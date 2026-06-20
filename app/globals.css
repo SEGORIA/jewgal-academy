@@ -75,6 +75,11 @@
 /* Transición suave al cambiar de tema */
 html[data-theme] body { transition: background-color .4s ease, color .4s ease; }
 
+/* Logo adaptable: blanco en oscuro, a color en claro */
+.brand-logo-light { display: none; }
+[data-theme="light"] .brand-logo-dark { display: none; }
+[data-theme="light"] .brand-logo-light { display: inline-block; }
+
 /* ─── Reset ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 

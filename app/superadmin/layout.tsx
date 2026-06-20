@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import Image from "next/image"
+import BrandLogo from "@/components/BrandLogo"
 import { usePathname } from "next/navigation"
 import {
   LayoutDashboard, Users, BookOpen, FileText,
@@ -60,7 +60,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Logo + badge */}
         <div style={{ padding: "26px 22px 20px", borderBottom: "1px solid rgba(165,141,102,.1)" }}>
           <Link href="/" target="_blank" aria-label="Ver sitio">
-            <Image src="/brand/logo-white.png" alt="Jewgal Academy" width={359} height={200} priority style={{ height: 36, width: "auto" }} />
+            <BrandLogo height={36} priority />
           </Link>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 10 }}>
             <Shield size={11} style={{ color: "#ef4444" }} />

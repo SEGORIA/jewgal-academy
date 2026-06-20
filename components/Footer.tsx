@@ -1,5 +1,5 @@
 import Link from "next/link"
-import Image from "next/image"
+import BrandLogo from "@/components/BrandLogo"
 
 export default function Footer() {
   return (
@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="foot-grid">
           {/* Brand */}
           <div className="foot-brand">
-            <Image src="/brand/logo-white.png" alt="Jewgal Academy" width={359} height={200} style={{ height: 52, width: "auto" }} />
+            <BrandLogo height={52} />
             <p>Transformación consciente para una vida con propósito.</p>
             <div className="foot-social">
               <a href="https://instagram.com/devora_benchimol_" target="_blank" rel="noopener noreferrer" aria-label="Instagram">

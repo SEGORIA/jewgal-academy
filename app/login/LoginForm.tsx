@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { signIn, getSession } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import Image from "next/image"
+import BrandLogo from "@/components/BrandLogo"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
 
 const spring = { type: "spring" as const, stiffness: 280, damping: 22 }
@@ -122,14 +122,7 @@ export default function LoginForm() {
           style={{ display: "flex", justifyContent: "center", marginBottom: 36 }}
         >
           <Link href="/" aria-label="Jewgal Academy — Inicio">
-            <Image
-              src="/brand/logo-white.png"
-              alt="Jewgal Academy"
-              width={359}
-              height={200}
-              priority
-              style={{ height: 52, width: "auto" }}
-            />
+            <BrandLogo height={52} priority />
           </Link>
         </motion.div>
 

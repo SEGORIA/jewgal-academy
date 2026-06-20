@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import Image from "next/image"
+import BrandLogo from "@/components/BrandLogo"
 import { useSession } from "next-auth/react"
 import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
@@ -40,7 +40,7 @@ export default function Navbar() {
     <>
       <nav className={`jnav${scrolled ? " scrolled" : ""}`} id="nav" aria-label="Navegación principal">
         <Link href="/" aria-label="Jewgal Academy — Inicio">
-          <Image src="/brand/logo-white.png" alt="Jewgal Academy" width={359} height={200} priority style={{ height: 44, width: "auto" }} />
+          <BrandLogo height={44} priority />
         </Link>
 
         <div className="nav-links">

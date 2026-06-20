@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import Image from "next/image"
+import BrandLogo from "@/components/BrandLogo"
 import { usePathname } from "next/navigation"
 import { LayoutDashboard, Video, BookOpen, PlayCircle, Menu, X, LogOut, UserCircle, Award, CreditCard } from "lucide-react"
 import { signOut } from "next-auth/react"
@@ -56,7 +56,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
         {/* Logo */}
         <div style={{ padding: "28px 24px 22px", borderBottom: "1px solid rgba(165,141,102,.1)" }}>
           <Link href="/" aria-label="Inicio">
-            <Image src="/brand/logo-white.png" alt="Jewgal Academy" width={359} height={200} priority style={{ height: 38, width: "auto" }} />
+            <BrandLogo height={38} priority />
           </Link>
           <p style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(165,141,102,.6)", marginTop: 8 }}>
             Aula Virtual
