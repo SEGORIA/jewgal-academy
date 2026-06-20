@@ -97,12 +97,13 @@
   --line-d: rgba(165,141,102,.26);
 }
 
-/* Navbar en modo claro: arriba (sobre el hero oscuro) mantiene logo blanco y links claros;
-   al hacer scroll pasa a fondo claro con links oscuros */
-[data-theme="light"] .jnav:not(.scrolled) .nav-links a,
-[data-theme="light"] .jnav:not(.scrolled) .nav-search { color: rgba(224,233,234,.78); }
-[data-theme="light"] .jnav:not(.scrolled) .brand-logo-dark { display: inline-block; }
-[data-theme="light"] .jnav:not(.scrolled) .brand-logo-light { display: none; }
+/* Navbar en modo claro:
+   - En la home (.over-hero), arriba está sobre el hero oscuro → logo blanco y links claros.
+   - En páginas internas (hero claro) y al hacer scroll → links oscuros y logo a color (por defecto). */
+[data-theme="light"] .jnav.over-hero:not(.scrolled) .nav-links a,
+[data-theme="light"] .jnav.over-hero:not(.scrolled) .nav-search { color: rgba(224,233,234,.78); }
+[data-theme="light"] .jnav.over-hero:not(.scrolled) .brand-logo-dark { display: inline-block; }
+[data-theme="light"] .jnav.over-hero:not(.scrolled) .brand-logo-light { display: none; }
 [data-theme="light"] .jnav.scrolled .nav-links a { color: var(--ink-soft); }
 
 /* Sidebars del panel y aula: logo blanco sobre el fondo oscuro del sidebar */
