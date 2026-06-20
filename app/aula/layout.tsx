@@ -74,7 +74,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
                 {showDivider && (
                   <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 10px 8px" }}>
                     <div style={{ flex: 1, height: 1, background: "var(--surface-2)" }} />
-                    <span style={{ fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(165,141,102,.25)" }}>cuenta</span>
+                    <span style={{ fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(165,141,102,.7)" }}>cuenta</span>
                     <div style={{ flex: 1, height: 1, background: "var(--surface-2)" }} />
                   </div>
                 )}

@@ -74,7 +74,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <nav style={{ flex: 1, padding: "16px 12px", overflowY: "auto", display: "flex", flexDirection: "column", gap: 6 }}>
           {NAV.map(({ group, items }) => (
             <div key={group} style={{ marginBottom: 8 }}>
-              <p style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(165,141,102,.4)", padding: "6px 10px", marginBottom: 2 }}>
+              <p style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(165,141,102,.7)", padding: "6px 10px", marginBottom: 2 }}>
                 {group}
               </p>
               {items.map(({ href, icon: Icon, label }) => {

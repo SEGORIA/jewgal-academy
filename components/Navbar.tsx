@@ -13,6 +13,7 @@ const NAV_LINKS = [
   { href: "/certificaciones", label: "Certificaciones" },
   { href: "/eventos",         label: "Eventos" },
   { href: "/blog",            label: "Blog" },
+  { href: "/contacto",        label: "Contacto" },
 ]
 
 export default function Navbar() {
