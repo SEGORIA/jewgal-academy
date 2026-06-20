@@ -319,7 +319,7 @@ export default function HomePage() {
         <div className="wrap">
           <div className="ruta-head reveal" style={{ marginBottom: 56 }}>
             <span className="eyebrow">Testimonios</span>
-            <h2 className="serif" style={{ color: "#eef4f4", fontSize: "clamp(28px,4vw,48px)", marginTop: 10 }}>Vidas que ya se transformaron</h2>
+            <h2 className="serif" style={{ color: "var(--text)", fontSize: "clamp(28px,4vw,48px)", marginTop: 10 }}>Vidas que ya se transformaron</h2>
           </div>
           <div className="testi-grid">
             {[

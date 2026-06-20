@@ -21,7 +21,59 @@
   --serif:  var(--font-serif, "Georgia", serif);
   --sans:   var(--font-sans,  system-ui, sans-serif);
   --script: var(--font-script, cursive);
+
+  /* ─── Tokens semánticos de tema (OSCURO por defecto) ─── */
+  --bg:            #081E29;   /* fondo principal */
+  --bg-2:          #0D2B3A;   /* fondo secundario */
+  --bg-3:          #060F14;   /* fondo profundo (sidebar, footer) */
+  --surface:       rgba(255,255,255,.03);  /* tarjetas */
+  --surface-2:     rgba(255,255,255,.05);  /* inputs / hover */
+  --surface-solid: #0b2535;                /* modales, dropdowns */
+  --text:          #eef4f4;                 /* texto principal */
+  --text-strong:   rgba(224,233,234,.85);
+  --text-muted:    rgba(224,233,234,.6);
+  --text-faint:    rgba(224,233,234,.4);
+  --text-dim:      rgba(224,233,234,.28);
+  --border:        rgba(165,141,102,.18);
+  --border-soft:   rgba(255,255,255,.07);
+  --hero-overlay-1: rgba(8,30,41,.97);
+  --hero-overlay-2: rgba(8,30,41,.55);
+  --hero-overlay-3: rgba(8,30,41,.08);
+  --bar:   rgba(8,30,41,.92);   /* barras translúcidas (topbar) */
+  --scrim: rgba(8,30,41,.85);   /* velo de modales */
 }
+
+/* ─── Tema CLARO (fondos blancos predominantes) ─── */
+[data-theme="light"] {
+  --navy:   #f6f4ef;
+  --navy-2: #ffffff;
+  --navy-3: #eef0ec;
+  --on-dark:       rgba(20,36,44,.7);
+  --on-dark-faint: rgba(20,36,44,.45);
+  --line-d: rgba(165,141,102,.32);
+
+  --bg:            #ffffff;
+  --bg-2:          #f6f4ef;
+  --bg-3:          #efece4;
+  --surface:       rgba(13,43,58,.028);
+  --surface-2:     rgba(13,43,58,.055);
+  --surface-solid: #ffffff;
+  --text:          #14242c;
+  --text-strong:   rgba(20,36,44,.9);
+  --text-muted:    rgba(20,36,44,.62);
+  --text-faint:    rgba(20,36,44,.45);
+  --text-dim:      rgba(20,36,44,.32);
+  --border:        rgba(165,141,102,.3);
+  --border-soft:   rgba(20,36,44,.1);
+  --hero-overlay-1: rgba(245,243,238,.95);
+  --hero-overlay-2: rgba(245,243,238,.5);
+  --hero-overlay-3: rgba(245,243,238,.05);
+  --bar:   rgba(255,255,255,.88);
+  --scrim: rgba(20,36,44,.45);
+}
+
+/* Transición suave al cambiar de tema */
+html[data-theme] body { transition: background-color .4s ease, color .4s ease; }
 
 /* ─── Reset ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

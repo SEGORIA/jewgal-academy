@@ -18,9 +18,9 @@ const inputStyle: React.CSSProperties = {
   borderRadius: 12,
   padding: "13px 16px",
   fontSize: 15,
-  color: "#eef4f4",
+  color: "var(--text)",
   outline: "none",
-  background: "rgba(255,255,255,.06)",
+  background: "var(--surface-2)",
   transition: "border-color .25s, box-shadow .25s",
   fontFamily: "inherit",
 }
@@ -164,8 +164,8 @@ export default function Checkout({ course }: { course: Course }) {
           ✦
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}>
-          <p style={{ fontFamily: "var(--serif)", fontSize: 20, color: "#eef4f4", marginBottom: 6 }}>¡Inscripción exitosa!</p>
-          <p style={{ color: "rgba(224,233,234,.6)", fontSize: 14 }}>Entrando a tu aula virtual…</p>
+          <p style={{ fontFamily: "var(--serif)", fontSize: 20, color: "var(--text)", marginBottom: 6 }}>¡Inscripción exitosa!</p>
+          <p style={{ color: "var(--text-muted)", fontSize: 14 }}>Entrando a tu aula virtual…</p>
           <motion.div
             initial={{ width: 0 }} animate={{ width: "100%" }}
             transition={{ delay: 0.5, duration: 1.1 }}
@@ -184,14 +184,14 @@ export default function Checkout({ course }: { course: Course }) {
       {/* Campos de datos */}
       <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 20 }}>
         <div>
-          <label style={{ display: "block", fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(224,233,234,.6)", marginBottom: 8 }}>
+          <label style={{ display: "block", fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 8 }}>
             Nombre completo
           </label>
           <input value={name} onChange={(e) => setName(e.target.value)}
             placeholder="Tu nombre" style={inputStyle} onFocus={focus} onBlur={blur} />
         </div>
         <div>
-          <label style={{ display: "block", fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(224,233,234,.6)", marginBottom: 8 }}>
+          <label style={{ display: "block", fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 8 }}>
             Email
           </label>
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
@@ -275,14 +275,14 @@ export default function Checkout({ course }: { course: Course }) {
               : <><Sparkles size={16} />Simular pago — demo</>
             }
           </GoldButton>
-          <p style={{ fontSize: 12, color: "rgba(224,233,234,.5)", display: "flex", alignItems: "flex-start", gap: 6, lineHeight: 1.55 }}>
+          <p style={{ fontSize: 12, color: "var(--text-muted)", display: "flex", alignItems: "flex-start", gap: 6, lineHeight: 1.55 }}>
             <ShieldCheck size={13} style={{ color: "#d49341", marginTop: 1, flexShrink: 0 }} />
             Modo demostración: no se cobra nada. Las pasarelas reales se activan al cargar las credenciales.
           </p>
         </div>
       )}
 
-      <p style={{ textAlign: "center", fontSize: 12, color: "rgba(224,233,234,.45)", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 16 }}>
+      <p style={{ textAlign: "center", fontSize: 12, color: "var(--text-faint)", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 16 }}>
         <ShieldCheck size={12} /> Pago seguro · Acceso inmediato al aula
       </p>
     </motion.div>

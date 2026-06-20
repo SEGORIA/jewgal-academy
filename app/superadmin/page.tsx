@@ -23,7 +23,7 @@ const quickActions = [
 ]
 
 const card: React.CSSProperties = {
-  background: "rgba(255,255,255,.03)",
+  background: "var(--surface)",
   border: "1px solid rgba(165,141,102,.13)",
   borderRadius: 14,
 }
@@ -40,14 +40,14 @@ function StatCard({ label, value, delta, icon: Icon, href, accent, loading }: {
         <div style={{ width: 38, height: 38, borderRadius: 9, background: accent + "22", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Icon size={18} style={{ color: accent }} />
         </div>
-        <ArrowUpRight size={14} style={{ color: "rgba(224,233,234,.2)" }} />
+        <ArrowUpRight size={14} style={{ color: "var(--text-dim)" }} />
       </div>
       {loading ? (
-        <div style={{ height: 36, width: 80, background: "rgba(255,255,255,.06)", borderRadius: 6, marginBottom: 4 }} />
+        <div style={{ height: 36, width: 80, background: "var(--surface-2)", borderRadius: 6, marginBottom: 4 }} />
       ) : (
-        <p style={{ fontSize: 30, fontWeight: 700, color: "#eef4f4", fontFamily: "var(--serif)", marginBottom: 4 }}>{value}</p>
+        <p style={{ fontSize: 30, fontWeight: 700, color: "var(--text)", fontFamily: "var(--serif)", marginBottom: 4 }}>{value}</p>
       )}
-      <p style={{ fontSize: 12, color: "rgba(224,233,234,.4)" }}>{label}</p>
+      <p style={{ fontSize: 12, color: "var(--text-faint)" }}>{label}</p>
       <p style={{ fontSize: 11, color: accent, marginTop: 4, opacity: .8 }}>{delta}</p>
     </Link>
   )
@@ -80,10 +80,10 @@ export default function AdminDashboard() {
         <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 10 }}>
           Jewgal Academy
         </span>
-        <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "#eef4f4", marginBottom: 6 }}>
+        <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "var(--text)", marginBottom: 6 }}>
           Panel de control
         </h1>
-        <p style={{ color: "rgba(224,233,234,.45)", fontSize: 15 }}>
+        <p style={{ color: "var(--text-faint)", fontSize: 15 }}>
           Gestión completa de la plataforma · {now}
         </p>
       </div>
@@ -106,20 +106,20 @@ export default function AdminDashboard() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(340px,1fr))", gap: 20, marginBottom: 20 }}>
         {/* Acciones rápidas */}
         <div style={{ ...card, padding: "24px 22px" }}>
-          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "#eef4f4", marginBottom: 18 }}>
+          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)", marginBottom: 18 }}>
             Acciones rápidas
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {quickActions.map(({ label, href, icon: Icon, color }) => (
               <Link key={label} href={href} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", borderRadius: 10, textDecoration: "none", transition: "background .18s" }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,.04)")}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--surface)")}
                 onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "transparent")}
               >
                 <div style={{ width: 34, height: 34, borderRadius: 8, background: color + "22", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                   <Icon size={16} style={{ color }} />
                 </div>
-                <span style={{ fontSize: 13, color: "rgba(224,233,234,.75)", fontWeight: 500 }}>{label}</span>
-                <ArrowUpRight size={13} style={{ color: "rgba(224,233,234,.2)", marginLeft: "auto" }} />
+                <span style={{ fontSize: 13, color: "var(--text-strong)", fontWeight: 500 }}>{label}</span>
+                <ArrowUpRight size={13} style={{ color: "var(--text-dim)", marginLeft: "auto" }} />
               </Link>
             ))}
           </div>
@@ -127,7 +127,7 @@ export default function AdminDashboard() {
 
         {/* Actividad / estado del sistema */}
         <div style={{ ...card, padding: "24px 22px" }}>
-          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "#eef4f4", marginBottom: 18 }}>
+          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)", marginBottom: 18 }}>
             Estado del sistema
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -141,8 +141,8 @@ export default function AdminDashboard() {
                 style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
                 <div style={{ width: 8, height: 8, borderRadius: "50%", background: item.dot, marginTop: 5, flexShrink: 0 }} />
                 <div>
-                  <p style={{ fontSize: 13, color: "rgba(224,233,234,.75)", fontWeight: 500 }}>{item.title}</p>
-                  <p style={{ fontSize: 12, color: "rgba(224,233,234,.35)", marginTop: 2 }}>{item.sub}</p>
+                  <p style={{ fontSize: 13, color: "var(--text-strong)", fontWeight: 500 }}>{item.title}</p>
+                  <p style={{ fontSize: 12, color: "var(--text-dim)", marginTop: 2 }}>{item.sub}</p>
                 </div>
               </motion.div>
             ))}
@@ -153,7 +153,7 @@ export default function AdminDashboard() {
       {/* Programas overview */}
       <div style={{ ...card, padding: "24px 22px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "#eef4f4" }}>
+          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)" }}>
             Programas · Vista general
           </h2>
           <Link href="/superadmin/cursos" style={{ fontSize: 12, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--gold,#A58D66)", textDecoration: "none" }}>
@@ -161,24 +161,24 @@ export default function AdminDashboard() {
           </Link>
         </div>
         <div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 120px 120px", gap: 12, padding: "0 14px 12px", borderBottom: "1px solid rgba(255,255,255,.06)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 120px 120px", gap: 12, padding: "0 14px 12px", borderBottom: "1px solid var(--surface-2)" }}>
             {["Programa", "Estado", "Inscripciones"].map((h) => (
-              <span key={h} style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(224,233,234,.3)" }}>{h}</span>
+              <span key={h} style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--text-dim)" }}>{h}</span>
             ))}
           </div>
           {PROGRAMS.map((p, i) => {
             const enrolled = stats?.enrollmentsByProgram?.find((e) => e.slug === p.slug)?.count ?? 0
             return (
               <motion.div key={p.slug} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }}
-                style={{ display: "grid", gridTemplateColumns: "1fr 120px 120px", gap: 12, padding: "14px", borderBottom: "1px solid rgba(255,255,255,.04)", alignItems: "center" }}>
+                style={{ display: "grid", gridTemplateColumns: "1fr 120px 120px", gap: 12, padding: "14px", borderBottom: "1px solid var(--surface)", alignItems: "center" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <div style={{ width: 8, height: 8, borderRadius: "50%", background: p.accent, flexShrink: 0 }} />
-                  <span style={{ fontSize: 13, color: "rgba(224,233,234,.75)" }}>{p.name}</span>
+                  <span style={{ fontSize: 13, color: "var(--text-strong)" }}>{p.name}</span>
                 </div>
                 <span style={{ fontSize: 11, color: "#6BBF8E", background: "rgba(107,191,142,.1)", border: "1px solid rgba(107,191,142,.2)", borderRadius: 20, padding: "3px 10px", display: "inline-block" }}>
                   Activo
                 </span>
-                <span style={{ fontSize: 13, color: "rgba(224,233,234,.45)" }}>
+                <span style={{ fontSize: 13, color: "var(--text-faint)" }}>
                   {loading ? "—" : enrolled}
                 </span>
               </motion.div>

@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useState } from "react"
 import Link from "next/link"
@@ -46,13 +46,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     href === "/superadmin" ? pathname === href : pathname.startsWith(href)
 
   return (
-    <div style={{ display: "flex", height: "100vh", background: "#060F14", overflow: "hidden" }}>
+    <div style={{ display: "flex", height: "100vh", background: "var(--bg-3)", overflow: "hidden" }}>
 
       {/* ── SIDEBAR ── */}
       <aside className="sidebar-desk" style={{
         position: "fixed", insetBlock: 0, left: 0, zIndex: 40,
         width: 240,
-        background: "linear-gradient(180deg,#081E29 0%,#060F14 100%)",
+        background: "linear-gradient(180deg,var(--bg) 0%,var(--bg-3) 100%)",
         borderRight: "1px solid rgba(165,141,102,.12)",
         display: "flex", flexDirection: "column",
         transition: "transform .3s",
@@ -90,7 +90,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         fontSize: 13, fontWeight: active ? 600 : 400,
                         textDecoration: "none", marginBottom: 2,
                         background: active ? "rgba(165,141,102,.13)" : "transparent",
-                        color: active ? "var(--gold,#A58D66)" : "rgba(224,233,234,.5)",
+                        color: active ? "var(--gold,#A58D66)" : "var(--text-muted)",
                         borderLeft: active ? "2px solid var(--gold,#A58D66)" : "2px solid transparent",
                         transition: "all .18s",
                       }}
@@ -110,18 +110,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Footer */}
         <div style={{ padding: "12px 12px 20px", borderTop: "1px solid rgba(165,141,102,.08)" }}>
-          <Link href="/" target="_blank" style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 9, fontSize: 12, color: "rgba(224,233,234,.35)", textDecoration: "none", marginBottom: 4, transition: "color .2s" }}
-            onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(224,233,234,.7)")}
-            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(224,233,234,.35)")}
+          <Link href="/" target="_blank" style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 9, fontSize: 12, color: "var(--text-dim)", textDecoration: "none", marginBottom: 4, transition: "color .2s" }}
+            onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-strong)")}
+            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-dim)")}
           >
             <Globe size={15} /> Ver sitio público
           </Link>
           <motion.button
             whileHover={{ x: 2 }}
             onClick={() => signOut({ callbackUrl: "/" })}
-            style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 9, width: "100%", background: "none", border: "none", cursor: "pointer", fontSize: 13, color: "rgba(224,233,234,.3)", transition: "color .2s" }}
+            style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 9, width: "100%", background: "none", border: "none", cursor: "pointer", fontSize: 13, color: "var(--text-dim)", transition: "color .2s" }}
             onMouseEnter={(e) => (e.currentTarget.style.color = "#fca5a5")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(224,233,234,.3)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-dim)")}
           >
             <LogOut size={15} /> Salir
           </motion.button>
@@ -133,7 +133,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {open && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={() => setOpen(false)}
-            style={{ position: "fixed", inset: 0, zIndex: 30, background: "rgba(8,30,41,.85)" }}
+            style={{ position: "fixed", inset: 0, zIndex: 30, background: "var(--scrim)" }}
           />
         )}
       </AnimatePresence>
@@ -144,26 +144,26 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <header style={{
           height: 58, borderBottom: "1px solid rgba(165,141,102,.1)",
           padding: "0 20px", display: "flex", alignItems: "center", justifyContent: "space-between",
-          background: "rgba(8,30,41,.92)", backdropFilter: "blur(10px)", flexShrink: 0,
+          background: "var(--bar)", backdropFilter: "blur(10px)", flexShrink: 0,
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <button
               onClick={() => setOpen(!open)}
               className="mob-menu-btn"
-              style={{ background: "none", border: "none", color: "rgba(224,233,234,.6)", cursor: "pointer", display: "none", padding: 4 }}
+              style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", display: "none", padding: 4 }}
             >
               {open ? <X size={20} /> : <Menu size={20} />}
             </button>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "rgba(224,233,234,.3)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "var(--text-dim)" }}>
               <span>Super Admin</span>
               <ChevronRight size={13} />
-              <span style={{ color: "rgba(224,233,234,.7)" }}>
+              <span style={{ color: "var(--text-strong)" }}>
                 {NAV.flatMap((g) => g.items).find((n) => isActive(n.href))?.label ?? "Panel"}
               </span>
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <span style={{ fontSize: 12, color: "rgba(224,233,234,.3)" }}>admin@jewgalacademy.com</span>
+            <span style={{ fontSize: 12, color: "var(--text-dim)" }}>admin@jewgalacademy.com</span>
             <div style={{ width: 34, height: 34, borderRadius: "50%", background: "#ef4444", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "white" }}>
               D
             </div>
@@ -171,7 +171,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </header>
 
         {/* Content */}
-        <main style={{ flex: 1, overflowY: "auto", padding: "32px 32px", background: "#081E29" }}>
+        <main style={{ flex: 1, overflowY: "auto", padding: "32px 32px", background: "var(--bg)" }}>
           {children}
         </main>
       </div>

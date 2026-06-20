@@ -211,7 +211,7 @@ export default function ComunidadMap() {
           </span>
           <span style={{
             fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase",
-            color: "rgba(224,233,234,.4)",
+            color: "var(--text-faint)",
           }}>
             Años transformando vidas en 4 países
           </span>
@@ -219,7 +219,7 @@ export default function ComunidadMap() {
 
         <h3 style={{
           fontFamily: "var(--serif,Georgia,serif)", fontWeight: 500,
-          fontSize: 30, color: "#eef4f4", lineHeight: 1.25,
+          fontSize: 30, color: "var(--text)", lineHeight: 1.25,
           marginBottom: 16,
         }}>
           Una trayectoria que trasciende fronteras
@@ -246,12 +246,12 @@ export default function ComunidadMap() {
                 {active.flag} {active.label} · {active.years}
               </span>
               <p style={{
-                fontSize: 15, fontWeight: 600, color: "#eef4f4",
+                fontSize: 15, fontWeight: 600, color: "var(--text)",
                 marginBottom: 8,
               }}>
                 {active.tagline}
               </p>
-              <p style={{ fontSize: 14, color: "rgba(224,233,234,.55)", lineHeight: 1.75 }}>
+              <p style={{ fontSize: 14, color: "var(--text-muted)", lineHeight: 1.75 }}>
                 {active.desc}
               </p>
             </div>
@@ -266,7 +266,7 @@ export default function ComunidadMap() {
               <span style={{ fontSize: 22, fontWeight: 700, fontFamily: "var(--serif)", color: active.accent }}>
                 {active.stat}
               </span>
-              <span style={{ fontSize: 12, color: "rgba(224,233,234,.5)" }}>
+              <span style={{ fontSize: 12, color: "var(--text-muted)" }}>
                 {active.statLabel}
               </span>
             </div>
@@ -288,7 +288,7 @@ export default function ComunidadMap() {
                   padding: "8px 14px", borderRadius: 24,
                   border: `1.5px solid ${isActive ? c.accent : "rgba(165,141,102,.18)"}`,
                   background: isActive ? `${c.accent}18` : "transparent",
-                  color: isActive ? c.accent : "rgba(224,233,234,.4)",
+                  color: isActive ? c.accent : "var(--text-faint)",
                   fontSize: 12, fontWeight: isActive ? 700 : 400,
                   cursor: "pointer", transition: "all .2s",
                   letterSpacing: ".06em",

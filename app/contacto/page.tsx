@@ -81,7 +81,7 @@ export default function ContactoPage() {
           <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Escríbeme</span>
           <h1 style={{
             fontFamily: "var(--serif)", fontWeight: 500,
-            fontSize: "clamp(40px,6vw,80px)", color: "#eef4f4",
+            fontSize: "clamp(40px,6vw,80px)", color: "var(--text)",
             lineHeight: 1.02, letterSpacing: "-.01em",
           }}>
             Estoy aquí<br /><em style={{ color: "var(--gold-light)", fontStyle: "normal" }}>para ti.</em>
@@ -106,11 +106,11 @@ export default function ContactoPage() {
                   {c.label}
                 </div>
                 {c.href ? (
-                  <a href={c.href} style={{ fontFamily: "var(--serif)", fontSize: 20, color: "#eef4f4", textDecoration: "none", display: "block" }}>
+                  <a href={c.href} style={{ fontFamily: "var(--serif)", fontSize: 20, color: "var(--text)", textDecoration: "none", display: "block" }}>
                     {c.value}
                   </a>
                 ) : (
-                  <span style={{ fontFamily: "var(--serif)", fontSize: 20, color: "#eef4f4" }}>{c.value}</span>
+                  <span style={{ fontFamily: "var(--serif)", fontSize: 20, color: "var(--text)" }}>{c.value}</span>
                 )}
               </div>
             ))}
@@ -128,7 +128,7 @@ export default function ContactoPage() {
               <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Formulario</span>
               <h2 style={{
                 fontFamily: "var(--serif)", fontWeight: 500,
-                fontSize: "clamp(28px,3.4vw,44px)", color: "#eef4f4",
+                fontSize: "clamp(28px,3.4vw,44px)", color: "var(--text)",
                 lineHeight: 1.15, marginBottom: 24,
               }}>
                 Cuéntame qué buscas
@@ -174,7 +174,7 @@ export default function ContactoPage() {
                 textAlign: "center",
               }}>
                 <div style={{ fontFamily: "var(--serif)", fontSize: 48, color: "var(--gold-light)", marginBottom: 16 }}>✦</div>
-                <h3 style={{ fontFamily: "var(--serif)", fontSize: 28, color: "#eef4f4", marginBottom: 12 }}>
+                <h3 style={{ fontFamily: "var(--serif)", fontSize: 28, color: "var(--text)", marginBottom: 12 }}>
                   ¡Mensaje enviado!
                 </h3>
                 <p style={{ color: "var(--on-dark)", fontSize: 15, marginBottom: 28 }}>
@@ -274,7 +274,7 @@ const inputStyle: React.CSSProperties = {
   border: "1px solid var(--line-d)",
   borderRadius: 4,
   padding: "13px 16px",
-  color: "#eef4f4",
+  color: "var(--text)",
   fontFamily: "var(--sans)",
   fontSize: 14,
   outline: "none",

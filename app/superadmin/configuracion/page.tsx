@@ -1,11 +1,11 @@
-﻿"use client"
+"use client"
 
-import { useState } from "react"
-import { Save, Eye, EyeOff, KeyRound, Users, CreditCard, Mail, Search } from "lucide-react"
+import { useState, useEffect } from "react"
+import { Save, Eye, EyeOff, KeyRound, Users, CreditCard, Mail, Search, Moon, Sun, Loader2 } from "lucide-react"
 
-const card: React.CSSProperties = { background: "rgba(255,255,255,.03)", border: "1px solid rgba(165,141,102,.13)", borderRadius: 14 }
-const inputStyle: React.CSSProperties = { background: "rgba(255,255,255,.05)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 14px", fontSize: 13, color: "#eef4f4", outline: "none", fontFamily: "inherit", width: "100%" }
-const labelStyle: React.CSSProperties = { fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(224,233,234,.45)", display: "block", marginBottom: 7 }
+const card: React.CSSProperties = { background: "var(--surface)", border: "1px solid rgba(165,141,102,.13)", borderRadius: 14 }
+const inputStyle: React.CSSProperties = { background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 14px", fontSize: 13, color: "var(--text)", outline: "none", fontFamily: "inherit", width: "100%" }
+const labelStyle: React.CSSProperties = { fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--text-faint)", display: "block", marginBottom: 7 }
 
 type Tab = "general" | "pagos" | "email" | "contrasenas"
 
@@ -17,6 +17,30 @@ export default function ConfiguracionPage() {
   const [pwSearch, setPwSearch]   = useState("")
   const [newPw, setNewPw]         = useState("")
   const [pwSaved, setPwSaved]     = useState(false)
+  const [theme, setTheme]         = useState<"dark" | "light">("dark")
+  const [themeSaving, setThemeSaving] = useState(false)
+
+  useEffect(() => {
+    const t = document.documentElement.getAttribute("data-theme")
+    setTheme(t === "light" ? "light" : "dark")
+  }, [])
+
+  async function changeTheme(t: "dark" | "light") {
+    if (t === theme || themeSaving) return
+    setThemeSaving(true)
+    const res = await fetch("/api/admin/theme", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ theme: t }),
+    })
+    if (res.ok) {
+      document.documentElement.setAttribute("data-theme", t)
+      setTheme(t)
+      window.location.reload() // refresca el layout para aplicar el tema en toda la plataforma
+    } else {
+      setThemeSaving(false)
+    }
+  }
 
   function handleSave() { setSaved(true); setTimeout(() => setSaved(false), 2500) }
   function handlePwSave() { setPwSaved(true); setTimeout(() => setPwSaved(false), 2500) }
@@ -32,19 +56,19 @@ export default function ConfiguracionPage() {
     <div style={{ maxWidth: 860, margin: "0 auto" }}>
       <div style={{ marginBottom: 32 }}>
         <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 8 }}>Admin</span>
-        <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "#eef4f4", marginBottom: 6 }}>Configuración</h1>
-        <p style={{ color: "rgba(224,233,234,.4)", fontSize: 14 }}>Parámetros globales de la plataforma.</p>
+        <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Configuración</h1>
+        <p style={{ color: "var(--text-faint)", fontSize: 14 }}>Parámetros globales de la plataforma.</p>
       </div>
 
       {/* Tab nav */}
-      <div style={{ display: "flex", gap: 4, marginBottom: 24, background: "rgba(255,255,255,.04)", borderRadius: 12, padding: 5 }}>
+      <div style={{ display: "flex", gap: 4, marginBottom: 24, background: "var(--surface)", borderRadius: 12, padding: 5 }}>
         {TABS.map(({ key, label, icon: Icon }) => (
           <button key={key} onClick={() => setTab(key)} style={{
             flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
             padding: "10px 12px", borderRadius: 9, border: "none", cursor: "pointer",
             fontSize: 13, fontWeight: tab === key ? 600 : 400,
             background: tab === key ? "rgba(165,141,102,.15)" : "transparent",
-            color: tab === key ? "var(--gold,#A58D66)" : "rgba(224,233,234,.4)",
+            color: tab === key ? "var(--gold,#A58D66)" : "var(--text-faint)",
             transition: "all .18s",
           }}>
             <Icon size={14} /> {label}
@@ -55,7 +79,7 @@ export default function ConfiguracionPage() {
       {/* GENERAL */}
       {tab === "general" && (
         <div style={{ ...card, padding: "28px 26px" }}>
-          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "#eef4f4", marginBottom: 22 }}>Información general</h2>
+          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--text)", marginBottom: 22 }}>Información general</h2>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             {[
               { label: "Nombre de la academia", key: "name", val: "Jewgal Academy" },
@@ -77,12 +101,48 @@ export default function ConfiguracionPage() {
             <label style={{ ...labelStyle, marginBottom: 12 }}>Modo de la plataforma</label>
             <div style={{ display: "flex", gap: 10 }}>
               {["Producción", "Modo demo (sin cobros reales)", "Mantenimiento"].map((m, i) => (
-                <label key={m} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 13, color: "rgba(224,233,234,.7)" }}>
+                <label key={m} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 13, color: "var(--text-strong)" }}>
                   <input type="radio" name="mode" defaultChecked={i === 1} style={{ accentColor: "#A58D66" }} /> {m}
                 </label>
               ))}
             </div>
           </div>
+          {/* Apariencia / Tema global */}
+          <div style={{ marginTop: 26, paddingTop: 24, borderTop: "1px solid rgba(255,255,255,.07)" }}>
+            <label style={{ ...labelStyle, marginBottom: 6 }}>Apariencia de la plataforma</label>
+            <p style={{ fontSize: 13, color: "var(--text-faint)", marginBottom: 14 }}>
+              Cambia el tema de <strong style={{ color: "var(--text-strong)" }}>todo</strong> el sitio, el aula y el panel — para todos los visitantes.
+            </p>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              {[
+                { key: "dark"  as const, label: "Modo oscuro", Icon: Moon, desc: "Elegante, fondos profundos" },
+                { key: "light" as const, label: "Modo claro",  Icon: Sun,  desc: "Luminoso, fondos blancos" },
+              ].map(({ key, label, Icon, desc }) => {
+                const on = theme === key
+                return (
+                  <button key={key} onClick={() => changeTheme(key)} disabled={themeSaving}
+                    style={{
+                      flex: 1, minWidth: 200, display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-start",
+                      padding: "16px 18px", borderRadius: 12, cursor: themeSaving ? "wait" : "pointer",
+                      background: on ? "rgba(165,141,102,.14)" : "var(--surface)",
+                      border: `1px solid ${on ? "var(--gold,#A58D66)" : "rgba(255,255,255,.08)"}`,
+                    }}>
+                    <div style={{ width: "100%", display: "flex", alignItems: "center", gap: 8, color: on ? "var(--gold,#A58D66)" : "var(--text-strong)" }}>
+                      <Icon size={18} /> <span style={{ fontSize: 14, fontWeight: 600 }}>{label}</span>
+                      {on && <span style={{ fontSize: 10, marginLeft: "auto", color: "#6BBF8E" }}>● Activo</span>}
+                    </div>
+                    <span style={{ fontSize: 12, color: "var(--text-faint)" }}>{desc}</span>
+                  </button>
+                )
+              })}
+            </div>
+            {themeSaving && (
+              <p style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "var(--text-muted)", marginTop: 12 }}>
+                <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> Aplicando tema a toda la plataforma…
+              </p>
+            )}
+          </div>
+
           <button onClick={handleSave} style={{ marginTop: 24, background: saved ? "#6BBF8E" : "var(--gold,#A58D66)", color: "#081E29", border: "none", borderRadius: 10, padding: "12px 28px", fontSize: 13, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "background .3s" }}>
             <Save size={15} /> {saved ? "¡Guardado!" : "Guardar cambios"}
           </button>
@@ -96,8 +156,8 @@ export default function ConfiguracionPage() {
           <div style={{ ...card, padding: "26px 24px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
               <div>
-                <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "#eef4f4", marginBottom: 4 }}>Stripe</h2>
-                <p style={{ fontSize: 13, color: "rgba(224,233,234,.4)" }}>Tarjetas de crédito y débito</p>
+                <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)", marginBottom: 4 }}>Stripe</h2>
+                <p style={{ fontSize: 13, color: "var(--text-faint)" }}>Tarjetas de crédito y débito</p>
               </div>
               <span style={{ fontSize: 11, color: "#fca5a5", background: "rgba(239,68,68,.1)", border: "1px solid rgba(239,68,68,.25)", borderRadius: 20, padding: "4px 12px" }}>No conectado</span>
             </div>
@@ -111,7 +171,7 @@ export default function ConfiguracionPage() {
                   <label style={labelStyle}>{label}</label>
                   <div style={{ position: "relative" }}>
                     <input type={showStripe ? "text" : "password"} placeholder={placeholder} style={{ ...inputStyle, paddingRight: 40 }} />
-                    <button type="button" onClick={() => setShowStripe(!showStripe)} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "rgba(224,233,234,.35)" }}>
+                    <button type="button" onClick={() => setShowStripe(!showStripe)} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-dim)" }}>
                       {showStripe ? <EyeOff size={15} /> : <Eye size={15} />}
                     </button>
                   </div>
@@ -127,8 +187,8 @@ export default function ConfiguracionPage() {
           <div style={{ ...card, padding: "26px 24px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
               <div>
-                <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "#eef4f4", marginBottom: 4 }}>PayPal</h2>
-                <p style={{ fontSize: 13, color: "rgba(224,233,234,.4)" }}>Pagos vía cuenta PayPal</p>
+                <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)", marginBottom: 4 }}>PayPal</h2>
+                <p style={{ fontSize: 13, color: "var(--text-faint)" }}>Pagos vía cuenta PayPal</p>
               </div>
               <span style={{ fontSize: 11, color: "#fca5a5", background: "rgba(239,68,68,.1)", border: "1px solid rgba(239,68,68,.25)", borderRadius: 20, padding: "4px 12px" }}>No conectado</span>
             </div>
@@ -141,14 +201,14 @@ export default function ConfiguracionPage() {
                   <label style={labelStyle}>{label}</label>
                   <div style={{ position: "relative" }}>
                     <input type={showPayPal ? "text" : "password"} placeholder={placeholder} style={{ ...inputStyle, paddingRight: 40 }} />
-                    <button type="button" onClick={() => setShowPayPal(!showPayPal)} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "rgba(224,233,234,.35)" }}>
+                    <button type="button" onClick={() => setShowPayPal(!showPayPal)} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-dim)" }}>
                       {showPayPal ? <EyeOff size={15} /> : <Eye size={15} />}
                     </button>
                   </div>
                 </div>
               ))}
             </div>
-            <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 13, color: "rgba(224,233,234,.6)", marginBottom: 16 }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 13, color: "var(--text-muted)", marginBottom: 16 }}>
               <input type="checkbox" style={{ accentColor: "#A58D66" }} /> Modo sandbox (pruebas)
             </label>
             <button onClick={handleSave} style={{ background: "var(--gold,#A58D66)", color: "#081E29", border: "none", borderRadius: 9, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
@@ -161,8 +221,8 @@ export default function ConfiguracionPage() {
       {/* EMAIL */}
       {tab === "email" && (
         <div style={{ ...card, padding: "28px 26px" }}>
-          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "#eef4f4", marginBottom: 6 }}>Configuración de email</h2>
-          <p style={{ color: "rgba(224,233,234,.4)", fontSize: 14, marginBottom: 24 }}>El sistema usa Resend para enviar emails de confirmación, bienvenida y recordatorios.</p>
+          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--text)", marginBottom: 6 }}>Configuración de email</h2>
+          <p style={{ color: "var(--text-faint)", fontSize: 14, marginBottom: 24 }}>El sistema usa Resend para enviar emails de confirmación, bienvenida y recordatorios.</p>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
             <div style={{ gridColumn: "span 2" }}>
               <label style={labelStyle}>API Key de Resend</label>
@@ -177,7 +237,7 @@ export default function ConfiguracionPage() {
               <input defaultValue="hola@jewgalacademy.com" style={inputStyle} />
             </div>
           </div>
-          <p style={{ fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(224,233,234,.3)", marginBottom: 14 }}>Emails automáticos activados</p>
+          <p style={{ fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 14 }}>Emails automáticos activados</p>
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 24 }}>
             {[
               "Email de bienvenida al inscribirse",
@@ -185,7 +245,7 @@ export default function ConfiguracionPage() {
               "Recordatorio de clase (24h antes)",
               "Reseteo de contraseña",
             ].map((label) => (
-              <label key={label} style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", fontSize: 13, color: "rgba(224,233,234,.65)" }}>
+              <label key={label} style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", fontSize: 13, color: "var(--text-muted)" }}>
                 <input type="checkbox" defaultChecked style={{ accentColor: "#A58D66" }} /> {label}
               </label>
             ))}
@@ -203,12 +263,12 @@ export default function ConfiguracionPage() {
           <div style={{ ...card, padding: "26px 24px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
               <Users size={18} style={{ color: "var(--gold,#A58D66)" }} />
-              <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "#eef4f4" }}>Resetear contraseña de alumna</h2>
+              <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)" }}>Resetear contraseña de alumna</h2>
             </div>
-            <p style={{ fontSize: 13, color: "rgba(224,233,234,.4)", marginBottom: 22 }}>Buscá una alumna por email y asignale una nueva contraseña temporal.</p>
+            <p style={{ fontSize: 13, color: "var(--text-faint)", marginBottom: 22 }}>Buscá una alumna por email y asignale una nueva contraseña temporal.</p>
 
             <div style={{ position: "relative", marginBottom: 16 }}>
-              <Search size={15} style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "rgba(224,233,234,.3)" }} />
+              <Search size={15} style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "var(--text-dim)" }} />
               <input
                 value={pwSearch} onChange={(e) => setPwSearch(e.target.value)}
                 placeholder="Buscar por email o nombre…"
@@ -217,8 +277,8 @@ export default function ConfiguracionPage() {
             </div>
 
             {pwSearch.length > 2 && (
-              <div style={{ background: "rgba(255,255,255,.04)", border: "1px solid rgba(165,141,102,.15)", borderRadius: 10, marginBottom: 16 }}>
-                <p style={{ padding: "16px 18px", fontSize: 13, color: "rgba(224,233,234,.35)" }}>No se encontraron alumnas con ese criterio.</p>
+              <div style={{ background: "var(--surface)", border: "1px solid rgba(165,141,102,.15)", borderRadius: 10, marginBottom: 16 }}>
+                <p style={{ padding: "16px 18px", fontSize: 13, color: "var(--text-dim)" }}>No se encontraron alumnas con ese criterio.</p>
               </div>
             )}
 
@@ -239,9 +299,9 @@ export default function ConfiguracionPage() {
           <div style={{ ...card, padding: "26px 24px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
               <KeyRound size={18} style={{ color: "#4B7E8C" }} />
-              <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "#eef4f4" }}>Mi contraseña (admin)</h2>
+              <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)" }}>Mi contraseña (admin)</h2>
             </div>
-            <p style={{ fontSize: 13, color: "rgba(224,233,234,.4)", marginBottom: 22 }}>Cambiá la contraseña de acceso al panel de administración.</p>
+            <p style={{ fontSize: 13, color: "var(--text-faint)", marginBottom: 22 }}>Cambiá la contraseña de acceso al panel de administración.</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <div><label style={labelStyle}>Contraseña actual</label><input type="password" placeholder="••••••••" style={inputStyle} /></div>
               <div><label style={labelStyle}>Nueva contraseña</label><input type="password" placeholder="Mínimo 8 caracteres" style={inputStyle} /></div>

@@ -58,9 +58,9 @@ export default function LoginForm() {
     borderRadius: 12,
     padding: "14px 16px",
     fontSize: 15,
-    color: "#eef4f4",
+    color: "var(--text)",
     outline: "none",
-    background: "rgba(255,255,255,.05)",
+    background: "var(--surface-2)",
     transition: "border-color .25s, box-shadow .25s",
     fontFamily: "inherit",
   }
@@ -68,7 +68,7 @@ export default function LoginForm() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "linear-gradient(135deg,#081E29 0%,#0b2535 55%,#0a3140 100%)",
+      background: "linear-gradient(135deg,var(--bg) 0%,var(--surface-solid) 55%,#0a3140 100%)",
       display: "flex", alignItems: "center", justifyContent: "center",
       padding: "24px 20px", position: "relative", overflow: "hidden",
     }}>
@@ -142,12 +142,12 @@ export default function LoginForm() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={spring}
               style={{
-                background: "rgba(255,255,255,.04)",
+                background: "var(--surface)",
                 borderRadius: 20,
                 padding: 52,
                 textAlign: "center",
                 border: "1px solid rgba(165,141,102,.3)",
-                boxShadow: "0 32px 80px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.06)",
+                boxShadow: "0 32px 80px rgba(0,0,0,.4), inset 0 1px 0 var(--surface-2)",
                 backdropFilter: "blur(12px)",
               }}
             >
@@ -158,11 +158,11 @@ export default function LoginForm() {
                 style={{ fontSize: 52, marginBottom: 18, color: "var(--gold,#A58D66)" }}
               >✦</motion.div>
               <motion.h2 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}
-                style={{ fontFamily: "var(--serif)", fontSize: 28, color: "#eef4f4", marginBottom: 10, fontWeight: 500 }}>
+                style={{ fontFamily: "var(--serif)", fontSize: 28, color: "var(--text)", marginBottom: 10, fontWeight: 500 }}>
                 ¡Bienvenida!
               </motion.h2>
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.38 }}
-                style={{ color: "rgba(224,233,234,.65)", fontSize: 15 }}>
+                style={{ color: "var(--text-muted)", fontSize: 15 }}>
                 {dest.startsWith("/superadmin")
                   ? "Entrando al panel de administración…"
                   : "Entrando a tu aula virtual…"}
@@ -180,11 +180,11 @@ export default function LoginForm() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               style={{
-                background: "rgba(255,255,255,.04)",
+                background: "var(--surface)",
                 borderRadius: 20,
                 padding: "40px 36px",
                 border: "1px solid rgba(165,141,102,.18)",
-                boxShadow: "0 32px 80px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.06)",
+                boxShadow: "0 32px 80px rgba(0,0,0,.4), inset 0 1px 0 var(--surface-2)",
                 backdropFilter: "blur(12px)",
               }}
             >
@@ -204,7 +204,7 @@ export default function LoginForm() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.22 }}
-                style={{ fontFamily: "var(--serif)", fontSize: 36, fontWeight: 500, color: "#eef4f4", lineHeight: 1.05, marginBottom: 6 }}
+                style={{ fontFamily: "var(--serif)", fontSize: 36, fontWeight: 500, color: "var(--text)", lineHeight: 1.05, marginBottom: 6 }}
               >
                 Iniciar sesión
               </motion.h1>
@@ -212,7 +212,7 @@ export default function LoginForm() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                style={{ color: "rgba(224,233,234,.6)", fontSize: 15, marginBottom: 32 }}
+                style={{ color: "var(--text-muted)", fontSize: 15, marginBottom: 32 }}
               >
                 Accedé a tu espacio de aprendizaje
               </motion.p>
@@ -236,7 +236,7 @@ export default function LoginForm() {
               <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                 {/* Email */}
                 <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.36 }}>
-                  <label style={{ display: "block", fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(224,233,234,.55)", marginBottom: 9 }}>
+                  <label style={{ display: "block", fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 9 }}>
                     Email
                   </label>
                   <input
@@ -248,7 +248,7 @@ export default function LoginForm() {
 
                 {/* Contraseña */}
                 <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.44 }}>
-                  <label style={{ display: "block", fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(224,233,234,.55)", marginBottom: 9 }}>
+                  <label style={{ display: "block", fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 9 }}>
                     Contraseña
                   </label>
                   <div style={{ position: "relative" }}>
@@ -260,7 +260,7 @@ export default function LoginForm() {
                     <motion.button
                       type="button" onClick={() => setShowPw(!showPw)}
                       whileTap={{ scale: 0.82 }}
-                      style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "rgba(224,233,234,.4)", display: "flex", alignItems: "center", padding: 4 }}
+                      style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)", display: "flex", alignItems: "center", padding: 4 }}
                     >
                       {showPw ? <EyeOff size={17} /> : <Eye size={17} />}
                     </motion.button>
@@ -314,7 +314,7 @@ export default function LoginForm() {
                 style={{ display: "flex", alignItems: "center", gap: 14, margin: "24px 0 0" }}
               >
                 <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,.08)" }} />
-                <span style={{ fontSize: 11, color: "rgba(224,233,234,.3)", letterSpacing: ".1em" }}>·</span>
+                <span style={{ fontSize: 11, color: "var(--text-dim)", letterSpacing: ".1em" }}>·</span>
                 <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,.08)" }} />
               </motion.div>
             </motion.div>
@@ -328,13 +328,13 @@ export default function LoginForm() {
           transition={{ delay: 0.68 }}
           style={{ textAlign: "center", marginTop: 24 }}
         >
-          <p style={{ fontSize: 14, color: "rgba(224,233,234,.5)", marginBottom: 10 }}>
+          <p style={{ fontSize: 14, color: "var(--text-muted)", marginBottom: 10 }}>
             ¿No tenés cuenta?{" "}
             <Link href="/#programas" style={{ color: "var(--gold,#A58D66)", fontWeight: 600, textDecoration: "none" }}>
               Inscribite en un programa
             </Link>
           </p>
-          <Link href="/" style={{ fontSize: 12, color: "rgba(224,233,234,.3)", textDecoration: "none", letterSpacing: ".08em" }}>
+          <Link href="/" style={{ fontSize: 12, color: "var(--text-dim)", textDecoration: "none", letterSpacing: ".08em" }}>
             ← Volver al sitio
           </Link>
         </motion.div>

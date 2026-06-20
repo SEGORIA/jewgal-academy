@@ -25,7 +25,7 @@ const STATUS_LABEL: Record<string, { label: string; color: string; bg: string; b
 }
 
 const card: React.CSSProperties = {
-  background: "rgba(255,255,255,.03)",
+  background: "var(--surface)",
   border: "1px solid rgba(165,141,102,.13)",
   borderRadius: 14,
 }
@@ -51,8 +51,8 @@ export default function PagosAdminPage() {
   const filtered = filter === "Todos" ? payments : payments.filter((p) => p.course.slug === filter)
 
   const selectStyle: React.CSSProperties = {
-    background: "rgba(255,255,255,.05)", border: "1px solid rgba(165,141,102,.2)",
-    borderRadius: 9, padding: "9px 13px", fontSize: 13, color: "#eef4f4",
+    background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)",
+    borderRadius: 9, padding: "9px 13px", fontSize: 13, color: "var(--text)",
     outline: "none", fontFamily: "inherit", cursor: "pointer",
   }
 
@@ -75,10 +75,10 @@ export default function PagosAdminPage() {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
         <div>
           <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 8 }}>Admin</span>
-          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "#eef4f4", marginBottom: 6 }}>Ingresos y pagos</h1>
-          <p style={{ color: "rgba(224,233,234,.4)", fontSize: 14 }}>Historial financiero de la plataforma.</p>
+          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Ingresos y pagos</h1>
+          <p style={{ color: "var(--text-faint)", fontSize: 14 }}>Historial financiero de la plataforma.</p>
         </div>
-        <button onClick={downloadCSV} style={{ display: "flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,.05)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 10, padding: "11px 18px", fontSize: 13, color: "rgba(224,233,234,.7)", cursor: "pointer", transition: "all .2s" }}
+        <button onClick={downloadCSV} style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 10, padding: "11px 18px", fontSize: 13, color: "var(--text-strong)", cursor: "pointer", transition: "all .2s" }}
           onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(165,141,102,.5)")}
           onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(165,141,102,.2)")}
         >
@@ -91,8 +91,8 @@ export default function PagosAdminPage() {
         <div style={{ ...card, padding: "18px 22px", marginBottom: 24, borderColor: "rgba(251,191,36,.2)", background: "rgba(251,191,36,.04)", display: "flex", gap: 14 }}>
           <AlertCircle size={18} style={{ color: "#fbbf24", flexShrink: 0, marginTop: 1 }} />
           <div>
-            <p style={{ fontSize: 13, fontWeight: 600, color: "#eef4f4", marginBottom: 3 }}>Stripe no está conectado</p>
-            <p style={{ fontSize: 13, color: "rgba(224,233,234,.5)", lineHeight: 1.6 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", marginBottom: 3 }}>Stripe no está conectado</p>
+            <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6 }}>
               Agregá <code style={{ color: "#fbbf24", background: "rgba(251,191,36,.1)", padding: "1px 6px", borderRadius: 4 }}>STRIPE_SECRET_KEY</code> en tu <code style={{ color: "#fbbf24", background: "rgba(251,191,36,.1)", padding: "1px 6px", borderRadius: 4 }}>.env.local</code> para activar pagos reales. Los pagos demo se muestran abajo.
             </p>
           </div>
@@ -111,8 +111,8 @@ export default function PagosAdminPage() {
             <div style={{ width: 36, height: 36, borderRadius: 8, background: accent + "22", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
               <Icon size={17} style={{ color: accent }} />
             </div>
-            <p style={{ fontSize: 26, fontWeight: 700, color: "#eef4f4", fontFamily: "var(--serif)" }}>{value}</p>
-            <p style={{ fontSize: 12, color: "rgba(224,233,234,.4)", marginTop: 3 }}>{label}</p>
+            <p style={{ fontSize: 26, fontWeight: 700, color: "var(--text)", fontFamily: "var(--serif)" }}>{value}</p>
+            <p style={{ fontSize: 12, color: "var(--text-faint)", marginTop: 3 }}>{label}</p>
             <p style={{ fontSize: 11, color: accent, marginTop: 3, opacity: .7 }}>{sub}</p>
           </div>
         ))}
@@ -120,8 +120,8 @@ export default function PagosAdminPage() {
 
       {/* Tabla de transacciones */}
       <div style={{ ...card, overflow: "hidden" }}>
-        <div style={{ padding: "18px 22px", borderBottom: "1px solid rgba(255,255,255,.06)", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "#eef4f4" }}>Transacciones</h2>
+        <div style={{ padding: "18px 22px", borderBottom: "1px solid var(--surface-2)", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)" }}>Transacciones</h2>
           <select value={filter} onChange={(e) => setFilter(e.target.value)} style={selectStyle}>
             <option value="Todos">Todos los programas</option>
             {Object.entries(PROGRAMS_META).map(([slug, m]) => (
@@ -131,7 +131,7 @@ export default function PagosAdminPage() {
         </div>
 
         {loading ? (
-          <div style={{ padding: "60px 0", display: "flex", alignItems: "center", justifyContent: "center", gap: 10, color: "rgba(224,233,234,.35)" }}>
+          <div style={{ padding: "60px 0", display: "flex", alignItems: "center", justifyContent: "center", gap: 10, color: "var(--text-dim)" }}>
             <Loader2 size={20} style={{ animation: "spin 1s linear infinite" }} /> Cargando transacciones…
           </div>
         ) : filtered.length === 0 ? (
@@ -139,16 +139,16 @@ export default function PagosAdminPage() {
             <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(165,141,102,.1)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
               <CreditCard size={22} style={{ color: "rgba(165,141,102,.5)" }} />
             </div>
-            <p style={{ color: "rgba(224,233,234,.55)", fontWeight: 500, marginBottom: 6 }}>No hay transacciones</p>
-            <p style={{ color: "rgba(224,233,234,.3)", fontSize: 13 }}>Los pagos aparecerán aquí después de la primera inscripción.</p>
+            <p style={{ color: "var(--text-muted)", fontWeight: 500, marginBottom: 6 }}>No hay transacciones</p>
+            <p style={{ color: "var(--text-dim)", fontSize: 13 }}>Los pagos aparecerán aquí después de la primera inscripción.</p>
           </div>
         ) : (
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
-                <tr style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
+                <tr style={{ borderBottom: "1px solid var(--surface-2)" }}>
                   {["Alumna", "Programa", "Monto", "Estado", "Fecha"].map((h) => (
-                    <th key={h} style={{ textAlign: "left", padding: "13px 18px", fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(224,233,234,.3)", fontWeight: 500 }}>{h}</th>
+                    <th key={h} style={{ textAlign: "left", padding: "13px 18px", fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--text-dim)", fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -156,16 +156,16 @@ export default function PagosAdminPage() {
                 {filtered.map((p) => {
                   const s = STATUS_LABEL[p.status] ?? STATUS_LABEL.pending
                   return (
-                    <tr key={p.id} style={{ borderBottom: "1px solid rgba(255,255,255,.04)", transition: "background .15s" }}
-                      onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,.02)")}
+                    <tr key={p.id} style={{ borderBottom: "1px solid var(--surface)", transition: "background .15s" }}
+                      onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--surface)")}
                       onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "transparent")}
                     >
                       <td style={{ padding: "14px 18px" }}>
-                        <div style={{ fontWeight: 500, color: "#eef4f4", marginBottom: 2 }}>{p.user.name}</div>
-                        <div style={{ fontSize: 11, color: "rgba(224,233,234,.35)" }}>{p.user.email}</div>
+                        <div style={{ fontWeight: 500, color: "var(--text)", marginBottom: 2 }}>{p.user.name}</div>
+                        <div style={{ fontSize: 11, color: "var(--text-dim)" }}>{p.user.email}</div>
                       </td>
-                      <td style={{ padding: "14px 18px", color: "rgba(224,233,234,.6)", fontSize: 12 }}>{p.course.title}</td>
-                      <td style={{ padding: "14px 18px", color: p.amount > 0 ? "#eef4f4" : "rgba(224,233,234,.35)", fontFamily: "var(--serif)", fontSize: 15 }}>
+                      <td style={{ padding: "14px 18px", color: "var(--text-muted)", fontSize: 12 }}>{p.course.title}</td>
+                      <td style={{ padding: "14px 18px", color: p.amount > 0 ? "var(--text)" : "var(--text-dim)", fontFamily: "var(--serif)", fontSize: 15 }}>
                         {p.amount > 0 ? `$${p.amount.toLocaleString("es")}` : "—"}
                       </td>
                       <td style={{ padding: "14px 18px" }}>
@@ -173,7 +173,7 @@ export default function PagosAdminPage() {
                           {s.label}
                         </span>
                       </td>
-                      <td style={{ padding: "14px 18px", color: "rgba(224,233,234,.4)", fontSize: 12 }}>
+                      <td style={{ padding: "14px 18px", color: "var(--text-faint)", fontSize: 12 }}>
                         {p.paidAt ? new Date(p.paidAt).toLocaleDateString("es-AR", { day: "numeric", month: "short", year: "numeric" }) : "—"}
                       </td>
                     </tr>

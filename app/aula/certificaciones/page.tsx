@@ -23,7 +23,7 @@ const PROGRAM_META: Record<string, { icon: string; accent: string; desc: string 
 }
 
 const card: React.CSSProperties = {
-  background: "rgba(255,255,255,.03)",
+  background: "var(--surface)",
   border: "1px solid rgba(165,141,102,.13)",
   borderRadius: 14,
 }
@@ -66,16 +66,16 @@ export default function CertificacionesPage() {
           <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 10 }}>
             Aula Virtual
           </span>
-          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "#eef4f4", marginBottom: 6 }}>
+          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>
             Mis certificaciones
           </h1>
-          <p style={{ color: "rgba(224,233,234,.4)", fontSize: 14 }}>
+          <p style={{ color: "var(--text-faint)", fontSize: 14 }}>
             Tus logros y certificados de programas completados.
           </p>
         </div>
 
         {loading ? (
-          <div style={{ padding: "80px 0", display: "flex", alignItems: "center", justifyContent: "center", gap: 10, color: "rgba(224,233,234,.35)" }}>
+          <div style={{ padding: "80px 0", display: "flex", alignItems: "center", justifyContent: "center", gap: 10, color: "var(--text-dim)" }}>
             <Loader2 size={20} style={{ animation: "spin 1s linear infinite" }} />
             Cargando certificaciones…
           </div>
@@ -89,10 +89,10 @@ export default function CertificacionesPage() {
             >
               🎓
             </motion.div>
-            <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 24, color: "#eef4f4", marginBottom: 12 }}>
+            <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 24, color: "var(--text)", marginBottom: 12 }}>
               Tu primer certificado te espera
             </h2>
-            <p style={{ color: "rgba(224,233,234,.45)", fontSize: 15, maxWidth: 440, margin: "0 auto 28px", lineHeight: 1.7 }}>
+            <p style={{ color: "var(--text-faint)", fontSize: 15, maxWidth: 440, margin: "0 auto 28px", lineHeight: 1.7 }}>
               Al completar cualquiera de nuestros programas, recibirás aquí tu certificado oficial firmado por Devora Benchimol.
             </p>
             <Link href="/#programas"
@@ -108,8 +108,8 @@ export default function CertificacionesPage() {
               borderRadius: 12, opacity: 0.5,
             }}>
               <p style={{ fontSize: 10, letterSpacing: ".3em", textTransform: "uppercase", color: "rgba(165,141,102,.6)", marginBottom: 12 }}>✦ JEWGAL ACADEMY ✦</p>
-              <p style={{ fontFamily: "var(--serif)", fontSize: 18, color: "#eef4f4", marginBottom: 8 }}>Certificado de Finalización</p>
-              <p style={{ fontSize: 12, color: "rgba(224,233,234,.4)" }}>Otorgado con honor a · Tu nombre aquí</p>
+              <p style={{ fontFamily: "var(--serif)", fontSize: 18, color: "var(--text)", marginBottom: 8 }}>Certificado de Finalización</p>
+              <p style={{ fontSize: 12, color: "var(--text-faint)" }}>Otorgado con honor a · Tu nombre aquí</p>
             </div>
           </div>
         ) : (
@@ -144,10 +144,10 @@ export default function CertificacionesPage() {
                   <p style={{ fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: meta.accent, marginBottom: 8, opacity: .8 }}>
                     Certificado oficial
                   </p>
-                  <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "#eef4f4", marginBottom: 6, lineHeight: 1.25 }}>
+                  <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)", marginBottom: 6, lineHeight: 1.25 }}>
                     {c.course.title}
                   </h3>
-                  <p style={{ fontSize: 12, color: "rgba(224,233,234,.35)", marginBottom: 6 }}>
+                  <p style={{ fontSize: 12, color: "var(--text-dim)", marginBottom: 6 }}>
                     Completado el {new Date(c.completedAt).toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" })}
                   </p>
                   <p style={{ fontSize: 11, color: "rgba(165,141,102,.5)", letterSpacing: ".1em", marginBottom: 22 }}>
@@ -177,7 +177,7 @@ export default function CertificacionesPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            style={{ position: "fixed", inset: 0, zIndex: 80, background: "rgba(8,30,41,.92)", backdropFilter: "blur(14px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 16px" }}
+            style={{ position: "fixed", inset: 0, zIndex: 80, background: "var(--bar)", backdropFilter: "blur(14px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 16px" }}
             onClick={() => setActive(null)}
           >
             {/* Controles */}
@@ -187,7 +187,7 @@ export default function CertificacionesPage() {
                 <Download size={15} /> Imprimir / Descargar
               </button>
               <button onClick={() => setActive(null)}
-                style={{ display: "flex", alignItems: "center", gap: 7, background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", color: "rgba(224,233,234,.6)", borderRadius: 9, padding: "10px 16px", fontSize: 13, cursor: "pointer" }}>
+                style={{ display: "flex", alignItems: "center", gap: 7, background: "var(--surface-2)", border: "1px solid rgba(255,255,255,.1)", color: "var(--text-muted)", borderRadius: 9, padding: "10px 16px", fontSize: 13, cursor: "pointer" }}>
                 <X size={15} /> Cerrar
               </button>
             </div>
@@ -203,7 +203,7 @@ export default function CertificacionesPage() {
               onClick={(e) => e.stopPropagation()}
               style={{
                 width: "min(780px, 100%)",
-                background: "linear-gradient(145deg, #0b2234, #081E29)",
+                background: "linear-gradient(145deg, #0b2234, var(--bg))",
                 border: `1px solid ${activeMeta.accent}55`,
                 borderRadius: 20,
                 padding: "60px 70px",
@@ -241,7 +241,7 @@ export default function CertificacionesPage() {
                 <p style={{ fontSize: 10, letterSpacing: ".45em", textTransform: "uppercase", color: activeMeta.accent, marginBottom: 4, opacity: .85 }}>
                   ✦ &nbsp; Jewgal Academy &nbsp; ✦
                 </p>
-                <h1 style={{ fontFamily: "var(--serif)", fontSize: 28, fontWeight: 400, color: "#eef4f4", letterSpacing: ".04em" }}>
+                <h1 style={{ fontFamily: "var(--serif)", fontSize: 28, fontWeight: 400, color: "var(--text)", letterSpacing: ".04em" }}>
                   Certificado de Finalización
                 </h1>
               </div>
@@ -261,17 +261,17 @@ export default function CertificacionesPage() {
                 {name}
               </h2>
 
-              <p style={{ textAlign: "center", fontSize: 14, color: "rgba(224,233,234,.45)", marginBottom: 14, lineHeight: 1.7 }}>
+              <p style={{ textAlign: "center", fontSize: 14, color: "var(--text-faint)", marginBottom: 14, lineHeight: 1.7 }}>
                 por completar exitosamente el programa de formación
               </p>
 
               {/* Nombre del programa */}
-              <h3 style={{ fontFamily: "var(--serif)", fontSize: 26, fontWeight: 400, color: "#eef4f4", textAlign: "center", marginBottom: 10 }}>
+              <h3 style={{ fontFamily: "var(--serif)", fontSize: 26, fontWeight: 400, color: "var(--text)", textAlign: "center", marginBottom: 10 }}>
                 {active.course.title}
               </h3>
 
               {/* Descripción del programa */}
-              <p style={{ textAlign: "center", fontSize: 13, color: "rgba(224,233,234,.3)", marginBottom: 50 }}>
+              <p style={{ textAlign: "center", fontSize: 13, color: "var(--text-dim)", marginBottom: 50 }}>
                 en la plataforma Jewgal Academy · por Devora Benchimol
               </p>
 
@@ -282,14 +282,14 @@ export default function CertificacionesPage() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
                 <div>
                   <div style={{ width: 180, height: 1, background: `${activeMeta.accent}60`, marginBottom: 10 }} />
-                  <p style={{ fontSize: 14, color: "#eef4f4", fontWeight: 600, marginBottom: 3 }}>Devora Benchimol</p>
+                  <p style={{ fontSize: 14, color: "var(--text)", fontWeight: 600, marginBottom: 3 }}>Devora Benchimol</p>
                   <p style={{ fontSize: 11, color: "rgba(165,141,102,.55)", letterSpacing: ".16em", textTransform: "uppercase" }}>
                     Fundadora · Master Coach Internacional
                   </p>
                 </div>
                 <div style={{ textAlign: "right" }}>
-                  <p style={{ fontSize: 11, color: "rgba(224,233,234,.3)", marginBottom: 4, letterSpacing: ".1em", textTransform: "uppercase" }}>Fecha de emisión</p>
-                  <p style={{ fontSize: 13, color: "rgba(224,233,234,.65)" }}>
+                  <p style={{ fontSize: 11, color: "var(--text-dim)", marginBottom: 4, letterSpacing: ".1em", textTransform: "uppercase" }}>Fecha de emisión</p>
+                  <p style={{ fontSize: 13, color: "var(--text-muted)" }}>
                     {new Date(active.completedAt).toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" })}
                   </p>
                   <p style={{ fontSize: 10, color: `${activeMeta.accent}70`, marginTop: 10, letterSpacing: ".12em" }}>

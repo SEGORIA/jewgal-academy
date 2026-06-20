@@ -119,3 +119,9 @@ model Payment {
   course          Course    @relation(fields: [courseId], references: [id])
   createdAt       DateTime  @default(now())
 }
+
+model SiteSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt @default(now())
+}

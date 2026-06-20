@@ -44,7 +44,7 @@ function formatTime(d: Date) {
 }
 
 const card: React.CSSProperties = {
-  background: "rgba(255,255,255,.03)",
+  background: "var(--surface)",
   border: "1px solid rgba(165,141,102,.14)",
   borderRadius: 14, padding: "24px 26px",
 }
@@ -59,10 +59,10 @@ export default function ClasesPage() {
         <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 10 }}>
           Aula Virtual
         </span>
-        <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "#eef4f4", marginBottom: 8 }}>
+        <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "var(--text)", marginBottom: 8 }}>
           Clases en vivo
         </h1>
-        <p style={{ color: "rgba(224,233,234,.5)", fontSize: 15 }}>
+        <p style={{ color: "var(--text-muted)", fontSize: 15 }}>
           Sesiones en vivo con Devora a través de Zoom.
         </p>
       </div>
@@ -79,14 +79,14 @@ export default function ClasesPage() {
                 <Video size={19} style={{ color: "#4B7E8C" }} />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <h3 style={{ fontWeight: 600, color: "#eef4f4", fontSize: 15, marginBottom: 5 }}>{s.title}</h3>
-                <p style={{ color: "rgba(224,233,234,.45)", fontSize: 13, marginBottom: 12, lineHeight: 1.6 }}>{s.description}</p>
+                <h3 style={{ fontWeight: 600, color: "var(--text)", fontSize: 15, marginBottom: 5 }}>{s.title}</h3>
+                <p style={{ color: "var(--text-faint)", fontSize: 13, marginBottom: 12, lineHeight: 1.6 }}>{s.description}</p>
                 <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-                  <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "rgba(224,233,234,.4)" }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--text-faint)" }}>
                     <Calendar size={12} style={{ color: "#4B7E8C" }} />
                     {formatDate(s.scheduledAt)}
                   </span>
-                  <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "rgba(224,233,234,.4)" }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--text-faint)" }}>
                     <Clock size={12} style={{ color: "#4B7E8C" }} />
                     {formatTime(s.scheduledAt)} hs
                   </span>
@@ -124,7 +124,7 @@ export default function ClasesPage() {
             </div>
           ))}
           {upcoming.length === 0 && (
-            <p style={{ color: "rgba(224,233,234,.35)", fontSize: 14 }}>No hay clases programadas por el momento.</p>
+            <p style={{ color: "var(--text-dim)", fontSize: 14 }}>No hay clases programadas por el momento.</p>
           )}
         </div>
       </section>
@@ -132,7 +132,7 @@ export default function ClasesPage() {
       {/* Pasadas */}
       {past.length > 0 && (
         <section>
-          <p style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(224,233,234,.3)", marginBottom: 14 }}>
+          <p style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 14 }}>
             Sesiones anteriores
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -140,8 +140,8 @@ export default function ClasesPage() {
               <div key={s.id} style={{ ...card, display: "flex", alignItems: "center", gap: 14, opacity: 0.6, padding: "16px 22px" }}>
                 <CheckCircle2 size={16} style={{ color: "#6BBF8E", flexShrink: 0 }} />
                 <div style={{ flex: 1 }}>
-                  <p style={{ fontWeight: 500, color: "#eef4f4", fontSize: 14 }}>{s.title}</p>
-                  <p style={{ fontSize: 12, color: "rgba(224,233,234,.4)", marginTop: 2 }}>{formatDate(s.scheduledAt)} · Completada</p>
+                  <p style={{ fontWeight: 500, color: "var(--text)", fontSize: 14 }}>{s.title}</p>
+                  <p style={{ fontSize: 12, color: "var(--text-faint)", marginTop: 2 }}>{formatDate(s.scheduledAt)} · Completada</p>
                 </div>
               </div>
             ))}

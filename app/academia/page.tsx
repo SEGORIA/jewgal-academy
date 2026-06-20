@@ -15,7 +15,7 @@ const PROGRAMS = [
     desc: "Formación integral que une psicología, logoterapia y herramientas de coaching para acompañar procesos de transformación profunda.",
     price: "$1.500", free: false,
     duration: "6 meses", level: "Todos los niveles",
-    grad: "linear-gradient(135deg,#081E29 0%,#0a3d4f 100%)",
+    grad: "linear-gradient(135deg,var(--bg) 0%,#0a3d4f 100%)",
     accent: "#A58D66", icon: "⟡",
     bullets: ["Certificado internacional", "Clases en vivo + grabaciones", "Supervisión individual"],
   },
@@ -88,7 +88,7 @@ export default function AcademiaPage() {
         <div style={{ position: "absolute", top: "-30%", right: "0%", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(165,141,102,.07),transparent 70%)", pointerEvents: "none" }} />
         <div className="wrap">
           <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Jewgal Academy</span>
-          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(46px,6.5vw,82px)", color: "#eef4f4", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}>
+          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(46px,6.5vw,82px)", color: "var(--text)", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}>
             La Academia
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: 17, maxWidth: 520, lineHeight: 1.7, marginBottom: 36 }}>
@@ -121,7 +121,7 @@ export default function AcademiaPage() {
                 whileHover={{ background: "rgba(165,141,102,.04)" }}
               >
                 <span style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: 13, color: "var(--gold)", display: "block", marginBottom: 16 }}>{p.n}</span>
-                <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 22, color: "#eef4f4", marginBottom: 10 }}>{p.title}</h3>
+                <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 22, color: "var(--text)", marginBottom: 10 }}>{p.title}</h3>
                 <p style={{ color: "var(--on-dark)", fontSize: 14, lineHeight: 1.65 }}>{p.desc}</p>
               </motion.div>
             ))}
@@ -135,7 +135,7 @@ export default function AcademiaPage() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 60, flexWrap: "wrap", gap: 16 }}>
             <div className="reveal">
               <span className="eyebrow" style={{ display: "block", marginBottom: 12 }}>Nuestros programas</span>
-              <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(28px,3.6vw,46px)", color: "#eef4f4", lineHeight: 1.1 }}>
+              <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(28px,3.6vw,46px)", color: "var(--text)", lineHeight: 1.1 }}>
                 Formaciones y certificaciones
               </h2>
             </div>
@@ -153,7 +153,7 @@ export default function AcademiaPage() {
                 <div>
                   <div style={{ fontSize: 44, color: PROGRAMS[0].accent, fontFamily: "var(--serif)", marginBottom: 8, lineHeight: 1 }}>{PROGRAMS[0].icon}</div>
                   <span style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: PROGRAMS[0].accent, display: "block", marginBottom: 12 }}>{PROGRAMS[0].tag}</span>
-                  <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 32, color: "#eef4f4", lineHeight: 1.1, marginBottom: 16 }}>{PROGRAMS[0].title}</h3>
+                  <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 32, color: "var(--text)", lineHeight: 1.1, marginBottom: 16 }}>{PROGRAMS[0].title}</h3>
                   <p style={{ color: "var(--on-dark)", fontSize: 15, lineHeight: 1.65, maxWidth: 360 }}>{PROGRAMS[0].desc}</p>
                 </div>
                 <Link href={`/programas/${PROGRAMS[0].slug}`} className="btn" style={{ alignSelf: "flex-start", marginTop: 24, borderColor: PROGRAMS[0].accent, color: PROGRAMS[0].accent }}>
@@ -171,7 +171,7 @@ export default function AcademiaPage() {
                 </div>
                 <div style={{ marginTop: 32 }}>
                   <div style={{ fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 6 }}>Inversión</div>
-                  <div style={{ fontFamily: "var(--serif)", fontSize: 34, color: "#eef4f4" }}>{PROGRAMS[0].price}</div>
+                  <div style={{ fontFamily: "var(--serif)", fontSize: 34, color: "var(--text)" }}>{PROGRAMS[0].price}</div>
                   <div style={{ display: "flex", gap: 14, marginTop: 14, flexWrap: "wrap" }}>
                     <span style={{ fontSize: 11, border: "1px solid var(--line-d)", borderRadius: 16, padding: "5px 13px", color: "var(--on-dark)" }}>⏱ {PROGRAMS[0].duration}</span>
                     <span style={{ fontSize: 11, border: "1px solid var(--line-d)", borderRadius: 16, padding: "5px 13px", color: "var(--on-dark)" }}>◈ {PROGRAMS[0].level}</span>
@@ -195,14 +195,14 @@ export default function AcademiaPage() {
                     <Link href={`/programas/${p.slug}`} style={{ textDecoration: "none" }}>
                       <div style={{
                         background: p.grad, borderRadius: 8, padding: "34px 28px",
-                        border: "1px solid rgba(255,255,255,.06)",
+                        border: "1px solid var(--surface-2)",
                         display: "flex", flexDirection: "column", justifyContent: "space-between",
                         minHeight: 340, cursor: "pointer",
                       }}>
                         <div>
                           <div style={{ fontSize: 30, color: p.accent, marginBottom: 12, lineHeight: 1 }}>{p.icon}</div>
                           <span style={{ fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: p.accent, display: "block", marginBottom: 10 }}>{p.tag}</span>
-                          <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "#eef4f4", lineHeight: 1.15, marginBottom: 10 }}>{p.title}</h3>
+                          <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--text)", lineHeight: 1.15, marginBottom: 10 }}>{p.title}</h3>
                           <p style={{ color: "var(--on-dark)", fontSize: 13, lineHeight: 1.6 }}>{p.desc}</p>
                         </div>
                         <div style={{ marginTop: 20 }}>

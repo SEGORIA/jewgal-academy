@@ -164,13 +164,13 @@ export default function Navbar() {
                   transition={{ delay: 0.06 + i * 0.06 }}
                 >
                   <Link href={l.href} onClick={() => setOpen(false)} style={{
-                    fontFamily: "var(--serif)", fontSize: 32, color: "#eef4f4",
+                    fontFamily: "var(--serif)", fontSize: 32, color: "var(--text)",
                     textDecoration: "none", padding: "10px 0", display: "block",
                     borderBottom: "1px solid rgba(165,141,102,.1)",
                     transition: "color .2s",
                   }}
                     onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--gold)")}
-                    onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "#eef4f4")}
+                    onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text)")}
                   >
                     {l.label}
                   </Link>

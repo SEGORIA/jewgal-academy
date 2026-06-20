@@ -6,7 +6,7 @@ export default function AdminLoading() {
     }}>
       <div style={{
         display: "flex", flexDirection: "column", alignItems: "center", gap: 16,
-        color: "rgba(224,233,234,.3)", fontSize: 13,
+        color: "var(--text-dim)", fontSize: 13,
       }}>
         <div style={{
           width: 24, height: 24, borderRadius: "50%",

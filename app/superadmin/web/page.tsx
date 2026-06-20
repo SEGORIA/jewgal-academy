@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useState } from "react"
 import { Eye, Save, ChevronDown, ChevronUp } from "lucide-react"
@@ -59,9 +59,9 @@ const INITIAL_SECTIONS: Section[] = [
   },
 ]
 
-const card: React.CSSProperties = { background: "rgba(255,255,255,.03)", border: "1px solid rgba(165,141,102,.13)", borderRadius: 14 }
-const inputBase: React.CSSProperties = { background: "rgba(255,255,255,.05)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, fontSize: 13, color: "#eef4f4", outline: "none", fontFamily: "inherit", width: "100%", padding: "10px 14px" }
-const labelStyle: React.CSSProperties = { fontSize: 11, letterSpacing: ".15em", textTransform: "uppercase", color: "rgba(224,233,234,.4)", display: "block", marginBottom: 7 }
+const card: React.CSSProperties = { background: "var(--surface)", border: "1px solid rgba(165,141,102,.13)", borderRadius: 14 }
+const inputBase: React.CSSProperties = { background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, fontSize: 13, color: "var(--text)", outline: "none", fontFamily: "inherit", width: "100%", padding: "10px 14px" }
+const labelStyle: React.CSSProperties = { fontSize: 11, letterSpacing: ".15em", textTransform: "uppercase", color: "var(--text-faint)", display: "block", marginBottom: 7 }
 
 export default function WebAdminPage() {
   const [sections, setSections] = useState<Section[]>(INITIAL_SECTIONS)
@@ -88,11 +88,11 @@ export default function WebAdminPage() {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
         <div>
           <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 8 }}>Admin</span>
-          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "#eef4f4", marginBottom: 6 }}>Editor del sitio web</h1>
-          <p style={{ color: "rgba(224,233,234,.4)", fontSize: 14 }}>Modificá los textos e información visibles en el sitio público.</p>
+          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Editor del sitio web</h1>
+          <p style={{ color: "var(--text-faint)", fontSize: 14 }}>Modificá los textos e información visibles en el sitio público.</p>
         </div>
         <div style={{ display: "flex", gap: 10 }}>
-          <a href="/" target="_blank" style={{ display: "flex", alignItems: "center", gap: 7, background: "rgba(255,255,255,.05)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 10, padding: "11px 18px", fontSize: 13, color: "rgba(224,233,234,.6)", textDecoration: "none" }}>
+          <a href="/" target="_blank" style={{ display: "flex", alignItems: "center", gap: 7, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 10, padding: "11px 18px", fontSize: 13, color: "var(--text-muted)", textDecoration: "none" }}>
             <Eye size={15} /> Ver sitio
           </a>
           <button onClick={handleSave} style={{ display: "flex", alignItems: "center", gap: 7, background: saved ? "#6BBF8E" : "var(--gold,#A58D66)", color: "#081E29", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer", transition: "background .3s" }}>
@@ -106,18 +106,18 @@ export default function WebAdminPage() {
           <div key={section.id} style={{ ...card }}>
             {/* Header acordeón */}
             <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "18px 22px", cursor: "pointer" }} onClick={() => setExpanded(expanded === section.id ? null : section.id)}>
-              <div style={{ width: 8, height: 8, borderRadius: "50%", background: section.visible ? "#6BBF8E" : "rgba(224,233,234,.2)", flexShrink: 0 }} />
-              <span style={{ fontSize: 15, fontWeight: 600, color: "#eef4f4", flex: 1 }}>{section.label}</span>
+              <div style={{ width: 8, height: 8, borderRadius: "50%", background: section.visible ? "#6BBF8E" : "var(--text-dim)", flexShrink: 0 }} />
+              <span style={{ fontSize: 15, fontWeight: 600, color: "var(--text)", flex: 1 }}>{section.label}</span>
               <button onClick={(e) => { e.stopPropagation(); toggleVisible(section.id) }}
-                style={{ fontSize: 11, color: section.visible ? "#6BBF8E" : "rgba(224,233,234,.3)", background: "none", border: "none", cursor: "pointer", letterSpacing: ".1em" }}>
+                style={{ fontSize: 11, color: section.visible ? "#6BBF8E" : "var(--text-dim)", background: "none", border: "none", cursor: "pointer", letterSpacing: ".1em" }}>
                 {section.visible ? "Visible" : "Oculto"}
               </button>
-              {expanded === section.id ? <ChevronUp size={16} style={{ color: "rgba(224,233,234,.3)" }} /> : <ChevronDown size={16} style={{ color: "rgba(224,233,234,.3)" }} />}
+              {expanded === section.id ? <ChevronUp size={16} style={{ color: "var(--text-dim)" }} /> : <ChevronDown size={16} style={{ color: "var(--text-dim)" }} />}
             </div>
 
             {/* Campos */}
             {expanded === section.id && (
-              <div style={{ padding: "0 22px 22px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, borderTop: "1px solid rgba(255,255,255,.06)", paddingTop: 20 }}>
+              <div style={{ padding: "0 22px 22px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, borderTop: "1px solid var(--surface-2)", paddingTop: 20 }}>
                 {section.fields.map((field) => (
                   <div key={field.key} style={{ gridColumn: field.type === "textarea" ? "span 2" : undefined }}>
                     <label style={labelStyle}>{field.label}</label>
@@ -145,8 +145,8 @@ export default function WebAdminPage() {
       </div>
 
       <div style={{ ...card, padding: "20px 22px", marginTop: 20, borderColor: "rgba(251,191,36,.15)", background: "rgba(251,191,36,.03)" }}>
-        <p style={{ fontSize: 13, color: "rgba(224,233,234,.5)", lineHeight: 1.7 }}>
-          <strong style={{ color: "rgba(224,233,234,.75)" }}>Nota:</strong> Los cambios de texto se guardan en la base de datos y se aplican al sitio en el próximo deploy. Para cambios de diseño (colores, imágenes, fuentes), editá los archivos de código con Claude Code.
+        <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.7 }}>
+          <strong style={{ color: "var(--text-strong)" }}>Nota:</strong> Los cambios de texto se guardan en la base de datos y se aplican al sitio en el próximo deploy. Para cambios de diseño (colores, imágenes, fuentes), editá los archivos de código con Claude Code.
         </p>
       </div>
     </div>

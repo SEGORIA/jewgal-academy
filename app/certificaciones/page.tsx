@@ -15,7 +15,7 @@ const CERTS = [
     slug: "life-coaching-integrativo",
     entity: "Jewgal Academy · Internacional",
     accent: "#A58D66",
-    grad: "linear-gradient(135deg,#081E29,#0a3d4f)",
+    grad: "linear-gradient(135deg,var(--bg),#0a3d4f)",
     icon: "⟡",
     duration: "6 meses",
     type: "Formación completa",
@@ -103,7 +103,7 @@ export default function CertificacionesPage() {
         <div style={{ position: "absolute", top: "-30%", right: "0%", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(165,141,102,.07),transparent 70%)", pointerEvents: "none" }} />
         <div className="wrap">
           <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Jewgal Academy</span>
-          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(44px,6vw,78px)", color: "#eef4f4", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}>
+          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(44px,6vw,78px)", color: "var(--text)", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}>
             Certificaciones
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: 17, maxWidth: 500, lineHeight: 1.7 }}>
@@ -136,7 +136,7 @@ export default function CertificacionesPage() {
                 >
                   {s.n}
                 </motion.span>
-                <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "#eef4f4", marginBottom: 10 }}>{s.title}</h3>
+                <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--text)", marginBottom: 10 }}>{s.title}</h3>
                 <p style={{ color: "var(--on-dark)", fontSize: 14, lineHeight: 1.6 }}>{s.desc}</p>
               </motion.div>
             ))}
@@ -169,7 +169,7 @@ export default function CertificacionesPage() {
                   <div>
                     <div style={{ fontSize: 36, color: c.accent, marginBottom: 10, lineHeight: 1 }}>{c.icon}</div>
                     <span style={{ fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: c.accent, display: "block", marginBottom: 10 }}>{c.type}</span>
-                    <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 22, color: "#eef4f4", lineHeight: 1.15 }}>{c.title}</h3>
+                    <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 22, color: "var(--text)", lineHeight: 1.15 }}>{c.title}</h3>
                   </div>
                   <div style={{ marginTop: 24 }}>
                     <div style={{ fontSize: 10, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--on-dark-faint)", marginBottom: 4 }}>Entidad</div>

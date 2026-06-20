@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useState } from "react"
 import { Plus, Pencil, Trash2, Eye, X } from "lucide-react"
@@ -13,9 +13,9 @@ const INITIAL_POSTS: Post[] = [
   { id: "3", title: "El Método Joogal: movimiento consciente", category: "Joogal", date: "28 May 2026", status: "draft", excerpt: "El movimiento como herramienta de transformación personal…", content: "" },
 ]
 
-const card: React.CSSProperties = { background: "rgba(255,255,255,.03)", border: "1px solid rgba(165,141,102,.13)", borderRadius: 14 }
-const inputStyle: React.CSSProperties = { background: "rgba(255,255,255,.05)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 14px", fontSize: 13, color: "#eef4f4", outline: "none", fontFamily: "inherit", width: "100%" }
-const labelStyle: React.CSSProperties = { fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(224,233,234,.45)", display: "block", marginBottom: 7 }
+const card: React.CSSProperties = { background: "var(--surface)", border: "1px solid rgba(165,141,102,.13)", borderRadius: 14 }
+const inputStyle: React.CSSProperties = { background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 14px", fontSize: 13, color: "var(--text)", outline: "none", fontFamily: "inherit", width: "100%" }
+const labelStyle: React.CSSProperties = { fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--text-faint)", display: "block", marginBottom: 7 }
 
 export default function BlogAdminPage() {
   const [posts, setPosts]     = useState<Post[]>(INITIAL_POSTS)
@@ -60,8 +60,8 @@ export default function BlogAdminPage() {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
         <div>
           <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 8 }}>Admin</span>
-          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "#eef4f4", marginBottom: 6 }}>Blog</h1>
-          <p style={{ color: "rgba(224,233,234,.4)", fontSize: 14 }}>{posts.length} entradas · {posts.filter((p) => p.status === "published").length} publicadas</p>
+          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Blog</h1>
+          <p style={{ color: "var(--text-faint)", fontSize: 14 }}>{posts.length} entradas · {posts.filter((p) => p.status === "published").length} publicadas</p>
         </div>
         <button onClick={openNew} style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--gold,#A58D66)", color: "#081E29", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
           <Plus size={16} /> Nueva entrada
@@ -77,19 +77,19 @@ export default function BlogAdminPage() {
               <div style={{ flex: 1 }}>
                 <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 6 }}>
                   <span style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "#A58D66", background: "rgba(165,141,102,.1)", borderRadius: 16, padding: "3px 10px" }}>{p.category}</span>
-                  <span style={{ fontSize: 11, color: p.status === "published" ? "#6BBF8E" : "rgba(224,233,234,.3)" }}>
+                  <span style={{ fontSize: 11, color: p.status === "published" ? "#6BBF8E" : "var(--text-dim)" }}>
                     {p.status === "published" ? "● Publicado" : "○ Borrador"}
                   </span>
-                  <span style={{ fontSize: 12, color: "rgba(224,233,234,.25)", marginLeft: "auto" }}>{p.date}</span>
+                  <span style={{ fontSize: 12, color: "var(--text-dim)", marginLeft: "auto" }}>{p.date}</span>
                 </div>
-                <h3 style={{ fontSize: 15, fontWeight: 600, color: "#eef4f4", marginBottom: 5 }}>{p.title}</h3>
-                <p style={{ fontSize: 13, color: "rgba(224,233,234,.4)", lineHeight: 1.6 }}>{p.excerpt}</p>
+                <h3 style={{ fontSize: 15, fontWeight: 600, color: "var(--text)", marginBottom: 5 }}>{p.title}</h3>
+                <p style={{ fontSize: 13, color: "var(--text-faint)", lineHeight: 1.6 }}>{p.excerpt}</p>
               </div>
               <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
-                <button onClick={() => toggleStatus(p.id)} title={p.status === "published" ? "Pasar a borrador" : "Publicar"} style={{ background: "none", border: "1px solid rgba(255,255,255,.08)", borderRadius: 7, padding: "7px 9px", cursor: "pointer", color: p.status === "published" ? "#6BBF8E" : "rgba(224,233,234,.3)" }}>
+                <button onClick={() => toggleStatus(p.id)} title={p.status === "published" ? "Pasar a borrador" : "Publicar"} style={{ background: "none", border: "1px solid rgba(255,255,255,.08)", borderRadius: 7, padding: "7px 9px", cursor: "pointer", color: p.status === "published" ? "#6BBF8E" : "var(--text-dim)" }}>
                   <Eye size={14} />
                 </button>
-                <button onClick={() => openEdit(p)} style={{ background: "none", border: "1px solid rgba(255,255,255,.08)", borderRadius: 7, padding: "7px 9px", cursor: "pointer", color: "rgba(224,233,234,.5)" }}>
+                <button onClick={() => openEdit(p)} style={{ background: "none", border: "1px solid rgba(255,255,255,.08)", borderRadius: 7, padding: "7px 9px", cursor: "pointer", color: "var(--text-muted)" }}>
                   <Pencil size={14} />
                 </button>
                 <button onClick={() => deletePost(p.id)} style={{ background: "none", border: "1px solid rgba(255,255,255,.08)", borderRadius: 7, padding: "7px 9px", cursor: "pointer", color: "rgba(239,68,68,.5)" }}>
@@ -104,10 +104,10 @@ export default function BlogAdminPage() {
         {showEditor && (
           <div style={{ ...card, padding: "26px 24px", position: "sticky", top: 24 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 22 }}>
-              <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "#eef4f4" }}>
+              <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--text)" }}>
                 {isNew ? "Nueva entrada" : "Editar entrada"}
               </h2>
-              <button onClick={() => { setEditing(null); setIsNew(false) }} style={{ background: "none", border: "none", color: "rgba(224,233,234,.3)", cursor: "pointer" }}>
+              <button onClick={() => { setEditing(null); setIsNew(false) }} style={{ background: "none", border: "none", color: "var(--text-dim)", cursor: "pointer" }}>
                 <X size={18} />
               </button>
             </div>
@@ -143,7 +143,7 @@ export default function BlogAdminPage() {
             </div>
 
             <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
-              <button onClick={() => { setEditing(null); setIsNew(false) }} style={{ flex: 1, background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 9, padding: "11px 0", fontSize: 13, color: "rgba(224,233,234,.5)", cursor: "pointer" }}>Cancelar</button>
+              <button onClick={() => { setEditing(null); setIsNew(false) }} style={{ flex: 1, background: "var(--surface-2)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 9, padding: "11px 0", fontSize: 13, color: "var(--text-muted)", cursor: "pointer" }}>Cancelar</button>
               <button onClick={savePost} style={{ flex: 2, background: "var(--gold,#A58D66)", border: "none", borderRadius: 9, padding: "11px 0", fontSize: 13, fontWeight: 700, color: "#081E29", cursor: "pointer" }}>
                 {isNew ? "Publicar entrada" : "Guardar cambios"}
               </button>

@@ -11,7 +11,7 @@ const EVENTS = [
     location: "Miami, Florida",
     desc: "Un fin de semana de reconexión profunda: movimiento Joogal, meditación, círculos de coaching y sabiduría de la Cábala. Plazas muy limitadas.",
     accent: "#A58D66",
-    grad: "linear-gradient(135deg,#081E29,#0a3d4f)",
+    grad: "linear-gradient(135deg,var(--bg),#0a3d4f)",
     spots: 20,
     price: "$450",
     icon: "◎",
@@ -64,7 +64,7 @@ export default function EventosPage() {
         <div style={{ position: "absolute", top: "-30%", right: "0", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(165,141,102,.07),transparent 70%)", pointerEvents: "none" }} />
         <div className="wrap">
           <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Agenda</span>
-          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(44px,6vw,78px)", color: "#eef4f4", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}>
+          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(44px,6vw,78px)", color: "var(--text)", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}>
             Próximos<br /><em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>Eventos</em>
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: 17, maxWidth: 500, lineHeight: 1.7 }}>
@@ -103,7 +103,7 @@ export default function EventosPage() {
                         📍 {ev.location}
                       </span>
                     </div>
-                    <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(20px,2.4vw,28px)", color: "#eef4f4", marginBottom: 12, lineHeight: 1.15 }}>
+                    <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(20px,2.4vw,28px)", color: "var(--text)", marginBottom: 12, lineHeight: 1.15 }}>
                       {ev.title}
                     </h3>
                     <p style={{ color: "var(--on-dark)", fontSize: 14.5, lineHeight: 1.65, maxWidth: 560 }}>{ev.desc}</p>
@@ -138,7 +138,7 @@ export default function EventosPage() {
                 ...(i === PAST.length - 1 ? { borderBottom: "1px solid var(--line-d)" } : {}),
               }}>
                 <div>
-                  <h4 style={{ fontFamily: "var(--serif)", fontSize: 19, color: "#eef4f4" }}>{p.title}</h4>
+                  <h4 style={{ fontFamily: "var(--serif)", fontSize: 19, color: "var(--text)" }}>{p.title}</h4>
                   <span style={{ fontSize: 12, color: "var(--on-dark-faint)" }}>{p.location}</span>
                 </div>
                 <span style={{ fontSize: 12, color: "var(--gold)", letterSpacing: ".1em" }}>{p.date}</span>

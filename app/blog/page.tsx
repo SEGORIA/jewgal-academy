@@ -153,7 +153,7 @@ export default function BlogPage() {
         <div style={{ position: "absolute", top: "-30%", right: "0", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(165,141,102,.07),transparent 70%)", pointerEvents: "none" }} />
         <div className="wrap">
           <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Jewgal Academy</span>
-          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(44px,6vw,78px)", color: "#eef4f4", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}>
+          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(44px,6vw,78px)", color: "var(--text)", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}>
             Blog &amp;<br /><em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>Recursos</em>
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: 17, maxWidth: 500, lineHeight: 1.7 }}>
@@ -205,7 +205,7 @@ export default function BlogPage() {
               }}
               whileHover={{ y: -4, boxShadow: "0 20px 60px rgba(0,0,0,.3)" }}
             >
-              <div style={{ background: "linear-gradient(135deg,#081E29,#0a3d4f)", padding: "52px 44px", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: 360 }}>
+              <div style={{ background: "linear-gradient(135deg,var(--bg),#0a3d4f)", padding: "52px 44px", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: 360 }}>
                 <div>
                   <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
                     <span style={{ fontSize: 11, border: "1px solid var(--line-d)", borderRadius: 16, padding: "4px 14px", color: filtered[0].accent, letterSpacing: ".12em", textTransform: "uppercase" }}>
@@ -213,7 +213,7 @@ export default function BlogPage() {
                     </span>
                     <span style={{ fontSize: 12, color: "var(--on-dark-faint)" }}>⏱ {filtered[0].readTime}</span>
                   </div>
-                  <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(22px,2.8vw,34px)", color: "#eef4f4", lineHeight: 1.2, marginBottom: 18 }}>
+                  <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(22px,2.8vw,34px)", color: "var(--text)", lineHeight: 1.2, marginBottom: 18 }}>
                     {filtered[0].title}
                   </h2>
                   <p style={{ color: "var(--on-dark)", fontSize: 15.5, lineHeight: 1.7 }}>{filtered[0].excerpt}</p>
@@ -226,7 +226,7 @@ export default function BlogPage() {
                 </motion.span>
               </div>
               <div style={{ background: "var(--navy-2)", padding: "52px 44px", display: "flex", alignItems: "center" }}>
-                <blockquote style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(17px,2vw,26px)", color: "#eef4f4", lineHeight: 1.5, borderLeft: `3px solid var(--gold)`, paddingLeft: 24 }}>
+                <blockquote style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(17px,2vw,26px)", color: "var(--text)", lineHeight: 1.5, borderLeft: `3px solid var(--gold)`, paddingLeft: 24 }}>
                   "El coaching integrativo no es solo una metodología. Es una manera de habitar el cambio desde adentro."
                   <cite style={{ display: "block", fontStyle: "normal", fontFamily: "var(--sans)", fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginTop: 16 }}>
                     — Devora Benchimol
@@ -251,7 +251,7 @@ export default function BlogPage() {
                   whileHover={{ y: -6, boxShadow: "0 16px 48px rgba(0,0,0,.25)", borderColor: "rgba(165,141,102,.4)" }}
                   style={{
                     border: "1px solid var(--line-d)", borderRadius: 8, padding: "32px 28px",
-                    background: "rgba(255,255,255,.02)",
+                    background: "var(--surface)",
                     display: "flex", flexDirection: "column", justifyContent: "space-between",
                     cursor: "pointer", minHeight: 280,
                   }}
@@ -263,7 +263,7 @@ export default function BlogPage() {
                       </span>
                       <span style={{ fontSize: 12, color: "var(--on-dark-faint)" }}>{post.readTime}</span>
                     </div>
-                    <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 19, color: "#eef4f4", lineHeight: 1.25, marginBottom: 12 }}>{post.title}</h3>
+                    <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 19, color: "var(--text)", lineHeight: 1.25, marginBottom: 12 }}>{post.title}</h3>
                     <p style={{ color: "var(--on-dark)", fontSize: 14, lineHeight: 1.65 }}>{post.excerpt}</p>
                   </div>
                   <div style={{ marginTop: 20, paddingTop: 18, borderTop: "1px solid var(--line-d)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -307,7 +307,7 @@ export default function BlogPage() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
               onClick={() => setOpenPost(null)}
-              style={{ position: "fixed", inset: 0, zIndex: 80, background: "rgba(8,30,41,.85)", backdropFilter: "blur(8px)", cursor: "pointer" }}
+              style={{ position: "fixed", inset: 0, zIndex: 80, background: "var(--scrim)", backdropFilter: "blur(8px)", cursor: "pointer" }}
             />
 
             {/* Panel del artículo */}
@@ -344,7 +344,7 @@ export default function BlogPage() {
                         </span>
                         <span style={{ fontSize: 12, color: "var(--on-dark-faint)" }}>{openPost.date} · {openPost.readTime}</span>
                       </div>
-                      <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(20px,2.6vw,30px)", color: "#eef4f4", lineHeight: 1.2 }}>
+                      <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(20px,2.6vw,30px)", color: "var(--text)", lineHeight: 1.2 }}>
                         {openPost.title}
                       </h2>
                     </div>

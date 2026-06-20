@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Jost, Allura } from "next/font/google"
 import "./globals.css"
 import Providers from "@/components/Providers"
 import ScrollProgress from "@/components/motion/ScrollProgress"
+import { getTheme } from "@/lib/theme"
 
 const SITE_URL = "https://jewgal-academy.vercel.app"
 
@@ -68,14 +69,16 @@ export const viewport: Viewport = {
   maximumScale: 5,
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const theme = await getTheme()
   return (
     <html
       lang="es"
+      data-theme={theme}
       className={`${cormorant.variable} ${jost.variable} ${allura.variable}`}
     >
       <body>

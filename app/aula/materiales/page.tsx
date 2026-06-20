@@ -13,7 +13,7 @@ const mockMaterials = [
 const modules = [...new Set(mockMaterials.map((m) => m.moduleNumber))].sort()
 
 const card: React.CSSProperties = {
-  background: "rgba(255,255,255,.03)",
+  background: "var(--surface)",
   border: "1px solid rgba(165,141,102,.14)",
   borderRadius: 14,
 }
@@ -26,10 +26,10 @@ export default function MaterialesPage() {
         <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 10 }}>
           Aula Virtual
         </span>
-        <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "#eef4f4", marginBottom: 8 }}>
+        <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "var(--text)", marginBottom: 8 }}>
           Materiales de estudio
         </h1>
-        <p style={{ color: "rgba(224,233,234,.5)", fontSize: 15 }}>
+        <p style={{ color: "var(--text-muted)", fontSize: 15 }}>
           PDFs, guías y recursos organizados por módulo.
         </p>
       </div>
@@ -41,10 +41,10 @@ export default function MaterialesPage() {
             <div style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(165,141,102,.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <BookOpen size={15} style={{ color: "var(--gold,#A58D66)" }} />
             </div>
-            <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "#eef4f4" }}>
+            <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)" }}>
               Módulo {mod}
             </h2>
-            <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,.06)" }} />
+            <div style={{ flex: 1, height: 1, background: "var(--surface-2)" }} />
           </div>
 
           {/* Materiales */}
@@ -75,8 +75,8 @@ export default function MaterialesPage() {
                   </div>
                   {/* Info */}
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontWeight: 600, color: "#eef4f4", fontSize: 14, marginBottom: 3 }}>{material.title}</p>
-                    <p style={{ color: "rgba(224,233,234,.4)", fontSize: 12 }}>{material.desc}</p>
+                    <p style={{ fontWeight: 600, color: "var(--text)", fontSize: 14, marginBottom: 3 }}>{material.title}</p>
+                    <p style={{ color: "var(--text-faint)", fontSize: 12 }}>{material.desc}</p>
                   </div>
                   {/* Acción */}
                   <a

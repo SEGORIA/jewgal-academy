@@ -23,7 +23,7 @@ const META: Record<string, {
 }> = {
   "life-coaching-integrativo": {
     eyebrow: "Formación Profesional",
-    grad: "linear-gradient(135deg,#081E29 0%,#0d2b3a 55%,#0a3d4f 100%)",
+    grad: "linear-gradient(135deg,var(--bg) 0%,var(--bg-2) 55%,#0a3d4f 100%)",
     accent: "#A58D66",
     icon: "⟡",
     duration: "6 meses",
@@ -234,7 +234,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
               </div>
               <h1 style={{
                 fontFamily: "var(--serif)", fontWeight: 500,
-                fontSize: "clamp(36px,5.5vw,68px)", color: "#eef4f4",
+                fontSize: "clamp(36px,5.5vw,68px)", color: "var(--text)",
                 lineHeight: 1.02, letterSpacing: "-.01em",
               }}>
                 {course.title}
@@ -273,7 +273,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                 border: "1px solid rgba(165,141,102,.25)", borderRadius: 20,
                 padding: "7px 16px",
                 fontSize: 12, color: "var(--on-dark)",
-                background: "rgba(255,255,255,.04)",
+                background: "var(--surface)",
               }}>
                 <span>{c.icon}</span>
                 <span>{c.label}</span>
@@ -295,7 +295,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
               <div className="reveal" style={{ marginBottom: 60 }}>
                 <h2 style={{
                   fontFamily: "var(--serif)", fontWeight: 500,
-                  fontSize: "clamp(22px,2.8vw,34px)", color: "#eef4f4",
+                  fontSize: "clamp(22px,2.8vw,34px)", color: "var(--text)",
                   marginBottom: 20,
                 }}>
                   Sobre el programa
@@ -309,7 +309,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
               <div className="reveal" style={{ marginBottom: 60 }}>
                 <h2 style={{
                   fontFamily: "var(--serif)", fontWeight: 500,
-                  fontSize: "clamp(22px,2.8vw,34px)", color: "#eef4f4",
+                  fontSize: "clamp(22px,2.8vw,34px)", color: "var(--text)",
                   marginBottom: 28,
                 }}>
                   Contenido del programa
@@ -325,7 +325,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                       <summary style={{
                         display: "flex", justifyContent: "space-between", alignItems: "center",
                         cursor: "pointer", paddingBottom: 10, listStyle: "none",
-                        color: "#eef4f4",
+                        color: "var(--text)",
                       }}>
                         <span style={{ display: "flex", gap: 12, alignItems: "center" }}>
                           <span style={{ fontFamily: "var(--serif)", fontSize: 13, color: "var(--gold)", fontStyle: "italic" }}>
@@ -355,7 +355,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
               <div className="reveal" style={{ marginBottom: 60 }}>
                 <h2 style={{
                   fontFamily: "var(--serif)", fontWeight: 500,
-                  fontSize: "clamp(22px,2.8vw,34px)", color: "#eef4f4",
+                  fontSize: "clamp(22px,2.8vw,34px)", color: "var(--text)",
                   marginBottom: 24,
                 }}>
                   Qué incluye
@@ -376,7 +376,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
               <div className="reveal" style={{ marginBottom: 60 }}>
                 <h2 style={{
                   fontFamily: "var(--serif)", fontWeight: 500,
-                  fontSize: "clamp(22px,2.8vw,34px)", color: "#eef4f4",
+                  fontSize: "clamp(22px,2.8vw,34px)", color: "var(--text)",
                   marginBottom: 24,
                 }}>
                   ¿Para quién es este programa?
@@ -406,7 +406,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                 <div style={{ fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: meta.accent, marginBottom: 12 }}>
                   Al finalizar
                 </div>
-                <p style={{ fontFamily: "var(--serif)", fontSize: 18, color: "#eef4f4", lineHeight: 1.6 }}>
+                <p style={{ fontFamily: "var(--serif)", fontSize: 18, color: "var(--text)", lineHeight: 1.6 }}>
                   {meta.outcome}
                 </p>
               </div>
@@ -430,7 +430,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                     Inscripción
                   </div>
                   <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
-                    <span style={{ fontFamily: "var(--serif)", fontSize: 28, color: "#eef4f4" }}>
+                    <span style={{ fontFamily: "var(--serif)", fontSize: 28, color: "var(--text)" }}>
                       {course.title}
                     </span>
                     <span style={{ fontFamily: "var(--serif)", fontSize: 28, color: course.isFree ? "#6BBF8E" : meta.accent }}>

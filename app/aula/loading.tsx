@@ -6,7 +6,7 @@ export default function AulaLoading() {
     }}>
       <div style={{
         display: "flex", flexDirection: "column", alignItems: "center", gap: 16,
-        color: "rgba(224,233,234,.35)", fontSize: 13,
+        color: "var(--text-dim)", fontSize: 13,
       }}>
         <div style={{
           width: 28, height: 28, borderRadius: "50%",

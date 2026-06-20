@@ -9,19 +9,19 @@ const INTERESTS = ["Life Coaching", "Cabalá", "Joogal · Adultos", "Joogalkids"
 const COUNTRIES  = ["Argentina", "Colombia", "México", "España", "Estados Unidos", "Israel", "Venezuela", "Chile", "Uruguay", "Otro"]
 
 const card: React.CSSProperties = {
-  background: "rgba(255,255,255,.03)",
+  background: "var(--surface)",
   border: "1px solid rgba(165,141,102,.13)",
   borderRadius: 16, padding: "28px 26px",
 }
 const inputStyle: React.CSSProperties = {
-  background: "rgba(255,255,255,.05)", border: "1px solid rgba(165,141,102,.2)",
-  borderRadius: 10, padding: "11px 14px", fontSize: 13, color: "#eef4f4",
+  background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)",
+  borderRadius: 10, padding: "11px 14px", fontSize: 13, color: "var(--text)",
   outline: "none", fontFamily: "inherit", width: "100%",
   transition: "border-color .2s, box-shadow .2s",
 }
 const label: React.CSSProperties = {
   fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase",
-  color: "rgba(224,233,234,.4)", display: "block", marginBottom: 7,
+  color: "var(--text-faint)", display: "block", marginBottom: 7,
 }
 
 export default function PerfilPage() {
@@ -125,7 +125,7 @@ export default function PerfilPage() {
         <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 8 }}>
           Aula Virtual
         </span>
-        <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 34, color: "#eef4f4", marginBottom: 4 }}>
+        <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 34, color: "var(--text)", marginBottom: 4 }}>
           Mi perfil
         </h1>
         <p style={{ fontSize: 14, color: "rgba(224,233,234,.38)" }}>
@@ -220,7 +220,7 @@ export default function PerfilPage() {
 
       {/* ── SOBRE MÍ ── */}
       <div style={{ ...card, marginBottom: 16 }}>
-        <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "#eef4f4", marginBottom: 18 }}>
+        <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)", marginBottom: 18 }}>
           Sobre mí
         </h2>
         <div style={{ marginBottom: 18 }}>
@@ -251,7 +251,7 @@ export default function PerfilPage() {
                     padding: "7px 14px", borderRadius: 20, fontSize: 12, cursor: "pointer",
                     border: `1.5px solid ${active ? "var(--gold,#A58D66)" : "rgba(165,141,102,.2)"}`,
                     background: active ? "rgba(165,141,102,.15)" : "transparent",
-                    color: active ? "var(--gold,#A58D66)" : "rgba(224,233,234,.4)",
+                    color: active ? "var(--gold,#A58D66)" : "var(--text-faint)",
                     fontWeight: active ? 600 : 400,
                     display: "flex", alignItems: "center", gap: 6,
                     transition: "all .18s",
@@ -293,7 +293,7 @@ export default function PerfilPage() {
       <div style={{ ...card }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
           <KeyRound size={17} style={{ color: "rgba(165,141,102,.7)" }} />
-          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "#eef4f4" }}>
+          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)" }}>
             Cambiar contraseña
           </h2>
         </div>
@@ -306,7 +306,7 @@ export default function PerfilPage() {
                 onChange={(e) => setPwCurrent(e.target.value)} placeholder="••••••••"
                 style={{ ...inputStyle, paddingRight: 40 }} onFocus={focusIn} onBlur={focusOut} />
               <button type="button" onClick={() => setShowPw(!showPw)}
-                style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "rgba(224,233,234,.3)" }}>
+                style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-dim)" }}>
                 {showPw ? <EyeOff size={14} /> : <Eye size={14} />}
               </button>
             </div>
@@ -319,7 +319,7 @@ export default function PerfilPage() {
                 onChange={(e) => setPwNew(e.target.value)} placeholder="Mínimo 8 caracteres"
                 style={{ ...inputStyle, paddingRight: 40 }} onFocus={focusIn} onBlur={focusOut} />
               <button type="button" onClick={() => setShowNew(!showNew)}
-                style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "rgba(224,233,234,.3)" }}>
+                style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-dim)" }}>
                 {showNew ? <EyeOff size={14} /> : <Eye size={14} />}
               </button>
             </div>
@@ -342,8 +342,8 @@ export default function PerfilPage() {
           whileHover={pwNew === pwConfirm && pwCurrent ? { scale: 1.02 } : {}}
           style={{
             display: "flex", alignItems: "center", gap: 8,
-            background: pwSaved ? "#6BBF8E" : "rgba(255,255,255,.06)",
-            border: "1px solid rgba(165,141,102,.25)", color: pwSaved ? "#081E29" : "rgba(224,233,234,.65)",
+            background: pwSaved ? "#6BBF8E" : "var(--surface-2)",
+            border: "1px solid rgba(165,141,102,.25)", color: pwSaved ? "var(--bg)" : "var(--text-muted)",
             borderRadius: 10, padding: "11px 22px", fontSize: 13, fontWeight: 600,
             cursor: !pwCurrent || !pwNew || pwNew !== pwConfirm ? "not-allowed" : "pointer",
             opacity: !pwCurrent || !pwNew || pwNew !== pwConfirm ? 0.45 : 1,

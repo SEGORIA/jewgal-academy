@@ -111,7 +111,7 @@ export default function ConoceADevorPage() {
           {/* Texto */}
           <div>
             <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Conoce a la fundadora</span>
-            <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(38px,5vw,70px)", lineHeight: 1.02, color: "#eef4f4", letterSpacing: "-.01em", marginBottom: 20 }}>
+            <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(38px,5vw,70px)", lineHeight: 1.02, color: "var(--text)", letterSpacing: "-.01em", marginBottom: 20 }}>
               Devora<br /><em style={{ color: "var(--gold-light)", fontStyle: "normal" }}>Benchimol</em>
             </h1>
             <div style={{ fontFamily: "var(--script)", fontSize: "clamp(20px,2.5vw,28px)", color: "var(--gold-light)", marginBottom: 24, lineHeight: 1 }}>
@@ -157,7 +157,7 @@ export default function ConoceADevorPage() {
       <section style={{ background: "var(--navy-2)" }}>
         <div className="wrap devora-section-pad">
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 24 }}>Mi misión</span>
-          <p className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(20px,3vw,40px)", color: "#eef4f4", lineHeight: 1.35, maxWidth: 820, letterSpacing: ".01em" }}>
+          <p className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(20px,3vw,40px)", color: "var(--text)", lineHeight: 1.35, maxWidth: 820, letterSpacing: ".01em" }}>
             "Facilitar procesos de transformación que integren mente, cuerpo y espíritu,
             ayudando a cada persona a alcanzar su máximo potencial y liderazgo personal."
           </p>
@@ -168,7 +168,7 @@ export default function ConoceADevorPage() {
       <section style={{ background: "var(--navy)" }}>
         <div className="wrap devora-section-pad">
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16 }}>Formación</span>
-          <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.5vw,48px)", color: "#eef4f4", letterSpacing: ".01em", marginBottom: "clamp(32px,5vw,56px)" }}>
+          <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.5vw,48px)", color: "var(--text)", letterSpacing: ".01em", marginBottom: "clamp(32px,5vw,56px)" }}>
             Credenciales &amp; Especialidades
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: "clamp(24px,3vw,32px)" }}>
@@ -176,7 +176,7 @@ export default function ConoceADevorPage() {
               <div key={g.category} className="reveal" style={{ borderTop: "1px solid var(--line-d)", paddingTop: 24 }}>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 20 }}>
                   <span style={{ fontFamily: "var(--serif)", fontSize: 13, color: "var(--gold)", fontStyle: "italic" }}>{g.n}</span>
-                  <h3 style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "#eef4f4" }}>{g.category}</h3>
+                  <h3 style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--text)" }}>{g.category}</h3>
                 </div>
                 <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
                   {g.items.map((it) => (
@@ -197,7 +197,7 @@ export default function ConoceADevorPage() {
         <div style={{ position: "absolute", inset: 0, opacity: .4, backgroundImage: "radial-gradient(1px 1px at 20% 30%,#cbb78b,transparent),radial-gradient(1px 1px at 70% 60%,#cbb78b,transparent),radial-gradient(1px 1px at 50% 80%,#c0d5d6,transparent)" }} />
         <div className="wrap devora-section-pad" style={{ position: "relative", zIndex: 2 }}>
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16 }}>Trayectoria</span>
-          <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.5vw,48px)", color: "#eef4f4", letterSpacing: ".01em", marginBottom: "clamp(32px,5vw,56px)" }}>
+          <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.5vw,48px)", color: "var(--text)", letterSpacing: ".01em", marginBottom: "clamp(32px,5vw,56px)" }}>
             Un camino que trasciende fronteras
           </h2>
 
@@ -229,7 +229,7 @@ export default function ConoceADevorPage() {
           <div className="devora-fund-grid">
             <div className="reveal">
               <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Impacto Social</span>
-              <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.2vw,46px)", color: "#eef4f4", lineHeight: 1.1, marginBottom: 20 }}>
+              <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.2vw,46px)", color: "var(--text)", lineHeight: 1.1, marginBottom: 20 }}>
                 Fundación Sholem<br /><em style={{ color: "var(--gold-light)", fontStyle: "normal" }}>Corazón Valiente</em>
               </h2>
               <div style={{ display: "inline-block", border: "1px solid var(--line-d)", borderRadius: 4, padding: "8px 16px", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--gold)", marginTop: 8 }}>

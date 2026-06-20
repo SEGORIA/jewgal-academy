@@ -40,12 +40,12 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
   }, [])
 
   return (
-    <div style={{ display: "flex", height: "100vh", background: "#081E29", overflow: "hidden" }}>
+    <div style={{ display: "flex", height: "100vh", background: "var(--bg)", overflow: "hidden" }}>
 
       {/* ── SIDEBAR ── */}
       <aside style={{
         position: "fixed", insetBlock: 0, left: 0, zIndex: 40,
-        width: 230, background: "linear-gradient(180deg,#081E29 0%,#0a2535 100%)",
+        width: 230, background: "linear-gradient(180deg,var(--bg) 0%,#0a2535 100%)",
         borderRight: "1px solid rgba(165,141,102,.12)",
         display: "flex", flexDirection: "column",
         transform: open ? "translateX(0)" : undefined,
@@ -73,9 +73,9 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
               <div key={href}>
                 {showDivider && (
                   <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 10px 8px" }}>
-                    <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,.06)" }} />
+                    <div style={{ flex: 1, height: 1, background: "var(--surface-2)" }} />
                     <span style={{ fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(165,141,102,.25)" }}>cuenta</span>
-                    <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,.06)" }} />
+                    <div style={{ flex: 1, height: 1, background: "var(--surface-2)" }} />
                   </div>
                 )}
                 <motion.div whileHover={{ x: 2 }} transition={{ type: "spring", stiffness: 400, damping: 28 }}>
@@ -88,7 +88,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
                       fontSize: 13, fontWeight: active ? 600 : 400,
                       textDecoration: "none",
                       background: active ? "rgba(165,141,102,.15)" : "transparent",
-                      color: active ? "var(--gold,#A58D66)" : "rgba(224,233,234,.55)",
+                      color: active ? "var(--gold,#A58D66)" : "var(--text-muted)",
                       borderLeft: active ? "2px solid var(--gold,#A58D66)" : "2px solid transparent",
                       transition: "all .2s",
                     }}
@@ -104,9 +104,9 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
 
         {/* Decorativo */}
         <div style={{ padding: "0 24px 24px", display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-          <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,.06)" }} />
+          <div style={{ flex: 1, height: 1, background: "var(--surface-2)" }} />
           <span style={{ color: "rgba(165,141,102,.3)", fontSize: 10 }}>✦</span>
-          <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,.06)" }} />
+          <div style={{ flex: 1, height: 1, background: "var(--surface-2)" }} />
         </div>
 
         {/* Cerrar sesión */}
@@ -118,11 +118,11 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
               display: "flex", alignItems: "center", gap: 12,
               padding: "11px 14px", borderRadius: 10, width: "100%",
               background: "none", border: "none", cursor: "pointer",
-              fontSize: 13, color: "rgba(224,233,234,.3)",
+              fontSize: 13, color: "var(--text-dim)",
               transition: "color .2s",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.color = "#fca5a5")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(224,233,234,.3)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-dim)")}
           >
             <LogOut size={17} />
             Cerrar sesión
@@ -136,7 +136,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={() => setOpen(false)}
-            style={{ position: "fixed", inset: 0, zIndex: 30, background: "rgba(8,30,41,.8)", backdropFilter: "blur(4px)" }}
+            style={{ position: "fixed", inset: 0, zIndex: 30, background: "var(--scrim)", backdropFilter: "blur(4px)" }}
           />
         )}
       </AnimatePresence>
@@ -147,19 +147,19 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
         <header style={{
           height: 60, borderBottom: "1px solid rgba(165,141,102,.1)",
           padding: "0 28px", display: "flex", alignItems: "center", justifyContent: "space-between",
-          background: "rgba(8,30,41,.95)", backdropFilter: "blur(8px)",
+          background: "var(--bar)", backdropFilter: "blur(8px)",
           flexShrink: 0,
         }}>
           <button
             onClick={() => setOpen(!open)}
-            style={{ background: "none", border: "none", color: "rgba(224,233,234,.6)", cursor: "pointer", display: "none" }}
+            style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", display: "none" }}
             className="mob-menu-btn"
           >
             {open ? <X size={20} /> : <Menu size={20} />}
           </button>
 
           {/* Breadcrumb */}
-          <span style={{ fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(224,233,234,.35)" }}>
+          <span style={{ fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--text-dim)" }}>
             {navItems.find((n) => n.href === pathname)?.label ?? "Aula"}
           </span>
 

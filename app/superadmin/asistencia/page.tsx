@@ -8,7 +8,7 @@ type Session = { id: string; title: string; scheduledAt: string; durationMin: nu
 type Student = { enrollmentId: string; name: string; email: string; attendance: Record<string, string> }
 
 const card: React.CSSProperties = {
-  background: "rgba(255,255,255,.03)",
+  background: "var(--surface)",
   border: "1px solid rgba(165,141,102,.13)",
   borderRadius: 14,
 }
@@ -75,41 +75,41 @@ export default function AsistenciaPage() {
     <div style={{ maxWidth: 920, margin: "0 auto" }}>
       <div style={{ marginBottom: 28 }}>
         <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 8 }}>Admin</span>
-        <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "#eef4f4", marginBottom: 6 }}>Registro de asistencia</h1>
-        <p style={{ color: "rgba(224,233,234,.4)", fontSize: 14 }}>Tomá lista por sesión. El porcentaje se actualiza solo en el aula y el panel.</p>
+        <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Registro de asistencia</h1>
+        <p style={{ color: "var(--text-faint)", fontSize: 14 }}>Tomá lista por sesión. El porcentaje se actualiza solo en el aula y el panel.</p>
       </div>
 
       {/* Selector de programa */}
       <div style={{ ...card, padding: "18px 20px", marginBottom: 18 }}>
-        <label style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(224,233,234,.45)", display: "block", marginBottom: 8 }}>Programa</label>
+        <label style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--text-faint)", display: "block", marginBottom: 8 }}>Programa</label>
         <select value={courseId} onChange={(e) => { setCourseId(e.target.value); loadCourse(e.target.value) }}
-          style={{ background: "rgba(255,255,255,.05)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 14px", fontSize: 13, color: "#eef4f4", outline: "none", width: "100%", cursor: "pointer" }}>
+          style={{ background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 14px", fontSize: 13, color: "var(--text)", outline: "none", width: "100%", cursor: "pointer" }}>
           <option value="">Elegí un programa…</option>
           {courses.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
         </select>
       </div>
 
       {loading ? (
-        <div style={{ ...card, padding: "50px 0", display: "flex", justifyContent: "center", color: "rgba(224,233,234,.35)" }}>
+        <div style={{ ...card, padding: "50px 0", display: "flex", justifyContent: "center", color: "var(--text-dim)" }}>
           <Loader2 size={20} style={{ animation: "spin 1s linear infinite" }} />
         </div>
       ) : courseId && sessions.length === 0 ? (
-        <div style={{ ...card, padding: "40px 20px", textAlign: "center", color: "rgba(224,233,234,.4)", fontSize: 14 }}>
+        <div style={{ ...card, padding: "40px 20px", textAlign: "center", color: "var(--text-faint)", fontSize: 14 }}>
           Este programa todavía no tiene sesiones en vivo cargadas.
         </div>
       ) : sessions.length > 0 ? (
         <>
           {/* Sesiones */}
           <div style={{ ...card, padding: "16px 18px", marginBottom: 18 }}>
-            <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(224,233,234,.45)", marginBottom: 12 }}>Sesión</p>
+            <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--text-faint)", marginBottom: 12 }}>Sesión</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
               {sessions.map((s) => {
                 const active = s.id === sessionId
                 return (
                   <button key={s.id} onClick={() => setSessionId(s.id)}
-                    style={{ background: active ? "rgba(165,141,102,.16)" : "rgba(255,255,255,.03)", border: `1px solid ${active ? "var(--gold,#A58D66)" : "rgba(255,255,255,.08)"}`, borderRadius: 9, padding: "9px 14px", fontSize: 12.5, color: active ? "var(--gold,#A58D66)" : "rgba(224,233,234,.6)", cursor: "pointer", fontWeight: active ? 600 : 400, textAlign: "left" }}>
+                    style={{ background: active ? "rgba(165,141,102,.16)" : "var(--surface)", border: `1px solid ${active ? "var(--gold,#A58D66)" : "rgba(255,255,255,.08)"}`, borderRadius: 9, padding: "9px 14px", fontSize: 12.5, color: active ? "var(--gold,#A58D66)" : "var(--text-muted)", cursor: "pointer", fontWeight: active ? 600 : 400, textAlign: "left" }}>
                     <div>{s.title}</div>
-                    <div style={{ fontSize: 10.5, color: "rgba(224,233,234,.35)", marginTop: 2 }}>
+                    <div style={{ fontSize: 10.5, color: "var(--text-dim)", marginTop: 2 }}>
                       {new Date(s.scheduledAt).toLocaleDateString("es-AR", { day: "numeric", month: "short" })} · {s.durationMin} min
                     </div>
                   </button>
@@ -122,27 +122,27 @@ export default function AsistenciaPage() {
           {sessionId && (
             <div style={{ ...card, padding: "20px 22px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 10 }}>
-                <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "#eef4f4" }}>Lista · {selectedSession?.title}</h2>
-                <span style={{ fontSize: 12, color: "rgba(224,233,234,.4)" }}>{students.length} alumno{students.length !== 1 ? "s" : ""}</span>
+                <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)" }}>Lista · {selectedSession?.title}</h2>
+                <span style={{ fontSize: 12, color: "var(--text-faint)" }}>{students.length} alumno{students.length !== 1 ? "s" : ""}</span>
               </div>
 
               {students.length === 0 ? (
-                <p style={{ color: "rgba(224,233,234,.4)", fontSize: 14, padding: "20px 0", textAlign: "center" }}>No hay alumnos inscritos en este programa.</p>
+                <p style={{ color: "var(--text-faint)", fontSize: 14, padding: "20px 0", textAlign: "center" }}>No hay alumnos inscritos en este programa.</p>
               ) : (
                 <>
                   <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                     {students.map((st) => (
-                      <div key={st.enrollmentId} style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 14px", borderRadius: 9, background: "rgba(255,255,255,.02)", border: "1px solid rgba(255,255,255,.05)", flexWrap: "wrap" }}>
+                      <div key={st.enrollmentId} style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 14px", borderRadius: 9, background: "var(--surface)", border: "1px solid var(--surface-2)", flexWrap: "wrap" }}>
                         <div style={{ flex: 1, minWidth: 140 }}>
-                          <p style={{ fontSize: 13.5, color: "#eef4f4", fontWeight: 500 }}>{st.name}</p>
-                          <p style={{ fontSize: 11.5, color: "rgba(224,233,234,.35)" }}>{st.email}</p>
+                          <p style={{ fontSize: 13.5, color: "var(--text)", fontWeight: 500 }}>{st.name}</p>
+                          <p style={{ fontSize: 11.5, color: "var(--text-dim)" }}>{st.email}</p>
                         </div>
                         <div style={{ display: "flex", gap: 6 }}>
                           {STATUSES.map(({ key, label, color, Icon }) => {
                             const on = (marks[st.enrollmentId] ?? "present") === key
                             return (
                               <button key={key} onClick={() => setMarks((m) => ({ ...m, [st.enrollmentId]: key }))}
-                                style={{ display: "flex", alignItems: "center", gap: 5, background: on ? `${color}22` : "transparent", border: `1px solid ${on ? color : "rgba(255,255,255,.1)"}`, color: on ? color : "rgba(224,233,234,.4)", borderRadius: 7, padding: "6px 10px", fontSize: 11.5, cursor: "pointer", fontWeight: on ? 600 : 400 }}>
+                                style={{ display: "flex", alignItems: "center", gap: 5, background: on ? `${color}22` : "transparent", border: `1px solid ${on ? color : "rgba(255,255,255,.1)"}`, color: on ? color : "var(--text-faint)", borderRadius: 7, padding: "6px 10px", fontSize: 11.5, cursor: "pointer", fontWeight: on ? 600 : 400 }}>
                                 <Icon size={12} /> {label}
                               </button>
                             )

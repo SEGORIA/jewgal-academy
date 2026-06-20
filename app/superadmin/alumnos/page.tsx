@@ -35,20 +35,20 @@ const COURSES = [
 type Modal = null | { type: "add" } | { type: "detail"; student: Student } | { type: "delete"; student: Student }
 
 const card: React.CSSProperties = {
-  background: "rgba(255,255,255,.03)",
+  background: "var(--surface)",
   border: "1px solid rgba(165,141,102,.13)",
   borderRadius: 14,
 }
 
 const inputStyle: React.CSSProperties = {
-  background: "rgba(255,255,255,.05)", border: "1px solid rgba(165,141,102,.2)",
-  borderRadius: 9, padding: "10px 14px", fontSize: 13, color: "#eef4f4",
+  background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)",
+  borderRadius: 9, padding: "10px 14px", fontSize: 13, color: "var(--text)",
   outline: "none", fontFamily: "inherit", width: "100%",
 }
 
 const labelStyle: React.CSSProperties = {
   fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase",
-  color: "rgba(224,233,234,.45)", display: "block", marginBottom: 7,
+  color: "var(--text-faint)", display: "block", marginBottom: 7,
 }
 
 export default function AlumnosPage() {
@@ -124,8 +124,8 @@ export default function AlumnosPage() {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
         <div>
           <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 8 }}>Admin</span>
-          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "#eef4f4", marginBottom: 6 }}>Alumnos</h1>
-          <p style={{ color: "rgba(224,233,234,.4)", fontSize: 14 }}>
+          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Alumnos</h1>
+          <p style={{ color: "var(--text-faint)", fontSize: 14 }}>
             {loading ? "Cargando…" : `${students.length} alumna${students.length !== 1 ? "s" : ""} registrada${students.length !== 1 ? "s" : ""}`}
           </p>
         </div>
@@ -138,7 +138,7 @@ export default function AlumnosPage() {
       {/* Filtro de búsqueda */}
       <div style={{ ...card, padding: "14px 18px", marginBottom: 20 }}>
         <div style={{ position: "relative" }}>
-          <Search size={15} style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "rgba(224,233,234,.3)" }} />
+          <Search size={15} style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "var(--text-dim)" }} />
           <input value={search} onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por nombre o email…"
             style={{ ...inputStyle, paddingLeft: 38 }} />
@@ -148,7 +148,7 @@ export default function AlumnosPage() {
       {/* Tabla */}
       <div style={{ ...card, overflow: "hidden" }}>
         {loading ? (
-          <div style={{ padding: "60px 0", display: "flex", alignItems: "center", justifyContent: "center", gap: 10, color: "rgba(224,233,234,.35)" }}>
+          <div style={{ padding: "60px 0", display: "flex", alignItems: "center", justifyContent: "center", gap: 10, color: "var(--text-dim)" }}>
             <Loader2 size={20} style={{ animation: "spin 1s linear infinite" }} />
             Cargando alumnas…
           </div>
@@ -156,9 +156,9 @@ export default function AlumnosPage() {
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
-                <tr style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
+                <tr style={{ borderBottom: "1px solid var(--surface-2)" }}>
                   {["Alumna", "Email", "Programa", "Inscripta", "Pagado", ""].map((h) => (
-                    <th key={h} style={{ textAlign: "left", padding: "13px 18px", fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(224,233,234,.3)", fontWeight: 500 }}>{h}</th>
+                    <th key={h} style={{ textAlign: "left", padding: "13px 18px", fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--text-dim)", fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -171,8 +171,8 @@ export default function AlumnosPage() {
                           <UserPlus size={24} style={{ color: "rgba(165,141,102,.5)" }} />
                         </div>
                         <div>
-                          <p style={{ color: "rgba(224,233,234,.6)", fontWeight: 500, marginBottom: 4 }}>{search ? "Sin resultados" : "No hay alumnas aún"}</p>
-                          <p style={{ color: "rgba(224,233,234,.3)", fontSize: 13 }}>
+                          <p style={{ color: "var(--text-muted)", fontWeight: 500, marginBottom: 4 }}>{search ? "Sin resultados" : "No hay alumnas aún"}</p>
+                          <p style={{ color: "var(--text-dim)", fontSize: 13 }}>
                             {search ? "Probá con otro nombre o email." : "Aparecerán aquí cuando se inscriban o las agregues manualmente."}
                           </p>
                         </div>
@@ -186,8 +186,8 @@ export default function AlumnosPage() {
                     </td>
                   </tr>
                 ) : filtered.map((s) => (
-                  <tr key={s.id} style={{ borderBottom: "1px solid rgba(255,255,255,.04)", transition: "background .15s" }}
-                    onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,.02)")}
+                  <tr key={s.id} style={{ borderBottom: "1px solid var(--surface)", transition: "background .15s" }}
+                    onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--surface)")}
                     onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "transparent")}
                   >
                     <td style={{ padding: "14px 18px" }}>
@@ -195,34 +195,34 @@ export default function AlumnosPage() {
                         <div style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(165,141,102,.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "var(--gold,#A58D66)", flexShrink: 0 }}>
                           {s.name.charAt(0).toUpperCase()}
                         </div>
-                        <span style={{ color: "#eef4f4", fontWeight: 500 }}>{s.name}</span>
+                        <span style={{ color: "var(--text)", fontWeight: 500 }}>{s.name}</span>
                       </div>
                     </td>
-                    <td style={{ padding: "14px 18px", color: "rgba(224,233,234,.5)" }}>{s.email}</td>
-                    <td style={{ padding: "14px 18px", color: "rgba(224,233,234,.55)", fontSize: 12, maxWidth: 200 }}>
+                    <td style={{ padding: "14px 18px", color: "var(--text-muted)" }}>{s.email}</td>
+                    <td style={{ padding: "14px 18px", color: "var(--text-muted)", fontSize: 12, maxWidth: 200 }}>
                       <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", display: "block" }}>{programName(s)}</span>
                     </td>
-                    <td style={{ padding: "14px 18px", color: "rgba(224,233,234,.4)", fontSize: 12 }}>
+                    <td style={{ padding: "14px 18px", color: "var(--text-faint)", fontSize: 12 }}>
                       {new Date(s.createdAt).toLocaleDateString("es-AR", { day: "numeric", month: "short", year: "numeric" })}
                     </td>
-                    <td style={{ padding: "14px 18px", color: totalPaid(s) > 0 ? "#6BBF8E" : "rgba(224,233,234,.25)", fontSize: 12 }}>
+                    <td style={{ padding: "14px 18px", color: totalPaid(s) > 0 ? "#6BBF8E" : "var(--text-dim)", fontSize: 12 }}>
                       {totalPaid(s) > 0 ? `$${totalPaid(s).toLocaleString("es")}` : "—"}
                     </td>
                     <td style={{ padding: "14px 18px", position: "relative" }}>
                       <button onClick={() => setMenuOpen(menuOpen === s.id ? null : s.id)}
-                        style={{ background: "none", border: "none", color: "rgba(224,233,234,.35)", cursor: "pointer", padding: 4, borderRadius: 6 }}>
+                        style={{ background: "none", border: "none", color: "var(--text-dim)", cursor: "pointer", padding: 4, borderRadius: 6 }}>
                         <MoreHorizontal size={17} />
                       </button>
                       {menuOpen === s.id && (
-                        <div style={{ position: "absolute", right: 48, top: 8, background: "#0b2535", border: "1px solid rgba(165,141,102,.2)", borderRadius: 10, padding: "6px 0", zIndex: 20, minWidth: 180, boxShadow: "0 12px 40px rgba(0,0,0,.5)" }}>
+                        <div style={{ position: "absolute", right: 48, top: 8, background: "var(--surface-solid)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 10, padding: "6px 0", zIndex: 20, minWidth: 180, boxShadow: "0 12px 40px rgba(0,0,0,.5)" }}>
                           {[
                             { label: "Ver detalle",  icon: Eye,    action: () => { setModal({ type: "detail", student: s }); setMenuOpen(null) } },
                             { label: "Enviar email", icon: Mail,   action: () => { window.location.href = `mailto:${s.email}`; setMenuOpen(null) } },
                             { label: "Eliminar",     icon: Trash2, action: () => { setModal({ type: "delete", student: s }); setMenuOpen(null) }, danger: true },
                           ].map(({ label, icon: Icon, action, danger }) => (
                             <button key={label} onClick={action}
-                              style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", background: "none", border: "none", padding: "10px 16px", fontSize: 13, cursor: "pointer", color: danger ? "#fca5a5" : "rgba(224,233,234,.7)", transition: "background .15s" }}
-                              onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,.05)")}
+                              style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", background: "none", border: "none", padding: "10px 16px", fontSize: 13, cursor: "pointer", color: danger ? "#fca5a5" : "var(--text-strong)", transition: "background .15s" }}
+                              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--surface-2)")}
                               onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
                             >
                               <Icon size={15} /> {label}
@@ -242,15 +242,15 @@ export default function AlumnosPage() {
       {/* ── MODALES ── */}
       {modal && (
         <div style={{ position: "fixed", inset: 0, zIndex: 60, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }} onClick={() => setModal(null)}>
-          <div style={{ position: "absolute", inset: 0, background: "rgba(8,30,41,.88)", backdropFilter: "blur(10px)" }} />
-          <div style={{ position: "relative", zIndex: 1, background: "#0b2535", border: "1px solid rgba(165,141,102,.22)", borderRadius: 18, padding: "36px 32px", width: "100%", maxWidth: 480, boxShadow: "0 48px 120px rgba(0,0,0,.6)" }} onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setModal(null)} style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none", color: "rgba(224,233,234,.4)", cursor: "pointer" }}><X size={20} /></button>
+          <div style={{ position: "absolute", inset: 0, background: "var(--scrim)", backdropFilter: "blur(10px)" }} />
+          <div style={{ position: "relative", zIndex: 1, background: "var(--surface-solid)", border: "1px solid rgba(165,141,102,.22)", borderRadius: 18, padding: "36px 32px", width: "100%", maxWidth: 480, boxShadow: "0 48px 120px rgba(0,0,0,.6)" }} onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setModal(null)} style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none", color: "var(--text-faint)", cursor: "pointer" }}><X size={20} /></button>
 
             {/* ADD */}
             {modal.type === "add" && (
               <>
-                <h2 style={{ fontFamily: "var(--serif)", fontSize: 24, color: "#eef4f4", marginBottom: 6 }}>Agregar alumna</h2>
-                <p style={{ color: "rgba(224,233,234,.4)", fontSize: 14, marginBottom: 24 }}>Crea una cuenta y asignala a un programa.</p>
+                <h2 style={{ fontFamily: "var(--serif)", fontSize: 24, color: "var(--text)", marginBottom: 6 }}>Agregar alumna</h2>
+                <p style={{ color: "var(--text-faint)", fontSize: 14, marginBottom: 24 }}>Crea una cuenta y asignala a un programa.</p>
                 {error && (
                   <div style={{ background: "rgba(239,68,68,.1)", border: "1px solid rgba(239,68,68,.3)", borderRadius: 9, padding: "10px 14px", fontSize: 13, color: "#fca5a5", marginBottom: 16 }}>
                     {error}
@@ -278,7 +278,7 @@ export default function AlumnosPage() {
                   </div>
                 </div>
                 <div style={{ display: "flex", gap: 10, marginTop: 26 }}>
-                  <button onClick={() => setModal(null)} style={{ flex: 1, background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 10, padding: "12px 0", fontSize: 13, color: "rgba(224,233,234,.6)", cursor: "pointer" }}>
+                  <button onClick={() => setModal(null)} style={{ flex: 1, background: "var(--surface-2)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 10, padding: "12px 0", fontSize: 13, color: "var(--text-muted)", cursor: "pointer" }}>
                     Cancelar
                   </button>
                   <button onClick={addStudent} disabled={saving}
@@ -293,16 +293,16 @@ export default function AlumnosPage() {
             {modal.type === "delete" && (
               <>
                 <h2 style={{ fontFamily: "var(--serif)", fontSize: 24, color: "#fca5a5", marginBottom: 8 }}>Eliminar alumna</h2>
-                <p style={{ color: "rgba(224,233,234,.5)", fontSize: 14, marginBottom: 24 }}>
-                  Esta acción eliminará la cuenta de <strong style={{ color: "#eef4f4" }}>{modal.student.name}</strong> y todas sus inscripciones. No se puede deshacer.
+                <p style={{ color: "var(--text-muted)", fontSize: 14, marginBottom: 24 }}>
+                  Esta acción eliminará la cuenta de <strong style={{ color: "var(--text)" }}>{modal.student.name}</strong> y todas sus inscripciones. No se puede deshacer.
                 </p>
                 <div style={{ display: "flex", gap: 10 }}>
-                  <button onClick={() => setModal(null)} style={{ flex: 1, background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 10, padding: "12px 0", fontSize: 13, color: "rgba(224,233,234,.6)", cursor: "pointer" }}>Cancelar</button>
+                  <button onClick={() => setModal(null)} style={{ flex: 1, background: "var(--surface-2)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 10, padding: "12px 0", fontSize: 13, color: "var(--text-muted)", cursor: "pointer" }}>Cancelar</button>
                   <button onClick={() => setModal(null)} style={{ flex: 2, background: "rgba(239,68,68,.85)", border: "none", borderRadius: 10, padding: "12px 0", fontSize: 13, fontWeight: 700, color: "white", cursor: "pointer" }}>
                     Contactar al soporte
                   </button>
                 </div>
-                <p style={{ fontSize: 11, color: "rgba(224,233,234,.25)", marginTop: 12, textAlign: "center" }}>Por seguridad, la eliminación definitiva requiere confirmación por email.</p>
+                <p style={{ fontSize: 11, color: "var(--text-dim)", marginTop: 12, textAlign: "center" }}>Por seguridad, la eliminación definitiva requiere confirmación por email.</p>
               </>
             )}
 
@@ -314,8 +314,8 @@ export default function AlumnosPage() {
                     {modal.student.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <h2 style={{ fontFamily: "var(--serif)", fontSize: 22, color: "#eef4f4", marginBottom: 2 }}>{modal.student.name}</h2>
-                    <p style={{ color: "rgba(224,233,234,.4)", fontSize: 14 }}>{modal.student.email}</p>
+                    <h2 style={{ fontFamily: "var(--serif)", fontSize: 22, color: "var(--text)", marginBottom: 2 }}>{modal.student.name}</h2>
+                    <p style={{ color: "var(--text-faint)", fontSize: 14 }}>{modal.student.email}</p>
                   </div>
                 </div>
 
@@ -324,9 +324,9 @@ export default function AlumnosPage() {
                   ["Inscripta el",  new Date(modal.student.createdAt).toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" })],
                   ["Pagos totales", totalPaid(modal.student) > 0 ? `$${totalPaid(modal.student).toLocaleString("es")}` : "Sin pago registrado"],
                 ].map(([k, v]) => (
-                  <div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-                    <span style={{ fontSize: 13, color: "rgba(224,233,234,.4)" }}>{k}</span>
-                    <span style={{ fontSize: 13, color: "rgba(224,233,234,.8)" }}>{v}</span>
+                  <div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid var(--surface-2)" }}>
+                    <span style={{ fontSize: 13, color: "var(--text-faint)" }}>{k}</span>
+                    <span style={{ fontSize: 13, color: "var(--text-strong)" }}>{v}</span>
                   </div>
                 ))}
 
@@ -340,46 +340,46 @@ export default function AlumnosPage() {
                         const totalH = en.course.totalHours
                         const done = !!en.completedAt
                         return (
-                          <div key={en.id} style={{ padding: "13px 14px", borderRadius: 10, background: done ? "rgba(107,191,142,.06)" : "rgba(255,255,255,.03)", border: `1px solid ${done ? "rgba(107,191,142,.2)" : "rgba(255,255,255,.07)"}` }}>
+                          <div key={en.id} style={{ padding: "13px 14px", borderRadius: 10, background: done ? "rgba(107,191,142,.06)" : "var(--surface)", border: `1px solid ${done ? "rgba(107,191,142,.2)" : "rgba(255,255,255,.07)"}` }}>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: 10 }}>
-                              <p style={{ fontSize: 13, color: "#eef4f4", fontWeight: 600 }}>{en.course.title}</p>
+                              <p style={{ fontSize: 13, color: "var(--text)", fontWeight: 600 }}>{en.course.title}</p>
                               {done ? (
                                 <span style={{ fontSize: 10, color: "#6BBF8E", whiteSpace: "nowrap" }}>
                                   <CheckCircle2 size={10} style={{ display: "inline", marginRight: 4 }} />
                                   N° {en.certificateNumber}
                                 </span>
                               ) : (
-                                <span style={{ fontSize: 10, color: "rgba(224,233,234,.35)", whiteSpace: "nowrap" }}>En curso</span>
+                                <span style={{ fontSize: 10, color: "var(--text-dim)", whiteSpace: "nowrap" }}>En curso</span>
                               )}
                             </div>
 
                             {/* Barra de avance */}
-                            <div style={{ height: 5, borderRadius: 3, background: "rgba(255,255,255,.06)", marginBottom: 12, overflow: "hidden" }}>
+                            <div style={{ height: 5, borderRadius: 3, background: "var(--surface-2)", marginBottom: 12, overflow: "hidden" }}>
                               <div style={{ width: `${en.progress}%`, height: "100%", background: done ? "#6BBF8E" : "var(--gold,#A58D66)", transition: "width .3s" }} />
                             </div>
 
                             {/* Métricas editables + asistencia */}
                             <div style={{ display: "flex", gap: 12, alignItems: "flex-end", flexWrap: "wrap" }}>
-                              <label style={{ fontSize: 10, letterSpacing: ".06em", textTransform: "uppercase", color: "rgba(224,233,234,.4)", display: "flex", flexDirection: "column", gap: 3 }}>
+                              <label style={{ fontSize: 10, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--text-faint)", display: "flex", flexDirection: "column", gap: 3 }}>
                                 Avance %
                                 <input type="number" min={0} max={100} value={ev.progress}
                                   onChange={(e) => setEdit((p) => ({ ...p, [en.id]: { ...ev, progress: Math.max(0, Math.min(100, Number(e.target.value))) } }))}
-                                  style={{ background: "rgba(255,255,255,.05)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 6, padding: "5px 8px", fontSize: 12, color: "#eef4f4", outline: "none", width: 60 }} />
+                                  style={{ background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 6, padding: "5px 8px", fontSize: 12, color: "var(--text)", outline: "none", width: 60 }} />
                               </label>
-                              <label style={{ fontSize: 10, letterSpacing: ".06em", textTransform: "uppercase", color: "rgba(224,233,234,.4)", display: "flex", flexDirection: "column", gap: 3 }}>
+                              <label style={{ fontSize: 10, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--text-faint)", display: "flex", flexDirection: "column", gap: 3 }}>
                                 Horas{totalH ? ` / ${totalH}` : ""}
                                 <input type="number" min={0} value={ev.hours}
                                   onChange={(e) => setEdit((p) => ({ ...p, [en.id]: { ...ev, hours: Math.max(0, Number(e.target.value)) } }))}
-                                  style={{ background: "rgba(255,255,255,.05)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 6, padding: "5px 8px", fontSize: 12, color: "#eef4f4", outline: "none", width: 60 }} />
+                                  style={{ background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 6, padding: "5px 8px", fontSize: 12, color: "var(--text)", outline: "none", width: 60 }} />
                               </label>
-                              <div style={{ fontSize: 11, color: "rgba(224,233,234,.5)", paddingBottom: 6 }}>
+                              <div style={{ fontSize: 11, color: "var(--text-muted)", paddingBottom: 6 }}>
                                 Asistencia<br />
-                                <strong style={{ color: "#eef4f4", fontSize: 13 }}>{en.attendance.rate !== null ? `${en.attendance.rate}%` : "—"}</strong>
-                                {en.attendance.held > 0 && <span style={{ color: "rgba(224,233,234,.35)" }}> ({en.attendance.attended}/{en.attendance.held})</span>}
+                                <strong style={{ color: "var(--text)", fontSize: 13 }}>{en.attendance.rate !== null ? `${en.attendance.rate}%` : "—"}</strong>
+                                {en.attendance.held > 0 && <span style={{ color: "var(--text-dim)" }}> ({en.attendance.attended}/{en.attendance.held})</span>}
                               </div>
                               <div style={{ display: "flex", gap: 6, marginLeft: "auto" }}>
                                 <button onClick={() => saveMetrics(en.id)} disabled={savingId === en.id}
-                                  style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.12)", color: "rgba(224,233,234,.75)", borderRadius: 7, padding: "7px 12px", fontSize: 11, cursor: "pointer", fontWeight: 600 }}>
+                                  style={{ background: "var(--surface-2)", border: "1px solid rgba(255,255,255,.12)", color: "var(--text-strong)", borderRadius: 7, padding: "7px 12px", fontSize: 11, cursor: "pointer", fontWeight: 600 }}>
                                   {savingId === en.id ? "…" : "Guardar"}
                                 </button>
                                 {!done && (
