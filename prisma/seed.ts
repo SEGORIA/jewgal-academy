@@ -31,6 +31,8 @@ async function main() {
       price: 1500,
       isFree: false,
       isPublished: true,
+      totalHours: 120,
+      durationWeeks: 24,
     },
     {
       title: "Instructor Certificado Joogalkids",
@@ -41,6 +43,8 @@ async function main() {
       price: 360,
       isFree: false,
       isPublished: true,
+      totalHours: 60,
+      durationWeeks: 12,
     },
     {
       title: "Cábala Coach",
@@ -51,6 +55,8 @@ async function main() {
       price: 360,
       isFree: false,
       isPublished: true,
+      totalHours: 16,
+      durationWeeks: 4,
     },
     {
       title: "Método Sholem",
@@ -61,6 +67,8 @@ async function main() {
       price: 360,
       isFree: false,
       isPublished: true,
+      totalHours: 60,
+      durationWeeks: 12,
     },
     {
       title: "Instructor Joogal Adultos",
@@ -71,17 +79,68 @@ async function main() {
       price: 0,
       isFree: true,
       isPublished: true,
+      totalHours: 48,
+      durationWeeks: 12,
     },
   ]
 
   for (const course of courses) {
     await db.course.upsert({
       where:  { slug: course.slug },
-      update: { isPublished: true },
+      update: { isPublished: true, totalHours: course.totalHours, durationWeeks: course.durationWeeks },
       create: course,
     })
   }
   console.log("✅ 5 cursos creados")
+
+  // ── Alumno demo con datos académicos de ejemplo ──
+  const demoPassword = await bcrypt.hash("demo1234", 10)
+  const student = await db.user.upsert({
+    where: { email: "estudiante@demo.com" },
+    update: {},
+    create: { email: "estudiante@demo.com", name: "Ana Estudiante", password: demoPassword, role: "student" },
+  })
+
+  const lifeCoaching = await db.course.findUnique({ where: { slug: "life-coaching-integrativo" } })
+  const cabala = await db.course.findUnique({ where: { slug: "cabala-coach" } })
+
+  if (lifeCoaching && cabala) {
+    const DAY = 864e5
+    // Sesiones en vivo del programa (3 pasadas + 1 futura)
+    await db.liveSession.deleteMany({ where: { courseId: lifeCoaching.id } })
+    const sessionsData = [
+      { courseId: lifeCoaching.id, title: "Módulo 1 · Fundamentos del coaching", scheduledAt: new Date(Date.now() - 21 * DAY), durationMin: 120, isCompleted: true },
+      { courseId: lifeCoaching.id, title: "Módulo 2 · Escucha activa",          scheduledAt: new Date(Date.now() - 14 * DAY), durationMin: 120, isCompleted: true },
+      { courseId: lifeCoaching.id, title: "Módulo 3 · Logoterapia y sentido",    scheduledAt: new Date(Date.now() - 7 * DAY),  durationMin: 120, isCompleted: true },
+      { courseId: lifeCoaching.id, title: "Módulo 4 · Trabajo con el trauma",    scheduledAt: new Date(Date.now() + 5 * DAY),  durationMin: 120, isCompleted: false },
+    ]
+    const sessions = []
+    for (const s of sessionsData) sessions.push(await db.liveSession.create({ data: s }))
+
+    // Enrollment en progreso con asistencia
+    const enr1 = await db.enrollment.upsert({
+      where:  { userId_courseId: { userId: student.id, courseId: lifeCoaching.id } },
+      update: { progress: 55, hoursCompleted: 66 },
+      create: { userId: student.id, courseId: lifeCoaching.id, status: "active", progress: 55, hoursCompleted: 66 },
+    })
+    const pastSessions = sessions.filter((s) => s.isCompleted)
+    const statuses = ["present", "present", "late"]
+    for (let i = 0; i < pastSessions.length; i++) {
+      await db.attendance.upsert({
+        where:  { enrollmentId_liveSessionId: { enrollmentId: enr1.id, liveSessionId: pastSessions[i].id } },
+        update: { status: statuses[i] },
+        create: { enrollmentId: enr1.id, liveSessionId: pastSessions[i].id, status: statuses[i] },
+      })
+    }
+
+    // Enrollment completado + certificado
+    await db.enrollment.upsert({
+      where:  { userId_courseId: { userId: student.id, courseId: cabala.id } },
+      update: { progress: 100, hoursCompleted: 16, status: "completed", completedAt: new Date(Date.now() - 30 * DAY), certificateNumber: "JA-CABALA-0001" },
+      create: { userId: student.id, courseId: cabala.id, status: "completed", progress: 100, hoursCompleted: 16, completedAt: new Date(Date.now() - 30 * DAY), certificateNumber: "JA-CABALA-0001" },
+    })
+    console.log("✅ Alumno demo (estudiante@demo.com / demo1234) con avances, horas y asistencia")
+  }
 
   console.log("\n🎉 Seed completado!")
   console.log("   Admin: admin@jewgalacademy.com")

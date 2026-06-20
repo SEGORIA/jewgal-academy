@@ -12,13 +12,41 @@ export async function GET() {
   const students = await db.user.findMany({
     where: { role: "student" },
     include: {
-      enrollments: { include: { course: { select: { title: true, slug: true } } } },
-      payments: { orderBy: { paidAt: "desc" }, take: 1 },
+      enrollments: {
+        include: {
+          course: { select: { title: true, slug: true, totalHours: true } },
+          attendances: { select: { status: true } },
+        },
+      },
+      payments: { select: { amount: true, status: true, paidAt: true } },
     },
     orderBy: { createdAt: "desc" },
   })
 
-  return NextResponse.json({ students })
+  // Sesiones ya dictadas por curso (denominador de asistencia)
+  const courseIds = [...new Set(students.flatMap((s) => s.enrollments.map((e) => e.courseId)))]
+  const held = courseIds.length
+    ? await db.liveSession.groupBy({
+        by: ["courseId"],
+        where: { courseId: { in: courseIds }, isCompleted: true },
+        _count: { id: true },
+      })
+    : []
+  const heldMap = Object.fromEntries(held.map((h) => [h.courseId, h._count.id]))
+
+  const enriched = students.map((s) => ({
+    ...s,
+    enrollments: s.enrollments.map((e) => {
+      const attended = e.attendances.filter((a) => a.status === "present" || a.status === "late").length
+      const heldCount = heldMap[e.courseId] ?? 0
+      return {
+        ...e,
+        attendance: { attended, held: heldCount, rate: heldCount > 0 ? Math.round((attended / heldCount) * 100) : null },
+      }
+    }),
+  }))
+
+  return NextResponse.json({ students: enriched })
 }
 
 export async function POST(req: NextRequest) {

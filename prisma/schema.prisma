@@ -34,6 +34,8 @@ model Course {
   thumbnail       String?
   isPublished     Boolean       @default(false)
   isFree          Boolean       @default(false)
+  totalHours      Float?        // intensidad horaria total del programa
+  durationWeeks   Int?          // duración estimada en semanas
   enrollments     Enrollment[]
   materials       Material[]
   liveSessions    LiveSession[]
@@ -43,15 +45,19 @@ model Course {
 }
 
 model Enrollment {
-  id                String    @id @default(cuid())
+  id                String       @id @default(cuid())
   userId            String
   courseId          String
-  status            String    @default("active")
+  status            String       @default("active")
+  progress          Int          @default(0)   // % de avance 0-100
+  hoursCompleted    Float        @default(0)   // horas realizadas
   completedAt       DateTime?
-  certificateNumber String?   @unique
-  user              User      @relation(fields: [userId], references: [id])
-  course            Course    @relation(fields: [courseId], references: [id])
-  enrolledAt        DateTime  @default(now())
+  certificateNumber String?      @unique
+  certificateUrl    String?
+  user              User         @relation(fields: [userId], references: [id])
+  course            Course       @relation(fields: [courseId], references: [id])
+  attendances       Attendance[]
+  enrolledAt        DateTime     @default(now())
 
   @@unique([userId, courseId])
 }
@@ -73,16 +79,30 @@ model Material {
 }
 
 model LiveSession {
-  id           String   @id @default(cuid())
+  id           String       @id @default(cuid())
   courseId     String
   title        String
   description  String?
   scheduledAt  DateTime
+  durationMin  Int          @default(90)  // duración en minutos (para sumar horas)
   joinUrl      String?
   recordingUrl String?
-  isCompleted  Boolean  @default(false)
-  course       Course   @relation(fields: [courseId], references: [id])
-  createdAt    DateTime @default(now())
+  isCompleted  Boolean      @default(false)
+  course       Course       @relation(fields: [courseId], references: [id])
+  attendances  Attendance[]
+  createdAt    DateTime     @default(now())
+}
+
+model Attendance {
+  id            String      @id @default(cuid())
+  enrollmentId  String
+  liveSessionId String
+  status        String      @default("present")  // present | absent | late
+  enrollment    Enrollment  @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  liveSession   LiveSession @relation(fields: [liveSessionId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+
+  @@unique([enrollmentId, liveSessionId])
 }
 
 model Payment {

@@ -24,13 +24,34 @@ const PROGRAM_META: Record<string, { icon: string; accent: string }> = {
 type Enrollment = {
   id: string
   enrolledAt: string
-  course: { id: string; title: string; slug: string; isFree: boolean }
+  status: string
+  progress: number
+  hoursCompleted: number
+  completedAt: string | null
+  certificateNumber: string | null
+  attendance: { attended: number; held: number; rate: number | null }
+  course: { id: string; title: string; slug: string; isFree: boolean; totalHours: number | null; durationWeeks: number | null }
 }
 
 const card: React.CSSProperties = {
   background: "rgba(255,255,255,.03)",
   border: "1px solid rgba(165,141,102,.14)",
   borderRadius: 14,
+}
+
+const badge: React.CSSProperties = {
+  fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase",
+  padding: "4px 10px", borderRadius: 20, border: "1px solid",
+  whiteSpace: "nowrap", flexShrink: 0,
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <div style={{ fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", color: "rgba(224,233,234,.4)", marginBottom: 2 }}>{label}</div>
+      <div style={{ fontSize: 13.5, fontWeight: 600, color: "#eef4f4" }}>{value}</div>
+    </div>
+  )
 }
 
 export default function AulaDashboard() {
@@ -171,6 +192,8 @@ export default function AulaDashboard() {
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {enrollments.map((en, i) => {
               const meta = PROGRAM_META[en.course.slug] ?? { icon: "✦", accent: "#A58D66" }
+              const isCertified = en.status === "completed" && en.certificateNumber
+              const totalH = en.course.totalHours
               return (
                 <motion.div
                   key={en.id}
@@ -178,40 +201,73 @@ export default function AulaDashboard() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.06 }}
                 >
-                  <TiltCard radius={10} intensity={5}>
-                    <div
-                      style={{
-                        display: "flex", alignItems: "center", gap: 16,
-                        padding: "16px 20px", borderRadius: 10,
-                        background: `${meta.accent}0A`,
-                        border: `1px solid ${meta.accent}25`,
-                      }}
-                    >
-                      <div style={{
-                        width: 44, height: 44, borderRadius: 10,
-                        background: `${meta.accent}20`,
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: 22, flexShrink: 0,
-                      }}>
-                        {meta.icon}
+                  <TiltCard radius={12} intensity={4}>
+                    <div style={{
+                      padding: "20px 22px", borderRadius: 12,
+                      background: `${meta.accent}0A`,
+                      border: `1px solid ${meta.accent}25`,
+                    }}>
+                      {/* Encabezado */}
+                      <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
+                        <div style={{
+                          width: 44, height: 44, borderRadius: 10,
+                          background: `${meta.accent}20`,
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          fontSize: 22, flexShrink: 0,
+                        }}>
+                          {meta.icon}
+                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <p style={{ fontWeight: 600, color: "#eef4f4", fontSize: 15, marginBottom: 2 }}>
+                            {en.course.title}
+                          </p>
+                          <p style={{ fontSize: 11.5, color: "rgba(224,233,234,.4)" }}>
+                            {isCertified && en.completedAt
+                              ? `Completado · ${new Date(en.completedAt).toLocaleDateString("es-AR", { month: "long", year: "numeric" })}`
+                              : `Desde ${new Date(en.enrolledAt).toLocaleDateString("es-AR", { month: "long", year: "numeric" })}`}
+                          </p>
+                        </div>
+                        {isCertified ? (
+                          <span style={{ ...badge, color: "#CBB78B", background: "rgba(203,183,139,.1)", borderColor: "rgba(203,183,139,.35)" }}>
+                            ✦ Certificada
+                          </span>
+                        ) : (
+                          <span style={{ ...badge, color: meta.accent, background: `${meta.accent}14`, borderColor: `${meta.accent}40` }}>
+                            En curso
+                          </span>
+                        )}
                       </div>
-                      <div style={{ flex: 1 }}>
-                        <p style={{ fontWeight: 600, color: "#eef4f4", fontSize: 14, marginBottom: 3 }}>
-                          {en.course.title}
-                        </p>
-                        <p style={{ fontSize: 12, color: "rgba(224,233,234,.4)" }}>
-                          Inscripta · Activo · desde{" "}
-                          {new Date(en.enrolledAt).toLocaleDateString("es-AR", { month: "long", year: "numeric" })}
-                        </p>
+
+                      {/* Barra de avance */}
+                      <div style={{ marginBottom: 16 }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+                          <span style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "rgba(224,233,234,.45)" }}>Avance del programa</span>
+                          <span style={{ fontSize: 12, fontWeight: 600, color: meta.accent }}>{en.progress}%</span>
+                        </div>
+                        <div style={{ height: 6, borderRadius: 4, background: "rgba(255,255,255,.06)", overflow: "hidden" }}>
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${en.progress}%` }}
+                            transition={{ duration: 1, delay: i * 0.06 + 0.2, ease: [0.16, 1, 0.3, 1] }}
+                            style={{ height: "100%", borderRadius: 4, background: `linear-gradient(90deg, ${meta.accent}, ${meta.accent}cc)` }}
+                          />
+                        </div>
                       </div>
-                      <Link
-                        href="/aula/materiales"
-                        style={{ fontSize: 12, letterSpacing: ".1em", textTransform: "uppercase", color: meta.accent, textDecoration: "none", whiteSpace: "nowrap" }}
-                        onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.7")}
-                        onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
-                      >
-                        Ver materiales →
-                      </Link>
+
+                      {/* Mini-estadísticas */}
+                      <div style={{ display: "flex", gap: 22, flexWrap: "wrap", alignItems: "center" }}>
+                        <Stat label="Horas" value={totalH ? `${Math.round(en.hoursCompleted)}/${totalH} h` : `${Math.round(en.hoursCompleted)} h`} />
+                        {en.attendance.rate !== null && <Stat label="Asistencia" value={`${en.attendance.rate}%`} />}
+                        {en.course.durationWeeks && <Stat label="Duración" value={`${en.course.durationWeeks} sem`} />}
+                        <Link
+                          href={isCertified ? "/aula/certificaciones" : "/aula/materiales"}
+                          style={{ marginLeft: "auto", fontSize: 11.5, letterSpacing: ".08em", textTransform: "uppercase", color: meta.accent, textDecoration: "none", whiteSpace: "nowrap" }}
+                          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.7")}
+                          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
+                        >
+                          {isCertified ? "Ver certificado →" : "Continuar →"}
+                        </Link>
+                      </div>
                     </div>
                   </TiltCard>
                 </motion.div>

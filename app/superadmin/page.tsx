@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Users, BookOpen, CreditCard, TrendingUp, ArrowUpRight, UserPlus, PlayCircle, FileText, Globe } from "lucide-react"
 import { motion } from "framer-motion"
 
-type Stats = { studentCount: number; enrollmentCount: number; totalRevenue: number; paymentCount: number; enrollmentsByProgram: { courseId: string; _count: { courseId: number } }[] }
+type Stats = { studentCount: number; enrollmentCount: number; totalRevenue: number; paymentCount: number; enrollmentsByProgram: { slug: string | null; count: number }[] }
 
 const PROGRAMS = [
   { name: "Life Coaching Integrativo", slug: "life-coaching-integrativo", accent: "#A58D66" },
@@ -132,7 +132,7 @@ export default function AdminDashboard() {
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {[
-              { dot: "#6BBF8E", title: "Base de datos", sub: "SQLite · Operativa" },
+              { dot: "#6BBF8E", title: "Base de datos", sub: "Neon PostgreSQL · Operativa" },
               { dot: "#6BBF8E", title: "5 programas publicados", sub: "Accesibles desde el sitio" },
               { dot: "#fbbf24", title: "Stripe", sub: "Configurar STRIPE_SECRET_KEY para activar pagos reales" },
               { dot: "#fbbf24", title: "PayPal", sub: "Configurar PAYPAL_CLIENT_ID para activar PayPal" },
@@ -167,7 +167,7 @@ export default function AdminDashboard() {
             ))}
           </div>
           {PROGRAMS.map((p, i) => {
-            const enrolled = stats?.enrollmentsByProgram?.find((e: any) => e.courseId && true)?._count?.courseId ?? 0
+            const enrolled = stats?.enrollmentsByProgram?.find((e) => e.slug === p.slug)?.count ?? 0
             return (
               <motion.div key={p.slug} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }}
                 style={{ display: "grid", gridTemplateColumns: "1fr 120px 120px", gap: 12, padding: "14px", borderBottom: "1px solid rgba(255,255,255,.04)", alignItems: "center" }}>

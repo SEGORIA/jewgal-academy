@@ -21,11 +21,19 @@ export async function GET() {
 
   const totalRevenue = payments.reduce((sum, p) => sum + p.amount, 0)
 
+  // Mapear courseId → slug para poder agrupar por programa en el front
+  const courses = await db.course.findMany({ select: { id: true, slug: true } })
+  const slugById = Object.fromEntries(courses.map((c) => [c.id, c.slug]))
+  const byProgram = enrollmentsByProgram.map((e) => ({
+    slug: slugById[e.courseId] ?? null,
+    count: e._count.courseId,
+  }))
+
   return NextResponse.json({
     studentCount,
     enrollmentCount,
     totalRevenue,
     paymentCount: payments.length,
-    enrollmentsByProgram,
+    enrollmentsByProgram: byProgram,
   })
 }

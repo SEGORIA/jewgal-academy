@@ -6,9 +6,12 @@ import { Search, UserPlus, Mail, MoreHorizontal, X, Eye, Trash2, Loader2, Award,
 type Enrollment = {
   id: string
   status: string
+  progress: number
+  hoursCompleted: number
   completedAt: string | null
   certificateNumber: string | null
-  course: { title: string; slug: string }
+  attendance: { attended: number; held: number; rate: number | null }
+  course: { title: string; slug: string; totalHours: number | null }
 }
 
 type Student = {
@@ -58,6 +61,21 @@ export default function AlumnosPage() {
   const [error,    setError]      = useState("")
 
   const [form, setForm] = useState({ name: "", email: "", password: "", courseSlug: "" })
+  const [edit, setEdit] = useState<Record<string, { progress: number; hours: number }>>({})
+  const [savingId, setSavingId] = useState<string | null>(null)
+
+  async function saveMetrics(enrollmentId: string) {
+    const v = edit[enrollmentId]
+    if (!v) return
+    setSavingId(enrollmentId)
+    const res = await fetch("/api/admin/enrollments", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ enrollmentId, progress: v.progress, hoursCompleted: v.hours }),
+    })
+    setSavingId(null)
+    if (res.ok) { load(); setModal(null) }
+  }
 
   const load = useCallback(() => {
     setLoading(true)
@@ -312,41 +330,78 @@ export default function AlumnosPage() {
                   </div>
                 ))}
 
-                {/* Programas con botón de completar */}
+                {/* Programas: avance, horas, asistencia, certificación */}
                 {modal.student.enrollments.length > 0 && (
                   <div style={{ marginTop: 16, marginBottom: 4 }}>
-                    <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(165,141,102,.5)", marginBottom: 10 }}>Programas</p>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                      {modal.student.enrollments.map((en) => (
-                        <div key={en.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 8, background: en.completedAt ? "rgba(107,191,142,.06)" : "rgba(255,255,255,.03)", border: `1px solid ${en.completedAt ? "rgba(107,191,142,.2)" : "rgba(255,255,255,.06)"}` }}>
-                          <div style={{ flex: 1 }}>
-                            <p style={{ fontSize: 13, color: "#eef4f4", fontWeight: 500 }}>{en.course.title}</p>
-                            {en.completedAt ? (
-                              <p style={{ fontSize: 11, color: "#6BBF8E", marginTop: 2 }}>
-                                <CheckCircle2 size={10} style={{ display: "inline", marginRight: 4 }} />
-                                Completado · N° {en.certificateNumber}
-                              </p>
-                            ) : (
-                              <p style={{ fontSize: 11, color: "rgba(224,233,234,.3)", marginTop: 2 }}>En curso · Activo</p>
-                            )}
+                    <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(165,141,102,.5)", marginBottom: 10 }}>Programas · gestión académica</p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                      {modal.student.enrollments.map((en) => {
+                        const ev = edit[en.id] ?? { progress: en.progress, hours: en.hoursCompleted }
+                        const totalH = en.course.totalHours
+                        const done = !!en.completedAt
+                        return (
+                          <div key={en.id} style={{ padding: "13px 14px", borderRadius: 10, background: done ? "rgba(107,191,142,.06)" : "rgba(255,255,255,.03)", border: `1px solid ${done ? "rgba(107,191,142,.2)" : "rgba(255,255,255,.07)"}` }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: 10 }}>
+                              <p style={{ fontSize: 13, color: "#eef4f4", fontWeight: 600 }}>{en.course.title}</p>
+                              {done ? (
+                                <span style={{ fontSize: 10, color: "#6BBF8E", whiteSpace: "nowrap" }}>
+                                  <CheckCircle2 size={10} style={{ display: "inline", marginRight: 4 }} />
+                                  N° {en.certificateNumber}
+                                </span>
+                              ) : (
+                                <span style={{ fontSize: 10, color: "rgba(224,233,234,.35)", whiteSpace: "nowrap" }}>En curso</span>
+                              )}
+                            </div>
+
+                            {/* Barra de avance */}
+                            <div style={{ height: 5, borderRadius: 3, background: "rgba(255,255,255,.06)", marginBottom: 12, overflow: "hidden" }}>
+                              <div style={{ width: `${en.progress}%`, height: "100%", background: done ? "#6BBF8E" : "var(--gold,#A58D66)", transition: "width .3s" }} />
+                            </div>
+
+                            {/* Métricas editables + asistencia */}
+                            <div style={{ display: "flex", gap: 12, alignItems: "flex-end", flexWrap: "wrap" }}>
+                              <label style={{ fontSize: 10, letterSpacing: ".06em", textTransform: "uppercase", color: "rgba(224,233,234,.4)", display: "flex", flexDirection: "column", gap: 3 }}>
+                                Avance %
+                                <input type="number" min={0} max={100} value={ev.progress}
+                                  onChange={(e) => setEdit((p) => ({ ...p, [en.id]: { ...ev, progress: Math.max(0, Math.min(100, Number(e.target.value))) } }))}
+                                  style={{ background: "rgba(255,255,255,.05)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 6, padding: "5px 8px", fontSize: 12, color: "#eef4f4", outline: "none", width: 60 }} />
+                              </label>
+                              <label style={{ fontSize: 10, letterSpacing: ".06em", textTransform: "uppercase", color: "rgba(224,233,234,.4)", display: "flex", flexDirection: "column", gap: 3 }}>
+                                Horas{totalH ? ` / ${totalH}` : ""}
+                                <input type="number" min={0} value={ev.hours}
+                                  onChange={(e) => setEdit((p) => ({ ...p, [en.id]: { ...ev, hours: Math.max(0, Number(e.target.value)) } }))}
+                                  style={{ background: "rgba(255,255,255,.05)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 6, padding: "5px 8px", fontSize: 12, color: "#eef4f4", outline: "none", width: 60 }} />
+                              </label>
+                              <div style={{ fontSize: 11, color: "rgba(224,233,234,.5)", paddingBottom: 6 }}>
+                                Asistencia<br />
+                                <strong style={{ color: "#eef4f4", fontSize: 13 }}>{en.attendance.rate !== null ? `${en.attendance.rate}%` : "—"}</strong>
+                                {en.attendance.held > 0 && <span style={{ color: "rgba(224,233,234,.35)" }}> ({en.attendance.attended}/{en.attendance.held})</span>}
+                              </div>
+                              <div style={{ display: "flex", gap: 6, marginLeft: "auto" }}>
+                                <button onClick={() => saveMetrics(en.id)} disabled={savingId === en.id}
+                                  style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.12)", color: "rgba(224,233,234,.75)", borderRadius: 7, padding: "7px 12px", fontSize: 11, cursor: "pointer", fontWeight: 600 }}>
+                                  {savingId === en.id ? "…" : "Guardar"}
+                                </button>
+                                {!done && (
+                                  <button
+                                    onClick={async () => {
+                                      const res = await fetch("/api/admin/enrollments/complete", {
+                                        method: "POST",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({ enrollmentId: en.id }),
+                                      })
+                                      if (res.ok) { load(); setModal(null) }
+                                    }}
+                                    style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(165,141,102,.12)", border: "1px solid rgba(165,141,102,.25)", color: "var(--gold,#A58D66)", borderRadius: 7, padding: "7px 12px", fontSize: 11, cursor: "pointer", fontWeight: 600, whiteSpace: "nowrap" }}
+                                  >
+                                    <Award size={12} /> Certificar
+                                  </button>
+                                )}
+                              </div>
+                            </div>
                           </div>
-                          {!en.completedAt && (
-                            <button
-                              onClick={async () => {
-                                const res = await fetch("/api/admin/enrollments/complete", {
-                                  method: "POST",
-                                  headers: { "Content-Type": "application/json" },
-                                  body: JSON.stringify({ enrollmentId: en.id }),
-                                })
-                                if (res.ok) { load(); setModal(null) }
-                              }}
-                              style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(165,141,102,.12)", border: "1px solid rgba(165,141,102,.25)", color: "var(--gold,#A58D66)", borderRadius: 7, padding: "7px 12px", fontSize: 11, cursor: "pointer", fontWeight: 600, whiteSpace: "nowrap" }}
-                            >
-                              <Award size={12} /> Emitir certificado
-                            </button>
-                          )}
-                        </div>
-                      ))}
+                        )
+                      })}
                     </div>
                   </div>
                 )}
