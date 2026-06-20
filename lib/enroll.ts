@@ -1,5 +1,6 @@
 import { db } from "./db"
 import bcrypt from "bcryptjs"
+import { generateTempPassword } from "./security"
 
 export type EnrollInput = {
   email: string
@@ -31,7 +32,7 @@ export async function enrollUserInCourse(input: EnrollInput): Promise<EnrollResu
 
   if (!user) {
     isNewUser = true
-    tempPassword = Math.random().toString(36).slice(-10)
+    tempPassword = generateTempPassword()
     user = await db.user.create({
       data: {
         email,

@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import Navbar from "@/components/Navbar"
+import HeroVideo from "@/components/HeroVideo"
 import ComunidadMap from "@/components/ComunidadMap"
 import Footer from "@/components/Footer"
 import { TiltCard } from "@/components/motion/TiltCard"
@@ -79,18 +80,8 @@ export default function HomePage() {
 
       {/* ── HERO ── */}
       <header className="hero" id="hero">
-        {/* Video hero — sin audio, loop, autoplay */}
-        <video
-          autoPlay muted loop playsInline
-          style={{
-            position: "absolute", inset: 0,
-            width: "100%", height: "100%",
-            objectFit: "cover", objectPosition: "center 20%",
-            zIndex: 0, pointerEvents: "none",
-          }}
-        >
-          <source src="/brand/hero-video.mp4" type="video/mp4" />
-        </video>
+        {/* Video hero con carga inteligente (fondo premium instantáneo + video diferido) */}
+        <HeroVideo />
 
         {/* Gradiente oscuro izquierda → transparente derecha */}
         <div className="hero-overlay" />

@@ -1,8 +1,17 @@
 import { NextRequest, NextResponse } from "next/server"
 import { stripe, isStripeConfigured } from "@/lib/stripe"
 import { db } from "@/lib/db"
+import { rateLimit, getClientIp } from "@/lib/security"
 
 export async function POST(req: NextRequest) {
+  const rl = rateLimit(`checkout:${getClientIp(req)}`, 10, 60_000)
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: "Demasiados intentos. Esperá un momento." },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfter) } }
+    )
+  }
+
   if (!isStripeConfigured()) {
     return NextResponse.json({ error: "Stripe no configurado" }, { status: 503 })
   }

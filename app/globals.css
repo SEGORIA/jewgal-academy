@@ -232,6 +232,23 @@ nav.jnav.scrolled {
   background-size: cover;
   background-position: center 25%;
 }
+/* Fondo premium instantáneo (0 bytes) — visible mientras carga el video o si no carga */
+.hero-fallback {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 72% 32%, rgba(75,126,140,.28), transparent 62%),
+    radial-gradient(circle at 86% 74%, rgba(165,141,102,.14), transparent 55%),
+    linear-gradient(135deg, #06181f 0%, #0a2d3a 48%, #081e29 100%);
+}
+/* Video del hero con fade-in elegante al estar listo */
+.hero-video {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 20%;
+  opacity: 0; transition: opacity 1.2s ease;
+  pointer-events: none;
+}
+.hero-video.loaded { opacity: 1; }
 /* Dark-to-clear gradient overlay */
 .hero-overlay {
   position: absolute; inset: 0; z-index: 1;
