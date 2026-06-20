@@ -8,6 +8,7 @@
   --gold:        #A58D66;
   --gold-light:  #CBB78B;
   --gold-deep:   #8A7350;
+  --on-gold:     #0d2b3a;   /* texto oscuro sobre acento dorado (fijo en ambos temas) */
   --aqua:  #C0D5D6;
   --teal:  #4B7E8C;
   --sand:  #E5E1DD;
@@ -127,7 +128,7 @@ body {
   overflow-x: hidden;
 }
 
-::selection { background: var(--gold); color: var(--navy); }
+::selection { background: var(--gold); color: var(--on-gold); }
 
 /* ─── Scrollbar ─── */
 ::-webkit-scrollbar { width: 7px; }
@@ -278,9 +279,9 @@ img, video { max-width: 100%; }
   transition: transform .4s cubic-bezier(.2,.7,.2,1);
   z-index: -1;
 }
-.btn:hover { color: var(--navy); }
+.btn:hover { color: var(--on-gold); }
 .btn:hover::before { transform: scaleX(1); }
-.btn.solid { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+.btn.solid { background: var(--gold); color: var(--on-gold); border-color: var(--gold); }
 .btn.solid::before { background: var(--gold-light); }
 /* Shine sweep — luz que cruza el botón sólido en hover */
 .btn.solid::after {
@@ -618,9 +619,10 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
 .foot-col a { display: block; color: var(--on-dark); text-decoration: none; font-size: 15px; margin-bottom: 11px; transition: color .3s; }
 .foot-col a:hover { color: var(--aqua); }
 .foot-col p { color: var(--on-dark); font-size: 14px; }
-.news input { width: 100%; background: var(--navy); border: 1px solid var(--line-d); border-radius: 4px; padding: 12px 14px; color: var(--aqua); font-family: var(--sans); font-size: 13px; margin-top: 6px; }
+.news input { width: 100%; background: var(--surface-2); border: 1px solid var(--line-d); border-radius: 4px; padding: 12px 14px; color: var(--text); font-family: var(--sans); font-size: 13px; margin-top: 6px; }
+.news input::placeholder { color: var(--text-faint); }
 .news .row { display: flex; gap: 8px; margin-top: 8px; }
-.news button { background: var(--gold); border: none; color: var(--navy); padding: 0 16px; border-radius: 4px; cursor: pointer; font-size: 18px; }
+.news button { background: var(--gold); border: none; color: var(--on-gold); padding: 0 16px; border-radius: 4px; cursor: pointer; font-size: 18px; }
 .foot-bottom { border-top: 1px solid var(--line-d); padding-top: 26px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
 .foot-bottom small { color: var(--on-dark-faint); font-size: 12px; }
 .foot-bottom .alma { font-size: 12px; color: var(--on-dark-faint); letter-spacing: .04em; }
