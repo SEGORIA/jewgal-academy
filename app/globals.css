@@ -56,6 +56,44 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
 
+/* ─── Accesibilidad: foco visible solo por teclado ─── */
+:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+:focus:not(:focus-visible) { outline: none; }
+a, button, [role="button"] { -webkit-tap-highlight-color: transparent; }
+
+/* Salto al contenido para lectores de pantalla / teclado */
+.skip-link {
+  position: absolute; left: -9999px; top: 0; z-index: 9999;
+  background: var(--navy-2); color: var(--gold-light);
+  padding: 12px 20px; border: 1px solid var(--gold);
+  font-size: 13px; letter-spacing: .08em; text-decoration: none;
+}
+.skip-link:focus { left: 16px; top: 16px; }
+
+/* ─── Respeto a prefers-reduced-motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Microinteracciones: feedback táctil en dispositivos sin hover ─── */
+@media (hover: none) {
+  .btn:active { transform: scale(.97); transition: transform .12s ease; }
+  .pcard:active, .tcard:active, [data-tilt]:active { transform: scale(.99); }
+}
+
+/* Imágenes nunca rompen el layout en móvil */
+img, video { max-width: 100%; }
+
 /* ─── Utility classes (Tailwind compat) ─── */
 .font-display  { font-family: var(--serif); font-optical-sizing: auto; }
 .font-sans     { font-family: var(--sans); }
@@ -752,10 +790,3 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
   .pagos-amount-col { display: none; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}

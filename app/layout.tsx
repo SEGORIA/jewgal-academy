@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next"
 import { Cormorant_Garamond, Jost, Allura } from "next/font/google"
 import "./globals.css"
 import Providers from "@/components/Providers"
+import ScrollProgress from "@/components/motion/ScrollProgress"
 
 const SITE_URL = "https://jewgal-academy.vercel.app"
 
@@ -77,7 +78,13 @@ export default function RootLayout({
       lang="es"
       className={`${cormorant.variable} ${jost.variable} ${allura.variable}`}
     >
-      <body><Providers>{children}</Providers></body>
+      <body>
+        <a href="#contenido" className="skip-link">Saltar al contenido</a>
+        <ScrollProgress />
+        <Providers>
+          <div id="contenido">{children}</div>
+        </Providers>
+      </body>
     </html>
   )
 }
