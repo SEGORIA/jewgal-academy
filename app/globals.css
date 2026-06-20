@@ -81,6 +81,10 @@
   --navy:   #0d2b3a;
   --navy-2: #081e29;
   --navy-3: #060f14;
+  --bg:   #081e29;
+  --bg-2: #0d2b3a;
+  --bg-3: #060f14;
+  --surface-solid: #0b2535;
   --text:        #eef4f4;
   --text-strong: rgba(224,233,234,.85);
   --text-muted:  rgba(224,233,234,.6);
