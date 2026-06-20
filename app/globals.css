@@ -75,6 +75,7 @@
 
 /* Secciones que se mantienen oscuras también en modo claro (acentos premium) */
 [data-theme="light"] .hero,
+[data-theme="light"] .sidebar-desk,
 [data-theme="light"] .campus-l,
 [data-theme="light"] .join {
   --navy:   #0d2b3a;
@@ -99,6 +100,10 @@
 [data-theme="light"] .jnav:not(.scrolled) .brand-logo-dark { display: inline-block; }
 [data-theme="light"] .jnav:not(.scrolled) .brand-logo-light { display: none; }
 [data-theme="light"] .jnav.scrolled .nav-links a { color: var(--ink-soft); }
+
+/* Sidebars del panel y aula: logo blanco sobre el fondo oscuro del sidebar */
+[data-theme="light"] .sidebar-desk .brand-logo-dark { display: inline-block; }
+[data-theme="light"] .sidebar-desk .brand-logo-light { display: none; }
 
 /* Transición suave al cambiar de tema */
 html[data-theme] body { transition: background-color .4s ease, color .4s ease; }
