@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a0d30"/>
+      <stop offset="100%" stop-color="#4a1f54"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="65%" cy="35%" r="55%">
+      <stop offset="0%" stop-color="#9B59B6" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#2a0d30" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#g)"/>
+  <rect width="600" height="400" fill="url(#glow)"/>
+  <!-- Rombo / diamante central -->
+  <polygon points="420,30 510,110 420,190 330,110" fill="none" stroke="#B07FD8" stroke-width="0.8" opacity="0.22"/>
+  <polygon points="420,55 490,110 420,165 350,110" fill="none" stroke="#A58D66" stroke-width="0.7" opacity="0.18"/>
+  <circle cx="420" cy="110" r="5" fill="#B07FD8" opacity="0.6"/>
+  <!-- Onda suave en la base -->
+  <path d="M0 310 Q200 270 400 300 Q500 315 600 290 L600 400 L0 400Z" fill="#B07FD8" opacity="0.06"/>
+  <!-- Partículas -->
+  <circle cx="150" cy="70"  r="1.5" fill="#B07FD8" opacity="0.5"/>
+  <circle cx="250" cy="130" r="1.2" fill="#A58D66" opacity="0.45"/>
+  <circle cx="530" cy="80"  r="1.8" fill="#B07FD8" opacity="0.5"/>
+  <!-- Deco -->
+  <line x1="40" y1="340" x2="200" y2="340" stroke="#B07FD8" stroke-width="1" opacity="0.3"/>
+  <text x="40" y="370" font-family="Georgia, serif" font-size="11" fill="#B07FD8" opacity="0.35" letter-spacing="4">JEWGAL ACADEMY</text>
+</svg>

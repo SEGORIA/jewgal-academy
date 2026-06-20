@@ -1,0 +1,102 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String       @id @default(cuid())
+  name             String
+  email            String       @unique
+  password         String?
+  image            String?
+  role             String       @default("student")
+  stripeCustomerId String?
+  enrollments      Enrollment[]
+  payments         Payment[]
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+}
+
+model Course {
+  id              String        @id @default(cuid())
+  title           String
+  slug            String        @unique
+  shortDesc       String
+  description     String
+  price           Float
+  currency        String        @default("USD")
+  stripePriceId   String?
+  stripeProductId String?
+  thumbnail       String?
+  isPublished     Boolean       @default(false)
+  isFree          Boolean       @default(false)
+  enrollments     Enrollment[]
+  materials       Material[]
+  liveSessions    LiveSession[]
+  payments        Payment[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Enrollment {
+  id                String    @id @default(cuid())
+  userId            String
+  courseId          String
+  status            String    @default("active")
+  completedAt       DateTime?
+  certificateNumber String?   @unique
+  user              User      @relation(fields: [userId], references: [id])
+  course            Course    @relation(fields: [courseId], references: [id])
+  enrolledAt        DateTime  @default(now())
+
+  @@unique([userId, courseId])
+}
+
+model Material {
+  id           String   @id @default(cuid())
+  courseId     String
+  title        String
+  description  String?
+  type         String
+  fileUrl      String?
+  videoUrl     String?
+  linkUrl      String?
+  moduleNumber Int      @default(1)
+  order        Int      @default(0)
+  isVisible    Boolean  @default(true)
+  course       Course   @relation(fields: [courseId], references: [id])
+  createdAt    DateTime @default(now())
+}
+
+model LiveSession {
+  id           String   @id @default(cuid())
+  courseId     String
+  title        String
+  description  String?
+  scheduledAt  DateTime
+  joinUrl      String?
+  recordingUrl String?
+  isCompleted  Boolean  @default(false)
+  course       Course   @relation(fields: [courseId], references: [id])
+  createdAt    DateTime @default(now())
+}
+
+model Payment {
+  id              String    @id @default(cuid())
+  userId          String
+  courseId        String
+  stripeSessionId String?
+  stripePaymentId String?
+  amount          Float
+  currency        String    @default("USD")
+  status          String    @default("pending")
+  paidAt          DateTime?
+  user            User      @relation(fields: [userId], references: [id])
+  course          Course    @relation(fields: [courseId], references: [id])
+  createdAt       DateTime  @default(now())
+}

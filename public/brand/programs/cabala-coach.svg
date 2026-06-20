@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1408"/>
+      <stop offset="100%" stop-color="#3d3010"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="45%" r="45%">
+      <stop offset="0%" stop-color="#A58D66" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#1a1408" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+  </defs>
+  <rect width="600" height="400" fill="url(#g)"/>
+  <!-- Halo dorado detrás de la estrella -->
+  <circle cx="300" cy="185" r="105" fill="#A58D66" opacity="0.12" filter="url(#blur)"/>
+  <rect width="600" height="400" fill="url(#glow)"/>
+  <!-- Círculo externo -->
+  <circle cx="300" cy="185" r="118" fill="none" stroke="#A58D66" stroke-width="0.8" opacity="0.2"/>
+  <circle cx="300" cy="185" r="108" fill="none" stroke="#CBB78B" stroke-width="0.4" opacity="0.15"/>
+
+  <!-- MAGEN DAVID — triángulo superior (punta arriba) -->
+  <polygon
+    points="300,75  390,230 210,230"
+    fill="none"
+    stroke="#A58D66"
+    stroke-width="2.2"
+    stroke-linejoin="round"
+    opacity="0.85"
+  />
+  <!-- MAGEN DAVID — triángulo inferior (punta abajo) -->
+  <polygon
+    points="300,295  390,140 210,140"
+    fill="none"
+    stroke="#A58D66"
+    stroke-width="2.2"
+    stroke-linejoin="round"
+    opacity="0.85"
+  />
+  <!-- Punto central brillante -->
+  <circle cx="300" cy="185" r="5" fill="#CBB78B" opacity="0.8"/>
+
+  <!-- Partículas doradas -->
+  <circle cx="140" cy="80"  r="1.5" fill="#A58D66" opacity="0.5"/>
+  <circle cx="470" cy="65"  r="1.8" fill="#CBB78B" opacity="0.55"/>
+  <circle cx="510" cy="290" r="1.3" fill="#A58D66" opacity="0.45"/>
+  <circle cx="90"  cy="300" r="1.6" fill="#CBB78B" opacity="0.4"/>
+
+  <!-- Deco inferior -->
+  <line x1="40" y1="355" x2="220" y2="355" stroke="#A58D66" stroke-width="1" opacity="0.3"/>
+  <text x="40" y="380" font-family="Georgia, serif" font-size="11" fill="#A58D66" opacity="0.4" letter-spacing="4">JEWGAL ACADEMY</text>
+</svg>
