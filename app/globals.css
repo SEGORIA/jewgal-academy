@@ -73,9 +73,10 @@
   --scrim: rgba(20,36,44,.45);
 }
 
-/* Secciones que se mantienen oscuras también en modo claro (acentos premium) */
+/* Secciones y tarjetas que se mantienen oscuras también en modo claro (acentos premium) */
 [data-theme="light"] .hero,
 [data-theme="light"] .sidebar-desk,
+[data-theme="light"] .tone-dark,
 [data-theme="light"] .campus-l,
 [data-theme="light"] .join {
   --navy:   #0d2b3a;

@@ -165,7 +165,7 @@ export default function CertificacionesPage() {
                 border: "1px solid var(--line-d)",
               }}>
                 {/* Panel izquierdo con gradiente */}
-                <div style={{ background: c.grad, padding: "36px 32px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                <div className="tone-dark" style={{ background: c.grad, padding: "36px 32px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                   <div>
                     <div style={{ fontSize: 36, color: c.accent, marginBottom: 10, lineHeight: 1 }}>{c.icon}</div>
                     <span style={{ fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: c.accent, display: "block", marginBottom: 10 }}>{c.type}</span>

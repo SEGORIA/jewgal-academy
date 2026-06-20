@@ -149,7 +149,7 @@ export default function AcademiaPage() {
             {/* Primera card — ancha */}
             <TiltCard radius={10} intensity={4}>
             <div className="reveal" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderRadius: 10, overflow: "hidden", border: "1px solid var(--line-d)" }}>
-              <div style={{ background: PROGRAMS[0].grad, padding: "52px 44px", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: 320 }}>
+              <div className="tone-dark" style={{ background: PROGRAMS[0].grad, padding: "52px 44px", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: 320 }}>
                 <div>
                   <div style={{ fontSize: 44, color: PROGRAMS[0].accent, fontFamily: "var(--serif)", marginBottom: 8, lineHeight: 1 }}>{PROGRAMS[0].icon}</div>
                   <span style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: PROGRAMS[0].accent, display: "block", marginBottom: 12 }}>{PROGRAMS[0].tag}</span>
@@ -193,7 +193,7 @@ export default function AcademiaPage() {
                 >
                   <TiltCard radius={8}>
                     <Link href={`/programas/${p.slug}`} style={{ textDecoration: "none" }}>
-                      <div style={{
+                      <div className="tone-dark" style={{
                         background: p.grad, borderRadius: 8, padding: "34px 28px",
                         border: "1px solid var(--surface-2)",
                         display: "flex", flexDirection: "column", justifyContent: "space-between",

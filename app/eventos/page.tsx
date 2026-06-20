@@ -86,7 +86,7 @@ export default function EventosPage() {
                 border: "1px solid var(--line-d)",
               }}>
                 {/* Fecha lateral */}
-                <div style={{ background: ev.grad, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "32px 20px", textAlign: "center" }}>
+                <div className="tone-dark" style={{ background: ev.grad, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "32px 20px", textAlign: "center" }}>
                   <span style={{ fontFamily: "var(--serif)", fontSize: 52, color: ev.accent, lineHeight: 1, fontWeight: 500 }}>{ev.date.day}</span>
                   <span style={{ fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--on-dark)", marginTop: 4 }}>{ev.date.month} {ev.date.year}</span>
                   <div style={{ fontSize: 28, color: ev.accent, marginTop: 16 }}>{ev.icon}</div>

@@ -199,7 +199,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
       <Navbar />
 
       {/* ── HERO ── */}
-      <section style={{
+      <section className="tone-dark" style={{
         background: meta.grad,
         paddingTop: 140, paddingBottom: 80,
         position: "relative", overflow: "hidden",
@@ -421,7 +421,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                 overflow: "hidden",
               }}>
                 {/* Cabecera del card */}
-                <div style={{
+                <div className="tone-dark" style={{
                   background: meta.grad,
                   padding: "24px 28px",
                   borderBottom: "1px solid rgba(165,141,102,.18)",
