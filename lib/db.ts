@@ -8,7 +8,7 @@ function createPrismaClient() {
 
   if (url && token) {
     const libsql  = createClient({ url, authToken: token })
-    const adapter = new PrismaLibSql(libsql)
+    const adapter = new PrismaLibSql(libsql as any)
     return new PrismaClient({ adapter, log: [] })
   }
 
