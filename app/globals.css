@@ -480,8 +480,8 @@ nav.jnav.scrolled {
 .fund-photo .bg { position: absolute; inset: 0; background-size: cover; background-position: 50% 22%; }
 .fund-photo .tag {
   position: absolute; left: 24px; bottom: 24px;
-  font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--on-dark);
-  background: rgba(8,30,41,.5); backdrop-filter: blur(4px);
+  font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: rgba(238,244,244,.9);
+  background: rgba(8,30,41,.62); backdrop-filter: blur(4px);
   padding: 8px 13px; border: 1px solid var(--line-d); border-radius: 4px;
 }
 .fund-photo .mono {
