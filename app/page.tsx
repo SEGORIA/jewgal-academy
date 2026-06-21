@@ -1,16 +1,22 @@
 "use client"
 
 import { useEffect } from "react"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import Image from "next/image"
 import Navbar from "@/components/Navbar"
 import HeroVideo from "@/components/HeroVideo"
-import ComunidadMap from "@/components/ComunidadMap"
 import Footer from "@/components/Footer"
 import { TiltCard } from "@/components/motion/TiltCard"
 import { FloatingParticles } from "@/components/motion/FloatingParticles"
 import { CursorLight } from "@/components/motion/CursorLight"
 import MagneticButton from "@/components/motion/MagneticButton"
+
+// Mapa interactivo: below-the-fold y con código propio → se carga diferido
+const ComunidadMap = dynamic(() => import("@/components/ComunidadMap"), {
+  ssr: false,
+  loading: () => <div style={{ minHeight: 360 }} aria-hidden="true" />,
+})
 
 const CERT_INSTITUTES = [
   { slug: "idc",           name: "IDC",  fullName: "International Development Community" },
