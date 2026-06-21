@@ -152,6 +152,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
         }}>
           <button
             onClick={() => setOpen(!open)}
+            aria-label={open ? "Cerrar menú" : "Abrir menú"}
             style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", display: "none" }}
             className="mob-menu-btn"
           >

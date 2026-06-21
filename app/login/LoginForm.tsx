@@ -9,6 +9,7 @@ import BrandLogo from "@/components/BrandLogo"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
 
 const spring = { type: "spring" as const, stiffness: 280, damping: 22 }
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function LoginForm() {
   const router = useRouter()
@@ -23,9 +24,11 @@ export default function LoginForm() {
   const [success, setSuccess]   = useState(false)
   const [dest, setDest]         = useState("/aula")
   const btnRef = useRef<HTMLButtonElement>(null)
+  const canSubmit = EMAIL_RE.test(email) && password.length >= 1
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (!canSubmit) return
     setLoading(true)
     setError("")
     const res = await signIn("credentials", { email, password, redirect: false })
@@ -252,6 +255,7 @@ export default function LoginForm() {
                     />
                     <motion.button
                       type="button" onClick={() => setShowPw(!showPw)}
+                      aria-label={showPw ? "Ocultar contraseña" : "Mostrar contraseña"}
                       whileTap={{ scale: 0.82 }}
                       style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)", display: "flex", alignItems: "center", padding: 4 }}
                     >
@@ -265,9 +269,9 @@ export default function LoginForm() {
                   <motion.button
                     ref={btnRef}
                     type="submit"
-                    disabled={loading}
-                    whileHover={loading ? {} : { scale: 1.025, boxShadow: "0 12px 40px rgba(165,141,102,.35)" }}
-                    whileTap={loading ? {} : { scale: 0.975 }}
+                    disabled={loading || !canSubmit}
+                    whileHover={loading || !canSubmit ? {} : { scale: 1.025, boxShadow: "0 12px 40px rgba(165,141,102,.35)" }}
+                    whileTap={loading || !canSubmit ? {} : { scale: 0.975 }}
                     style={{
                       width: "100%",
                       background: "var(--gold,#A58D66)",
@@ -275,8 +279,8 @@ export default function LoginForm() {
                       border: "none", borderRadius: 12,
                       padding: "15px 0", fontSize: 13,
                       fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase",
-                      cursor: loading ? "not-allowed" : "pointer",
-                      opacity: loading ? 0.75 : 1,
+                      cursor: loading || !canSubmit ? "not-allowed" : "pointer",
+                      opacity: loading || !canSubmit ? 0.6 : 1,
                       display: "flex", alignItems: "center", justifyContent: "center", gap: 9,
                       position: "relative", overflow: "hidden",
                       fontFamily: "var(--sans)", marginTop: 4,

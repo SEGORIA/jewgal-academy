@@ -149,6 +149,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <button
               onClick={() => setOpen(!open)}
+              aria-label={open ? "Cerrar menú" : "Abrir menú"}
               className="mob-menu-btn"
               style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", display: "none", padding: 4 }}
             >

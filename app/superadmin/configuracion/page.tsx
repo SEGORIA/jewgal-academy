@@ -171,7 +171,7 @@ export default function ConfiguracionPage() {
                   <label style={labelStyle}>{label}</label>
                   <div style={{ position: "relative" }}>
                     <input type={showStripe ? "text" : "password"} placeholder={placeholder} style={{ ...inputStyle, paddingRight: 40 }} />
-                    <button type="button" onClick={() => setShowStripe(!showStripe)} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-dim)" }}>
+                    <button type="button" onClick={() => setShowStripe(!showStripe)} aria-label={showStripe ? "Ocultar clave" : "Mostrar clave"} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-dim)" }}>
                       {showStripe ? <EyeOff size={15} /> : <Eye size={15} />}
                     </button>
                   </div>
@@ -201,7 +201,7 @@ export default function ConfiguracionPage() {
                   <label style={labelStyle}>{label}</label>
                   <div style={{ position: "relative" }}>
                     <input type={showPayPal ? "text" : "password"} placeholder={placeholder} style={{ ...inputStyle, paddingRight: 40 }} />
-                    <button type="button" onClick={() => setShowPayPal(!showPayPal)} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-dim)" }}>
+                    <button type="button" onClick={() => setShowPayPal(!showPayPal)} aria-label={showPayPal ? "Ocultar clave" : "Mostrar clave"} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-dim)" }}>
                       {showPayPal ? <EyeOff size={15} /> : <Eye size={15} />}
                     </button>
                   </div>

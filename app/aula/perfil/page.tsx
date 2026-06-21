@@ -305,7 +305,7 @@ export default function PerfilPage() {
               <input type={showPw ? "text" : "password"} value={pwCurrent}
                 onChange={(e) => setPwCurrent(e.target.value)} placeholder="••••••••"
                 style={{ ...inputStyle, paddingRight: 40 }} onFocus={focusIn} onBlur={focusOut} />
-              <button type="button" onClick={() => setShowPw(!showPw)}
+              <button type="button" onClick={() => setShowPw(!showPw)} aria-label={showPw ? "Ocultar contraseña" : "Mostrar contraseña"}
                 style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-dim)" }}>
                 {showPw ? <EyeOff size={14} /> : <Eye size={14} />}
               </button>

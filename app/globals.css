@@ -37,6 +37,11 @@
   --text-dim:      rgba(224,233,234,.28);
   --border:        rgba(165,141,102,.18);
   --border-soft:   rgba(255,255,255,.07);
+  /* Radios y elevación (design tokens) */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --shadow-card: 0 8px 32px rgba(8,30,41,.14);
   --hero-overlay-1: rgba(8,30,41,.97);
   --hero-overlay-2: rgba(8,30,41,.55);
   --hero-overlay-3: rgba(8,30,41,.08);
@@ -189,6 +194,34 @@ a, button, [role="button"] { -webkit-tap-highlight-color: transparent; }
 
 /* Imágenes nunca rompen el layout en móvil */
 img, video { max-width: 100%; }
+
+/* ─── Campos de formulario: foco y error ─── */
+.field { border: 1px solid var(--line-d); }
+.field:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(165,141,102,.12);
+}
+.field[aria-invalid="true"] { border-color: #e0788a; }
+.field[aria-invalid="true"]:focus { box-shadow: 0 0 0 3px rgba(224,120,138,.15); }
+
+/* ─── Componentes reutilizables (design system) ───
+   Usar estas clases en código nuevo en vez de repetir estilos inline.
+   Responden a los tokens de tema, así que funcionan en claro y oscuro. */
+.ja-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+.ja-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+  padding: 4px 11px; border-radius: 999px;
+  border: 1px solid var(--border); color: var(--text-muted);
+}
+.ja-label {
+  display: block; font-size: 11px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px;
+}
 
 /* ─── Utility classes (Tailwind compat) ─── */
 .font-display  { font-family: var(--serif); font-optical-sizing: auto; }

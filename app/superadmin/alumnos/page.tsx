@@ -209,7 +209,7 @@ export default function AlumnosPage() {
                       {totalPaid(s) > 0 ? `$${totalPaid(s).toLocaleString("es")}` : "—"}
                     </td>
                     <td style={{ padding: "14px 18px", position: "relative" }}>
-                      <button onClick={() => setMenuOpen(menuOpen === s.id ? null : s.id)}
+                      <button onClick={() => setMenuOpen(menuOpen === s.id ? null : s.id)} aria-label="Acciones de la alumna"
                         style={{ background: "none", border: "none", color: "var(--text-dim)", cursor: "pointer", padding: 4, borderRadius: 6 }}>
                         <MoreHorizontal size={17} />
                       </button>
@@ -244,7 +244,7 @@ export default function AlumnosPage() {
         <div style={{ position: "fixed", inset: 0, zIndex: 60, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }} onClick={() => setModal(null)}>
           <div style={{ position: "absolute", inset: 0, background: "var(--scrim)", backdropFilter: "blur(10px)" }} />
           <div style={{ position: "relative", zIndex: 1, background: "var(--surface-solid)", border: "1px solid rgba(165,141,102,.22)", borderRadius: 18, padding: "36px 32px", width: "100%", maxWidth: 480, boxShadow: "0 48px 120px rgba(0,0,0,.6)" }} onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setModal(null)} style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none", color: "var(--text-faint)", cursor: "pointer" }}><X size={20} /></button>
+            <button onClick={() => setModal(null)} aria-label="Cerrar" style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none", color: "var(--text-faint)", cursor: "pointer" }}><X size={20} /></button>
 
             {/* ADD */}
             {modal.type === "add" && (

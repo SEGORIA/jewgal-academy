@@ -44,19 +44,48 @@ const contactInfo = [
   },
 ]
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export default function ContactoPage() {
   const [form, setForm] = useState({ nombre: "", email: "", asunto: "", mensaje: "" })
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle")
+  const [errorMsg, setErrorMsg] = useState("")
+
+  const errors = {
+    nombre: form.nombre.trim().length < 2 ? "Ingresá tu nombre" : "",
+    email: !EMAIL_RE.test(form.email) ? "Ingresá un email válido" : "",
+    mensaje: form.mensaje.trim().length < 10 ? "Escribí un mensaje (mínimo 10 caracteres)" : "",
+  }
+  const isValid = !errors.nombre && !errors.email && !errors.mensaje
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
 
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setTouched((prev) => ({ ...prev, [e.target.name]: true }))
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setTouched({ nombre: true, email: true, mensaje: true })
+    if (!isValid) return
     setStatus("sending")
-    /* Aquí se puede conectar Resend / un endpoint /api/contacto */
-    await new Promise((r) => setTimeout(r, 1200))
-    setStatus("sent")
+    setErrorMsg("")
+    try {
+      const res = await fetch("/api/contacto", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}))
+        throw new Error(d.error || "No se pudo enviar el mensaje")
+      }
+      setStatus("sent")
+    } catch (err) {
+      setStatus("error")
+      setErrorMsg(err instanceof Error ? err.message : "No se pudo enviar el mensaje")
+    }
   }
 
   return (
@@ -188,25 +217,29 @@ export default function ContactoPage() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="reveal" style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+              <form onSubmit={handleSubmit} className="reveal" noValidate style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                 {/* Nombre */}
                 <div>
-                  <label style={labelStyle}>Nombre completo *</label>
-                  <input name="nombre" value={form.nombre} onChange={handleChange} required
-                    placeholder="Tu nombre" style={inputStyle} />
+                  <label style={labelStyle} htmlFor="c-nombre">Nombre completo *</label>
+                  <input id="c-nombre" name="nombre" value={form.nombre} onChange={handleChange} onBlur={handleBlur}
+                    placeholder="Tu nombre" className="field" style={inputStyle}
+                    aria-invalid={!!(touched.nombre && errors.nombre)} />
+                  {touched.nombre && errors.nombre && <FieldError>{errors.nombre}</FieldError>}
                 </div>
 
                 {/* Email */}
                 <div>
-                  <label style={labelStyle}>Correo electrónico *</label>
-                  <input name="email" type="email" value={form.email} onChange={handleChange} required
-                    placeholder="tu@correo.com" style={inputStyle} />
+                  <label style={labelStyle} htmlFor="c-email">Correo electrónico *</label>
+                  <input id="c-email" name="email" type="email" value={form.email} onChange={handleChange} onBlur={handleBlur}
+                    placeholder="tu@correo.com" className="field" style={inputStyle}
+                    aria-invalid={!!(touched.email && errors.email)} />
+                  {touched.email && errors.email && <FieldError>{errors.email}</FieldError>}
                 </div>
 
                 {/* Asunto */}
                 <div>
-                  <label style={labelStyle}>¿Sobre qué quieres hablar?</label>
-                  <select name="asunto" value={form.asunto} onChange={handleChange} style={inputStyle}>
+                  <label style={labelStyle} htmlFor="c-asunto">¿Sobre qué quieres hablar?</label>
+                  <select id="c-asunto" name="asunto" value={form.asunto} onChange={handleChange} className="field" style={inputStyle}>
                     <option value="">Selecciona un tema…</option>
                     <option value="life-coaching">Life Coaching Integrativo</option>
                     <option value="joogal-adultos">Instructor Joogal Adultos</option>
@@ -220,17 +253,25 @@ export default function ContactoPage() {
 
                 {/* Mensaje */}
                 <div>
-                  <label style={labelStyle}>Tu mensaje *</label>
-                  <textarea name="mensaje" value={form.mensaje} onChange={handleChange} required
+                  <label style={labelStyle} htmlFor="c-mensaje">Tu mensaje *</label>
+                  <textarea id="c-mensaje" name="mensaje" value={form.mensaje} onChange={handleChange} onBlur={handleBlur}
                     placeholder="Cuéntame con qué te puedo ayudar…"
-                    rows={5} style={{ ...inputStyle, resize: "vertical" }} />
+                    rows={5} className="field" style={{ ...inputStyle, resize: "vertical" }}
+                    aria-invalid={!!(touched.mensaje && errors.mensaje)} />
+                  {touched.mensaje && errors.mensaje && <FieldError>{errors.mensaje}</FieldError>}
                 </div>
+
+                {status === "error" && (
+                  <div role="alert" style={{ background: "rgba(239,68,68,.1)", border: "1px solid rgba(239,68,68,.3)", borderRadius: 6, padding: "10px 14px", fontSize: 13, color: "#fca5a5" }}>
+                    {errorMsg}
+                  </div>
+                )}
 
                 <button
                   type="submit"
                   className="btn solid"
                   disabled={status === "sending"}
-                  style={{ marginTop: 4 }}
+                  style={{ marginTop: 4, opacity: status === "sending" ? 0.7 : 1 }}
                 >
                   {status === "sending" ? "Enviando…" : "Enviar mensaje →"}
                 </button>
@@ -271,12 +312,19 @@ const labelStyle: React.CSSProperties = {
 const inputStyle: React.CSSProperties = {
   width: "100%",
   background: "var(--navy-2)",
-  border: "1px solid var(--line-d)",
   borderRadius: 4,
   padding: "13px 16px",
   color: "var(--text)",
   fontFamily: "var(--sans)",
   fontSize: 14,
   outline: "none",
-  transition: "border-color .3s",
+  transition: "border-color .25s",
+}
+
+function FieldError({ children }: { children: React.ReactNode }) {
+  return (
+    <p role="alert" style={{ margin: "6px 0 0", fontSize: 12, color: "#fca5a5", display: "flex", alignItems: "center", gap: 5 }}>
+      <span aria-hidden="true">⚠</span> {children}
+    </p>
+  )
 }
