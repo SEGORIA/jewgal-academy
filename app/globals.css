@@ -562,7 +562,7 @@ nav.jnav.scrolled {
 }
 .map .pt { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: var(--gold-light); box-shadow: 0 0 10px var(--gold-light); animation: twinkle 3s ease-in-out infinite; }
 .com-side { padding-left: 10px; }
-.com-side .big { font-family: var(--serif); font-size: 64px; font-weight: 600; color: var(--gold-light); line-height: 1; }
+.com-side .big { font-family: var(--serif); font-size: 64px; font-weight: 500; color: var(--gold-light); line-height: 1; }
 .com-side .big-l { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--on-dark); margin: 6px 0 30px; }
 .com-side h3 { font-family: var(--serif); font-weight: 500; font-size: 30px; color: var(--text); margin-bottom: 16px; line-height: 1.15; }
 .com-side p { color: var(--on-dark); font-size: 15px; margin-bottom: 26px; max-width: 340px; }
