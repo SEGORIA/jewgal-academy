@@ -7,6 +7,19 @@ import { getTheme } from "@/lib/theme"
 
 const SITE_URL = "https://jewgal-academy.vercel.app"
 
+const orgJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  name: "Jewgal Academy",
+  url: SITE_URL,
+  logo: `${SITE_URL}/brand/logo.png`,
+  description:
+    "Formación de coaches, certificaciones y programas de desarrollo personal y bienestar con Devora Benchimol.",
+  founder: { "@type": "Person", name: "Devora Benchimol", jobTitle: "Master Coach Internacional" },
+  sameAs: ["https://instagram.com/devora_benchimol_"],
+  address: { "@type": "PostalAddress", addressLocality: "Miami", addressRegion: "FL", addressCountry: "US" },
+}
+
 const cormorant = Cormorant_Garamond({
   variable: "--font-serif",
   subsets: ["latin"],
@@ -82,6 +95,10 @@ export default async function RootLayout({
       className={`${cormorant.variable} ${jost.variable} ${allura.variable}`}
     >
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        />
         <a href="#contenido" className="skip-link">Saltar al contenido</a>
         <ScrollProgress />
         <Providers>

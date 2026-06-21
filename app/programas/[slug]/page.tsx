@@ -193,8 +193,34 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
   const meta = META[slug] ?? DEFAULT_META
   const priceLabel = course.isFree ? "Gratis" : formatPrice(course.price, course.currency)
 
+  const courseJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: course.title,
+    description: course.shortDesc,
+    provider: {
+      "@type": "EducationalOrganization",
+      name: "Jewgal Academy",
+      sameAs: "https://jewgal-academy.vercel.app",
+    },
+    ...(course.isFree
+      ? {}
+      : {
+          offers: {
+            "@type": "Offer",
+            price: course.price,
+            priceCurrency: course.currency,
+            availability: "https://schema.org/InStock",
+          },
+        }),
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd) }}
+      />
       <RevealInit />
       <Navbar />
 
