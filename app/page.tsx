@@ -238,7 +238,7 @@ export default function HomePage() {
         <div className="wrap">
           <div className="fund-grid">
             <div className="fund-photo reveal">
-              <div className="bg" style={{ backgroundImage: "url('/brand/devora-portrait.jpg')" }} />
+              <div className="bg" style={{ backgroundImage: "url('/brand/devora-portrait.webp')" }} />
               <div className="mono">D</div>
               <div className="tag">Devora Benchimol</div>
             </div>
@@ -266,8 +266,10 @@ export default function HomePage() {
             {CERT_INSTITUTES.map((inst) => (
               <div key={inst.slug} className="aval-item" title={inst.fullName}>
                 <img
-                  src={`/brand/certs/${inst.slug}.png`}
+                  src={`/brand/certs/${inst.slug}.webp`}
                   alt={inst.fullName}
+                  loading="lazy"
+                  decoding="async"
                   className="aval-logo"
                   onLoad={(e) => {
                     const t = e.currentTarget as HTMLImageElement

@@ -38,6 +38,9 @@ const nextConfig: NextConfig = {
     root: path.resolve(__dirname),
   },
   poweredByHeader: false,
+  images: {
+    formats: ["image/avif", "image/webp"],
+  },
   async headers() {
     return [
       {

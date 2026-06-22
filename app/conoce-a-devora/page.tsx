@@ -102,7 +102,7 @@ export default function ConoceADevorPage() {
         <div className="wrap devora-hero-grid">
           {/* Foto */}
           <div className="devora-hero-photo">
-            <div style={{ position: "absolute", inset: 0, backgroundImage: "url('/brand/devora-hero.jpg')", backgroundSize: "cover", backgroundPosition: "50% 22%" }} />
+            <div style={{ position: "absolute", inset: 0, backgroundImage: "url('/brand/devora-hero.webp')", backgroundSize: "cover", backgroundPosition: "50% 22%" }} />
             <div style={{ position: "absolute", left: 20, bottom: 20, fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(238,244,244,.9)", background: "rgba(8,30,41,.62)", backdropFilter: "blur(4px)", padding: "8px 13px", border: "1px solid var(--line-d)", borderRadius: 4 }}>
               Master Coach Internacional · Miami
             </div>
