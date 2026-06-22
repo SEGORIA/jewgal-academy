@@ -223,6 +223,11 @@ img, video { max-width: 100%; }
   text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px;
 }
 
+/* Hero de Academia: en móvil la foto pasa a fondo atenuado para no tapar el texto */
+@media (max-width: 760px) {
+  .academia-hero-photo { width: 100%; opacity: .18; }
+}
+
 /* ─── Utility classes (Tailwind compat) ─── */
 .font-display  { font-family: var(--serif); font-optical-sizing: auto; }
 .font-sans     { font-family: var(--sans); }

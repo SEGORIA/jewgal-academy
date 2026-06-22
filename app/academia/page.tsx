@@ -80,13 +80,17 @@ export default function AcademiaPage() {
 
       {/* ── HERO ── */}
       <section style={{
-        background: "linear-gradient(120deg,var(--navy-2) 0%,var(--navy) 55%,#0a3140 100%)",
+        background: "var(--bg-2)",
         paddingTop: 150, paddingBottom: 90,
         position: "relative", overflow: "hidden",
         borderBottom: "1px solid var(--line-d)",
       }}>
-        <div style={{ position: "absolute", top: "-30%", right: "0%", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(165,141,102,.07),transparent 70%)", pointerEvents: "none" }} />
-        <div className="wrap">
+        {/* Foto de la comunidad, fundida con el fondo del hero */}
+        <div className="academia-hero-photo" style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "52%", zIndex: 0 }}>
+          <img src="/brand/devora-grupo.webp" alt="Devora con su comunidad de alumnas" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 28%" }} />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, var(--bg-2) 2%, rgba(0,0,0,0) 58%)" }} />
+        </div>
+        <div className="wrap" style={{ position: "relative", zIndex: 2 }}>
           <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Jewgal Academy</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(46px,6.5vw,82px)", color: "var(--text)", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}>
             La Academia
