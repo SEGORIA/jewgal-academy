@@ -19,7 +19,7 @@ export default function GrabacionesPage() {
     <div style={{ maxWidth: 760, margin: "0 auto" }}>
       {/* Header */}
       <div style={{ marginBottom: 36 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 10 }}>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
           Aula Virtual
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "var(--text)", marginBottom: 8 }}>
@@ -41,13 +41,13 @@ export default function GrabacionesPage() {
               <div key={rec.id} style={{ ...card, overflow: "hidden" }}>
                 <div style={{ aspectRatio: "16/9", background: "linear-gradient(135deg,var(--surface-solid),var(--bg))", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                   <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(165,141,102,.2)", border: "2px solid rgba(165,141,102,.4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <PlayCircle size={32} style={{ color: "var(--gold,#A58D66)" }} />
+                    <PlayCircle size={32} style={{ color: "var(--gold)" }} />
                   </div>
                 </div>
                 <div style={{ padding: "20px 24px" }}>
                   <h3 style={{ fontWeight: 600, color: "var(--text)", fontSize: 15, marginBottom: 8 }}>{rec.title}</h3>
                   <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--text-faint)" }}>
-                    <Clock size={12} style={{ color: "var(--gold,#A58D66)" }} />
+                    <Clock size={12} style={{ color: "var(--gold)" }} />
                     {rec.duration} · Módulo {rec.moduleNumber}
                   </div>
                 </div>
@@ -66,7 +66,7 @@ export default function GrabacionesPage() {
         {available.length === 0 && (
           <div style={{ ...card, padding: "44px 32px", textAlign: "center", marginBottom: 16, borderColor: "rgba(165,141,102,.1)" }}>
             <div style={{ width: 56, height: 56, borderRadius: "50%", background: "rgba(165,141,102,.1)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px" }}>
-              <Lock size={24} style={{ color: "var(--gold,#A58D66)" }} />
+              <Lock size={24} style={{ color: "var(--gold)" }} />
             </div>
             <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--text)", marginBottom: 8 }}>
               Las grabaciones estarán disponibles pronto

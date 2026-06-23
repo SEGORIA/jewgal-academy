@@ -87,7 +87,7 @@ export default function WebAdminPage() {
     <div style={{ maxWidth: 900, margin: "0 auto" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
         <div>
-          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 8 }}>Admin</span>
+          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>Admin</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Editor del sitio web</h1>
           <p style={{ color: "var(--text-faint)", fontSize: 14 }}>Modificá los textos e información visibles en el sitio público.</p>
         </div>
@@ -95,7 +95,7 @@ export default function WebAdminPage() {
           <a href="/" target="_blank" style={{ display: "flex", alignItems: "center", gap: 7, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 10, padding: "11px 18px", fontSize: 13, color: "var(--text-muted)", textDecoration: "none" }}>
             <Eye size={15} /> Ver sitio
           </a>
-          <button onClick={handleSave} style={{ display: "flex", alignItems: "center", gap: 7, background: saved ? "#6BBF8E" : "var(--gold,#A58D66)", color: "#081E29", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer", transition: "background .3s" }}>
+          <button onClick={handleSave} style={{ display: "flex", alignItems: "center", gap: 7, background: saved ? "var(--success)" : "var(--gold)", color: "#081E29", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer", transition: "background .3s" }}>
             <Save size={15} /> {saved ? "¡Guardado!" : "Guardar cambios"}
           </button>
         </div>
@@ -106,10 +106,10 @@ export default function WebAdminPage() {
           <div key={section.id} style={{ ...card }}>
             {/* Header acordeón */}
             <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "18px 22px", cursor: "pointer" }} onClick={() => setExpanded(expanded === section.id ? null : section.id)}>
-              <div style={{ width: 8, height: 8, borderRadius: "50%", background: section.visible ? "#6BBF8E" : "var(--text-dim)", flexShrink: 0 }} />
+              <div style={{ width: 8, height: 8, borderRadius: "50%", background: section.visible ? "var(--success)" : "var(--text-dim)", flexShrink: 0 }} />
               <span style={{ fontSize: 15, fontWeight: 600, color: "var(--text)", flex: 1 }}>{section.label}</span>
               <button onClick={(e) => { e.stopPropagation(); toggleVisible(section.id) }}
-                style={{ fontSize: 11, color: section.visible ? "#6BBF8E" : "var(--text-dim)", background: "none", border: "none", cursor: "pointer", letterSpacing: ".1em" }}>
+                style={{ fontSize: 11, color: section.visible ? "var(--success)" : "var(--text-dim)", background: "none", border: "none", cursor: "pointer", letterSpacing: ".1em" }}>
                 {section.visible ? "Visible" : "Oculto"}
               </button>
               {expanded === section.id ? <ChevronUp size={16} style={{ color: "var(--text-dim)" }} /> : <ChevronDown size={16} style={{ color: "var(--text-dim)" }} />}

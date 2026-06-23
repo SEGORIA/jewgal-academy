@@ -126,7 +126,7 @@ export default function Checkout({ course }: { course: Course }) {
   }
 
   const focus = (e: React.FocusEvent<HTMLInputElement>) => {
-    e.target.style.borderColor = "var(--gold,#A58D66)"
+    e.target.style.borderColor = "var(--gold)"
     e.target.style.boxShadow   = "0 0 0 3px rgba(165,141,102,.18)"
   }
   const blur = (e: React.FocusEvent<HTMLInputElement>) => {

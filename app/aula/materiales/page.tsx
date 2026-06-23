@@ -23,7 +23,7 @@ export default function MaterialesPage() {
     <div style={{ maxWidth: 760, margin: "0 auto" }}>
       {/* Header */}
       <div style={{ marginBottom: 36 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 10 }}>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
           Aula Virtual
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "var(--text)", marginBottom: 8 }}>
@@ -39,7 +39,7 @@ export default function MaterialesPage() {
           {/* Módulo header */}
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
             <div style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(165,141,102,.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <BookOpen size={15} style={{ color: "var(--gold,#A58D66)" }} />
+              <BookOpen size={15} style={{ color: "var(--gold)" }} />
             </div>
             <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)" }}>
               Módulo {mod}
@@ -69,8 +69,8 @@ export default function MaterialesPage() {
                   {/* Icono */}
                   <div style={{ width: 40, height: 40, borderRadius: 8, background: "rgba(165,141,102,.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                     {material.type === "document"
-                      ? <FileText size={17} style={{ color: "var(--gold,#A58D66)" }} />
-                      : <ExternalLink size={17} style={{ color: "#4B7E8C" }} />
+                      ? <FileText size={17} style={{ color: "var(--gold)" }} />
+                      : <ExternalLink size={17} style={{ color: "var(--teal)" }} />
                     }
                   </div>
                   {/* Info */}
@@ -83,7 +83,7 @@ export default function MaterialesPage() {
                     href={material.fileUrl || material.linkUrl || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ color: "var(--gold,#A58D66)", transition: "opacity .2s", flexShrink: 0 }}
+                    style={{ color: "var(--gold)", transition: "opacity .2s", flexShrink: 0 }}
                     aria-label={`Descargar ${material.title}`}
                     onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = ".65")}
                     onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}

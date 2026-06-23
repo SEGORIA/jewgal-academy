@@ -122,7 +122,7 @@ export default function PerfilPage() {
 
       {/* Header */}
       <div style={{ marginBottom: 32 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 8 }}>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>
           Aula Virtual
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 34, color: "var(--text)", marginBottom: 4 }}>
@@ -156,7 +156,7 @@ export default function PerfilPage() {
             >
               {photo
                 ? <img src={photo} alt="Foto de perfil" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                : <span style={{ fontFamily: "var(--serif)", fontSize: 38, color: "var(--gold,#A58D66)", fontWeight: 500 }}>{initials}</span>
+                : <span style={{ fontFamily: "var(--serif)", fontSize: 38, color: "var(--gold)", fontWeight: 500 }}>{initials}</span>
               }
               {/* Overlay hover */}
               <motion.div
@@ -167,8 +167,8 @@ export default function PerfilPage() {
                   display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4,
                 }}
               >
-                <Camera size={18} style={{ color: "#A58D66" }} />
-                <span style={{ fontSize: 10, color: "#A58D66", letterSpacing: ".1em" }}>Cambiar</span>
+                <Camera size={18} style={{ color: "var(--gold)" }} />
+                <span style={{ fontSize: 10, color: "var(--gold)", letterSpacing: ".1em" }}>Cambiar</span>
               </motion.div>
             </div>
             <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }}
@@ -249,9 +249,9 @@ export default function PerfilPage() {
                   whileTap={{ scale: 0.95 }}
                   style={{
                     padding: "7px 14px", borderRadius: 20, fontSize: 12, cursor: "pointer",
-                    border: `1.5px solid ${active ? "var(--gold,#A58D66)" : "rgba(165,141,102,.2)"}`,
+                    border: `1.5px solid ${active ? "var(--gold)" : "rgba(165,141,102,.2)"}`,
                     background: active ? "rgba(165,141,102,.15)" : "transparent",
-                    color: active ? "var(--gold,#A58D66)" : "var(--text-faint)",
+                    color: active ? "var(--gold)" : "var(--text-faint)",
                     fontWeight: active ? 600 : 400,
                     display: "flex", alignItems: "center", gap: 6,
                     transition: "all .18s",
@@ -274,7 +274,7 @@ export default function PerfilPage() {
           whileTap={{ scale: 0.97 }}
           style={{
             display: "flex", alignItems: "center", gap: 8,
-            background: saved ? "#6BBF8E" : "var(--gold,#A58D66)",
+            background: saved ? "var(--success)" : "var(--gold)",
             color: "#081E29", border: "none", borderRadius: 11,
             padding: "13px 28px", fontSize: 13, fontWeight: 700,
             cursor: "pointer", transition: "background .3s",
@@ -334,7 +334,7 @@ export default function PerfilPage() {
           </div>
         </div>
         {pwConfirm && pwNew !== pwConfirm && (
-          <p style={{ fontSize: 12, color: "#fca5a5", marginBottom: 14 }}>Las contraseñas no coinciden.</p>
+          <p style={{ fontSize: 12, color: "var(--danger)", marginBottom: 14 }}>Las contraseñas no coinciden.</p>
         )}
         <motion.button
           onClick={handlePwSave}
@@ -342,7 +342,7 @@ export default function PerfilPage() {
           whileHover={pwNew === pwConfirm && pwCurrent ? { scale: 1.02 } : {}}
           style={{
             display: "flex", alignItems: "center", gap: 8,
-            background: pwSaved ? "#6BBF8E" : "var(--surface-2)",
+            background: pwSaved ? "var(--success)" : "var(--surface-2)",
             border: "1px solid rgba(165,141,102,.25)", color: pwSaved ? "var(--bg)" : "var(--text-muted)",
             borderRadius: 10, padding: "11px 22px", fontSize: 13, fontWeight: 600,
             cursor: !pwCurrent || !pwNew || pwNew !== pwConfirm ? "not-allowed" : "pointer",

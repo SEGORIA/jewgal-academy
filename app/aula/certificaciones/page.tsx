@@ -47,7 +47,7 @@ export default function CertificacionesPage() {
     window.print()
   }
 
-  const name      = session?.user?.name ?? "Alumna"
+  const name      = session?.user?.name ?? "Estudiante"
   const activeMeta = active ? (PROGRAM_META[active.course.slug] ?? { icon: "✦", accent: "#A58D66", desc: active.course.title }) : null
 
   return (
@@ -63,7 +63,7 @@ export default function CertificacionesPage() {
 
       <div style={{ maxWidth: 860, margin: "0 auto" }}>
         <div style={{ marginBottom: 36 }}>
-          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 10 }}>
+          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
             Aula Virtual
           </span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>
@@ -96,7 +96,7 @@ export default function CertificacionesPage() {
               Al completar cualquiera de nuestros programas, recibirás aquí tu certificado oficial firmado por Devora Benchimol.
             </p>
             <Link href="/#programas"
-              style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "var(--gold,#A58D66)", color: "#081E29", textDecoration: "none", padding: "12px 28px", borderRadius: 10, fontSize: 13, fontWeight: 700, letterSpacing: ".08em" }}>
+              style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "var(--gold)", color: "#081E29", textDecoration: "none", padding: "12px 28px", borderRadius: 10, fontSize: 13, fontWeight: 700, letterSpacing: ".08em" }}>
               Explorar programas →
             </Link>
 
@@ -183,7 +183,7 @@ export default function CertificacionesPage() {
             {/* Controles */}
             <div style={{ display: "flex", gap: 12, marginBottom: 24 }} onClick={(e) => e.stopPropagation()}>
               <button onClick={printCert}
-                style={{ display: "flex", alignItems: "center", gap: 7, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.35)", color: "var(--gold,#A58D66)", borderRadius: 9, padding: "10px 20px", fontSize: 13, cursor: "pointer" }}>
+                style={{ display: "flex", alignItems: "center", gap: 7, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.35)", color: "var(--gold)", borderRadius: 9, padding: "10px 20px", fontSize: 13, cursor: "pointer" }}>
                 <Download size={15} /> Imprimir / Descargar
               </button>
               <button onClick={() => setActive(null)}

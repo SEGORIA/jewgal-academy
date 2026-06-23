@@ -11,7 +11,7 @@ export default function AdminLoading() {
         <div style={{
           width: 24, height: 24, borderRadius: "50%",
           border: "2px solid rgba(165,141,102,.2)",
-          borderTopColor: "var(--gold,#A58D66)",
+          borderTopColor: "var(--gold)",
           animation: "spin 0.9s linear infinite",
         }} />
         Cargando panel…

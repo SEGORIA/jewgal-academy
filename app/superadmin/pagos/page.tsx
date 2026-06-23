@@ -12,16 +12,16 @@ type Payment = {
 
 const PROGRAMS_META: Record<string, { name: string; accent: string; price: number }> = {
   "life-coaching-integrativo": { name: "Life Coaching Integrativo", accent: "#A58D66", price: 1500 },
-  "joogal-adultos":            { name: "Instructor Joogal Adultos", accent: "#6BBF8E", price: 0 },
+  "joogal-adultos":            { name: "Instructor Joogal Adultos", accent: "var(--success)", price: 0 },
   "joogalkids":                { name: "Instructor Joogalkids",     accent: "#7B9FD8", price: 360 },
   "metodo-sholem":             { name: "Método Sholem",             accent: "#B07FD8", price: 360 },
   "cabala-coach":              { name: "Cábala Coach",              accent: "#CBB78B", price: 360 },
 }
 
 const STATUS_LABEL: Record<string, { label: string; color: string; bg: string; border: string }> = {
-  completed: { label: "Completado", color: "#6BBF8E", bg: "rgba(107,191,142,.1)",  border: "rgba(107,191,142,.25)" },
-  demo:      { label: "Demo",       color: "#A58D66", bg: "rgba(165,141,102,.1)",  border: "rgba(165,141,102,.25)" },
-  pending:   { label: "Pendiente",  color: "#fbbf24", bg: "rgba(251,191,36,.1)",   border: "rgba(251,191,36,.25)" },
+  completed: { label: "Completado", color: "var(--success)", bg: "rgba(107,191,142,.1)",  border: "rgba(107,191,142,.25)" },
+  demo:      { label: "Demo",       color: "var(--gold)", bg: "rgba(165,141,102,.1)",  border: "rgba(165,141,102,.25)" },
+  pending:   { label: "Pendiente",  color: "var(--warning)", bg: "rgba(251,191,36,.1)",   border: "rgba(251,191,36,.25)" },
 }
 
 const card: React.CSSProperties = {
@@ -57,7 +57,7 @@ export default function PagosAdminPage() {
   }
 
   function downloadCSV() {
-    const rows = [["Fecha","Alumna","Email","Programa","Monto","Estado"]]
+    const rows = [["Fecha","Alumno","Email","Programa","Monto","Estado"]]
     payments.forEach((p) => rows.push([
       p.paidAt ? new Date(p.paidAt).toLocaleDateString("es-AR") : "—",
       p.user.name, p.user.email, p.course.title,
@@ -74,7 +74,7 @@ export default function PagosAdminPage() {
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
         <div>
-          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 8 }}>Admin</span>
+          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>Admin</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Ingresos y pagos</h1>
           <p style={{ color: "var(--text-faint)", fontSize: 14 }}>Historial financiero de la plataforma.</p>
         </div>
@@ -89,11 +89,11 @@ export default function PagosAdminPage() {
       {/* Aviso Stripe si no hay pagos reales */}
       {!payments.some((p) => p.status === "completed") && (
         <div style={{ ...card, padding: "18px 22px", marginBottom: 24, borderColor: "rgba(251,191,36,.2)", background: "rgba(251,191,36,.04)", display: "flex", gap: 14 }}>
-          <AlertCircle size={18} style={{ color: "#fbbf24", flexShrink: 0, marginTop: 1 }} />
+          <AlertCircle size={18} style={{ color: "var(--warning)", flexShrink: 0, marginTop: 1 }} />
           <div>
             <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", marginBottom: 3 }}>Stripe no está conectado</p>
             <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6 }}>
-              Agregá <code style={{ color: "#fbbf24", background: "rgba(251,191,36,.1)", padding: "1px 6px", borderRadius: 4 }}>STRIPE_SECRET_KEY</code> en tu <code style={{ color: "#fbbf24", background: "rgba(251,191,36,.1)", padding: "1px 6px", borderRadius: 4 }}>.env.local</code> para activar pagos reales. Los pagos demo se muestran abajo.
+              Agregá <code style={{ color: "var(--warning)", background: "rgba(251,191,36,.1)", padding: "1px 6px", borderRadius: 4 }}>STRIPE_SECRET_KEY</code> en tu <code style={{ color: "var(--warning)", background: "rgba(251,191,36,.1)", padding: "1px 6px", borderRadius: 4 }}>.env.local</code> para activar pagos reales. Los pagos demo se muestran abajo.
             </p>
           </div>
         </div>
@@ -104,7 +104,7 @@ export default function PagosAdminPage() {
         {[
           { label: "Ingresos totales",  value: loading ? "—" : `$${totalRevenue.toLocaleString("es")}`,  sub: "Pagos completados + demo", icon: DollarSign, accent: "#A58D66" },
           { label: "Transacciones",     value: loading ? "—" : String(completedPayments.length),          sub: "Inscripciones activas",    icon: CreditCard, accent: "#4B7E8C" },
-          { label: "Alumnas pagas",     value: loading ? "—" : String(uniqueStudents),                   sub: "Usuarios únicos",          icon: Users,      accent: "#6BBF8E" },
+          { label: "Alumnos con pago",     value: loading ? "—" : String(uniqueStudents),                   sub: "Usuarios únicos",          icon: Users,      accent: "var(--success)" },
           { label: "Ticket promedio",   value: loading ? "—" : avgTicket > 0 ? `$${Math.round(avgTicket).toLocaleString("es")}` : "$—", sub: "Por transacción", icon: TrendingUp, accent: "#B07FD8" },
         ].map(({ label, value, sub, icon: Icon, accent }) => (
           <div key={label} style={{ ...card, padding: "20px 18px" }}>
@@ -147,7 +147,7 @@ export default function PagosAdminPage() {
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
                 <tr style={{ borderBottom: "1px solid var(--surface-2)" }}>
-                  {["Alumna", "Programa", "Monto", "Estado", "Fecha"].map((h) => (
+                  {["Alumno", "Programa", "Monto", "Estado", "Fecha"].map((h) => (
                     <th key={h} style={{ textAlign: "left", padding: "13px 18px", fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--text-dim)", fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>

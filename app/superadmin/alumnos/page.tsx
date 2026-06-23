@@ -123,15 +123,15 @@ export default function AlumnosPage() {
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
         <div>
-          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 8 }}>Admin</span>
+          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>Admin</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Alumnos</h1>
           <p style={{ color: "var(--text-faint)", fontSize: 14 }}>
-            {loading ? "Cargando…" : `${students.length} alumna${students.length !== 1 ? "s" : ""} registrada${students.length !== 1 ? "s" : ""}`}
+            {loading ? "Cargando…" : `${students.length} alumno${students.length !== 1 ? "s" : ""} registrado${students.length !== 1 ? "s" : ""}`}
           </p>
         </div>
         <button onClick={() => { setModal({ type: "add" }); setError("") }}
-          style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--gold,#A58D66)", color: "#081E29", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, letterSpacing: ".08em", cursor: "pointer" }}>
-          <UserPlus size={16} /> Agregar alumna
+          style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--gold)", color: "#081E29", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, letterSpacing: ".08em", cursor: "pointer" }}>
+          <UserPlus size={16} /> Agregar alumno
         </button>
       </div>
 
@@ -150,14 +150,14 @@ export default function AlumnosPage() {
         {loading ? (
           <div style={{ padding: "60px 0", display: "flex", alignItems: "center", justifyContent: "center", gap: 10, color: "var(--text-dim)" }}>
             <Loader2 size={20} style={{ animation: "spin 1s linear infinite" }} />
-            Cargando alumnas…
+            Cargando alumnos…
           </div>
         ) : (
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
                 <tr style={{ borderBottom: "1px solid var(--surface-2)" }}>
-                  {["Alumna", "Email", "Programa", "Inscripta", "Pagado", ""].map((h) => (
+                  {["Alumno", "Email", "Programa", "Inscrito", "Pagado", ""].map((h) => (
                     <th key={h} style={{ textAlign: "left", padding: "13px 18px", fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--text-dim)", fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
@@ -171,15 +171,15 @@ export default function AlumnosPage() {
                           <UserPlus size={24} style={{ color: "rgba(165,141,102,.5)" }} />
                         </div>
                         <div>
-                          <p style={{ color: "var(--text-muted)", fontWeight: 500, marginBottom: 4 }}>{search ? "Sin resultados" : "No hay alumnas aún"}</p>
+                          <p style={{ color: "var(--text-muted)", fontWeight: 500, marginBottom: 4 }}>{search ? "Sin resultados" : "No hay alumnos aún"}</p>
                           <p style={{ color: "var(--text-dim)", fontSize: 13 }}>
                             {search ? "Probá con otro nombre o email." : "Aparecerán aquí cuando se inscriban o las agregues manualmente."}
                           </p>
                         </div>
                         {!search && (
                           <button onClick={() => setModal({ type: "add" })}
-                            style={{ background: "var(--gold,#A58D66)", color: "#081E29", border: "none", borderRadius: 9, padding: "10px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-                            Agregar primera alumna
+                            style={{ background: "var(--gold)", color: "#081E29", border: "none", borderRadius: 9, padding: "10px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                            Agregar primer alumno
                           </button>
                         )}
                       </div>
@@ -192,7 +192,7 @@ export default function AlumnosPage() {
                   >
                     <td style={{ padding: "14px 18px" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        <div style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(165,141,102,.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "var(--gold,#A58D66)", flexShrink: 0 }}>
+                        <div style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(165,141,102,.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "var(--gold)", flexShrink: 0 }}>
                           {s.name.charAt(0).toUpperCase()}
                         </div>
                         <span style={{ color: "var(--text)", fontWeight: 500 }}>{s.name}</span>
@@ -205,11 +205,12 @@ export default function AlumnosPage() {
                     <td style={{ padding: "14px 18px", color: "var(--text-faint)", fontSize: 12 }}>
                       {new Date(s.createdAt).toLocaleDateString("es-AR", { day: "numeric", month: "short", year: "numeric" })}
                     </td>
-                    <td style={{ padding: "14px 18px", color: totalPaid(s) > 0 ? "#6BBF8E" : "var(--text-dim)", fontSize: 12 }}>
+                    <td style={{ padding: "14px 18px", color: totalPaid(s) > 0 ? "var(--success)" : "var(--text-dim)", fontSize: 12 }}>
                       {totalPaid(s) > 0 ? `$${totalPaid(s).toLocaleString("es")}` : "—"}
                     </td>
                     <td style={{ padding: "14px 18px", position: "relative" }}>
-                      <button onClick={() => setMenuOpen(menuOpen === s.id ? null : s.id)} aria-label="Acciones de la alumna"
+                      <button onClick={() => setMenuOpen(menuOpen === s.id ? null : s.id)} aria-label="Acciones del alumno"
+                        aria-haspopup="menu" aria-expanded={menuOpen === s.id}
                         style={{ background: "none", border: "none", color: "var(--text-dim)", cursor: "pointer", padding: 4, borderRadius: 6 }}>
                         <MoreHorizontal size={17} />
                       </button>
@@ -221,7 +222,7 @@ export default function AlumnosPage() {
                             { label: "Eliminar",     icon: Trash2, action: () => { setModal({ type: "delete", student: s }); setMenuOpen(null) }, danger: true },
                           ].map(({ label, icon: Icon, action, danger }) => (
                             <button key={label} onClick={action}
-                              style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", background: "none", border: "none", padding: "10px 16px", fontSize: 13, cursor: "pointer", color: danger ? "#fca5a5" : "var(--text-strong)", transition: "background .15s" }}
+                              style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", background: "none", border: "none", padding: "10px 16px", fontSize: 13, cursor: "pointer", color: danger ? "var(--danger)" : "var(--text-strong)", transition: "background .15s" }}
                               onMouseEnter={(e) => (e.currentTarget.style.background = "var(--surface-2)")}
                               onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
                             >
@@ -249,10 +250,10 @@ export default function AlumnosPage() {
             {/* ADD */}
             {modal.type === "add" && (
               <>
-                <h2 style={{ fontFamily: "var(--serif)", fontSize: 24, color: "var(--text)", marginBottom: 6 }}>Agregar alumna</h2>
+                <h2 style={{ fontFamily: "var(--serif)", fontSize: 24, color: "var(--text)", marginBottom: 6 }}>Agregar alumno</h2>
                 <p style={{ color: "var(--text-faint)", fontSize: 14, marginBottom: 24 }}>Crea una cuenta y asignala a un programa.</p>
                 {error && (
-                  <div style={{ background: "rgba(239,68,68,.1)", border: "1px solid rgba(239,68,68,.3)", borderRadius: 9, padding: "10px 14px", fontSize: 13, color: "#fca5a5", marginBottom: 16 }}>
+                  <div style={{ background: "rgba(239,68,68,.1)", border: "1px solid rgba(239,68,68,.3)", borderRadius: 9, padding: "10px 14px", fontSize: 13, color: "var(--danger)", marginBottom: 16 }}>
                     {error}
                   </div>
                 )}
@@ -282,7 +283,7 @@ export default function AlumnosPage() {
                     Cancelar
                   </button>
                   <button onClick={addStudent} disabled={saving}
-                    style={{ flex: 2, background: "var(--gold,#A58D66)", border: "none", borderRadius: 10, padding: "12px 0", fontSize: 13, fontWeight: 700, color: "#081E29", cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                    style={{ flex: 2, background: "var(--gold)", border: "none", borderRadius: 10, padding: "12px 0", fontSize: 13, fontWeight: 700, color: "#081E29", cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                     {saving ? <><Loader2 size={15} style={{ animation: "spin 1s linear infinite" }} /> Creando…</> : "Crear cuenta"}
                   </button>
                 </div>
@@ -292,7 +293,7 @@ export default function AlumnosPage() {
             {/* DELETE */}
             {modal.type === "delete" && (
               <>
-                <h2 style={{ fontFamily: "var(--serif)", fontSize: 24, color: "#fca5a5", marginBottom: 8 }}>Eliminar alumna</h2>
+                <h2 style={{ fontFamily: "var(--serif)", fontSize: 24, color: "var(--danger)", marginBottom: 8 }}>Eliminar alumno</h2>
                 <p style={{ color: "var(--text-muted)", fontSize: 14, marginBottom: 24 }}>
                   Esta acción eliminará la cuenta de <strong style={{ color: "var(--text)" }}>{modal.student.name}</strong> y todas sus inscripciones. No se puede deshacer.
                 </p>
@@ -310,7 +311,7 @@ export default function AlumnosPage() {
             {modal.type === "detail" && (
               <>
                 <div style={{ display: "flex", gap: 16, alignItems: "center", marginBottom: 24 }}>
-                  <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(165,141,102,.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 700, color: "var(--gold,#A58D66)", flexShrink: 0 }}>
+                  <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(165,141,102,.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 700, color: "var(--gold)", flexShrink: 0 }}>
                     {modal.student.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
@@ -321,7 +322,7 @@ export default function AlumnosPage() {
 
                 {/* Info básica */}
                 {[
-                  ["Inscripta el",  new Date(modal.student.createdAt).toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" })],
+                  ["Inscrito el",  new Date(modal.student.createdAt).toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" })],
                   ["Pagos totales", totalPaid(modal.student) > 0 ? `$${totalPaid(modal.student).toLocaleString("es")}` : "Sin pago registrado"],
                 ].map(([k, v]) => (
                   <div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid var(--surface-2)" }}>
@@ -344,7 +345,7 @@ export default function AlumnosPage() {
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: 10 }}>
                               <p style={{ fontSize: 13, color: "var(--text)", fontWeight: 600 }}>{en.course.title}</p>
                               {done ? (
-                                <span style={{ fontSize: 10, color: "#6BBF8E", whiteSpace: "nowrap" }}>
+                                <span style={{ fontSize: 10, color: "var(--success)", whiteSpace: "nowrap" }}>
                                   <CheckCircle2 size={10} style={{ display: "inline", marginRight: 4 }} />
                                   N° {en.certificateNumber}
                                 </span>
@@ -355,7 +356,7 @@ export default function AlumnosPage() {
 
                             {/* Barra de avance */}
                             <div style={{ height: 5, borderRadius: 3, background: "var(--surface-2)", marginBottom: 12, overflow: "hidden" }}>
-                              <div style={{ width: `${en.progress}%`, height: "100%", background: done ? "#6BBF8E" : "var(--gold,#A58D66)", transition: "width .3s" }} />
+                              <div style={{ width: `${en.progress}%`, height: "100%", background: done ? "var(--success)" : "var(--gold)", transition: "width .3s" }} />
                             </div>
 
                             {/* Métricas editables + asistencia */}
@@ -392,7 +393,7 @@ export default function AlumnosPage() {
                                       })
                                       if (res.ok) { load(); setModal(null) }
                                     }}
-                                    style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(165,141,102,.12)", border: "1px solid rgba(165,141,102,.25)", color: "var(--gold,#A58D66)", borderRadius: 7, padding: "7px 12px", fontSize: 11, cursor: "pointer", fontWeight: 600, whiteSpace: "nowrap" }}
+                                    style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(165,141,102,.12)", border: "1px solid rgba(165,141,102,.25)", color: "var(--gold)", borderRadius: 7, padding: "7px 12px", fontSize: 11, cursor: "pointer", fontWeight: 600, whiteSpace: "nowrap" }}
                                   >
                                     <Award size={12} /> Certificar
                                   </button>
@@ -407,10 +408,10 @@ export default function AlumnosPage() {
                 )}
 
                 <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
-                  <a href={`mailto:${modal.student.email}`} style={{ flex: 1, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.25)", borderRadius: 10, padding: "11px 0", fontSize: 13, color: "var(--gold,#A58D66)", cursor: "pointer", textDecoration: "none", textAlign: "center" as const }}>
+                  <a href={`mailto:${modal.student.email}`} style={{ flex: 1, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.25)", borderRadius: 10, padding: "11px 0", fontSize: 13, color: "var(--gold)", cursor: "pointer", textDecoration: "none", textAlign: "center" as const }}>
                     Enviar email
                   </a>
-                  <button onClick={() => setModal(null)} style={{ flex: 1, background: "var(--gold,#A58D66)", border: "none", borderRadius: 10, padding: "11px 0", fontSize: 13, fontWeight: 700, color: "#081E29", cursor: "pointer" }}>Cerrar</button>
+                  <button onClick={() => setModal(null)} style={{ flex: 1, background: "var(--gold)", border: "none", borderRadius: 10, padding: "11px 0", fontSize: 13, fontWeight: 700, color: "#081E29", cursor: "pointer" }}>Cerrar</button>
                 </div>
               </>
             )}

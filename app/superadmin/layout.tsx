@@ -90,8 +90,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         fontSize: 13, fontWeight: active ? 600 : 400,
                         textDecoration: "none", marginBottom: 2,
                         background: active ? "rgba(165,141,102,.13)" : "transparent",
-                        color: active ? "var(--gold,#A58D66)" : "var(--text-muted)",
-                        borderLeft: active ? "2px solid var(--gold,#A58D66)" : "2px solid transparent",
+                        color: active ? "var(--gold)" : "var(--text-muted)",
+                        borderLeft: active ? "2px solid var(--gold)" : "2px solid transparent",
                         transition: "all .18s",
                       }}
                     >
@@ -120,7 +120,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             whileHover={{ x: 2 }}
             onClick={() => signOut({ callbackUrl: "/" })}
             style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 9, width: "100%", background: "none", border: "none", cursor: "pointer", fontSize: 13, color: "var(--text-dim)", transition: "color .2s" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#fca5a5")}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--danger)")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-dim)")}
           >
             <LogOut size={15} /> Salir
@@ -150,6 +150,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <button
               onClick={() => setOpen(!open)}
               aria-label={open ? "Cerrar menú" : "Abrir menú"}
+              aria-expanded={open}
               className="mob-menu-btn"
               style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", display: "none", padding: 4 }}
             >

@@ -88,8 +88,8 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
                       fontSize: 13, fontWeight: active ? 600 : 400,
                       textDecoration: "none",
                       background: active ? "rgba(165,141,102,.15)" : "transparent",
-                      color: active ? "var(--gold,#A58D66)" : "var(--text-muted)",
-                      borderLeft: active ? "2px solid var(--gold,#A58D66)" : "2px solid transparent",
+                      color: active ? "var(--gold)" : "var(--text-muted)",
+                      borderLeft: active ? "2px solid var(--gold)" : "2px solid transparent",
                       transition: "all .2s",
                     }}
                   >
@@ -121,7 +121,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
               fontSize: 13, color: "var(--text-dim)",
               transition: "color .2s",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#fca5a5")}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--danger)")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-dim)")}
           >
             <LogOut size={17} />
@@ -153,6 +153,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
           <button
             onClick={() => setOpen(!open)}
             aria-label={open ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={open}
             style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", display: "none" }}
             className="mob-menu-btn"
           >
@@ -171,7 +172,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
               title="Mi perfil"
               style={{
                 width: 34, height: 34, borderRadius: "50%",
-                background: "var(--gold,#A58D66)",
+                background: "var(--gold)",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: 13, fontWeight: 700, color: "#081E29", cursor: "pointer",
                 border: "2px solid rgba(165,141,102,.35)",

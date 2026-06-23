@@ -262,7 +262,7 @@ export default function ContactoPage() {
                 </div>
 
                 {status === "error" && (
-                  <div role="alert" style={{ background: "rgba(239,68,68,.1)", border: "1px solid rgba(239,68,68,.3)", borderRadius: 6, padding: "10px 14px", fontSize: 13, color: "#fca5a5" }}>
+                  <div role="alert" style={{ background: "rgba(239,68,68,.1)", border: "1px solid rgba(239,68,68,.3)", borderRadius: 6, padding: "10px 14px", fontSize: 13, color: "var(--danger)" }}>
                     {errorMsg}
                   </div>
                 )}
@@ -323,7 +323,7 @@ const inputStyle: React.CSSProperties = {
 
 function FieldError({ children }: { children: React.ReactNode }) {
   return (
-    <p role="alert" style={{ margin: "6px 0 0", fontSize: 12, color: "#fca5a5", display: "flex", alignItems: "center", gap: 5 }}>
+    <p role="alert" style={{ margin: "6px 0 0", fontSize: 12, color: "var(--danger)", display: "flex", alignItems: "center", gap: 5 }}>
       <span aria-hidden="true">⚠</span> {children}
     </p>
   )

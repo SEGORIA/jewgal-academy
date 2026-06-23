@@ -391,7 +391,7 @@ export default function HomePage() {
             </div>
             <div className="campus-r">
               <div className="dash-top">
-                <b>¡Bienvenida!</b>
+                <b>¡Hola!</b>
                 <span>Mis cursos</span>
               </div>
               {[

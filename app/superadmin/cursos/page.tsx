@@ -7,7 +7,7 @@ type Tab = "materiales" | "sesiones" | "alumnos"
 
 const PROGRAMS = [
   { slug: "life-coaching-integrativo", name: "Life Coaching Integrativo", price: 1500, isFree: false, students: 0, accent: "#A58D66", published: true  },
-  { slug: "joogal-adultos",            name: "Instructor Joogal Adultos", price: 0,    isFree: true,  students: 0, accent: "#6BBF8E", published: true  },
+  { slug: "joogal-adultos",            name: "Instructor Joogal Adultos", price: 0,    isFree: true,  students: 0, accent: "var(--success)", published: true  },
   { slug: "joogalkids",                name: "Instructor Joogalkids",     price: 360,  isFree: false, students: 0, accent: "#7B9FD8", published: true  },
   { slug: "metodo-sholem",             name: "Método Sholem",             price: 360,  isFree: false, students: 0, accent: "#B07FD8", published: true  },
   { slug: "cabala-coach",              name: "Cábala Coach",              price: 360,  isFree: false, students: 0, accent: "#CBB78B", published: false },
@@ -45,9 +45,9 @@ export default function CursosAdminPage() {
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
       <div style={{ marginBottom: 32 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 8 }}>Admin</span>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>Admin</span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Programas</h1>
-        <p style={{ color: "var(--text-faint)", fontSize: 14 }}>Gestioná contenido, sesiones y alumnas de cada programa.</p>
+        <p style={{ color: "var(--text-faint)", fontSize: 14 }}>Gestioná contenido, sesiones y alumnos de cada programa.</p>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: selected ? "300px 1fr" : "1fr", gap: 20, alignItems: "start" }}>
@@ -62,14 +62,14 @@ export default function CursosAdminPage() {
                 <div style={{ width: 10, height: 10, borderRadius: "50%", background: p.accent, flexShrink: 0 }} />
                 <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)", flex: 1 }}>{p.name}</span>
                 <button onClick={(e) => { e.stopPropagation(); togglePublish(p.slug) }}
-                  style={{ background: "none", border: "none", cursor: "pointer", color: p.published ? "#6BBF8E" : "var(--text-dim)", padding: 2 }}>
+                  style={{ background: "none", border: "none", cursor: "pointer", color: p.published ? "var(--success)" : "var(--text-dim)", padding: 2 }}>
                   {p.published ? <Eye size={16} /> : <EyeOff size={16} />}
                 </button>
               </div>
               <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
                 <span style={{ fontSize: 12, color: "var(--text-faint)" }}>{p.isFree ? "Gratuito" : `$${p.price}`}</span>
-                <span style={{ fontSize: 12, color: "var(--text-dim)" }}>· {p.students} alumnas</span>
-                <span style={{ marginLeft: "auto", fontSize: 11, color: p.published ? "#6BBF8E" : "var(--text-dim)" }}>
+                <span style={{ fontSize: 12, color: "var(--text-dim)" }}>· {p.students} alumnos</span>
+                <span style={{ marginLeft: "auto", fontSize: 11, color: p.published ? "var(--success)" : "var(--text-dim)" }}>
                   {p.published ? "● Activo" : "○ Oculto"}
                 </span>
               </div>
@@ -95,7 +95,7 @@ export default function CursosAdminPage() {
               {([
                 { key: "materiales", icon: FileText,    label: "Materiales" },
                 { key: "sesiones",   icon: Video,       label: "Clases en vivo" },
-                { key: "alumnos",    icon: Users,       label: "Alumnas" },
+                { key: "alumnos",    icon: Users,       label: "Alumnos" },
               ] as { key: Tab; icon: typeof FileText; label: string }[]).map(({ key, icon: Icon, label }) => (
                 <button key={key} onClick={() => setTab(key)} style={{
                   flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
@@ -188,7 +188,7 @@ export default function CursosAdminPage() {
             {tab === "alumnos" && (
               <div style={{ padding: "40px 0", textAlign: "center" }}>
                 <Users size={26} style={{ color: "rgba(165,141,102,.2)", margin: "0 auto 12px", display: "block" }} />
-                <p style={{ color: "var(--text-dim)", fontSize: 14 }}>No hay alumnas en este programa</p>
+                <p style={{ color: "var(--text-dim)", fontSize: 14 }}>No hay alumnos en este programa</p>
                 <p style={{ color: "var(--text-dim)", fontSize: 13, marginTop: 4 }}>Se inscribirán desde la página pública o desde el admin.</p>
               </div>
             )}

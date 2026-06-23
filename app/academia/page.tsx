@@ -87,7 +87,7 @@ export default function AcademiaPage() {
       }}>
         {/* Foto de la comunidad, fundida con el fondo del hero */}
         <div className="academia-hero-photo" style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "52%", zIndex: 0 }}>
-          <img src="/brand/devora-grupo.webp" alt="Devora con su comunidad de alumnas" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 28%" }} />
+          <img src="/brand/devora-grupo.webp" alt="Devora con su comunidad de alumnos" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 28%" }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, var(--bg-2) 2%, rgba(0,0,0,0) 58%)" }} />
         </div>
         <div className="wrap" style={{ position: "relative", zIndex: 2 }}>

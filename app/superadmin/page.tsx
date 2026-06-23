@@ -9,16 +9,16 @@ type Stats = { studentCount: number; enrollmentCount: number; totalRevenue: numb
 
 const PROGRAMS = [
   { name: "Life Coaching Integrativo", slug: "life-coaching-integrativo", accent: "#A58D66" },
-  { name: "Instructor Joogal Adultos", slug: "joogal-adultos",            accent: "#6BBF8E" },
+  { name: "Instructor Joogal Adultos", slug: "joogal-adultos",            accent: "var(--success)" },
   { name: "Instructor Joogalkids",     slug: "joogalkids",                accent: "#7B9FD8" },
   { name: "Método Sholem",             slug: "metodo-sholem",             accent: "#B07FD8" },
   { name: "Cábala Coach",              slug: "cabala-coach",              accent: "#CBB78B" },
 ]
 
 const quickActions = [
-  { label: "Agregar alumna",     href: "/superadmin/alumnos",  icon: UserPlus,   color: "#A58D66" },
-  { label: "Agendar clase live", href: "/superadmin/cursos",   icon: PlayCircle, color: "#4B7E8C" },
-  { label: "Nueva entrada blog", href: "/superadmin/blog",     icon: FileText,   color: "#6BBF8E" },
+  { label: "Agregar alumno",     href: "/superadmin/alumnos",  icon: UserPlus,   color: "var(--gold)" },
+  { label: "Agendar clase live", href: "/superadmin/cursos",   icon: PlayCircle, color: "var(--teal)" },
+  { label: "Nueva entrada blog", href: "/superadmin/blog",     icon: FileText,   color: "var(--success)" },
   { label: "Editar sitio web",   href: "/superadmin/web",      icon: Globe,      color: "#B07FD8" },
 ]
 
@@ -69,7 +69,7 @@ export default function AdminDashboard() {
   const statCards = [
     { label: "Alumnos activos",   value: stats ? String(stats.studentCount)    : "—", delta: "Registradas", icon: Users,      href: "/superadmin/alumnos", accent: "#A58D66" },
     { label: "Programas activos", value: "5",                                          delta: "Todos publicados", icon: BookOpen, href: "/superadmin/cursos",  accent: "#4B7E8C" },
-    { label: "Ingresos totales",  value: stats ? `$${stats.totalRevenue.toLocaleString("es")}` : "—", delta: stats?.paymentCount ? `${stats.paymentCount} transacciones` : "Stripe pendiente", icon: CreditCard, href: "/superadmin/pagos", accent: "#6BBF8E" },
+    { label: "Ingresos totales",  value: stats ? `$${stats.totalRevenue.toLocaleString("es")}` : "—", delta: stats?.paymentCount ? `${stats.paymentCount} transacciones` : "Stripe pendiente", icon: CreditCard, href: "/superadmin/pagos", accent: "var(--success)" },
     { label: "Inscripciones",     value: stats ? String(stats.enrollmentCount) : "—", delta: "Activas",     icon: TrendingUp, href: "/superadmin/alumnos", accent: "#B07FD8" },
   ]
 
@@ -77,7 +77,7 @@ export default function AdminDashboard() {
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
       {/* Header */}
       <div style={{ marginBottom: 36 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 10 }}>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
           Jewgal Academy
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "var(--text)", marginBottom: 6 }}>
@@ -132,10 +132,10 @@ export default function AdminDashboard() {
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {[
-              { dot: "#6BBF8E", title: "Base de datos", sub: "Neon PostgreSQL · Operativa" },
-              { dot: "#6BBF8E", title: "5 programas publicados", sub: "Accesibles desde el sitio" },
-              { dot: "#fbbf24", title: "Stripe", sub: "Configurar STRIPE_SECRET_KEY para activar pagos reales" },
-              { dot: "#fbbf24", title: "PayPal", sub: "Configurar PAYPAL_CLIENT_ID para activar PayPal" },
+              { dot: "var(--success)", title: "Base de datos", sub: "Neon PostgreSQL · Operativa" },
+              { dot: "var(--success)", title: "5 programas publicados", sub: "Accesibles desde el sitio" },
+              { dot: "var(--warning)", title: "Stripe", sub: "Configurar STRIPE_SECRET_KEY para activar pagos reales" },
+              { dot: "var(--warning)", title: "PayPal", sub: "Configurar PAYPAL_CLIENT_ID para activar PayPal" },
             ].map((item, i) => (
               <motion.div key={i} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}
                 style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
@@ -156,7 +156,7 @@ export default function AdminDashboard() {
           <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)" }}>
             Programas · Vista general
           </h2>
-          <Link href="/superadmin/cursos" style={{ fontSize: 12, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--gold,#A58D66)", textDecoration: "none" }}>
+          <Link href="/superadmin/cursos" style={{ fontSize: 12, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--gold)", textDecoration: "none" }}>
             Gestionar →
           </Link>
         </div>
@@ -175,7 +175,7 @@ export default function AdminDashboard() {
                   <div style={{ width: 8, height: 8, borderRadius: "50%", background: p.accent, flexShrink: 0 }} />
                   <span style={{ fontSize: 13, color: "var(--text-strong)" }}>{p.name}</span>
                 </div>
-                <span style={{ fontSize: 11, color: "#6BBF8E", background: "rgba(107,191,142,.1)", border: "1px solid rgba(107,191,142,.2)", borderRadius: 20, padding: "3px 10px", display: "inline-block" }}>
+                <span style={{ fontSize: 11, color: "var(--success)", background: "rgba(107,191,142,.1)", border: "1px solid rgba(107,191,142,.2)", borderRadius: 20, padding: "3px 10px", display: "inline-block" }}>
                   Activo
                 </span>
                 <span style={{ fontSize: 13, color: "var(--text-faint)" }}>

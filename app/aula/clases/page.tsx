@@ -56,7 +56,7 @@ export default function ClasesPage() {
   return (
     <div style={{ maxWidth: 760, margin: "0 auto" }}>
       <div style={{ marginBottom: 36 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 10 }}>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
           Aula Virtual
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "var(--text)", marginBottom: 8 }}>
@@ -69,25 +69,25 @@ export default function ClasesPage() {
 
       {/* Próximas */}
       <section style={{ marginBottom: 40 }}>
-        <p style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "#4B7E8C", marginBottom: 16 }}>
+        <p style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--teal)", marginBottom: 16 }}>
           Próximas sesiones
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           {upcoming.map((s) => (
             <div key={s.id} style={{ ...card, borderColor: "rgba(75,126,140,.2)", display: "flex", gap: 18, alignItems: "flex-start" }}>
               <div style={{ width: 44, height: 44, borderRadius: 10, background: "rgba(75,126,140,.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <Video size={19} style={{ color: "#4B7E8C" }} />
+                <Video size={19} style={{ color: "var(--teal)" }} />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <h3 style={{ fontWeight: 600, color: "var(--text)", fontSize: 15, marginBottom: 5 }}>{s.title}</h3>
                 <p style={{ color: "var(--text-faint)", fontSize: 13, marginBottom: 12, lineHeight: 1.6 }}>{s.description}</p>
                 <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
                   <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--text-faint)" }}>
-                    <Calendar size={12} style={{ color: "#4B7E8C" }} />
+                    <Calendar size={12} style={{ color: "var(--teal)" }} />
                     {formatDate(s.scheduledAt)}
                   </span>
                   <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--text-faint)" }}>
-                    <Clock size={12} style={{ color: "#4B7E8C" }} />
+                    <Clock size={12} style={{ color: "var(--teal)" }} />
                     {formatTime(s.scheduledAt)} hs
                   </span>
                 </div>
@@ -101,7 +101,7 @@ export default function ClasesPage() {
                   rel="noopener noreferrer"
                   style={{
                     display: "flex", alignItems: "center", gap: 7,
-                    background: "var(--gold,#A58D66)", color: "#081E29",
+                    background: "var(--gold)", color: "#081E29",
                     fontSize: 12, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase",
                     textDecoration: "none", padding: "10px 18px", borderRadius: 8,
                     flexShrink: 0, transition: "opacity .2s",

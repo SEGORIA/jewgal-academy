@@ -59,11 +59,11 @@ export default function BlogAdminPage() {
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
         <div>
-          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 8 }}>Admin</span>
+          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>Admin</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Blog</h1>
           <p style={{ color: "var(--text-faint)", fontSize: 14 }}>{posts.length} entradas · {posts.filter((p) => p.status === "published").length} publicadas</p>
         </div>
-        <button onClick={openNew} style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--gold,#A58D66)", color: "#081E29", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+        <button onClick={openNew} style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--gold)", color: "#081E29", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
           <Plus size={16} /> Nueva entrada
         </button>
       </div>
@@ -76,8 +76,8 @@ export default function BlogAdminPage() {
             <div key={p.id} style={{ ...card, padding: "18px 20px", display: "flex", gap: 14, alignItems: "flex-start" }}>
               <div style={{ flex: 1 }}>
                 <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 6 }}>
-                  <span style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "#A58D66", background: "rgba(165,141,102,.1)", borderRadius: 16, padding: "3px 10px" }}>{p.category}</span>
-                  <span style={{ fontSize: 11, color: p.status === "published" ? "#6BBF8E" : "var(--text-dim)" }}>
+                  <span style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--gold)", background: "rgba(165,141,102,.1)", borderRadius: 16, padding: "3px 10px" }}>{p.category}</span>
+                  <span style={{ fontSize: 11, color: p.status === "published" ? "var(--success)" : "var(--text-dim)" }}>
                     {p.status === "published" ? "● Publicado" : "○ Borrador"}
                   </span>
                   <span style={{ fontSize: 12, color: "var(--text-dim)", marginLeft: "auto" }}>{p.date}</span>
@@ -86,7 +86,7 @@ export default function BlogAdminPage() {
                 <p style={{ fontSize: 13, color: "var(--text-faint)", lineHeight: 1.6 }}>{p.excerpt}</p>
               </div>
               <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
-                <button onClick={() => toggleStatus(p.id)} title={p.status === "published" ? "Pasar a borrador" : "Publicar"} style={{ background: "none", border: "1px solid rgba(255,255,255,.08)", borderRadius: 7, padding: "7px 9px", cursor: "pointer", color: p.status === "published" ? "#6BBF8E" : "var(--text-dim)" }}>
+                <button onClick={() => toggleStatus(p.id)} title={p.status === "published" ? "Pasar a borrador" : "Publicar"} style={{ background: "none", border: "1px solid rgba(255,255,255,.08)", borderRadius: 7, padding: "7px 9px", cursor: "pointer", color: p.status === "published" ? "var(--success)" : "var(--text-dim)" }}>
                   <Eye size={14} />
                 </button>
                 <button onClick={() => openEdit(p)} style={{ background: "none", border: "1px solid rgba(255,255,255,.08)", borderRadius: 7, padding: "7px 9px", cursor: "pointer", color: "var(--text-muted)" }}>
@@ -144,7 +144,7 @@ export default function BlogAdminPage() {
 
             <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
               <button onClick={() => { setEditing(null); setIsNew(false) }} style={{ flex: 1, background: "var(--surface-2)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 9, padding: "11px 0", fontSize: 13, color: "var(--text-muted)", cursor: "pointer" }}>Cancelar</button>
-              <button onClick={savePost} style={{ flex: 2, background: "var(--gold,#A58D66)", border: "none", borderRadius: 9, padding: "11px 0", fontSize: 13, fontWeight: 700, color: "#081E29", cursor: "pointer" }}>
+              <button onClick={savePost} style={{ flex: 2, background: "var(--gold)", border: "none", borderRadius: 9, padding: "11px 0", fontSize: 13, fontWeight: 700, color: "#081E29", cursor: "pointer" }}>
                 {isNew ? "Publicar entrada" : "Guardar cambios"}
               </button>
             </div>

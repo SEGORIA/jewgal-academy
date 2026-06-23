@@ -14,9 +14,9 @@ const card: React.CSSProperties = {
 }
 
 const STATUSES = [
-  { key: "present", label: "Presente", color: "#6BBF8E", Icon: Check },
-  { key: "late",    label: "Tarde",    color: "#fbbf24", Icon: Clock },
-  { key: "absent",  label: "Ausente",  color: "#fca5a5", Icon: XIcon },
+  { key: "present", label: "Presente", color: "var(--success)", Icon: Check },
+  { key: "late",    label: "Tarde",    color: "var(--warning)", Icon: Clock },
+  { key: "absent",  label: "Ausente",  color: "var(--danger)", Icon: XIcon },
 ]
 
 export default function AsistenciaPage() {
@@ -74,7 +74,7 @@ export default function AsistenciaPage() {
   return (
     <div style={{ maxWidth: 920, margin: "0 auto" }}>
       <div style={{ marginBottom: 28 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 8 }}>Admin</span>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>Admin</span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Registro de asistencia</h1>
         <p style={{ color: "var(--text-faint)", fontSize: 14 }}>Tomá lista por sesión. El porcentaje se actualiza solo en el aula y el panel.</p>
       </div>
@@ -107,7 +107,7 @@ export default function AsistenciaPage() {
                 const active = s.id === sessionId
                 return (
                   <button key={s.id} onClick={() => setSessionId(s.id)}
-                    style={{ background: active ? "rgba(165,141,102,.16)" : "var(--surface)", border: `1px solid ${active ? "var(--gold,#A58D66)" : "rgba(255,255,255,.08)"}`, borderRadius: 9, padding: "9px 14px", fontSize: 12.5, color: active ? "var(--gold,#A58D66)" : "var(--text-muted)", cursor: "pointer", fontWeight: active ? 600 : 400, textAlign: "left" }}>
+                    style={{ background: active ? "rgba(165,141,102,.16)" : "var(--surface)", border: `1px solid ${active ? "var(--gold)" : "rgba(255,255,255,.08)"}`, borderRadius: 9, padding: "9px 14px", fontSize: 12.5, color: active ? "var(--gold)" : "var(--text-muted)", cursor: "pointer", fontWeight: active ? 600 : 400, textAlign: "left" }}>
                     <div>{s.title}</div>
                     <div style={{ fontSize: 10.5, color: "var(--text-dim)", marginTop: 2 }}>
                       {new Date(s.scheduledAt).toLocaleDateString("es-AR", { day: "numeric", month: "short" })} · {s.durationMin} min
@@ -154,10 +154,10 @@ export default function AsistenciaPage() {
 
                   <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 18 }}>
                     <button onClick={save} disabled={saving}
-                      style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--gold,#A58D66)", color: "#081E29", border: "none", borderRadius: 10, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1 }}>
+                      style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--gold)", color: "#081E29", border: "none", borderRadius: 10, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1 }}>
                       {saving ? <><Loader2 size={15} style={{ animation: "spin 1s linear infinite" }} /> Guardando…</> : <><Save size={15} /> Guardar asistencia</>}
                     </button>
-                    {saved && <span style={{ fontSize: 13, color: "#6BBF8E", display: "flex", alignItems: "center", gap: 6 }}><Check size={15} /> Asistencia guardada</span>}
+                    {saved && <span style={{ fontSize: 13, color: "var(--success)", display: "flex", alignItems: "center", gap: 6 }}><Check size={15} /> Asistencia guardada</span>}
                   </div>
                 </>
               )}

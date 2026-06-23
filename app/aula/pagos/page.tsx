@@ -20,8 +20,8 @@ const PROGRAM_META: Record<string, { icon: string; accent: string }> = {
 
 const STATUS = {
   completed: { label: "Completado", color: "#6BBF8E", bg: "rgba(107,191,142,.1)",  border: "rgba(107,191,142,.25)", icon: CheckCircle2 },
-  demo:      { label: "Demo",       color: "#A58D66", bg: "rgba(165,141,102,.1)",  border: "rgba(165,141,102,.25)", icon: CheckCircle2 },
-  pending:   { label: "Pendiente",  color: "#fbbf24", bg: "rgba(251,191,36,.08)",  border: "rgba(251,191,36,.25)",  icon: Clock },
+  demo:      { label: "Demo",       color: "var(--gold)", bg: "rgba(165,141,102,.1)",  border: "rgba(165,141,102,.25)", icon: CheckCircle2 },
+  pending:   { label: "Pendiente",  color: "var(--warning)", bg: "rgba(251,191,36,.08)",  border: "rgba(251,191,36,.25)",  icon: Clock },
 }
 
 const card: React.CSSProperties = {
@@ -51,7 +51,7 @@ export default function PagosPage() {
   return (
     <div style={{ maxWidth: 780, margin: "0 auto" }}>
       <div style={{ marginBottom: 36 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 10 }}>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
           Aula Virtual
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>
@@ -67,7 +67,7 @@ export default function PagosPage() {
         {[
           { label: "Programas pagados", value: String(payments.filter((p) => p.status !== "pending").length), accent: "#A58D66" },
           { label: "Total invertido",   value: loading ? "—" : `$${total.toLocaleString("es")}`,               accent: "#6BBF8E" },
-          { label: "Pagos pendientes",  value: String(pending.length),                                          accent: pending.length > 0 ? "#fbbf24" : "var(--text-dim)" },
+          { label: "Pagos pendientes",  value: String(pending.length),                                          accent: pending.length > 0 ? "var(--warning)" : "var(--text-dim)" },
         ].map(({ label, value, accent }) => (
           <div key={label} style={{ ...card, padding: "20px 18px" }}>
             <p style={{ fontSize: 24, fontWeight: 700, color: "var(--text)", fontFamily: "var(--serif)", marginBottom: 4 }}>{value}</p>
@@ -79,7 +79,7 @@ export default function PagosPage() {
       {/* Aviso pagos pendientes */}
       {pending.length > 0 && (
         <div style={{ ...card, padding: "18px 22px", marginBottom: 20, borderColor: "rgba(251,191,36,.25)", background: "rgba(251,191,36,.04)", display: "flex", gap: 14, alignItems: "flex-start" }}>
-          <AlertCircle size={18} style={{ color: "#fbbf24", flexShrink: 0, marginTop: 1 }} />
+          <AlertCircle size={18} style={{ color: "var(--warning)", flexShrink: 0, marginTop: 1 }} />
           <div style={{ flex: 1 }}>
             <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", marginBottom: 4 }}>
               Tenés {pending.length} pago{pending.length > 1 ? "s" : ""} pendiente{pending.length > 1 ? "s" : ""}
@@ -88,7 +88,7 @@ export default function PagosPage() {
               Completá el pago para acceder al contenido del programa.
             </p>
           </div>
-          <Link href="/#programas" style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, letterSpacing: ".1em", textTransform: "uppercase", color: "#fbbf24", textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0 }}>
+          <Link href="/#programas" style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--warning)", textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0 }}>
             Completar <ArrowRight size={13} />
           </Link>
         </div>
@@ -111,7 +111,7 @@ export default function PagosPage() {
           <div style={{ padding: "60px 0", textAlign: "center" }}>
             <div style={{ fontSize: 36, marginBottom: 14, color: "rgba(165,141,102,.2)" }}>✦</div>
             <p style={{ color: "var(--text-faint)", fontSize: 14, marginBottom: 8 }}>Aún no tenés transacciones registradas.</p>
-            <Link href="/#programas" style={{ fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--gold,#A58D66)", textDecoration: "none" }}>
+            <Link href="/#programas" style={{ fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--gold)", textDecoration: "none" }}>
               Ver programas →
             </Link>
           </div>
@@ -157,7 +157,7 @@ export default function PagosPage() {
 
                   {/* Completar pago si pendiente */}
                   {p.status === "pending" && (
-                    <Link href={`/programas/${p.course.slug}`} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "#fbbf24", textDecoration: "none", flexShrink: 0 }}>
+                    <Link href={`/programas/${p.course.slug}`} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--warning)", textDecoration: "none", flexShrink: 0 }}>
                       Completar <ArrowRight size={12} />
                     </Link>
                   )}

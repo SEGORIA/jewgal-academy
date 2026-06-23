@@ -253,7 +253,7 @@ export default function ConoceADevorPage() {
         <div className="glow" />
         <div className="wrap join-inner reveal">
           <span className="eyebrow" style={{ display: "inline-block" }}>Empieza hoy</span>
-          <h2>¿Lista para tu <em>transformación</em>?</h2>
+          <h2>¿Comenzamos tu <em>transformación</em>?</h2>
           <p>Elige el programa que mejor se adapta a tu camino y comienza esta semana.</p>
           <div className="join-actions">
             <Link href="/#programas" className="btn solid">Explorar programas →</Link>

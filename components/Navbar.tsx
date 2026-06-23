@@ -130,7 +130,7 @@ export default function Navbar() {
         </div>
 
         {/* Hamburger mobile */}
-        <button onClick={() => setOpen(!open)} aria-label="Abrir menú" className="nav-toggle">
+        <button onClick={() => setOpen(!open)} aria-label={open ? "Cerrar menú" : "Abrir menú"} aria-expanded={open} aria-controls="mobile-menu" className="nav-toggle">
           {[0, 1, 2].map((i) => (
             <span key={i} style={{ display: "block", width: 24, height: 1.5, background: "var(--aqua)", transition: ".3s",
               transform: open && i === 0 ? "rotate(45deg) translate(4.5px, 4.5px)" : open && i === 1 ? "scaleX(0)" : open && i === 2 ? "rotate(-45deg) translate(4.5px,-4.5px)" : "none",
@@ -144,6 +144,7 @@ export default function Navbar() {
         {open && (
           <motion.div
             key="mobile-menu"
+            id="mobile-menu"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}

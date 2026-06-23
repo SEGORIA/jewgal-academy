@@ -47,6 +47,13 @@
   --hero-overlay-3: rgba(8,30,41,.08);
   --bar:   rgba(8,30,41,.92);   /* barras translúcidas (topbar) */
   --scrim: rgba(8,30,41,.85);   /* velo de modales */
+  /* ─── Tokens semánticos de estado (valor pensado para contraste sobre fondo oscuro) ─── */
+  --success:      #6BBF8E;
+  --success-soft: rgba(107,191,142,.12);
+  --danger:       #fca5a5;
+  --danger-soft:  rgba(252,165,165,.12);
+  --warning:      #fbbf24;
+  --warning-soft: rgba(251,191,36,.12);
 }
 
 /* ─── Tema CLARO (fondos blancos predominantes) ─── */
@@ -76,6 +83,13 @@
   --hero-overlay-3: rgba(245,243,238,.05);
   --bar:   rgba(255,255,255,.88);
   --scrim: rgba(20,36,44,.45);
+  /* Estados re-tintados para contraste AA sobre fondos claros */
+  --success:      #1f8a55;
+  --success-soft: rgba(31,138,85,.1);
+  --danger:       #c0362c;
+  --danger-soft:  rgba(192,54,44,.09);
+  --warning:      #8a6300;
+  --warning-soft: rgba(138,99,0,.1);
 }
 
 /* Secciones y tarjetas que se mantienen oscuras también en modo claro (acentos premium) */
@@ -583,10 +597,12 @@ nav.jnav.scrolled {
   padding: 36px 32px;
   background: var(--surface);
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 .tcard .qm { font-family: var(--serif); font-size: 72px; color: var(--gold); line-height: .8; margin-bottom: 12px; opacity: .7; }
 .tcard p { font-size: 16.5px; color: var(--on-dark); line-height: 1.75; margin-bottom: 24px; font-style: italic; font-family: var(--serif); }
-.tcard .who { font-size: 12.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); }
+.tcard .who { font-size: 12.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-top: auto; }
 
 /* ─── COMUNIDAD ─── */
 .comunidad { background: var(--navy); }
@@ -700,7 +716,8 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
   .stat:nth-child(even) { border-right: none; }
   .testi-grid { grid-template-columns: 1fr; }
   .avales-grid { gap: 16px; }
-  .aval-item { padding: 0 14px; height: 46px; }
+  .aval-item { width: 158px; height: 82px; padding: 0 16px; }
+  .aval-logo { max-height: 50px; max-width: 112px; }
   .fund-mission-block { padding: 12px 14px; gap: 10px; }
   .play { left: 75%; }
 }
@@ -743,8 +760,9 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
   .pad { padding: 52px 0; }
   .join-actions { flex-direction: column; align-items: center; }
   /* Avales */
-  .avales-grid { gap: 10px; }
-  .aval-item { height: 40px; padding: 0 10px; }
+  .avales-grid { gap: 12px; }
+  .aval-item { width: 132px; height: 70px; padding: 0 12px; }
+  .aval-logo { max-height: 42px; max-width: 92px; }
   /* Fund mission inline */
   .fund-mission-block { flex-direction: column; gap: 6px; }
   .fund-mission-block p { font-size: 13px; }
@@ -829,31 +847,32 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 52px;
-  padding: 0 20px;
-  border: 1px solid rgba(165,141,102,.12);
-  border-radius: 10px;
-  background: rgba(255,255,255,.02);
-  transition: border-color .25s, background .25s;
+  width: 178px;            /* todas las cajas iguales */
+  height: 92px;
+  padding: 0 24px;
+  border: 1px solid rgba(165,141,102,.18);
+  border-radius: 14px;
+  background: #f7f3ec;     /* tarjeta clara: los logos a color se ven nítidos en ambos temas */
+  box-shadow: 0 6px 22px rgba(8,30,41,.18);
+  transition: border-color .25s, box-shadow .3s, transform .3s;
 }
 .aval-item:hover {
-  border-color: rgba(165,141,102,.3);
-  background: rgba(165,141,102,.06);
+  border-color: rgba(165,141,102,.45);
+  box-shadow: 0 10px 30px rgba(8,30,41,.26);
+  transform: translateY(-3px);
 }
 .aval-logo {
-  height: 28px;
+  height: auto;
+  max-height: 58px;        /* logos más grandes */
+  max-width: 130px;
   width: auto;
-  max-width: 120px;
   object-fit: contain;
-  filter: brightness(0) invert(.7) sepia(.3) hue-rotate(180deg);
+  filter: none;            /* colores originales */
   opacity: 0;
-  transition: filter .3s, opacity .6s ease;
+  transition: opacity .6s ease, transform .3s;
 }
-.aval-logo.loaded { opacity: .65; }
-.aval-item:hover .aval-logo.loaded {
-  filter: brightness(0) invert(1) sepia(.2);
-  opacity: 1;
-}
+.aval-logo.loaded { opacity: 1; }
+.aval-item:hover .aval-logo.loaded { transform: scale(1.05); }
 .aval-badge {
   position: absolute;
   inset: 0;
@@ -864,11 +883,11 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
   font-weight: 700;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: rgba(165,141,102,.6);
-  transition: opacity .4s ease;
+  color: var(--navy);
+  transition: opacity .4s ease, color .3s;
   pointer-events: none;
 }
-.aval-item:hover .aval-badge { color: var(--gold); }
+.aval-item:hover .aval-badge { color: var(--gold-deep); }
 .avales-note {
   text-align: center;
   font-size: 12px;

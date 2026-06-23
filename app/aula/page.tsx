@@ -1,11 +1,21 @@
 "use client"
 
-import { BookOpen, Video, PlayCircle, Calendar, ArrowRight, Sparkles, CheckCircle } from "lucide-react"
+import { BookOpen, Video, PlayCircle, Calendar, ArrowRight, Sparkles, CheckCircle,
+  Sprout, Compass, TrendingUp, Star, Crown, Footprints, Milestone, Target, CalendarCheck, Clock, Award, Trophy } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 import Link from "next/link"
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { TiltCard } from "@/components/motion/TiltCard"
+import { getLevel, getAchievements, getSummary, MILESTONES, type LevelIcon, type AchievementIcon } from "@/lib/gamification"
+
+const LEVEL_ICONS: Record<LevelIcon, LucideIcon> = {
+  sprout: Sprout, compass: Compass, trending: TrendingUp, star: Star, crown: Crown,
+}
+const ACH_ICONS: Record<AchievementIcon, LucideIcon> = {
+  footprints: Footprints, milestone: Milestone, target: Target, calendar: CalendarCheck, clock: Clock, award: Award,
+}
 
 const quickLinks = [
   { href: "/aula/clases",      icon: Video,       label: "Próxima clase en vivo", sub: "Ver calendario y acceso Zoom",  accent: "#4B7E8C", glow: "rgba(75,126,140,.18)" },
@@ -54,6 +64,18 @@ function Stat({ label, value }: { label: string; value: string }) {
   )
 }
 
+function SummaryStat({ icon: Icon, value, label }: { icon: LucideIcon; value: string; label: string }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      <Icon size={16} style={{ color: "var(--gold)" }} />
+      <div>
+        <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text)", lineHeight: 1.1 }}>{value}</div>
+        <div style={{ fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--text-faint)" }}>{label}</div>
+      </div>
+    </div>
+  )
+}
+
 export default function AulaDashboard() {
   const { data: session } = useSession()
   const [enrollments, setEnrollments] = useState<Enrollment[]>([])
@@ -72,6 +94,9 @@ export default function AulaDashboard() {
       .catch(() => setEnrollments([]))
       .finally(() => setLoading(false))
   }, [])
+
+  const summary = !loading && enrollments.length > 0 ? getSummary(enrollments) : null
+  const SummaryLevelIcon = summary ? LEVEL_ICONS[summary.level.icon] : null
 
   return (
     <div style={{ maxWidth: 860, margin: "0 auto" }}>
@@ -108,19 +133,43 @@ export default function AulaDashboard() {
 
       {/* Encabezado */}
       <div style={{ marginBottom: 40 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--gold,#A58D66)", display: "block", marginBottom: 12 }}>
+        <span style={{ fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 12 }}>
           Jewgal Academy · Aula Virtual
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(30px,4vw,46px)", color: "var(--text)", lineHeight: 1.08, marginBottom: 12 }}>
           {session?.user?.name
-            ? <>Hola, <em style={{ fontStyle: "normal", color: "var(--gold,#A58D66)" }}>{session.user.name.split(" ")[0]}</em></>
-            : <>Bienvenida a tu <em style={{ fontStyle: "normal", color: "var(--gold,#A58D66)" }}>espacio de aprendizaje</em></>
+            ? <>Hola, <em style={{ fontStyle: "normal", color: "var(--gold)" }}>{session.user.name.split(" ")[0]}</em></>
+            : <>Te damos la bienvenida a tu <em style={{ fontStyle: "normal", color: "var(--gold)" }}>espacio de aprendizaje</em></>
           }
         </h1>
         <p style={{ color: "var(--text-muted)", fontSize: 15 }}>
           Aquí encontrás todo el contenido de tus programas activos.
         </p>
       </div>
+
+      {/* Resumen gamificado */}
+      {summary && SummaryLevelIcon && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          style={{ ...card, padding: "20px 24px", marginBottom: 28, display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <div style={{ width: 48, height: 48, borderRadius: 12, background: "rgba(165,141,102,.14)", border: "1px solid rgba(165,141,102,.28)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <SummaryLevelIcon size={24} style={{ color: "var(--gold)" }} />
+            </div>
+            <div>
+              <div style={{ fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--text-faint)", marginBottom: 3 }}>Tu nivel</div>
+              <div style={{ fontFamily: "var(--serif)", fontSize: 21, color: "var(--text)", lineHeight: 1 }}>{summary.level.name}</div>
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 26, marginLeft: "auto", flexWrap: "wrap" }}>
+            <SummaryStat icon={Trophy} value={`${summary.unlocked}/${summary.totalAch}`} label="Logros" />
+            <SummaryStat icon={Clock} value={`${summary.totalHours} h`} label="Horas" />
+            <SummaryStat icon={Sparkles} value={`${summary.avgProgress}%`} label="Avance medio" />
+          </div>
+        </motion.div>
+      )}
 
       {/* Accesos rápidos */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(180px,1fr))", gap: 16, marginBottom: 32 }}>
@@ -171,7 +220,7 @@ export default function AulaDashboard() {
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              style={{ width: 16, height: 16, borderRadius: "50%", border: "2px solid rgba(165,141,102,.3)", borderTopColor: "var(--gold,#A58D66)" }}
+              style={{ width: 16, height: 16, borderRadius: "50%", border: "2px solid rgba(165,141,102,.3)", borderTopColor: "var(--gold)" }}
             />
             Cargando tus programas…
           </div>
@@ -179,11 +228,11 @@ export default function AulaDashboard() {
           <div style={{ textAlign: "center", padding: "32px 0" }}>
             <div style={{ fontSize: 32, color: "rgba(165,141,102,.3)", marginBottom: 14 }}>✦</div>
             <p style={{ color: "var(--text-dim)", fontSize: 14, marginBottom: 16 }}>
-              Aún no estás inscripta en ningún programa.
+              Aún no tienes ningún programa activo.
             </p>
             <Link
               href="/#programas"
-              style={{ fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--gold,#A58D66)", textDecoration: "none" }}
+              style={{ fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--gold)", textDecoration: "none" }}
             >
               Ver todos los programas →
             </Link>
@@ -194,6 +243,9 @@ export default function AulaDashboard() {
               const meta = PROGRAM_META[en.course.slug] ?? { icon: "✦", accent: "#A58D66" }
               const isCertified = en.status === "completed" && en.certificateNumber
               const totalH = en.course.totalHours
+              const level = getLevel(en.progress, !!isCertified)
+              const LevelIcon = LEVEL_ICONS[level.icon]
+              const achievements = getAchievements(en)
               return (
                 <motion.div
                   key={en.id}
@@ -228,12 +280,12 @@ export default function AulaDashboard() {
                           </p>
                         </div>
                         {isCertified ? (
-                          <span style={{ ...badge, color: "#CBB78B", background: "rgba(203,183,139,.1)", borderColor: "rgba(203,183,139,.35)" }}>
-                            ✦ Certificada
+                          <span style={{ ...badge, color: "var(--gold-light)", background: "rgba(203,183,139,.1)", borderColor: "rgba(203,183,139,.35)" }}>
+                            ✦ Certificado
                           </span>
                         ) : (
-                          <span style={{ ...badge, color: meta.accent, background: `${meta.accent}14`, borderColor: `${meta.accent}40` }}>
-                            En curso
+                          <span style={{ ...badge, color: meta.accent, background: `${meta.accent}14`, borderColor: `${meta.accent}40`, display: "inline-flex", alignItems: "center", gap: 5 }}>
+                            <LevelIcon size={11} /> {level.name}
                           </span>
                         )}
                       </div>
@@ -244,13 +296,28 @@ export default function AulaDashboard() {
                           <span style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--text-faint)" }}>Avance del programa</span>
                           <span style={{ fontSize: 12, fontWeight: 600, color: meta.accent }}>{en.progress}%</span>
                         </div>
-                        <div style={{ height: 6, borderRadius: 4, background: "var(--surface-2)", overflow: "hidden" }}>
-                          <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${en.progress}%` }}
-                            transition={{ duration: 1, delay: i * 0.06 + 0.2, ease: [0.16, 1, 0.3, 1] }}
-                            style={{ height: "100%", borderRadius: 4, background: `linear-gradient(90deg, ${meta.accent}, ${meta.accent}cc)` }}
-                          />
+                        <div style={{ position: "relative" }}>
+                          <div style={{ height: 6, borderRadius: 4, background: "var(--surface-2)", overflow: "hidden" }}>
+                            <motion.div
+                              initial={{ width: 0 }}
+                              animate={{ width: `${en.progress}%` }}
+                              transition={{ duration: 1, delay: i * 0.06 + 0.2, ease: [0.16, 1, 0.3, 1] }}
+                              style={{ height: "100%", borderRadius: 4, background: `linear-gradient(90deg, ${meta.accent}, ${meta.accent}cc)` }}
+                            />
+                          </div>
+                          {MILESTONES.filter((m) => m < 100).map((m) => {
+                            const reached = en.progress >= m
+                            return (
+                              <div key={m} title={`Hito ${m}%`} style={{
+                                position: "absolute", top: "50%", left: `${m}%`, transform: "translate(-50%,-50%)",
+                                width: 10, height: 10, borderRadius: "50%",
+                                background: reached ? meta.accent : "var(--surface-solid)",
+                                border: `2px solid ${reached ? meta.accent : "var(--border)"}`,
+                                boxShadow: reached ? `0 0 8px ${meta.accent}88` : "none",
+                                transition: "all .4s ease",
+                              }} />
+                            )
+                          })}
                         </div>
                       </div>
 
@@ -268,6 +335,25 @@ export default function AulaDashboard() {
                           {isCertified ? "Ver certificado →" : "Continuar →"}
                         </Link>
                       </div>
+
+                      {/* Insignias / logros */}
+                      <div style={{ display: "flex", gap: 8, marginTop: 16, flexWrap: "wrap" }}>
+                        {achievements.map((a) => {
+                          const AchIcon = ACH_ICONS[a.icon]
+                          return (
+                            <div key={a.id} title={`${a.label} — ${a.desc}`} style={{
+                              width: 30, height: 30, borderRadius: 8,
+                              display: "flex", alignItems: "center", justifyContent: "center",
+                              background: a.unlocked ? `${meta.accent}1a` : "var(--surface-2)",
+                              border: `1px solid ${a.unlocked ? `${meta.accent}45` : "var(--border-soft)"}`,
+                              opacity: a.unlocked ? 1 : 0.4,
+                              transition: "all .3s",
+                            }}>
+                              <AchIcon size={15} style={{ color: a.unlocked ? meta.accent : "var(--text-dim)" }} />
+                            </div>
+                          )
+                        })}
+                      </div>
                     </div>
                   </TiltCard>
                 </motion.div>
@@ -281,10 +367,10 @@ export default function AulaDashboard() {
       <div style={{ ...card, padding: "28px 26px", borderColor: "rgba(75,126,140,.2)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
           <div style={{ width: 36, height: 36, borderRadius: 8, background: "rgba(75,126,140,.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Calendar size={17} style={{ color: "#4B7E8C" }} />
+            <Calendar size={17} style={{ color: "var(--teal)" }} />
           </div>
           <div>
-            <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "#4B7E8C", marginBottom: 2 }}>Próxima sesión</p>
+            <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--teal)", marginBottom: 2 }}>Próxima sesión</p>
             <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 17, color: "var(--text)" }}>
               Clases en vivo por Zoom
             </h2>
@@ -296,7 +382,7 @@ export default function AulaDashboard() {
         <div style={{ paddingLeft: 48 }}>
           <Link
             href="/aula/clases"
-            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--gold,#A58D66)", textDecoration: "none" }}
+            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--gold)", textDecoration: "none" }}
           >
             <Sparkles size={13} /> Ver calendario
           </Link>

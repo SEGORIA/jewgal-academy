@@ -98,7 +98,7 @@ export default function LoginForm() {
         <motion.div key={i}
           animate={{ y: [0, -16, 0], opacity: [0.3, 0.7, 0.3] }}
           transition={{ duration: 7 + i * 1.5, repeat: Infinity, ease: "easeInOut", delay: p.delay }}
-          style={{ position: "absolute", ...p, width: p.size, height: p.size, borderRadius: "50%", background: "var(--gold,#A58D66)", pointerEvents: "none" }}
+          style={{ position: "absolute", ...p, width: p.size, height: p.size, borderRadius: "50%", background: "var(--gold)", pointerEvents: "none" }}
         />
       ))}
 
@@ -107,7 +107,7 @@ export default function LoginForm() {
         initial={{ height: 0, opacity: 0 }}
         animate={{ height: 120, opacity: 1 }}
         transition={{ delay: 0.6, duration: 0.8 }}
-        style={{ position: "absolute", left: "calc(50% - 230px)", top: "50%", transform: "translateY(-50%)", width: 1, background: "linear-gradient(to bottom,transparent,var(--gold,#A58D66),transparent)", pointerEvents: "none" }}
+        style={{ position: "absolute", left: "calc(50% - 230px)", top: "50%", transform: "translateY(-50%)", width: 1, background: "linear-gradient(to bottom,transparent,var(--gold),transparent)", pointerEvents: "none" }}
       />
 
       {/* Contenedor principal */}
@@ -151,11 +151,11 @@ export default function LoginForm() {
                 initial={{ scale: 0, rotate: -20 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ type: "spring", stiffness: 360, damping: 18, delay: 0.1 }}
-                style={{ fontSize: 52, marginBottom: 18, color: "var(--gold,#A58D66)" }}
+                style={{ fontSize: 52, marginBottom: 18, color: "var(--gold)" }}
               >✦</motion.div>
               <motion.h2 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}
                 style={{ fontFamily: "var(--serif)", fontSize: 28, color: "var(--text)", marginBottom: 10, fontWeight: 500 }}>
-                ¡Bienvenida!
+                ¡Te damos la bienvenida!
               </motion.h2>
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.38 }}
                 style={{ color: "var(--text-muted)", fontSize: 15 }}>
@@ -166,7 +166,7 @@ export default function LoginForm() {
               <motion.div
                 initial={{ width: 0 }} animate={{ width: "100%" }}
                 transition={{ delay: 0.5, duration: 1.1, ease: "easeInOut" }}
-                style={{ height: 2, background: "linear-gradient(90deg,var(--gold,#A58D66),#d4b06a)", borderRadius: 4, marginTop: 28 }}
+                style={{ height: 2, background: "linear-gradient(90deg,var(--gold),#d4b06a)", borderRadius: 4, marginTop: 28 }}
               />
             </motion.div>
           ) : (
@@ -222,7 +222,7 @@ export default function LoginForm() {
                     animate={{ opacity: 1, height: "auto", marginBottom: 20, x: [0, -10, 10, -8, 8, -4, 4, 0] }}
                     exit={{ opacity: 0, height: 0, marginBottom: 0 }}
                     transition={{ duration: 0.45 }}
-                    style={{ background: "rgba(220,38,38,.12)", border: "1px solid rgba(220,38,38,.35)", color: "#fca5a5", borderRadius: 10, padding: "12px 16px", fontSize: 14, overflow: "hidden" }}
+                    style={{ background: "rgba(220,38,38,.12)", border: "1px solid rgba(220,38,38,.35)", color: "var(--danger)", borderRadius: 10, padding: "12px 16px", fontSize: 14, overflow: "hidden" }}
                   >
                     {error}
                   </motion.div>
@@ -274,7 +274,7 @@ export default function LoginForm() {
                     whileTap={loading || !canSubmit ? {} : { scale: 0.975 }}
                     style={{
                       width: "100%",
-                      background: "var(--gold,#A58D66)",
+                      background: "var(--gold)",
                       color: "#081E29",
                       border: "none", borderRadius: 12,
                       padding: "15px 0", fontSize: 13,
@@ -327,7 +327,7 @@ export default function LoginForm() {
         >
           <p style={{ fontSize: 14, color: "var(--text-muted)", marginBottom: 10 }}>
             ¿No tenés cuenta?{" "}
-            <Link href="/#programas" style={{ color: "var(--gold,#A58D66)", fontWeight: 600, textDecoration: "none" }}>
+            <Link href="/#programas" style={{ color: "var(--gold)", fontWeight: 600, textDecoration: "none" }}>
               Inscribite en un programa
             </Link>
           </p>
