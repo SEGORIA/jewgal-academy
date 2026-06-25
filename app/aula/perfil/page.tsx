@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Camera, Save, KeyRound, Eye, EyeOff, Check, User, Phone, MapPin, Briefcase, Sparkles } from "lucide-react"
 
-const INTERESTS = ["Life Coaching", "Cabalá", "Joogal · Adultos", "Joogalkids", "Método Sholem", "Mindfulness", "Liderazgo", "Bienestar"]
+const INTERESTS = ["Life Coaching", "Cabalá", "Jewgal · Adultos", "Joogalkids", "Método Sholem", "Mindfulness", "Liderazgo", "Bienestar"]
 const COUNTRIES  = ["Argentina", "Colombia", "México", "España", "Estados Unidos", "Israel", "Venezuela", "Chile", "Uruguay", "Otro"]
 
 const card: React.CSSProperties = {

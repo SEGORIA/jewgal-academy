@@ -12,7 +12,7 @@ type Payment = {
 
 const PROGRAMS_META: Record<string, { name: string; accent: string; price: number }> = {
   "life-coaching-integrativo": { name: "Life Coaching Integrativo", accent: "#A58D66", price: 1500 },
-  "joogal-adultos":            { name: "Instructor Joogal Adultos", accent: "var(--success)", price: 0 },
+  "joogal-adultos":            { name: "Instructor Jewgal Adultos", accent: "var(--success)", price: 0 },
   "joogalkids":                { name: "Instructor Joogalkids",     accent: "#7B9FD8", price: 360 },
   "metodo-sholem":             { name: "Método Sholem",             accent: "#B07FD8", price: 360 },
   "cabala-coach":              { name: "Cábala Coach",              accent: "#CBB78B", price: 360 },

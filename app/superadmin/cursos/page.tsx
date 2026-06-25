@@ -7,7 +7,7 @@ type Tab = "materiales" | "sesiones" | "alumnos"
 
 const PROGRAMS = [
   { slug: "life-coaching-integrativo", name: "Life Coaching Integrativo", price: 1500, isFree: false, students: 0, accent: "#A58D66", published: true  },
-  { slug: "joogal-adultos",            name: "Instructor Joogal Adultos", price: 0,    isFree: true,  students: 0, accent: "var(--success)", published: true  },
+  { slug: "joogal-adultos",            name: "Instructor Jewgal Adultos", price: 0,    isFree: true,  students: 0, accent: "var(--success)", published: true  },
   { slug: "joogalkids",                name: "Instructor Joogalkids",     price: 360,  isFree: false, students: 0, accent: "#7B9FD8", published: true  },
   { slug: "metodo-sholem",             name: "Método Sholem",             price: 360,  isFree: false, students: 0, accent: "#B07FD8", published: true  },
   { slug: "cabala-coach",              name: "Cábala Coach",              price: 360,  isFree: false, students: 0, accent: "#CBB78B", published: false },

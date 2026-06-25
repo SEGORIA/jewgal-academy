@@ -242,7 +242,7 @@ export default function ContactoPage() {
                   <select id="c-asunto" name="asunto" value={form.asunto} onChange={handleChange} className="field" style={inputStyle}>
                     <option value="">Selecciona un tema…</option>
                     <option value="life-coaching">Life Coaching Integrativo</option>
-                    <option value="joogal-adultos">Instructor Joogal Adultos</option>
+                    <option value="joogal-adultos">Instructor Jewgal Adultos</option>
                     <option value="joogalkids">Instructor Joogalkids</option>
                     <option value="cabala">Cábala Coach</option>
                     <option value="metodo-sholem">Método Sholem</option>

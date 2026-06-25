@@ -6,10 +6,10 @@ import RevealInit from "@/components/RevealInit"
 const EVENTS = [
   {
     date: { day: "14", month: "Jul", year: "2026" },
-    title: "Retiro de Bienestar · Joogal Experience",
+    title: "Retiro de Bienestar · Jewgal Experience",
     type: "Retiro presencial",
     location: "Miami, Florida",
-    desc: "Un fin de semana de reconexión profunda: movimiento Joogal, meditación, círculos de coaching y sabiduría de la Cábala. Plazas muy limitadas.",
+    desc: "Un fin de semana de reconexión profunda: movimiento Jewgal, meditación, círculos de coaching y sabiduría de la Cábala. Plazas muy limitadas.",
     accent: "#A58D66",
     grad: "linear-gradient(135deg,var(--bg),#0a3d4f)",
     spots: 20,
@@ -44,7 +44,7 @@ const EVENTS = [
 
 const PAST = [
   { title: "Retiro Sholem · Buenos Aires", date: "Marzo 2026", location: "Argentina" },
-  { title: "Masterclass Joogal · Bogotá", date: "Enero 2026", location: "Colombia" },
+  { title: "Masterclass Jewgal · Bogotá", date: "Enero 2026", location: "Colombia" },
   { title: "Taller Cábala y Crianza", date: "Noviembre 2025", location: "Miami, FL" },
 ]
 

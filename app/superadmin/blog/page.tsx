@@ -5,12 +5,12 @@ import { Plus, Pencil, Trash2, Eye, X } from "lucide-react"
 
 type Post = { id: string; title: string; category: string; date: string; status: "published" | "draft"; excerpt: string; content: string }
 
-const CATEGORIES = ["Coaching", "Cabalá", "Joogal", "Liderazgo", "Educación"]
+const CATEGORIES = ["Coaching", "Cabalá", "Jewgal", "Liderazgo", "Educación"]
 
 const INITIAL_POSTS: Post[] = [
-  { id: "1", title: "¿Qué es el Life Coaching Integrativo?", category: "Coaching", date: "12 Jun 2026", status: "published", excerpt: "El coaching integrativo une psicología, logoterapia y herramientas espirituales…", content: "" },
+  { id: "1", title: "¿Qué es el Life Coaching Integrativo?", category: "Coaching", date: "12 Jun 2026", status: "published", excerpt: "El coaching integrativo une logoterapia, mindfulness y herramientas espirituales…", content: "" },
   { id: "2", title: "Cabalá y bienestar: sabiduría ancestral", category: "Cabalá", date: "04 Jun 2026", status: "published", excerpt: "La Cabalá no es religión ni magia. Es un mapa del alma humana…", content: "" },
-  { id: "3", title: "El Método Joogal: movimiento consciente", category: "Joogal", date: "28 May 2026", status: "draft", excerpt: "El movimiento como herramienta de transformación personal…", content: "" },
+  { id: "3", title: "El Método Jewgal: movimiento consciente", category: "Jewgal", date: "28 May 2026", status: "draft", excerpt: "El movimiento como herramienta de transformación personal…", content: "" },
 ]
 
 const card: React.CSSProperties = { background: "var(--surface)", border: "1px solid rgba(165,141,102,.13)", borderRadius: 14 }

@@ -26,7 +26,7 @@ type Student = {
 const COURSES = [
   { id: "", label: "Sin programa" },
   { id: "life-coaching-integrativo", label: "Life Coaching Integrativo" },
-  { id: "joogal-adultos",            label: "Instructor Joogal Adultos" },
+  { id: "joogal-adultos",            label: "Instructor Jewgal Adultos" },
   { id: "joogalkids",                label: "Instructor Joogalkids" },
   { id: "metodo-sholem",             label: "Método Sholem" },
   { id: "cabala-coach",              label: "Cábala Coach" },

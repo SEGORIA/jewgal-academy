@@ -41,7 +41,7 @@ const META: Record<string, {
     ],
     modules: [
       { title: "Fundamentos del Coaching", items: ["¿Qué es el coaching?", "Bases de la escucha activa", "El modelo GROW"] },
-      { title: "Psicología Integrativa", items: ["Logoterapia y sentido de vida", "Regulación emocional", "Creencias limitantes"] },
+      { title: "Enfoque Integrativo", items: ["Logoterapia y sentido de vida", "Regulación emocional", "Creencias limitantes"] },
       { title: "Herramientas Prácticas", items: ["Rueda de la vida", "Plan de acción", "Feedback transformador"] },
       { title: "Práctica Profesional", items: ["Ética del coach", "Construcción de tu práctica", "Primeras sesiones reales"] },
     ],
@@ -64,7 +64,7 @@ const META: Record<string, {
     includes: [
       "Acceso al aula virtual 24/7",
       "Clases en vivo por Zoom",
-      "Manual oficial Joogal Adultos",
+      "Manual oficial Jewgal Adultos",
       "Grabaciones de cada clase",
       "Certificado oficial de instructor",
       "Comunidad de instructores",
@@ -72,7 +72,7 @@ const META: Record<string, {
       "Kit de materiales descargables",
     ],
     modules: [
-      { title: "Bases del Método Joogal", items: ["Historia y filosofía", "Principios del movimiento consciente", "El cuerpo como herramienta"] },
+      { title: "Bases del Método Jewgal", items: ["Historia y filosofía", "Principios del movimiento consciente", "El cuerpo como herramienta"] },
       { title: "Anatomía y Movimiento", items: ["Anatomía funcional", "Biomecánica segura", "Adaptaciones para adultos"] },
       { title: "Didáctica de Clases", items: ["Estructura de una sesión", "Lenguaje del instructor", "Gestión del grupo"] },
       { title: "Práctica y Certificación", items: ["Clases prácticas supervisadas", "Evaluación teórica", "Presentación final"] },
@@ -83,7 +83,7 @@ const META: Record<string, {
       "Personas que buscan una segunda vocación o fuente de ingresos",
       "Líderes comunitarios que desean implementar bienestar en sus grupos",
     ],
-    outcome: "Serás instructor certificado del Método Joogal Adultos, con las herramientas para dictar tus propias clases, talleres y retiros.",
+    outcome: "Serás instructor certificado del Método Jewgal Adultos, con las herramientas para dictar tus propias clases, talleres y retiros.",
   },
   "joogalkids": {
     eyebrow: "Certificación Infantil",
@@ -104,7 +104,7 @@ const META: Record<string, {
       "Recursos lúdicos descargables",
     ],
     modules: [
-      { title: "Desarrollo Infantil", items: ["Etapas del desarrollo", "Psicología del juego", "Necesidades del niño"] },
+      { title: "Sensopercepción y Movimiento", items: ["Sensopercepción", "Mindfulness en movimiento", "Expresión corporal"] },
       { title: "Movimiento y Creatividad", items: ["El cuerpo en la infancia", "Juegos de movimiento", "Expresión libre"] },
       { title: "Pedagogía Lúdica", items: ["Diseño de actividades", "Manejo de grupos infantiles", "Recursos creativos"] },
       { title: "Práctica y Certificación", items: ["Clases prácticas", "Evaluación pedagógica", "Presentación final"] },
@@ -136,7 +136,7 @@ const META: Record<string, {
       "Recursos para talleres",
     ],
     modules: [
-      { title: "El Adolescente de Hoy", items: ["Psicología adolescente", "Identidad y pertenencia", "Desafíos actuales"] },
+      { title: "El Adolescente de Hoy", items: ["Desarrollo emocional", "Identidad y pertenencia", "Desafíos actuales"] },
       { title: "Liderazgo con Valores", items: ["Bases del Método Sholem", "Valores judíos aplicados", "Liderazgo positivo"] },
       { title: "Facilitación de Grupos", items: ["Dinámica de grupos", "Resolución de conflictos", "Creación de comunidad"] },
       { title: "Programa y Práctica", items: ["Diseño de programas", "Práctica facilitada", "Evaluación final"] },

@@ -43,7 +43,7 @@ export default function Footer() {
           <div className="foot-col">
             <h5>Programas</h5>
             <Link href="/programas/life-coaching-integrativo">Life Coaching</Link>
-            <Link href="/programas/joogal-adultos">Joogal Adultos</Link>
+            <Link href="/programas/joogal-adultos">Jewgal Adultos</Link>
             <Link href="/programas/cabala-coach">Cábala Coach</Link>
             <Link href="/programas/metodo-sholem">Método Sholem</Link>
           </div>

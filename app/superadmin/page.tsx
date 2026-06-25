@@ -9,7 +9,7 @@ type Stats = { studentCount: number; enrollmentCount: number; totalRevenue: numb
 
 const PROGRAMS = [
   { name: "Life Coaching Integrativo", slug: "life-coaching-integrativo", accent: "#A58D66" },
-  { name: "Instructor Joogal Adultos", slug: "joogal-adultos",            accent: "var(--success)" },
+  { name: "Instructor Jewgal Adultos", slug: "joogal-adultos",            accent: "var(--success)" },
   { name: "Instructor Joogalkids",     slug: "joogalkids",                accent: "#7B9FD8" },
   { name: "Método Sholem",             slug: "metodo-sholem",             accent: "#B07FD8" },
   { name: "Cábala Coach",              slug: "cabala-coach",              accent: "#CBB78B" },

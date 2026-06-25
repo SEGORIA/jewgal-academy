@@ -12,7 +12,7 @@ const PROGRAMS = [
     slug: "life-coaching-integrativo",
     title: "Life Coaching Integrativo",
     tag: "Formación profesional",
-    desc: "Formación integral que une psicología, logoterapia y herramientas de coaching para acompañar procesos de transformación profunda.",
+    desc: "Formación integral que une logoterapia, mindfulness y herramientas de coaching para acompañar procesos de transformación profunda.",
     price: "$1.500", free: false,
     duration: "6 meses", level: "Todos los niveles",
     grad: "linear-gradient(135deg,var(--bg) 0%,#0a3d4f 100%)",
@@ -21,14 +21,14 @@ const PROGRAMS = [
   },
   {
     slug: "joogal-adultos",
-    title: "Instructor Joogal · Adultos",
+    title: "Instructor Jewgal · Adultos",
     tag: "Certificación oficial",
-    desc: "Certifícate como instructor del Método Joogal y desarrolla tu práctica como guía de bienestar y movimiento consciente.",
+    desc: "Certifícate como instructor del Método Jewgal y desarrolla tu práctica como guía de bienestar y movimiento consciente.",
     price: "Gratis", free: true,
     duration: "3 meses", level: "Sin requisitos",
     grad: "linear-gradient(135deg,#0a1e15 0%,#0e3824 100%)",
     accent: "#6BBF8E", icon: "✦",
-    bullets: ["Certificado oficial Joogal", "Manual completo incluido", "Mentoring grupal mensual"],
+    bullets: ["Certificado oficial Jewgal", "Manual completo incluido", "Mentoring grupal mensual"],
   },
   {
     slug: "joogalkids",
@@ -68,7 +68,7 @@ const PROGRAMS = [
 const PILLARS = [
   { n: "01", title: "Coaching Integrativo", desc: "Unimos las mejores herramientas del coaching moderno con enfoques psicológicos y espirituales." },
   { n: "02", title: "Sabiduría de la Cabalá", desc: "Incorporamos principios ancestrales que aportan profundidad y sentido a cada proceso de transformación." },
-  { n: "03", title: "Movimiento Consciente", desc: "El cuerpo como herramienta de cambio. El método Joogal integra movimiento, respiración y presencia." },
+  { n: "03", title: "Movimiento Consciente", desc: "El cuerpo como herramienta de cambio. El método Jewgal integra movimiento, respiración y presencia." },
   { n: "04", title: "Comunidad Global", desc: "Aprendizaje entre pares, mentoring en vivo y acceso a una red de coaches e instructores activos." },
 ]
 
@@ -96,7 +96,7 @@ export default function AcademiaPage() {
             La Academia
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: 17, maxWidth: 520, lineHeight: 1.7, marginBottom: 36 }}>
-            Programas, certificaciones y formaciones que integran coaching, psicología y sabiduría ancestral. Más de 40 años de experiencia al servicio de tu transformación.
+            Programas, certificaciones y formaciones que integran coaching, logoterapia y sabiduría ancestral. Más de 40 años de experiencia al servicio de tu transformación.
           </p>
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
             <Link href="#programas" className="btn solid">Ver programas →</Link>

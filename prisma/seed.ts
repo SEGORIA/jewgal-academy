@@ -27,7 +27,7 @@ async function main() {
       slug: "life-coaching-integrativo",
       shortDesc: "Formación integral para guiar procesos de transformación personal.",
       description:
-        "Programa completo que combina coaching, Cabalá y psicología para formar coaches integrales. Incluye módulos de mindfulness, logoterapia y trabajo con el trauma.",
+        "Programa completo que combina coaching, Cabalá y logoterapia para formar coaches integrales. Incluye módulos de mindfulness, logoterapia y trabajo con el trauma.",
       price: 1500,
       isFree: false,
       isPublished: true,
@@ -37,9 +37,9 @@ async function main() {
     {
       title: "Instructor Certificado Joogalkids",
       slug: "joogalkids",
-      shortDesc: "Formación para guías de desarrollo infantil con el método Joogal.",
+      shortDesc: "Formación para guías de desarrollo infantil con el método Jewgal.",
       description:
-        "Certificación especializada para trabajar con niños a través del método Joogal, combinando movimiento, juego y desarrollo emocional.",
+        "Certificación especializada para trabajar con niños a través del método Jewgal, combinando movimiento, juego y desarrollo emocional.",
       price: 360,
       isFree: false,
       isPublished: true,
@@ -71,11 +71,11 @@ async function main() {
       durationWeeks: 12,
     },
     {
-      title: "Instructor Joogal Adultos",
+      title: "Instructor Jewgal Adultos",
       slug: "joogal-adultos",
-      shortDesc: "Certificación profesional en el método Joogal para adultos.",
+      shortDesc: "Certificación profesional en el método Jewgal para adultos.",
       description:
-        "Formación completa para instructores que desean trabajar con adultos usando el método Joogal de transformación personal.",
+        "Formación completa para instructores que desean trabajar con adultos usando el método Jewgal de transformación personal.",
       price: 0,
       isFree: true,
       isPublished: true,

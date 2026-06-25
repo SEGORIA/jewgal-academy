@@ -24,14 +24,14 @@ const POSTS: Post[] = [
     category: "Coaching",
     date: "12 Jun 2026",
     title: "¿Qué es el Life Coaching Integrativo y por qué va más allá del coaching tradicional?",
-    excerpt: "El coaching integrativo une psicología, logoterapia y herramientas espirituales para un acompañamiento más profundo y sostenido en el tiempo.",
+    excerpt: "El coaching integrativo une logoterapia, mindfulness y herramientas espirituales para un acompañamiento más profundo y sostenido en el tiempo.",
     readTime: "5 min",
     accent: "#A58D66",
-    content: `El Life Coaching Integrativo no es una moda pasajera ni un conjunto de técnicas de motivación. Es una disciplina que surge de la necesidad de acompañar a las personas de manera completa: integrando su mente, su cuerpo y su espíritu en un mismo proceso de transformación.
+    content: `El Life Coaching Integrativo no es una moda pasajera ni un conjunto de técnicas de motivación. Es una disciplina que surge de la necesidad de acompañar a las personas de manera completa: integrando su mente, su cuerpo y su alma en un mismo proceso de transformación.
 
 A diferencia del coaching tradicional, que muchas veces se enfoca en objetivos externos y estrategias de acción, el enfoque integrativo parte de una pregunta más profunda: ¿quién quiero ser? Antes de preguntarse qué quiero lograr, el proceso invita a explorar los valores, creencias y patrones que dan forma a nuestra identidad.
 
-En Jewgal Academy, este enfoque integra herramientas de la psicología humanista, la logoterapia de Viktor Frankl, el mindfulness y la sabiduría de la Cabalá. No como un collage de técnicas, sino como un sistema coherente que parte del sentido de vida de cada persona.
+En Jewgal Academy, este enfoque integra herramientas de la logoterapia de Viktor Frankl, el mindfulness y la sabiduría de la Cabalá. No como un collage de técnicas, sino como un sistema coherente que parte del sentido de vida de cada persona.
 
 El resultado es un proceso que no solo produce resultados visibles, sino que transforma la manera en que la persona habita su vida cotidiana. Los clientes de coaches integrativos suelen reportar no solo que alcanzaron sus metas, sino que se sienten más en paz con quiénes son, más capaces de sostener los cambios en el tiempo y más conectados con su propósito más profundo.
 
@@ -57,21 +57,21 @@ En nuestro Micro Curso de Cábala Coach, exploramos estas herramientas de manera
   },
   {
     slug: "joogal-movimiento-consciente",
-    category: "Joogal",
+    category: "Jewgal",
     date: "28 May 2026",
-    title: "El Método Joogal: cuando el movimiento se convierte en herramienta de transformación",
+    title: "El Método Jewgal: cuando el movimiento se convierte en herramienta de transformación",
     excerpt: "Cómo integrar cuerpo, mente y emoción a través del movimiento consciente para acceder a estados de mayor bienestar y claridad.",
     readTime: "6 min",
     accent: "#6BBF8E",
     content: `Durante décadas, el mundo del desarrollo personal ignoró el cuerpo. Se llenaron páginas de libros sobre mentalidad, creencias y estrategias, pero muy pocos preguntaron: ¿qué pasa en el cuerpo cuando una persona se transforma? ¿Cómo el movimiento puede ser un catalizador del cambio?
 
-El Método Joogal nació de estas preguntas. Es un sistema de movimiento consciente que integra principios del yoga, la expresión corporal, la danza terapéutica y el mindfulness en movimiento. No se trata de un ejercicio físico convencional, sino de una práctica que invita a habitar el cuerpo con presencia y a escuchar lo que el cuerpo tiene para decir.
+El Método Jewgal nació de estas preguntas. Es un sistema de movimiento consciente que integra principios del yoga, la expresión corporal, la danza terapéutica y el mindfulness en movimiento. No se trata de un ejercicio físico convencional, sino de una práctica que invita a habitar el cuerpo con presencia y a escuchar lo que el cuerpo tiene para decir.
 
-Cuando practicamos Joogal, activamos el sistema nervioso parasimpático, reducimos el cortisol y aumentamos la producción de oxitocina y serotonina. Pero más allá de la bioquímica, lo que más reportan quienes lo practican es una sensación de integración: de que mente y cuerpo finalmente están en el mismo lugar, al mismo tiempo.
+Cuando practicamos Jewgal, activamos el sistema nervioso parasimpático, reducimos el cortisol y aumentamos la producción de oxitocina y serotonina. Pero más allá de la bioquímica, lo que más reportan quienes lo practican es una sensación de integración: de que mente y cuerpo finalmente están en el mismo lugar, al mismo tiempo.
 
-Para instructores y educadores, el Método Joogal ofrece una herramienta poderosa para acompañar grupos. Ya sea en colegios, empresas, comunidades o retiros, las clases Joogal crean estados de apertura y conexión que facilitan el aprendizaje y la transformación.
+Para instructores y educadores, el Método Jewgal ofrece una herramienta poderosa para acompañar grupos. Ya sea en colegios, empresas, comunidades o retiros, las clases Jewgal crean estados de apertura y conexión que facilitan el aprendizaje y la transformación.
 
-Si te interesa certificarte como instructor del Método Joogal Adultos o Joogalkids, te invitamos a explorar nuestras formaciones. Están diseñadas para ser accesibles incluso si no tienes experiencia previa en yoga o danza.`,
+Si te interesa certificarte como instructor del Método Jewgal Adultos o Joogalkids, te invitamos a explorar nuestras formaciones. Están diseñadas para ser accesibles incluso si no tienes experiencia previa en yoga o danza.`,
   },
   {
     slug: "liderazgo-con-proposito",
@@ -129,7 +129,7 @@ En Jewgal Academy, esto es lo que buscamos en cada proceso formativo. No coaches
   },
 ]
 
-const CATEGORIES = ["Todo", "Coaching", "Cabalá", "Joogal", "Liderazgo", "Educación"]
+const CATEGORIES = ["Todo", "Coaching", "Cabalá", "Jewgal", "Liderazgo", "Educación"]
 
 const spring = { type: "spring" as const, stiffness: 280, damping: 26 }
 

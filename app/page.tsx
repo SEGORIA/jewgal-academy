@@ -31,7 +31,7 @@ const CERT_INSTITUTES = [
 
 const PROGRAMS = [
   { slug: "life-coaching-integrativo", title: "Life Coaching Integrativo",   desc: "Formación integral para el cambio.", price: "$1.500", free: false, img: "/brand/programs/life-coaching.svg" },
-  { slug: "joogal-adultos",            title: "Instructor Joogal · Adultos", desc: "Certifícate como instructor oficial del método Joogal.", price: "Gratis", free: true, img: "/brand/programs/joogal-adultos.svg" },
+  { slug: "joogal-adultos",            title: "Instructor Jewgal · Adultos", desc: "Certifícate como instructor oficial del método Jewgal.", price: "Gratis", free: true, img: "/brand/programs/joogal-adultos.svg" },
   { slug: "joogalkids",                title: "Instructor Joogalkids",       desc: "Formando a los guías del desarrollo infantil.", price: "$360", free: false, img: "/brand/programs/joogalkids.svg" },
   { slug: "metodo-sholem",             title: "Método Sholem",               desc: "Formación de instructores para líderes adolescentes.", price: "$360", free: false, img: "/brand/programs/metodo-sholem.svg" },
   { slug: "cabala-coach",              title: "Micro Curso · Cábala Coach",  desc: "Sabiduría milenaria aplicada al bienestar personal.", price: "$360", free: false, img: "/brand/programs/cabala-coach.svg" },
@@ -246,7 +246,7 @@ export default function HomePage() {
               <span className="eyebrow">Conoce a la fundadora</span>
               <h2>Devora Benchimol</h2>
               <div className="sig">Master Coach Internacional · Educadora</div>
-              <p>Más de 40 años facilitando procesos de transformación que integran mente, cuerpo y espíritu, con trayectoria internacional en Argentina, Israel, Colombia y Estados Unidos.</p>
+              <p>Más de 40 años facilitando procesos de transformación que integran mente, cuerpo y alma, con trayectoria internacional en Argentina, Israel, Colombia y Estados Unidos.</p>
               <p>Su método une Logoterapia y sentido de vida, Mindfulness y regulación del trauma, la sabiduría de la Cábala aplicada al coaching, y retiros de bienestar profundo.</p>
               <div className="fund-mission-block">
                 <span className="fund-mission-icon" aria-hidden="true">✦</span>

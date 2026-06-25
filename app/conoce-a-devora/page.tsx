@@ -16,7 +16,8 @@ const credentials = [
 const timeline = [
   { code: "AR", place: "Argentina",     period: "Inicio · Formación", event: "Comienzos en Buenos Aires. Formación en psicopedagogía y ciencias de la educación." },
   { code: "IL", place: "Israel",        period: "Espiritualidad",     event: "Inmersión en la Cabalá y la espiritualidad judía aplicada al desarrollo personal." },
-  { code: "CO", place: "Colombia",      period: "Expansión",          event: "Expansión del método Joogal y formación de coaches en Latinoamérica." },
+  { code: "GT", place: "Guatemala",     period: "Comunidad",          event: "Acompañamiento de procesos de transformación y formación de líderes en Centroamérica." },
+  { code: "CO", place: "Colombia",      period: "Expansión",          event: "Expansión del método Jewgal y formación de coaches en Latinoamérica." },
   { code: "US", place: "Miami, EE.UU.", period: "2015 – Presente",    event: "Miami · Sede internacional. Desde Miami lidera programas en línea con alcance global, fundó la organización 501c3 Sholem Corazón Valiente y creó Jewgal Academy para transformar vidas." },
 ]
 
@@ -118,7 +119,7 @@ export default function ConoceADevorPage() {
               Master Coach · Educadora · Fundadora
             </div>
             <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.5vw,16px)", maxWidth: 440, marginBottom: 16, lineHeight: 1.7 }}>
-              Más de 40 años facilitando procesos de transformación que integran mente, cuerpo y espíritu, con trayectoria internacional en Argentina, Israel, Colombia y Estados Unidos.
+              Más de 40 años facilitando procesos de transformación que integran mente, cuerpo y alma, con trayectoria internacional en Argentina, Israel, Guatemala, Colombia y Estados Unidos.
             </p>
             <div style={{ display: "flex", gap: 12, marginTop: 32, flexWrap: "wrap" }}>
               <Link href="/#programas" className="btn solid">Ver programas →</Link>
@@ -137,9 +138,9 @@ export default function ConoceADevorPage() {
             style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "clamp(24px,4vw,48px)", alignItems: "start" }}
           >
             {[
-              { num: "40+", label: "Años transformando vidas en 4 países" },
+              { num: "40+", label: "Años transformando vidas en 5 países" },
               { num: "5",   label: "Programas y certificaciones activos" },
-              { num: "4",   label: "Países: Argentina · Israel · Colombia · EE.UU." },
+              { num: "5",   label: "Países: Argentina · Israel · Guatemala · Colombia · EE.UU." },
               { num: "501(c)(3)", label: "Fundación Sholem Corazón Valiente, EE.UU." },
             ].map((s) => (
               <motion.div key={s.num}
@@ -153,12 +154,43 @@ export default function ConoceADevorPage() {
         </div>
       </section>
 
+      {/* ── EN SUS PALABRAS (bio) ── */}
+      <section style={{ background: "var(--navy)" }}>
+        <div className="wrap devora-section-pad" style={{ maxWidth: 860 }}>
+          <span className="eyebrow reveal" style={{ display: "block", marginBottom: 28 }}>En sus palabras</span>
+          <div className="reveal" style={{ display: "flex", flexDirection: "column", gap: 20, fontSize: "clamp(15px,1.6vw,17px)", lineHeight: 1.8, color: "var(--on-dark)" }}>
+            <p>Soy <strong style={{ color: "var(--text)" }}>Devora Benchimol</strong>. Master Coach Internacional, educadora, Rabbanit y fundadora de Jewgal Academy.</p>
+            <p>Durante más de 40 años he acompañado personas en Argentina, Israel, Guatemala, Colombia y Estados Unidos a atravesar sus procesos más profundos — los que se viven en el cuerpo, los que duelen en el alma, y los que transforman la vida para siempre.</p>
+            <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(19px,2.2vw,24px)", color: "var(--gold-light)", lineHeight: 1.45 }}>Mi camino no nació de un aula. Nació del encuentro real con el ser humano.</p>
+            <p>De esa trayectoria surgió una forma de trabajar que integra lo que la mayoría separa: la mente y el cuerpo, la técnica y la intuición, el conocimiento académico y la sabiduría ancestral.</p>
+            <p>Soy creadora de <strong style={{ color: "var(--text)" }}>Joogalkids</strong>, un programa de Mindfulness in Motion basado en el Alef Bet, diseñado para que los niños aprendan a conectar con su mundo interior a través del movimiento, el juego y la sabiduría de las letras hebreas. Y de <strong style={{ color: "var(--text)" }}>Jewgal</strong>, su versión para adultos — una metodología propia que lleva ese mismo principio de consciencia en movimiento a quienes guían, educan y lideran.</p>
+            <p style={{ marginTop: 4 }}>En cada retiro traigo conmigo todo eso:</p>
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 14, paddingLeft: 0 }}>
+              {[
+                ["La profundidad de la ", "Logoterapia", " para encontrar sentido donde parece no haberlo."],
+                ["La presencia del ", "Mindfulness", " y el trabajo con el trauma para sanar desde adentro."],
+                ["La sabiduría de la ", "Cabalá", " como mapa del alma y herramienta de transformación real."],
+                ["El lenguaje del ", "cuerpo", " a través de la Expresión Corporal, la Danza y el Masaje Terapéutico."],
+                ["La delicadeza de las ", "Flores de Bach y el Tapping", " para liberar lo que las palabras no alcanzan."],
+                ["Y la mirada de la ", "Psicopedagogía", " para que cada proceso sea también un aprendizaje que se integra y se sostiene."],
+              ].map(([pre, strong, post]) => (
+                <li key={strong} style={{ display: "flex", gap: 12, alignItems: "baseline" }}>
+                  <span style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--gold)", flexShrink: 0, transform: "translateY(-2px)" }} />
+                  <span>{pre}<strong style={{ color: "var(--text)" }}>{strong}</strong>{post}</span>
+                </li>
+              ))}
+            </ul>
+            <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(20px,2.4vw,26px)", color: "var(--text)", lineHeight: 1.4, marginTop: 8 }}>No vengo a darte respuestas.<br />Vengo a acompañarte a encontrar las tuyas.</p>
+          </div>
+        </div>
+      </section>
+
       {/* ── MISIÓN ── */}
       <section style={{ background: "var(--navy-2)" }}>
         <div className="wrap devora-section-pad">
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 24 }}>Mi misión</span>
           <p className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(20px,3vw,40px)", color: "var(--text)", lineHeight: 1.35, maxWidth: 820, letterSpacing: ".01em" }}>
-            "Facilitar procesos de transformación que integren mente, cuerpo y espíritu,
+            "Facilitar procesos de transformación que integren mente, cuerpo y alma,
             ayudando a cada persona a alcanzar su máximo potencial y liderazgo personal."
           </p>
         </div>
