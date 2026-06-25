@@ -13,9 +13,9 @@ export const getTheme = unstable_cache(
   async (): Promise<Theme> => {
     try {
       const s = await db.siteSetting.findUnique({ where: { key: "theme" } })
-      return s?.value === "light" ? "light" : "dark"
+      return s?.value === "dark" ? "dark" : "light"
     } catch {
-      return "dark"
+      return "light"
     }
   },
   ["site-theme"],

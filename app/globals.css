@@ -58,31 +58,40 @@
 
 /* ─── Tema CLARO (fondos blancos predominantes) ─── */
 [data-theme="light"] {
-  --navy:   #f6f4ef;
-  --navy-2: #ffffff;
-  --navy-3: #eef0ec;
-  --on-dark:       rgba(20,36,44,.7);
-  --on-dark-faint: rgba(20,36,44,.45);
-  --line-d: rgba(165,141,102,.32);
+  /* ── PALETA OFICIAL DEL MANUAL (cálida clara) ── */
+  --navy:   #F6F1E7;   /* Blanco Crema — fondo principal */
+  --navy-2: #FBF8F1;   /* crema claro */
+  --navy-3: #EFE6D6;   /* arena suave */
+  --gold:        #C49F72;   /* Dorado Apagado — acento */
+  --gold-light:  #D8B98C;
+  --gold-deep:   #846145;   /* Café Tierra */
+  --terra:       #A76D61;   /* Rosa Terracota */
+  --aqua:  #5c4228;         /* texto cálido (body) */
+  --teal:  #A76D61;         /* acento secundario → terracota */
+  --ink:      #4a3320;
+  --ink-soft: #846145;
+  --on-dark:       rgba(92,66,40,.85);
+  --on-dark-faint: rgba(92,66,40,.5);
+  --line-d: rgba(132,97,69,.24);
 
-  --bg:            #ffffff;
-  --bg-2:          #f6f4ef;
-  --bg-3:          #efece4;
-  --surface:       rgba(13,43,58,.028);
-  --surface-2:     rgba(13,43,58,.055);
-  --surface-solid: #ffffff;
-  --text:          #14242c;
-  --text-strong:   rgba(20,36,44,.9);
-  --text-muted:    rgba(20,36,44,.62);
-  --text-faint:    rgba(20,36,44,.45);
-  --text-dim:      rgba(20,36,44,.32);
-  --border:        rgba(165,141,102,.3);
-  --border-soft:   rgba(20,36,44,.1);
-  --hero-overlay-1: rgba(245,243,238,.95);
-  --hero-overlay-2: rgba(245,243,238,.5);
-  --hero-overlay-3: rgba(245,243,238,.05);
-  --bar:   rgba(255,255,255,.88);
-  --scrim: rgba(20,36,44,.45);
+  --bg:            #F6F1E7;
+  --bg-2:          #EFE6D6;
+  --bg-3:          #E5D6BD;
+  --surface:       rgba(132,97,69,.05);
+  --surface-2:     rgba(132,97,69,.09);
+  --surface-solid: #FBF8F1;
+  --text:          #463018;
+  --text-strong:   rgba(58,40,24,.96);
+  --text-muted:    rgba(74,51,32,.74);
+  --text-faint:    rgba(74,51,32,.52);
+  --text-dim:      rgba(74,51,32,.36);
+  --border:        rgba(132,97,69,.22);
+  --border-soft:   rgba(132,97,69,.12);
+  --hero-overlay-1: rgba(246,241,231,.95);
+  --hero-overlay-2: rgba(246,241,231,.5);
+  --hero-overlay-3: rgba(246,241,231,.05);
+  --bar:   rgba(246,241,231,.9);
+  --scrim: rgba(74,51,32,.45);
   /* Estados re-tintados para contraste AA sobre fondos claros */
   --success:      #1f8a55;
   --success-soft: rgba(31,138,85,.1);
@@ -98,23 +107,27 @@
 [data-theme="light"] .tone-dark,
 [data-theme="light"] .campus-l,
 [data-theme="light"] .join {
-  --navy:   #0d2b3a;
-  --navy-2: #081e29;
-  --navy-3: #060f14;
-  --bg:   #081e29;
-  --bg-2: #0d2b3a;
-  --bg-3: #060f14;
-  --surface-solid: #0b2535;
-  --text:        #eef4f4;
-  --text-strong: rgba(224,233,234,.85);
-  --text-muted:  rgba(224,233,234,.6);
-  --text-faint:  rgba(224,233,234,.4);
-  --text-dim:    rgba(224,233,234,.28);
-  --on-dark:       rgba(224,233,234,.82);
-  --on-dark-faint: rgba(192,213,214,.45);
-  --surface:   rgba(255,255,255,.04);
-  --surface-2: rgba(255,255,255,.06);
-  --line-d: rgba(165,141,102,.26);
+  --navy:   #2c1f14;
+  --navy-2: #21160d;
+  --navy-3: #160e07;
+  --bg:   #21160d;
+  --bg-2: #2c1f14;
+  --bg-3: #160e07;
+  --surface-solid: #2c1f14;
+  --text:        #F6F1E7;
+  --text-strong: rgba(246,241,231,.92);
+  --text-muted:  rgba(246,241,231,.66);
+  --text-faint:  rgba(246,241,231,.45);
+  --text-dim:    rgba(246,241,231,.3);
+  --on-dark:       rgba(246,241,231,.82);
+  --on-dark-faint: rgba(224,204,177,.5);
+  --gold:        #C49F72;
+  --gold-light:  #D8B98C;
+  --aqua:  #E0CCB1;
+  --teal:  #A76D61;
+  --surface:   rgba(255,255,255,.05);
+  --surface-2: rgba(255,255,255,.08);
+  --line-d: rgba(196,159,114,.28);
 }
 
 /* Navbar en modo claro:
