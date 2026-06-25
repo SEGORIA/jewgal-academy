@@ -56,7 +56,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
         {/* Logo */}
         <div style={{ padding: "28px 24px 22px", borderBottom: "1px solid rgba(165,141,102,.1)" }}>
           <Link href="/" aria-label="Inicio">
-            <BrandLogo height={38} priority />
+            <BrandLogo height={62} variant="square" priority />
           </Link>
           <p style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(165,141,102,.6)", marginTop: 8 }}>
             Aula Virtual

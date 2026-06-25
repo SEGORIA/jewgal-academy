@@ -60,7 +60,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Logo + badge */}
         <div style={{ padding: "26px 22px 20px", borderBottom: "1px solid rgba(165,141,102,.1)" }}>
           <Link href="/" target="_blank" aria-label="Ver sitio">
-            <BrandLogo height={36} priority />
+            <BrandLogo height={62} variant="square" priority />
           </Link>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 10 }}>
             <Shield size={11} style={{ color: "#ef4444" }} />

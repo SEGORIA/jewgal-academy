@@ -125,7 +125,7 @@ export default function LoginForm() {
           style={{ display: "flex", justifyContent: "center", marginBottom: 36 }}
         >
           <Link href="/" aria-label="Jewgal Academy — Inicio">
-            <BrandLogo height={52} priority />
+            <BrandLogo height={72} variant="square" priority />
           </Link>
         </motion.div>
 

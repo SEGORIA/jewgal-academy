@@ -1,36 +1,30 @@
 import Image from "next/image"
 
 /**
- * Logo adaptable al tema:
- * - versión blanca sobre fondos oscuros (modo oscuro),
- * - versión a color sobre fondos claros (modo claro).
- * El toggle se hace por CSS según data-theme (ver globals.css).
+ * Logo de marca (transparente, sin fondo).
+ * - variant "horizontal" → barras (navbar, footer)
+ * - variant "square"     → espacios verticales/cuadrados (sidebars)
  */
 export default function BrandLogo({
   height,
   priority = false,
+  variant = "horizontal",
 }: {
   height: number
   priority?: boolean
+  variant?: "horizontal" | "square"
 }) {
+  const square = variant === "square"
+  const src = square ? "/brand/logo-cuadrado.png" : "/brand/logo-horizontal.png"
+  const width = Math.round(height * (square ? 1.05 : 1.7))
   return (
     <span className="brand-logo" style={{ display: "inline-flex", lineHeight: 0 }}>
       <Image
-        src="/brand/logo-white.png"
+        src={src}
         alt="Jewgal Academy"
-        width={359}
-        height={200}
+        width={width}
+        height={height}
         priority={priority}
-        className="brand-logo-dark"
-        style={{ height, width: "auto" }}
-      />
-      <Image
-        src="/brand/logo-trimmed.png"
-        alt="Jewgal Academy"
-        width={359}
-        height={200}
-        priority={priority}
-        className="brand-logo-light"
         style={{ height, width: "auto" }}
       />
     </span>
