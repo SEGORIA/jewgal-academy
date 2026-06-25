@@ -72,7 +72,7 @@ const CERTS = [
     entity: "Jewgal Academy · Micro Certificación",
     accent: "#CBB78B",
     grad: "linear-gradient(135deg,#130e03,#2e1f00)",
-    icon: "✡",
+    icon: "❂",
     duration: "4 semanas",
     type: "Micro Certificación",
     desc: "Acredita el manejo de herramientas cabalísticas aplicadas al coaching y el autoconocimiento. Ideal como complemento a otras formaciones de bienestar.",

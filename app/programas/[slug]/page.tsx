@@ -153,7 +153,7 @@ const META: Record<string, {
     eyebrow: "Micro Curso · Sabiduría Ancestral",
     grad: "linear-gradient(135deg,#130e03 0%,#231700 55%,#2e1f00 100%)",
     accent: "#CBB78B",
-    icon: "✡",
+    icon: "❂",
     duration: "4 semanas",
     modality: "Online · A tu ritmo",
     level: "Todos los niveles",

@@ -26,7 +26,7 @@ const EVENTS = [
     grad: "linear-gradient(135deg,#130e03,#2e1f00)",
     spots: 200,
     price: "Gratis",
-    icon: "✡",
+    icon: "❂",
   },
   {
     date: { day: "05", month: "Ago", year: "2026" },

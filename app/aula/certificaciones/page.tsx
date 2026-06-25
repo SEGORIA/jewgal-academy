@@ -19,7 +19,7 @@ const PROGRAM_META: Record<string, { icon: string; accent: string; desc: string 
   "joogal-adultos":            { icon: "✦", accent: "#6BBF8E", desc: "Instructor Jewgal · Adultos" },
   "joogalkids":                { icon: "★", accent: "#7B9FD8", desc: "Instructor Joogalkids" },
   "metodo-sholem":             { icon: "◈", accent: "#B07FD8", desc: "Método Sholem" },
-  "cabala-coach":              { icon: "✡", accent: "#CBB78B", desc: "Cábala Coach" },
+  "cabala-coach":              { icon: "❂", accent: "#CBB78B", desc: "Cábala Coach" },
 }
 
 const card: React.CSSProperties = {

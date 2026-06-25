@@ -60,7 +60,7 @@ const PROGRAMS = [
     price: "$360", free: false,
     duration: "4 semanas", level: "Todos los niveles",
     grad: "linear-gradient(135deg,#130e03 0%,#2e1f00 100%)",
-    accent: "#CBB78B", icon: "✡",
+    accent: "#CBB78B", icon: "❂",
     bullets: ["Acceso de por vida", "Videos HD + guías PDF", "Comunidad privada"],
   },
 ]

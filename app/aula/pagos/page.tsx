@@ -15,7 +15,7 @@ const PROGRAM_META: Record<string, { icon: string; accent: string }> = {
   "joogal-adultos":            { icon: "✦", accent: "#6BBF8E" },
   "joogalkids":                { icon: "★", accent: "#7B9FD8" },
   "metodo-sholem":             { icon: "◈", accent: "#B07FD8" },
-  "cabala-coach":              { icon: "✡", accent: "#CBB78B" },
+  "cabala-coach":              { icon: "❂", accent: "#CBB78B" },
 }
 
 const STATUS = {
