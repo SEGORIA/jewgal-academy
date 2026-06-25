@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Jost, Allura } from "next/font/google"
 import "./globals.css"
 import Providers from "@/components/Providers"
 import ScrollProgress from "@/components/motion/ScrollProgress"
+import WhatsAppFab from "@/components/WhatsAppFab"
 import { getTheme } from "@/lib/theme"
 
 const SITE_URL = "https://jewgal-academy.vercel.app"
@@ -105,6 +106,7 @@ export default async function RootLayout({
         <Providers>
           <div id="contenido">{children}</div>
         </Providers>
+        <WhatsAppFab />
       </body>
     </html>
   )

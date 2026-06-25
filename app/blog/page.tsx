@@ -129,7 +129,7 @@ En Jewgal Academy, esto es lo que buscamos en cada proceso formativo. No coaches
   },
 ]
 
-const CATEGORIES = ["Todo", "Coaching", "Cabalá", "Jewgal", "Liderazgo", "Educación"]
+const CATEGORIES = ["Todo", "Coaching", "Cabalá", "Jewgal", "Liderazgo", "Adolescentes"]
 
 const spring = { type: "spring" as const, stiffness: 280, damping: 26 }
 

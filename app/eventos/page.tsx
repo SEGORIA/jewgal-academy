@@ -40,6 +40,18 @@ const EVENTS = [
     price: "$280",
     icon: "⟡",
   },
+  {
+    date: { day: "12", month: "Sep", year: "2026" },
+    title: "Encuentro Jewgal · Medellín",
+    type: "Evento presencial",
+    location: "Medellín, Colombia",
+    desc: "Un encuentro de transformación y movimiento consciente con Devora Benchimol en Colombia: talleres de Jewgal, círculos de coaching y sabiduría de la Cábala. Plazas limitadas.",
+    accent: "#6BBF8E",
+    grad: "linear-gradient(135deg,#0a1e15,#0e3824)",
+    spots: 40,
+    price: "Por confirmar",
+    icon: "✦",
+  },
 ]
 
 const PAST = [

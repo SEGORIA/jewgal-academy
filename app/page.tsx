@@ -207,6 +207,9 @@ export default function HomePage() {
             <h2>Programas destacados</h2>
             <Link href="/#programas">Ver todos los programas →</Link>
           </div>
+          <p className="reveal" style={{ color: "var(--ink-soft)", fontSize: 14.5, marginTop: -34, marginBottom: 40, maxWidth: 580, lineHeight: 1.6 }}>
+            Modalidad <strong style={{ color: "var(--ink)" }}>presencial, online o híbrida</strong> según el programa — elige la que mejor se adapte a tu ritmo y lugar.
+          </p>
           <div className="prog-grid">
             {PROGRAMS.map((p) => (
               <TiltCard key={p.slug} className="reveal" radius={6}>
