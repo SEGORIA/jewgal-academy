@@ -233,6 +233,42 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── DIFERENCIADOR · 3 DIMENSIONES ── */}
+      <section style={{ background: "var(--navy-2)", borderTop: "1px solid var(--line-d)", borderBottom: "1px solid var(--line-d)" }}>
+        <div className="wrap" style={{ padding: "clamp(64px,8vw,110px) 0" }}>
+          <div className="reveal" style={{ textAlign: "center", maxWidth: 700, margin: "0 auto clamp(40px,5vw,64px)" }}>
+            <span className="eyebrow" style={{ display: "inline-block", marginBottom: 18 }}>Qué nos hace únicos</span>
+            <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(28px,4vw,48px)", color: "var(--text)", lineHeight: 1.12, marginBottom: 18 }}>
+              Integramos tres dimensiones que <em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>rara vez conviven</em> en una misma formación
+            </h2>
+            <p style={{ color: "var(--on-dark)", fontSize: "clamp(15px,1.6vw,17px)", lineHeight: 1.7 }}>
+              El rigor de la ciencia, la profundidad del desarrollo humano y la sabiduría espiritual — unidos en un solo camino de transformación.
+            </p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: "clamp(20px,2.5vw,32px)" }}>
+            {[
+              { n: "01", title: "Rigor profesional",    desc: "Método con respaldo científico y certificación reconocida.", items: ["Coaching avalado", "Regulación emocional", "Logoterapia"] },
+              { n: "02", title: "Desarrollo humano",    desc: "Herramientas para crecer y para acompañar a otros.",          items: ["Resiliencia", "Autoconocimiento", "Liderazgo consciente"] },
+              { n: "03", title: "Sabiduría espiritual", desc: "La raíz ancestral como mapa del alma y del propósito.",       items: ["Cábala", "Consciencia", "Propósito de vida"] },
+            ].map((d) => (
+              <div key={d.n} className="reveal" style={{ background: "var(--surface)", border: "1px solid var(--line-d)", borderRadius: "var(--r-lg)", padding: "clamp(28px,3vw,38px)" }}>
+                <div style={{ fontFamily: "var(--serif)", fontSize: 13, fontStyle: "italic", color: "var(--gold)", marginBottom: 14 }}>{d.n}</div>
+                <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(20px,2.2vw,26px)", color: "var(--text)", marginBottom: 10 }}>{d.title}</h3>
+                <p style={{ color: "var(--on-dark)", fontSize: 14.5, lineHeight: 1.6, marginBottom: 20 }}>{d.desc}</p>
+                <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10, padding: 0 }}>
+                  {d.items.map((it) => (
+                    <li key={it} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, color: "var(--text-strong)" }}>
+                      <span style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--gold)", flexShrink: 0 }} />
+                      {it}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── FUNDADORA ── */}
       <section className="fundadora pad" id="fundadora">
         <div className="wrap">
