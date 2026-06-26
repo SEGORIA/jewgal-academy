@@ -13,7 +13,7 @@ type Payment = {
 const PROGRAM_META: Record<string, { icon: string; accent: string }> = {
   "life-coaching-integrativo": { icon: "⟡", accent: "#A58D66" },
   "joogal-adultos":            { icon: "✦", accent: "#6BBF8E" },
-  "joogalkids":                { icon: "★", accent: "#7B9FD8" },
+  "joogalkids":                { icon: "★", accent: "#A76D61" },
   "metodo-sholem":             { icon: "◈", accent: "#B07FD8" },
   "cabala-coach":              { icon: "❂", accent: "#CBB78B" },
 }

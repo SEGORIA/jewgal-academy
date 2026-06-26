@@ -6,11 +6,11 @@ const PARTICLES = [
   { x:  8, size: 2.5, delay: 0,   dur:  9, col: "#A58D66", opa: 0.55 },
   { x: 18, size: 1.5, delay: 1.8, dur: 12, col: "#CBB78B", opa: 0.4  },
   { x: 31, size: 3.5, delay: 0.5, dur:  8, col: "#A58D66", opa: 0.5  },
-  { x: 44, size: 2,   delay: 3.2, dur: 11, col: "#4B7E8C", opa: 0.38 },
+  { x: 44, size: 2,   delay: 3.2, dur: 11, col: "#A76D61", opa: 0.38 },
   { x: 57, size: 1.5, delay: 2.1, dur:  9, col: "#6BBF8E", opa: 0.35 },
   { x: 67, size: 3,   delay: 1.0, dur: 10, col: "#CBB78B", opa: 0.48 },
   { x: 79, size: 2,   delay: 4.5, dur:  8, col: "#A58D66", opa: 0.42 },
-  { x: 90, size: 1.5, delay: 0.7, dur: 13, col: "#4B7E8C", opa: 0.32 },
+  { x: 90, size: 1.5, delay: 0.7, dur: 13, col: "#A76D61", opa: 0.32 },
 ]
 
 /**

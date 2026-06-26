@@ -8,7 +8,7 @@ type Tab = "materiales" | "sesiones" | "alumnos"
 const PROGRAMS = [
   { slug: "life-coaching-integrativo", name: "Life Coaching Integrativo", price: 1500, isFree: false, students: 0, accent: "#A58D66", published: true  },
   { slug: "joogal-adultos",            name: "Instructor Jewgal Adultos", price: 0,    isFree: true,  students: 0, accent: "var(--success)", published: true  },
-  { slug: "joogalkids",                name: "Instructor Joogalkids",     price: 360,  isFree: false, students: 0, accent: "#7B9FD8", published: true  },
+  { slug: "joogalkids",                name: "Instructor Joogalkids",     price: 360,  isFree: false, students: 0, accent: "#A76D61", published: true  },
   { slug: "metodo-sholem",             name: "Método Sholem",             price: 360,  isFree: false, students: 0, accent: "#B07FD8", published: true  },
   { slug: "cabala-coach",              name: "Cábala Coach",              price: 360,  isFree: false, students: 0, accent: "#CBB78B", published: false },
 ]
@@ -115,7 +115,7 @@ export default function CursosAdminPage() {
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
                   <p style={{ fontSize: 13, color: "var(--text-faint)" }}>0 materiales subidos</p>
-                  <button onClick={() => setShowAddMat(!showAddMat)} style={{ display: "flex", alignItems: "center", gap: 7, background: selected.accent, color: "#081E29", border: "none", borderRadius: 8, padding: "9px 16px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+                  <button onClick={() => setShowAddMat(!showAddMat)} style={{ display: "flex", alignItems: "center", gap: 7, background: selected.accent, color: "#2C1F14", border: "none", borderRadius: 8, padding: "9px 16px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
                     <Plus size={14} /> Subir material
                   </button>
                 </div>
@@ -141,7 +141,7 @@ export default function CursosAdminPage() {
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
                       <button onClick={() => setShowAddMat(false)} style={{ flex: 1, background: "var(--surface-2)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 8, padding: "10px 0", fontSize: 13, color: "var(--text-muted)", cursor: "pointer" }}>Cancelar</button>
-                      <button onClick={() => setShowAddMat(false)} style={{ flex: 2, background: selected.accent, border: "none", borderRadius: 8, padding: "10px 0", fontSize: 13, fontWeight: 700, color: "#081E29", cursor: "pointer" }}>Guardar</button>
+                      <button onClick={() => setShowAddMat(false)} style={{ flex: 2, background: selected.accent, border: "none", borderRadius: 8, padding: "10px 0", fontSize: 13, fontWeight: 700, color: "#2C1F14", cursor: "pointer" }}>Guardar</button>
                     </div>
                   </div>
                 )}
@@ -157,7 +157,7 @@ export default function CursosAdminPage() {
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
                   <p style={{ fontSize: 13, color: "var(--text-faint)" }}>0 sesiones programadas</p>
-                  <button onClick={() => setShowAddSes(!showAddSes)} style={{ display: "flex", alignItems: "center", gap: 7, background: selected.accent, color: "#081E29", border: "none", borderRadius: 8, padding: "9px 16px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+                  <button onClick={() => setShowAddSes(!showAddSes)} style={{ display: "flex", alignItems: "center", gap: 7, background: selected.accent, color: "#2C1F14", border: "none", borderRadius: 8, padding: "9px 16px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
                     <Plus size={14} /> Agendar sesión
                   </button>
                 </div>
@@ -173,7 +173,7 @@ export default function CursosAdminPage() {
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
                       <button onClick={() => setShowAddSes(false)} style={{ flex: 1, background: "var(--surface-2)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 8, padding: "10px 0", fontSize: 13, color: "var(--text-muted)", cursor: "pointer" }}>Cancelar</button>
-                      <button onClick={() => setShowAddSes(false)} style={{ flex: 2, background: selected.accent, border: "none", borderRadius: 8, padding: "10px 0", fontSize: 13, fontWeight: 700, color: "#081E29", cursor: "pointer" }}>Guardar</button>
+                      <button onClick={() => setShowAddSes(false)} style={{ flex: 2, background: selected.accent, border: "none", borderRadius: 8, padding: "10px 0", fontSize: 13, fontWeight: 700, color: "#2C1F14", cursor: "pointer" }}>Guardar</button>
                     </div>
                   </div>
                 )}

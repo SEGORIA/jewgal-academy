@@ -101,7 +101,7 @@ export default function ClasesPage() {
                   rel="noopener noreferrer"
                   style={{
                     display: "flex", alignItems: "center", gap: 7,
-                    background: "var(--gold)", color: "#081E29",
+                    background: "var(--gold)", color: "#2C1F14",
                     fontSize: 12, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase",
                     textDecoration: "none", padding: "10px 18px", borderRadius: 8,
                     flexShrink: 0, transition: "opacity .2s",

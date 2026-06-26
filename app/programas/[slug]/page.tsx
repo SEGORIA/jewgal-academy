@@ -23,7 +23,7 @@ const META: Record<string, {
 }> = {
   "life-coaching-integrativo": {
     eyebrow: "Formación Profesional",
-    grad: "linear-gradient(135deg,var(--bg) 0%,var(--bg-2) 55%,#0a3d4f 100%)",
+    grad: "linear-gradient(135deg,var(--bg) 0%,var(--bg-2) 55%,#3A2817 100%)",
     accent: "#A58D66",
     icon: "⟡",
     duration: "6 meses",
@@ -87,8 +87,8 @@ const META: Record<string, {
   },
   "joogalkids": {
     eyebrow: "Certificación Infantil",
-    grad: "linear-gradient(135deg,#101828 0%,#1a2540 55%,#1e2d52 100%)",
-    accent: "#7B9FD8",
+    grad: "linear-gradient(135deg,#241A10 0%,#2C1F14 55%,#3A2817 100%)",
+    accent: "#A76D61",
     icon: "★",
     duration: "3 meses",
     modality: "Online · Clases en vivo",

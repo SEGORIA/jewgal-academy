@@ -63,7 +63,7 @@ export default function BlogAdminPage() {
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Blog</h1>
           <p style={{ color: "var(--text-faint)", fontSize: 14 }}>{posts.length} entradas · {posts.filter((p) => p.status === "published").length} publicadas</p>
         </div>
-        <button onClick={openNew} style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--gold)", color: "#081E29", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+        <button onClick={openNew} style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
           <Plus size={16} /> Nueva entrada
         </button>
       </div>
@@ -144,7 +144,7 @@ export default function BlogAdminPage() {
 
             <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
               <button onClick={() => { setEditing(null); setIsNew(false) }} style={{ flex: 1, background: "var(--surface-2)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 9, padding: "11px 0", fontSize: 13, color: "var(--text-muted)", cursor: "pointer" }}>Cancelar</button>
-              <button onClick={savePost} style={{ flex: 2, background: "var(--gold)", border: "none", borderRadius: 9, padding: "11px 0", fontSize: 13, fontWeight: 700, color: "#081E29", cursor: "pointer" }}>
+              <button onClick={savePost} style={{ flex: 2, background: "var(--gold)", border: "none", borderRadius: 9, padding: "11px 0", fontSize: 13, fontWeight: 700, color: "#2C1F14", cursor: "pointer" }}>
                 {isNew ? "Publicar entrada" : "Guardar cambios"}
               </button>
             </div>

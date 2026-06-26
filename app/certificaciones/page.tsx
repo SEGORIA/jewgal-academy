@@ -15,7 +15,7 @@ const CERTS = [
     slug: "life-coaching-integrativo",
     entity: "Jewgal Academy · Internacional",
     accent: "#A58D66",
-    grad: "linear-gradient(135deg,var(--bg),#0a3d4f)",
+    grad: "linear-gradient(135deg,var(--bg),#3A2817)",
     icon: "⟡",
     duration: "6 meses",
     type: "Formación completa",
@@ -42,8 +42,8 @@ const CERTS = [
     program: "Instructor Joogalkids",
     slug: "joogalkids",
     entity: "Método Jewgal · Certificación Infantil",
-    accent: "#7B9FD8",
-    grad: "linear-gradient(135deg,#101828,#1e2d52)",
+    accent: "#A76D61",
+    grad: "linear-gradient(135deg,#241A10,#3A2817)",
     icon: "★",
     duration: "3 meses",
     type: "Certificación Oficial",
@@ -95,7 +95,7 @@ export default function CertificacionesPage() {
 
       {/* ── HERO ── */}
       <section style={{
-        background: "linear-gradient(120deg,var(--navy-2) 0%,var(--navy) 55%,#0a3140 100%)",
+        background: "linear-gradient(120deg,var(--navy-2) 0%,var(--navy) 55%,#2A1D12 100%)",
         paddingTop: 150, paddingBottom: 90,
         position: "relative", overflow: "hidden",
         borderBottom: "1px solid var(--line-d)",

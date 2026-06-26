@@ -275,7 +275,7 @@ export default function PerfilPage() {
           style={{
             display: "flex", alignItems: "center", gap: 8,
             background: saved ? "var(--success)" : "var(--gold)",
-            color: "#081E29", border: "none", borderRadius: 11,
+            color: "#2C1F14", border: "none", borderRadius: 11,
             padding: "13px 28px", fontSize: 13, fontWeight: 700,
             cursor: "pointer", transition: "background .3s",
           }}

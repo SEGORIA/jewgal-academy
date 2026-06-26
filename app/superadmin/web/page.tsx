@@ -95,7 +95,7 @@ export default function WebAdminPage() {
           <a href="/" target="_blank" style={{ display: "flex", alignItems: "center", gap: 7, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 10, padding: "11px 18px", fontSize: 13, color: "var(--text-muted)", textDecoration: "none" }}>
             <Eye size={15} /> Ver sitio
           </a>
-          <button onClick={handleSave} style={{ display: "flex", alignItems: "center", gap: 7, background: saved ? "var(--success)" : "var(--gold)", color: "#081E29", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer", transition: "background .3s" }}>
+          <button onClick={handleSave} style={{ display: "flex", alignItems: "center", gap: 7, background: saved ? "var(--success)" : "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer", transition: "background .3s" }}>
             <Save size={15} /> {saved ? "¡Guardado!" : "Guardar cambios"}
           </button>
         </div>

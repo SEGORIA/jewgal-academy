@@ -13,7 +13,7 @@ type Payment = {
 const PROGRAMS_META: Record<string, { name: string; accent: string; price: number }> = {
   "life-coaching-integrativo": { name: "Life Coaching Integrativo", accent: "#A58D66", price: 1500 },
   "joogal-adultos":            { name: "Instructor Jewgal Adultos", accent: "var(--success)", price: 0 },
-  "joogalkids":                { name: "Instructor Joogalkids",     accent: "#7B9FD8", price: 360 },
+  "joogalkids":                { name: "Instructor Joogalkids",     accent: "#A76D61", price: 360 },
   "metodo-sholem":             { name: "Método Sholem",             accent: "#B07FD8", price: 360 },
   "cabala-coach":              { name: "Cábala Coach",              accent: "#CBB78B", price: 360 },
 }
@@ -103,7 +103,7 @@ export default function PagosAdminPage() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(210px,1fr))", gap: 14, marginBottom: 24 }}>
         {[
           { label: "Ingresos totales",  value: loading ? "—" : `$${totalRevenue.toLocaleString("es")}`,  sub: "Pagos completados + demo", icon: DollarSign, accent: "#A58D66" },
-          { label: "Transacciones",     value: loading ? "—" : String(completedPayments.length),          sub: "Inscripciones activas",    icon: CreditCard, accent: "#4B7E8C" },
+          { label: "Transacciones",     value: loading ? "—" : String(completedPayments.length),          sub: "Inscripciones activas",    icon: CreditCard, accent: "#A76D61" },
           { label: "Alumnos con pago",     value: loading ? "—" : String(uniqueStudents),                   sub: "Usuarios únicos",          icon: Users,      accent: "var(--success)" },
           { label: "Ticket promedio",   value: loading ? "—" : avgTicket > 0 ? `$${Math.round(avgTicket).toLocaleString("es")}` : "$—", sub: "Por transacción", icon: TrendingUp, accent: "#B07FD8" },
         ].map(({ label, value, sub, icon: Icon, accent }) => (

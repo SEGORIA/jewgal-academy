@@ -154,7 +154,7 @@ export default function AsistenciaPage() {
 
                   <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 18 }}>
                     <button onClick={save} disabled={saving}
-                      style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--gold)", color: "#081E29", border: "none", borderRadius: 10, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1 }}>
+                      style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 10, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1 }}>
                       {saving ? <><Loader2 size={15} style={{ animation: "spin 1s linear infinite" }} /> Guardando…</> : <><Save size={15} /> Guardar asistencia</>}
                     </button>
                     {saved && <span style={{ fontSize: 13, color: "var(--success)", display: "flex", alignItems: "center", gap: 6 }}><Check size={15} /> Asistencia guardada</span>}

@@ -143,7 +143,7 @@ export default function ConfiguracionPage() {
             )}
           </div>
 
-          <button onClick={handleSave} style={{ marginTop: 24, background: saved ? "var(--success)" : "var(--gold)", color: "#081E29", border: "none", borderRadius: 10, padding: "12px 28px", fontSize: 13, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "background .3s" }}>
+          <button onClick={handleSave} style={{ marginTop: 24, background: saved ? "var(--success)" : "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 10, padding: "12px 28px", fontSize: 13, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "background .3s" }}>
             <Save size={15} /> {saved ? "¡Guardado!" : "Guardar cambios"}
           </button>
         </div>
@@ -178,7 +178,7 @@ export default function ConfiguracionPage() {
                 </div>
               ))}
             </div>
-            <button onClick={handleSave} style={{ marginTop: 18, background: "var(--gold)", color: "#081E29", border: "none", borderRadius: 9, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+            <button onClick={handleSave} style={{ marginTop: 18, background: "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 9, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
               Conectar Stripe
             </button>
           </div>
@@ -211,7 +211,7 @@ export default function ConfiguracionPage() {
             <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 13, color: "var(--text-muted)", marginBottom: 16 }}>
               <input type="checkbox" style={{ accentColor: "var(--gold)" }} /> Modo sandbox (pruebas)
             </label>
-            <button onClick={handleSave} style={{ background: "var(--gold)", color: "#081E29", border: "none", borderRadius: 9, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+            <button onClick={handleSave} style={{ background: "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 9, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
               Conectar PayPal
             </button>
           </div>
@@ -250,7 +250,7 @@ export default function ConfiguracionPage() {
               </label>
             ))}
           </div>
-          <button onClick={handleSave} style={{ background: saved ? "var(--success)" : "var(--gold)", color: "#081E29", border: "none", borderRadius: 10, padding: "12px 28px", fontSize: 13, fontWeight: 700, cursor: "pointer", transition: "background .3s" }}>
+          <button onClick={handleSave} style={{ background: saved ? "var(--success)" : "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 10, padding: "12px 28px", fontSize: 13, fontWeight: 700, cursor: "pointer", transition: "background .3s" }}>
             {saved ? "¡Guardado!" : "Guardar configuración"}
           </button>
         </div>
@@ -290,7 +290,7 @@ export default function ConfiguracionPage() {
               <label style={labelStyle}>Confirmar contraseña</label>
               <input type="password" placeholder="Repetir contraseña" style={inputStyle} />
             </div>
-            <button onClick={handlePwSave} style={{ marginTop: 18, background: pwSaved ? "var(--success)" : "var(--gold)", color: "#081E29", border: "none", borderRadius: 9, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "background .3s" }}>
+            <button onClick={handlePwSave} style={{ marginTop: 18, background: pwSaved ? "var(--success)" : "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 9, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "background .3s" }}>
               <KeyRound size={14} /> {pwSaved ? "¡Contraseña actualizada!" : "Actualizar contraseña"}
             </button>
           </div>
@@ -307,7 +307,7 @@ export default function ConfiguracionPage() {
               <div><label style={labelStyle}>Nueva contraseña</label><input type="password" placeholder="Mínimo 8 caracteres" style={inputStyle} /></div>
               <div><label style={labelStyle}>Confirmar nueva contraseña</label><input type="password" placeholder="Repetir contraseña" style={inputStyle} /></div>
             </div>
-            <button onClick={handleSave} style={{ marginTop: 18, background: saved ? "var(--success)" : "#4B7E8C", color: "white", border: "none", borderRadius: 9, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer", transition: "background .3s" }}>
+            <button onClick={handleSave} style={{ marginTop: 18, background: saved ? "var(--success)" : "#A76D61", color: "white", border: "none", borderRadius: 9, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer", transition: "background .3s" }}>
               {saved ? "¡Contraseña actualizada!" : "Cambiar mi contraseña"}
             </button>
           </div>

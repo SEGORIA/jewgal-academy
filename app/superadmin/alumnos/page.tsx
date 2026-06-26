@@ -130,7 +130,7 @@ export default function AlumnosPage() {
           </p>
         </div>
         <button onClick={() => { setModal({ type: "add" }); setError("") }}
-          style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--gold)", color: "#081E29", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, letterSpacing: ".08em", cursor: "pointer" }}>
+          style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, letterSpacing: ".08em", cursor: "pointer" }}>
           <UserPlus size={16} /> Agregar alumno
         </button>
       </div>
@@ -178,7 +178,7 @@ export default function AlumnosPage() {
                         </div>
                         {!search && (
                           <button onClick={() => setModal({ type: "add" })}
-                            style={{ background: "var(--gold)", color: "#081E29", border: "none", borderRadius: 9, padding: "10px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                            style={{ background: "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 9, padding: "10px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
                             Agregar primer alumno
                           </button>
                         )}
@@ -283,7 +283,7 @@ export default function AlumnosPage() {
                     Cancelar
                   </button>
                   <button onClick={addStudent} disabled={saving}
-                    style={{ flex: 2, background: "var(--gold)", border: "none", borderRadius: 10, padding: "12px 0", fontSize: 13, fontWeight: 700, color: "#081E29", cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                    style={{ flex: 2, background: "var(--gold)", border: "none", borderRadius: 10, padding: "12px 0", fontSize: 13, fontWeight: 700, color: "#2C1F14", cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                     {saving ? <><Loader2 size={15} style={{ animation: "spin 1s linear infinite" }} /> Creando…</> : "Crear cuenta"}
                   </button>
                 </div>
@@ -411,7 +411,7 @@ export default function AlumnosPage() {
                   <a href={`mailto:${modal.student.email}`} style={{ flex: 1, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.25)", borderRadius: 10, padding: "11px 0", fontSize: 13, color: "var(--gold)", cursor: "pointer", textDecoration: "none", textAlign: "center" as const }}>
                     Enviar email
                   </a>
-                  <button onClick={() => setModal(null)} style={{ flex: 1, background: "var(--gold)", border: "none", borderRadius: 10, padding: "11px 0", fontSize: 13, fontWeight: 700, color: "#081E29", cursor: "pointer" }}>Cerrar</button>
+                  <button onClick={() => setModal(null)} style={{ flex: 1, background: "var(--gold)", border: "none", borderRadius: 10, padding: "11px 0", fontSize: 13, fontWeight: 700, color: "#2C1F14", cursor: "pointer" }}>Cerrar</button>
                 </div>
               </>
             )}

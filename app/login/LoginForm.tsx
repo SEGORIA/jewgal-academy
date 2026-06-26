@@ -71,7 +71,7 @@ export default function LoginForm() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "linear-gradient(135deg,var(--bg) 0%,var(--surface-solid) 55%,#0a3140 100%)",
+      background: "linear-gradient(135deg,var(--bg) 0%,var(--surface-solid) 55%,#2A1D12 100%)",
       display: "flex", alignItems: "center", justifyContent: "center",
       padding: "24px 20px", position: "relative", overflow: "hidden",
     }}>
@@ -275,7 +275,7 @@ export default function LoginForm() {
                     style={{
                       width: "100%",
                       background: "var(--gold)",
-                      color: "#081E29",
+                      color: "#2C1F14",
                       border: "none", borderRadius: 12,
                       padding: "15px 0", fontSize: 13,
                       fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase",

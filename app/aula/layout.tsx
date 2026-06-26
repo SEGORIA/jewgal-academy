@@ -174,7 +174,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
                 width: 34, height: 34, borderRadius: "50%",
                 background: "var(--gold)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 13, fontWeight: 700, color: "#081E29", cursor: "pointer",
+                fontSize: 13, fontWeight: 700, color: "#2C1F14", cursor: "pointer",
                 border: "2px solid rgba(165,141,102,.35)",
                 overflow: "hidden", flexShrink: 0,
               }}

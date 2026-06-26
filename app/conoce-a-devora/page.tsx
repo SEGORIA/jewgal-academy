@@ -94,7 +94,7 @@ export default function ConoceADevorPage() {
 
       {/* ── HERO ── */}
       <section style={{
-        background: "linear-gradient(120deg,var(--navy-2) 0%,var(--navy) 52%,#0a3140 100%)",
+        background: "linear-gradient(120deg,var(--navy-2) 0%,var(--navy) 52%,#2A1D12 100%)",
         paddingTop: "clamp(100px,12vw,160px)", paddingBottom: "clamp(60px,8vw,100px)",
         position: "relative", overflow: "hidden",
       }}>
@@ -225,7 +225,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── TRAYECTORIA ── */}
-      <section style={{ background: "linear-gradient(180deg,var(--navy-2),#0a2c3a)", position: "relative" }}>
+      <section style={{ background: "linear-gradient(180deg,var(--navy-2),#2A1D12)", position: "relative" }}>
         <div style={{ position: "absolute", inset: 0, opacity: .4, backgroundImage: "radial-gradient(1px 1px at 20% 30%,#cbb78b,transparent),radial-gradient(1px 1px at 70% 60%,#cbb78b,transparent),radial-gradient(1px 1px at 50% 80%,#c0d5d6,transparent)" }} />
         <div className="wrap devora-section-pad" style={{ position: "relative", zIndex: 2 }}>
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16 }}>Trayectoria</span>

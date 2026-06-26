@@ -98,7 +98,7 @@ Si trabajas con equipos, comunidades o adolescentes, te invitamos a preguntarte:
     title: "Método Sholem: formando líderes adolescentes desde los valores y la identidad",
     excerpt: "Un enfoque único para acompañar a los jóvenes en la construcción de una identidad sólida, un sentido de pertenencia y un liderazgo con corazón.",
     readTime: "5 min",
-    accent: "#7B9FD8",
+    accent: "#A76D61",
     content: `Los adolescentes de hoy enfrentan un desafío que ninguna generación anterior tuvo que afrontar de la misma manera: construir una identidad en el contexto de las redes sociales, la sobreinformación y la presión de ser alguien antes de saber quién uno quiere ser.
 
 El Método Sholem surge como respuesta a este desafío. Fue desarrollado para acompañar a jóvenes en la construcción de su identidad desde los valores, la pertenencia comunitaria y el liderazgo positivo. No se trata de darles respuestas, sino de crear las condiciones para que encuentren las suyas.
@@ -146,7 +146,7 @@ export default function BlogPage() {
 
       {/* ── HERO ── */}
       <section style={{
-        background: "linear-gradient(120deg,var(--navy-2) 0%,var(--navy) 55%,#0a3140 100%)",
+        background: "linear-gradient(120deg,var(--navy-2) 0%,var(--navy) 55%,#2A1D12 100%)",
         paddingTop: 150, paddingBottom: 90, position: "relative", overflow: "hidden",
         borderBottom: "1px solid var(--line-d)",
       }}>
@@ -205,7 +205,7 @@ export default function BlogPage() {
               }}
               whileHover={{ y: -4, boxShadow: "0 20px 60px rgba(0,0,0,.3)" }}
             >
-              <div style={{ background: "linear-gradient(135deg,var(--bg),#0a3d4f)", padding: "52px 44px", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: 360 }}>
+              <div style={{ background: "linear-gradient(135deg,var(--bg),#3A2817)", padding: "52px 44px", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: 360 }}>
                 <div>
                   <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
                     <span style={{ fontSize: 11, border: "1px solid var(--line-d)", borderRadius: 16, padding: "4px 14px", color: filtered[0].accent, letterSpacing: ".12em", textTransform: "uppercase" }}>

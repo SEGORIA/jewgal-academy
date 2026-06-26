@@ -95,7 +95,7 @@ export default function ContactoPage() {
 
       {/* ── HERO ── */}
       <section style={{
-        background: "linear-gradient(120deg,var(--navy-2) 0%,var(--navy) 60%,#0a3140 100%)",
+        background: "linear-gradient(120deg,var(--navy-2) 0%,var(--navy) 60%,#2A1D12 100%)",
         paddingTop: 160, paddingBottom: 80,
         borderBottom: "1px solid var(--line-d)",
         position: "relative", overflow: "hidden",

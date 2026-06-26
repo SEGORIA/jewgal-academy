@@ -1,32 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
   <defs>
     <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1a2540"/>
+      <stop offset="0%" stop-color="#2C1F14"/>
       <stop offset="100%" stop-color="#2d3f70"/>
     </linearGradient>
     <radialGradient id="glow" cx="60%" cy="40%" r="50%">
-      <stop offset="0%" stop-color="#7B9FD8" stop-opacity="0.3"/>
-      <stop offset="100%" stop-color="#1a2540" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#A76D61" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#2C1F14" stop-opacity="0"/>
     </radialGradient>
   </defs>
   <rect width="600" height="400" fill="url(#g)"/>
   <rect width="600" height="400" fill="url(#glow)"/>
   <!-- Estrellas pequeñas decorativas -->
-  <circle cx="120" cy="80"  r="1.8" fill="#7B9FD8" opacity="0.7"/>
+  <circle cx="120" cy="80"  r="1.8" fill="#A76D61" opacity="0.7"/>
   <circle cx="310" cy="55"  r="1.4" fill="#A58D66" opacity="0.6"/>
-  <circle cx="460" cy="130" r="2"   fill="#7B9FD8" opacity="0.65"/>
+  <circle cx="460" cy="130" r="2"   fill="#A76D61" opacity="0.65"/>
   <circle cx="520" cy="60"  r="1.2" fill="#A58D66" opacity="0.5"/>
-  <circle cx="200" cy="120" r="1.5" fill="#7B9FD8" opacity="0.55"/>
+  <circle cx="200" cy="120" r="1.5" fill="#A76D61" opacity="0.55"/>
   <circle cx="380" cy="95"  r="1.8" fill="#A58D66" opacity="0.6"/>
-  <circle cx="80"  cy="180" r="1.3" fill="#7B9FD8" opacity="0.4"/>
-  <circle cx="540" cy="190" r="1.6" fill="#7B9FD8" opacity="0.45"/>
+  <circle cx="80"  cy="180" r="1.3" fill="#A76D61" opacity="0.4"/>
+  <circle cx="540" cy="190" r="1.6" fill="#A76D61" opacity="0.45"/>
   <!-- Arco grande -->
-  <circle cx="350" cy="400" r="280" fill="none" stroke="#7B9FD8" stroke-width="0.7" opacity="0.15"/>
-  <circle cx="350" cy="400" r="220" fill="none" stroke="#7B9FD8" stroke-width="0.5" opacity="0.1"/>
+  <circle cx="350" cy="400" r="280" fill="none" stroke="#A76D61" stroke-width="0.7" opacity="0.15"/>
+  <circle cx="350" cy="400" r="220" fill="none" stroke="#A76D61" stroke-width="0.5" opacity="0.1"/>
   <!-- Punto focal -->
-  <circle cx="420" cy="110" r="7" fill="none" stroke="#7B9FD8" stroke-width="1.5" opacity="0.5"/>
-  <circle cx="420" cy="110" r="3" fill="#7B9FD8" opacity="0.7"/>
+  <circle cx="420" cy="110" r="7" fill="none" stroke="#A76D61" stroke-width="1.5" opacity="0.5"/>
+  <circle cx="420" cy="110" r="3" fill="#A76D61" opacity="0.7"/>
   <!-- Deco -->
-  <line x1="40" y1="340" x2="200" y2="340" stroke="#7B9FD8" stroke-width="1" opacity="0.3"/>
-  <text x="40" y="370" font-family="Georgia, serif" font-size="11" fill="#7B9FD8" opacity="0.35" letter-spacing="4">JEWGAL ACADEMY</text>
+  <line x1="40" y1="340" x2="200" y2="340" stroke="#A76D61" stroke-width="1" opacity="0.3"/>
+  <text x="40" y="370" font-family="Georgia, serif" font-size="11" fill="#A76D61" opacity="0.35" letter-spacing="4">JEWGAL ACADEMY</text>
 </svg>

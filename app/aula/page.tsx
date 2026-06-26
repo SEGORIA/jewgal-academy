@@ -18,7 +18,7 @@ const ACH_ICONS: Record<AchievementIcon, LucideIcon> = {
 }
 
 const quickLinks = [
-  { href: "/aula/clases",      icon: Video,       label: "Próxima clase en vivo", sub: "Ver calendario y acceso Zoom",  accent: "#4B7E8C", glow: "rgba(75,126,140,.18)" },
+  { href: "/aula/clases",      icon: Video,       label: "Próxima clase en vivo", sub: "Ver calendario y acceso Zoom",  accent: "#A76D61", glow: "rgba(75,126,140,.18)" },
   { href: "/aula/materiales",  icon: BookOpen,    label: "Materiales del curso",  sub: "PDFs, guías y ejercicios",      accent: "#A58D66", glow: "rgba(165,141,102,.18)" },
   { href: "/aula/grabaciones", icon: PlayCircle,  label: "Grabaciones",           sub: "Revisá las clases pasadas",     accent: "#6BBF8E", glow: "rgba(107,191,142,.14)" },
 ]
@@ -26,7 +26,7 @@ const quickLinks = [
 const PROGRAM_META: Record<string, { icon: string; accent: string }> = {
   "life-coaching-integrativo": { icon: "⟡", accent: "#A58D66" },
   "joogal-adultos":            { icon: "✦", accent: "#6BBF8E" },
-  "joogalkids":                { icon: "★", accent: "#7B9FD8" },
+  "joogalkids":                { icon: "★", accent: "#A76D61" },
   "metodo-sholem":             { icon: "◈", accent: "#B07FD8" },
   "cabala-coach":              { icon: "❂", accent: "#CBB78B" },
 }

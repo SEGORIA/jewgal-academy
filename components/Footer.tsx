@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="foot-grid">
           {/* Brand */}
           <div className="foot-brand">
-            <BrandLogo height={66} />
+            <BrandLogo height={84} variant="square" />
             <p>Transformación consciente para una vida con propósito.</p>
             <div className="foot-social">
               <a href="https://instagram.com/devora_benchimol_" target="_blank" rel="noopener noreferrer" aria-label="Instagram">

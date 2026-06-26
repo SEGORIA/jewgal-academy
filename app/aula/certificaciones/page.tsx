@@ -17,7 +17,7 @@ type Enrollment = {
 const PROGRAM_META: Record<string, { icon: string; accent: string; desc: string }> = {
   "life-coaching-integrativo": { icon: "⟡", accent: "#A58D66", desc: "Life Coaching Integrativo" },
   "joogal-adultos":            { icon: "✦", accent: "#6BBF8E", desc: "Instructor Jewgal · Adultos" },
-  "joogalkids":                { icon: "★", accent: "#7B9FD8", desc: "Instructor Joogalkids" },
+  "joogalkids":                { icon: "★", accent: "#A76D61", desc: "Instructor Joogalkids" },
   "metodo-sholem":             { icon: "◈", accent: "#B07FD8", desc: "Método Sholem" },
   "cabala-coach":              { icon: "❂", accent: "#CBB78B", desc: "Cábala Coach" },
 }
@@ -96,7 +96,7 @@ export default function CertificacionesPage() {
               Al completar cualquiera de nuestros programas, recibirás aquí tu certificado oficial firmado por Devora Benchimol.
             </p>
             <Link href="/#programas"
-              style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "var(--gold)", color: "#081E29", textDecoration: "none", padding: "12px 28px", borderRadius: 10, fontSize: 13, fontWeight: 700, letterSpacing: ".08em" }}>
+              style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "var(--gold)", color: "#2C1F14", textDecoration: "none", padding: "12px 28px", borderRadius: 10, fontSize: 13, fontWeight: 700, letterSpacing: ".08em" }}>
               Explorar programas →
             </Link>
 

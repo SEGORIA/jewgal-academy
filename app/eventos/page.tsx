@@ -11,7 +11,7 @@ const EVENTS = [
     location: "Miami, Florida",
     desc: "Un fin de semana de reconexión profunda: movimiento Jewgal, meditación, círculos de coaching y sabiduría de la Cábala. Plazas muy limitadas.",
     accent: "#A58D66",
-    grad: "linear-gradient(135deg,var(--bg),#0a3d4f)",
+    grad: "linear-gradient(135deg,var(--bg),#3A2817)",
     spots: 20,
     price: "$450",
     icon: "◎",
@@ -34,8 +34,8 @@ const EVENTS = [
     type: "Intensivo presencial",
     location: "Miami, Florida",
     desc: "Dos días de inmersión en herramientas prácticas de Life Coaching Integrativo. Válido como módulo optativo para alumnos de la Academia.",
-    accent: "#7B9FD8",
-    grad: "linear-gradient(135deg,#101828,#1e2d52)",
+    accent: "#A76D61",
+    grad: "linear-gradient(135deg,#241A10,#3A2817)",
     spots: 30,
     price: "$280",
     icon: "⟡",
@@ -68,7 +68,7 @@ export default function EventosPage() {
 
       {/* ── HERO ── */}
       <section style={{
-        background: "linear-gradient(120deg,var(--navy-2) 0%,var(--navy) 55%,#0a3140 100%)",
+        background: "linear-gradient(120deg,var(--navy-2) 0%,var(--navy) 55%,#2A1D12 100%)",
         paddingTop: 150, paddingBottom: 90,
         position: "relative", overflow: "hidden",
         borderBottom: "1px solid var(--line-d)",

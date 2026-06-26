@@ -100,7 +100,7 @@ export default function HomePage() {
 
         {/* Circuit SVG — esquina inferior izquierda */}
         <svg className="circuit" viewBox="0 0 460 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <g stroke="#4B7E8C" strokeWidth="0.9" opacity="0.55">
+          <g stroke="#A76D61" strokeWidth="0.9" opacity="0.55">
             <path d="M20 240 L60 240 L60 200 L120 200 L120 160 L200 160 L200 120 L270 120"/>
             <path d="M20 215 L45 215 L45 175 L105 175 L105 135 L185 135"/>
             <path d="M140 250 L180 250 L180 210 L260 210 L260 175"/>
@@ -123,7 +123,7 @@ export default function HomePage() {
             <circle cx="270" cy="80"  r="3" opacity=".75"/>
             <circle cx="185" cy="95"  r="3" opacity=".75"/>
           </g>
-          <g fill="#4B7E8C">
+          <g fill="#A76D61">
             <circle cx="45"  cy="215" r="2.5" opacity=".8"/>
             <circle cx="105" cy="175" r="2.5" opacity=".8"/>
             <circle cx="185" cy="135" r="3" opacity=".85"/>

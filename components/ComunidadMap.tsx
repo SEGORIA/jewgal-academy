@@ -24,7 +24,7 @@ const COUNTRIES = [
     years: "Formación continua",
     tagline: "La sabiduría de la Cábala",
     desc: "En Jerusalén y Tel Aviv profundizó sus estudios de Cábala aplicada y pensamiento judío, integrando esta sabiduría milenaria como herramienta de coaching y transformación personal consciente.",
-    accent: "#4B7E8C",
+    accent: "#A76D61",
     stat: "∞",
     statLabel: "sabiduría ancestral",
   },
@@ -88,17 +88,17 @@ export default function ComunidadMap() {
         {/* Siluetas de continentes simplificadas */}
         <svg viewBox="0 0 500 320" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: .12 }} aria-hidden>
           {/* América del Norte */}
-          <path d="M60 30 C70 20 130 25 150 55 C165 80 155 110 140 130 C125 150 110 155 100 170 C90 185 85 195 75 190 C55 180 40 155 35 130 C28 100 35 55 60 30Z" fill="#4B7E8C" />
+          <path d="M60 30 C70 20 130 25 150 55 C165 80 155 110 140 130 C125 150 110 155 100 170 C90 185 85 195 75 190 C55 180 40 155 35 130 C28 100 35 55 60 30Z" fill="#A76D61" />
           {/* América del Sur */}
-          <path d="M95 200 C105 195 135 200 145 220 C158 245 155 280 140 300 C125 318 105 318 90 300 C75 280 72 245 85 220 C90 210 90 205 95 200Z" fill="#4B7E8C" />
+          <path d="M95 200 C105 195 135 200 145 220 C158 245 155 280 140 300 C125 318 105 318 90 300 C75 280 72 245 85 220 C90 210 90 205 95 200Z" fill="#A76D61" />
           {/* Europa */}
-          <path d="M230 30 C245 22 275 25 285 45 C295 65 285 85 270 95 C255 105 240 100 232 88 C220 72 218 48 230 30Z" fill="#4B7E8C" />
+          <path d="M230 30 C245 22 275 25 285 45 C295 65 285 85 270 95 C255 105 240 100 232 88 C220 72 218 48 230 30Z" fill="#A76D61" />
           {/* Oriente Medio (Israel) */}
-          <path d="M275 90 C285 85 300 88 308 100 C316 114 312 130 300 136 C288 142 276 135 270 122 C264 108 265 96 275 90Z" fill="#4B7E8C" />
+          <path d="M275 90 C285 85 300 88 308 100 C316 114 312 130 300 136 C288 142 276 135 270 122 C264 108 265 96 275 90Z" fill="#A76D61" />
           {/* África */}
-          <path d="M230 110 C248 103 280 108 292 128 C310 155 308 200 295 228 C280 256 255 265 235 255 C215 245 200 220 196 195 C190 165 195 135 210 118 C218 111 224 113 230 110Z" fill="#4B7E8C" />
+          <path d="M230 110 C248 103 280 108 292 128 C310 155 308 200 295 228 C280 256 255 265 235 255 C215 245 200 220 196 195 C190 165 195 135 210 118 C218 111 224 113 230 110Z" fill="#A76D61" />
           {/* Asia */}
-          <path d="M305 30 C340 20 420 30 450 60 C475 88 470 140 445 165 C415 192 370 195 340 178 C310 162 295 135 296 105 C297 75 300 38 305 30Z" fill="#4B7E8C" />
+          <path d="M305 30 C340 20 420 30 450 60 C475 88 470 140 445 165 C415 192 370 195 340 178 C310 162 295 135 296 105 C297 75 300 38 305 30Z" fill="#A76D61" />
         </svg>
 
         {/* Líneas conectoras entre países activos */}
