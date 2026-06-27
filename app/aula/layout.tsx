@@ -45,7 +45,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
       {/* ── SIDEBAR ── */}
       <aside style={{
         position: "fixed", insetBlock: 0, left: 0, zIndex: 40,
-        width: 230, background: "linear-gradient(180deg,var(--bg) 0%,#0a2535 100%)",
+        width: 230, background: "linear-gradient(180deg,var(--bg) 0%,var(--bg-3) 100%)",
         borderRight: "1px solid rgba(165,141,102,.12)",
         display: "flex", flexDirection: "column",
         transform: open ? "translateX(0)" : undefined,

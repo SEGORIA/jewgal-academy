@@ -137,10 +137,10 @@ export default function HomePage() {
         {/* Contenido izquierda */}
         <div className="wrap">
           <div className="hero-inner">
-            <span className="eyebrow">Transformación consciente</span>
+            <span className="eyebrow">Jewgal Academy</span>
             <h1>
-              <span className="ln"><span>Aprende. Integra.</span></span>
-              <span className="ln"><span><em>Transforma.</em></span></span>
+              <span className="ln"><span>Sabiduría para vivir.</span></span>
+              <span className="ln"><span><em>Liderazgo para transformar.</em></span></span>
             </h1>
             <p>Programas, certificaciones y experiencias diseñadas para desarrollar resiliencia, bienestar emocional y crecimiento espiritual. Únete a una comunidad global de aprendizaje con propósito.</p>
             <div className="hero-cta">

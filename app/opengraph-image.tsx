@@ -17,8 +17,8 @@ export default function OpengraphImage() {
           justifyContent: "center",
           padding: "80px 90px",
           background:
-            "radial-gradient(ellipse 70% 55% at 78% 30%, rgba(75,126,140,0.35), transparent 60%), linear-gradient(135deg, #06181f 0%, #0a2d3a 52%, #081e29 100%)",
-          color: "#eef4f4",
+            "radial-gradient(ellipse 70% 55% at 78% 30%, rgba(167,109,97,0.3), transparent 60%), linear-gradient(135deg, #1a0f08 0%, #2c1f14 52%, #3a2418 100%)",
+          color: "#F6F1E7",
           fontFamily: "sans-serif",
         }}
       >
@@ -31,12 +31,12 @@ export default function OpengraphImage() {
             marginBottom: 28,
           }}
         >
-          TRANSFORMACIÓN CONSCIENTE
+          SABIDURÍA PARA VIVIR · LIDERAZGO PARA TRANSFORMAR
         </div>
         <div style={{ display: "flex", fontSize: 98, fontWeight: 600, lineHeight: 1.02, marginBottom: 26 }}>
           Jewgal Academy
         </div>
-        <div style={{ display: "flex", fontSize: 38, color: "#9fb8bd" }}>
+        <div style={{ display: "flex", fontSize: 38, color: "#D8B98C" }}>
           Devora Benchimol · Master Coach Internacional
         </div>
         <div style={{ display: "flex", width: 150, height: 4, background: "#c9a86a", marginTop: 46 }} />

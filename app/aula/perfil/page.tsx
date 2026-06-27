@@ -163,7 +163,7 @@ export default function PerfilPage() {
                 whileHover={{ opacity: 1 }}
                 initial={{ opacity: 0 }}
                 style={{
-                  position: "absolute", inset: 0, background: "rgba(8,30,41,.7)",
+                  position: "absolute", inset: 0, background: "rgba(44,31,20,.72)",
                   display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4,
                 }}
               >

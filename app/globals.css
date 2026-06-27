@@ -434,9 +434,9 @@ nav.jnav.scrolled {
 .hero-fallback {
   position: absolute; inset: 0; z-index: 0;
   background:
-    radial-gradient(ellipse 70% 55% at 72% 32%, rgba(75,126,140,.28), transparent 62%),
-    radial-gradient(circle at 86% 74%, rgba(165,141,102,.14), transparent 55%),
-    linear-gradient(135deg, #06181f 0%, #0a2d3a 48%, #081e29 100%);
+    radial-gradient(ellipse 70% 55% at 72% 32%, rgba(167,109,97,.22), transparent 62%),
+    radial-gradient(circle at 86% 74%, rgba(196,159,114,.18), transparent 55%),
+    linear-gradient(135deg, #1a0f08 0%, #2c1f14 48%, #3a2418 100%);
 }
 /* Video del hero con fade-in elegante al estar listo */
 .hero-video {
@@ -447,15 +447,15 @@ nav.jnav.scrolled {
   pointer-events: none;
 }
 .hero-video.loaded { opacity: 1; }
-/* Dark-to-clear gradient overlay */
+/* Overlay izquierda → transparente — tonalidad café cálida */
 .hero-overlay {
   position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(
     to right,
-    rgba(8,30,41,.97) 0%,
-    rgba(8,30,41,.88) 36%,
-    rgba(8,30,41,.54) 60%,
-    rgba(8,30,41,.08) 100%
+    rgba(44,31,20,.96) 0%,
+    rgba(44,31,20,.86) 36%,
+    rgba(44,31,20,.52) 60%,
+    rgba(44,31,20,.06) 100%
   );
 }
 /* Circuit/network SVG (bottom-left) */
@@ -478,7 +478,7 @@ nav.jnav.scrolled {
   border-radius: 50%;
   border: 1px solid rgba(224,233,234,.7);
   display: flex; align-items: center; justify-content: center;
-  background: rgba(8,30,41,.3);
+  background: rgba(44,31,20,.35);
   backdrop-filter: blur(3px);
   transition: .4s; position: relative;
 }
@@ -556,7 +556,7 @@ nav.jnav.scrolled {
 .fund-photo .tag {
   position: absolute; left: 24px; bottom: 24px;
   font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: rgba(238,244,244,.9);
-  background: rgba(8,30,41,.62); backdrop-filter: blur(4px);
+  background: rgba(44,31,20,.70); backdrop-filter: blur(4px);
   padding: 8px 13px; border: 1px solid var(--line-d); border-radius: 4px;
 }
 .fund-photo .mono {
@@ -622,8 +622,8 @@ nav.jnav.scrolled {
 .map {
   position: relative; aspect-ratio: 2/1;
   border: 1px solid var(--line-d); border-radius: 10px; overflow: hidden;
-  background: #081e29;
-  background-image: radial-gradient(circle,rgba(192,213,214,.14) 1px,transparent 1.4px);
+  background: #2c1f14;
+  background-image: radial-gradient(circle,rgba(196,159,114,.16) 1px,transparent 1.4px);
   background-size: 13px 13px;
 }
 .map .pt { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: var(--gold-light); box-shadow: 0 0 10px var(--gold-light); animation: twinkle 3s ease-in-out infinite; }
@@ -649,7 +649,7 @@ nav.jnav.scrolled {
 .feat p { font-size: 15px; color: var(--on-dark); margin-bottom: 18px; }
 .feat .go { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); display: inline-flex; gap: 7px; align-items: center; }
 .campus { display: grid; grid-template-columns: .9fr 1.4fr; gap: 0; border: 1px solid var(--line-d); border-radius: 12px; overflow: hidden; margin-top: 30px; }
-.campus-l { padding: 48px 44px; background: linear-gradient(160deg,#0f3144,#081e29); display: flex; flex-direction: column; justify-content: center; }
+.campus-l { padding: 48px 44px; background: linear-gradient(160deg,#3a2418,#2c1f14); display: flex; flex-direction: column; justify-content: center; }
 .campus-l .eyebrow { margin-bottom: 14px; }
 .campus-l h3 { font-family: var(--serif); font-size: 34px; color: var(--text); font-weight: 500; line-height: 1.1; margin-bottom: 16px; }
 .campus-l p { color: var(--on-dark); font-size: 15px; margin-bottom: 26px; }
@@ -834,7 +834,7 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
    SECCIÓN AVALES Y CERTIFICACIONES (homepage)
 ───────────────────────────────────────────────── */
 .avales-section {
-  background: rgba(8,30,41,.7);
+  background: var(--bg-3);
   border-top: 1px solid rgba(165,141,102,.1);
   border-bottom: 1px solid rgba(165,141,102,.1);
   padding: 44px 0;
@@ -865,12 +865,12 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
   border: 1px solid rgba(165,141,102,.18);
   border-radius: 14px;
   background: #f7f3ec;     /* tarjeta clara: los logos a color se ven nítidos en ambos temas */
-  box-shadow: 0 6px 22px rgba(8,30,41,.18);
+  box-shadow: 0 6px 22px rgba(44,31,20,.14);
   transition: border-color .25s, box-shadow .3s, transform .3s;
 }
 .aval-item:hover {
   border-color: rgba(165,141,102,.45);
-  box-shadow: 0 10px 30px rgba(8,30,41,.26);
+  box-shadow: 0 10px 30px rgba(44,31,20,.22);
   transform: translateY(-3px);
 }
 .aval-logo {
