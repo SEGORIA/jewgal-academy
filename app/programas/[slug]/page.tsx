@@ -55,8 +55,8 @@ const META: Record<string, {
   },
   "joogal-adultos": {
     eyebrow: "Certificación Oficial",
-    grad: "linear-gradient(135deg,#0a1e15 0%,#0d2b1e 55%,#0e3824 100%)",
-    accent: "#6BBF8E",
+    grad: "linear-gradient(135deg,#1a0f08 0%,#0d2b1e 55%,#2c1f14 100%)",
+    accent: "#C49F72",
     icon: "✦",
     duration: "3 meses",
     modality: "Online · Híbrido",
@@ -274,7 +274,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
             <div style={{ textAlign: "right", flexShrink: 0 }}>
               <div style={{
                 fontFamily: "var(--serif)", fontWeight: 500,
-                fontSize: "clamp(36px,4vw,56px)", color: course.isFree ? "#6BBF8E" : meta.accent,
+                fontSize: "clamp(36px,4vw,56px)", color: course.isFree ? "#C49F72" : meta.accent,
                 lineHeight: 1,
               }}>
                 {priceLabel}
@@ -459,7 +459,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                     <span style={{ fontFamily: "var(--serif)", fontSize: 28, color: "var(--text)" }}>
                       {course.title}
                     </span>
-                    <span style={{ fontFamily: "var(--serif)", fontSize: 28, color: course.isFree ? "#6BBF8E" : meta.accent }}>
+                    <span style={{ fontFamily: "var(--serif)", fontSize: 28, color: course.isFree ? "#C49F72" : meta.accent }}>
                       {priceLabel}
                     </span>
                   </div>

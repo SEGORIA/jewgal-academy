@@ -26,8 +26,8 @@ const PROGRAMS = [
     desc: "Certifícate como instructor del Método Jewgal y desarrolla tu práctica como guía de bienestar y movimiento consciente.",
     price: "Gratis", free: true,
     duration: "3 meses", level: "Sin requisitos",
-    grad: "linear-gradient(135deg,#0a1e15 0%,#0e3824 100%)",
-    accent: "#6BBF8E", icon: "✦",
+    grad: "linear-gradient(135deg,#1a0f08 0%,#2c1f14 100%)",
+    accent: "#C49F72", icon: "✦",
     bullets: ["Certificado oficial Jewgal", "Manual completo incluido", "Mentoring grupal mensual"],
   },
   {
@@ -211,7 +211,7 @@ export default function AcademiaPage() {
                           <p style={{ color: "var(--on-dark)", fontSize: 13, lineHeight: 1.6 }}>{p.desc}</p>
                         </div>
                         <div style={{ marginTop: 20 }}>
-                          <div style={{ fontFamily: "var(--serif)", fontSize: p.free ? 14 : 22, color: p.free ? "#6BBF8E" : p.accent, marginBottom: 10 }}>
+                          <div style={{ fontFamily: "var(--serif)", fontSize: p.free ? 14 : 22, color: p.free ? "#C49F72" : p.accent, marginBottom: 10 }}>
                             {p.price}
                           </div>
                           <span style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: p.accent }}>Ver programa →</span>

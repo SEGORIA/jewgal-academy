@@ -175,7 +175,7 @@ export default function AdminDashboard() {
                   <div style={{ width: 8, height: 8, borderRadius: "50%", background: p.accent, flexShrink: 0 }} />
                   <span style={{ fontSize: 13, color: "var(--text-strong)" }}>{p.name}</span>
                 </div>
-                <span style={{ fontSize: 11, color: "var(--success)", background: "rgba(107,191,142,.1)", border: "1px solid rgba(107,191,142,.2)", borderRadius: 20, padding: "3px 10px", display: "inline-block" }}>
+                <span style={{ fontSize: 11, color: "var(--success)", background: "rgba(196,159,114,.1)", border: "1px solid rgba(196,159,114,.2)", borderRadius: 20, padding: "3px 10px", display: "inline-block" }}>
                   Activo
                 </span>
                 <span style={{ fontSize: 13, color: "var(--text-faint)" }}>

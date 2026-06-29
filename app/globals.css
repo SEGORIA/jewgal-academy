@@ -542,7 +542,7 @@ nav.jnav.scrolled {
 .pcard h3 { font-family: var(--serif); font-weight: 500; font-size: 21px; color: var(--ink); margin-bottom: 8px; line-height: 1.15; }
 .pcard p { font-size: 13.5px; color: var(--ink-soft); margin-bottom: 18px; }
 .pcard .price { display: block; margin: auto 0 14px; font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--gold-deep); }
-.pcard .price.free { color: #3f9b73; font-style: normal; font-weight: 500; font-family: var(--sans); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
+.pcard .price.free { color: #846145; font-style: normal; font-weight: 500; font-family: var(--sans); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
 .pcard .go { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-deep); display: inline-flex; align-items: center; gap: 7px; }
 .star { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
 .star svg { width: 58%; filter: drop-shadow(0 0 14px rgba(203,183,139,.6)); }

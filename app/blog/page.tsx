@@ -62,7 +62,7 @@ En nuestro Micro Curso de Cábala Coach, exploramos estas herramientas de manera
     title: "El Método Jewgal: cuando el movimiento se convierte en herramienta de transformación",
     excerpt: "Cómo integrar cuerpo, mente y emoción a través del movimiento consciente para acceder a estados de mayor bienestar y claridad.",
     readTime: "6 min",
-    accent: "#6BBF8E",
+    accent: "#C49F72",
     content: `Durante décadas, el mundo del desarrollo personal ignoró el cuerpo. Se llenaron páginas de libros sobre mentalidad, creencias y estrategias, pero muy pocos preguntaron: ¿qué pasa en el cuerpo cuando una persona se transforma? ¿Cómo el movimiento puede ser un catalizador del cambio?
 
 El Método Jewgal nació de estas preguntas. Es un sistema de movimiento consciente que integra principios del yoga, la expresión corporal, la danza terapéutica y el mindfulness en movimiento. No se trata de un ejercicio físico convencional, sino de una práctica que invita a habitar el cuerpo con presencia y a escuchar lo que el cuerpo tiene para decir.

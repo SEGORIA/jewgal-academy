@@ -33,7 +33,7 @@ export default function GrabacionesPage() {
       {/* Disponibles */}
       {available.length > 0 && (
         <section style={{ marginBottom: 40 }}>
-          <p style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "#6BBF8E", marginBottom: 16 }}>
+          <p style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "#C49F72", marginBottom: 16 }}>
             Disponibles
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>

@@ -19,7 +19,7 @@ const PROGRAMS_META: Record<string, { name: string; accent: string; price: numbe
 }
 
 const STATUS_LABEL: Record<string, { label: string; color: string; bg: string; border: string }> = {
-  completed: { label: "Completado", color: "var(--success)", bg: "rgba(107,191,142,.1)",  border: "rgba(107,191,142,.25)" },
+  completed: { label: "Completado", color: "var(--success)", bg: "rgba(196,159,114,.1)",  border: "rgba(196,159,114,.25)" },
   demo:      { label: "Demo",       color: "var(--gold)", bg: "rgba(165,141,102,.1)",  border: "rgba(165,141,102,.25)" },
   pending:   { label: "Pendiente",  color: "var(--warning)", bg: "rgba(251,191,36,.1)",   border: "rgba(251,191,36,.25)" },
 }

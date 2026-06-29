@@ -12,14 +12,14 @@ type Payment = {
 
 const PROGRAM_META: Record<string, { icon: string; accent: string }> = {
   "life-coaching-integrativo": { icon: "⟡", accent: "#A58D66" },
-  "joogal-adultos":            { icon: "✦", accent: "#6BBF8E" },
+  "joogal-adultos":            { icon: "✦", accent: "#C49F72" },
   "joogalkids":                { icon: "★", accent: "#A76D61" },
   "metodo-sholem":             { icon: "◈", accent: "#B07FD8" },
   "cabala-coach":              { icon: "❂", accent: "#CBB78B" },
 }
 
 const STATUS = {
-  completed: { label: "Completado", color: "#6BBF8E", bg: "rgba(107,191,142,.1)",  border: "rgba(107,191,142,.25)", icon: CheckCircle2 },
+  completed: { label: "Completado", color: "#C49F72", bg: "rgba(196,159,114,.1)",  border: "rgba(196,159,114,.25)", icon: CheckCircle2 },
   demo:      { label: "Demo",       color: "var(--gold)", bg: "rgba(165,141,102,.1)",  border: "rgba(165,141,102,.25)", icon: CheckCircle2 },
   pending:   { label: "Pendiente",  color: "var(--warning)", bg: "rgba(251,191,36,.08)",  border: "rgba(251,191,36,.25)",  icon: Clock },
 }
@@ -66,7 +66,7 @@ export default function PagosPage() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(170px,1fr))", gap: 14, marginBottom: 28 }}>
         {[
           { label: "Programas pagados", value: String(payments.filter((p) => p.status !== "pending").length), accent: "#A58D66" },
-          { label: "Total invertido",   value: loading ? "—" : `$${total.toLocaleString("es")}`,               accent: "#6BBF8E" },
+          { label: "Total invertido",   value: loading ? "—" : `$${total.toLocaleString("es")}`,               accent: "#C49F72" },
           { label: "Pagos pendientes",  value: String(pending.length),                                          accent: pending.length > 0 ? "var(--warning)" : "var(--text-dim)" },
         ].map(({ label, value, accent }) => (
           <div key={label} style={{ ...card, padding: "20px 18px" }}>

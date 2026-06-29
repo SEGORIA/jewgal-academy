@@ -341,7 +341,7 @@ export default function AlumnosPage() {
                         const totalH = en.course.totalHours
                         const done = !!en.completedAt
                         return (
-                          <div key={en.id} style={{ padding: "13px 14px", borderRadius: 10, background: done ? "rgba(107,191,142,.06)" : "var(--surface)", border: `1px solid ${done ? "rgba(107,191,142,.2)" : "rgba(255,255,255,.07)"}` }}>
+                          <div key={en.id} style={{ padding: "13px 14px", borderRadius: 10, background: done ? "rgba(196,159,114,.06)" : "var(--surface)", border: `1px solid ${done ? "rgba(196,159,114,.2)" : "rgba(255,255,255,.07)"}` }}>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: 10 }}>
                               <p style={{ fontSize: 13, color: "var(--text)", fontWeight: 600 }}>{en.course.title}</p>
                               {done ? (

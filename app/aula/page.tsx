@@ -20,12 +20,12 @@ const ACH_ICONS: Record<AchievementIcon, LucideIcon> = {
 const quickLinks = [
   { href: "/aula/clases",      icon: Video,       label: "Próxima clase en vivo", sub: "Ver calendario y acceso Zoom",  accent: "#A76D61", glow: "rgba(75,126,140,.18)" },
   { href: "/aula/materiales",  icon: BookOpen,    label: "Materiales del curso",  sub: "PDFs, guías y ejercicios",      accent: "#A58D66", glow: "rgba(165,141,102,.18)" },
-  { href: "/aula/grabaciones", icon: PlayCircle,  label: "Grabaciones",           sub: "Revisá las clases pasadas",     accent: "#6BBF8E", glow: "rgba(107,191,142,.14)" },
+  { href: "/aula/grabaciones", icon: PlayCircle,  label: "Grabaciones",           sub: "Revisá las clases pasadas",     accent: "#C49F72", glow: "rgba(196,159,114,.14)" },
 ]
 
 const PROGRAM_META: Record<string, { icon: string; accent: string }> = {
   "life-coaching-integrativo": { icon: "⟡", accent: "#A58D66" },
-  "joogal-adultos":            { icon: "✦", accent: "#6BBF8E" },
+  "joogal-adultos":            { icon: "✦", accent: "#C49F72" },
   "joogalkids":                { icon: "★", accent: "#A76D61" },
   "metodo-sholem":             { icon: "◈", accent: "#B07FD8" },
   "cabala-coach":              { icon: "❂", accent: "#CBB78B" },
@@ -112,13 +112,13 @@ export default function AulaDashboard() {
             transition={{ type: "spring", stiffness: 360, damping: 28 }}
             style={{
               display: "flex", alignItems: "center", gap: 14,
-              background: "rgba(107,191,142,.1)",
-              border: "1px solid rgba(107,191,142,.35)",
+              background: "rgba(196,159,114,.1)",
+              border: "1px solid rgba(196,159,114,.35)",
               borderRadius: 12, padding: "14px 20px",
               marginBottom: 28,
             }}
           >
-            <CheckCircle size={20} style={{ color: "#6BBF8E", flexShrink: 0 }} />
+            <CheckCircle size={20} style={{ color: "#C49F72", flexShrink: 0 }} />
             <div>
               <p style={{ fontWeight: 600, color: "var(--text)", fontSize: 14, marginBottom: 2 }}>
                 ¡Inscripción confirmada!

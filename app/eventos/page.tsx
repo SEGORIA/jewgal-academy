@@ -46,8 +46,8 @@ const EVENTS = [
     type: "Evento presencial",
     location: "Medellín, Colombia",
     desc: "Un encuentro de transformación y movimiento consciente con Devora Benchimol en Colombia: talleres de Jewgal, círculos de coaching y sabiduría de la Cábala. Plazas limitadas.",
-    accent: "#6BBF8E",
-    grad: "linear-gradient(135deg,#0a1e15,#0e3824)",
+    accent: "#C49F72",
+    grad: "linear-gradient(135deg,#1a0f08,#2c1f14)",
     spots: 40,
     price: "Por confirmar",
     icon: "✦",
@@ -124,7 +124,7 @@ export default function EventosPage() {
                     <div style={{ fontSize: 10, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 4 }}>
                       {ev.spots} plazas
                     </div>
-                    <div style={{ fontFamily: "var(--serif)", fontSize: 28, color: ev.price === "Gratis" ? "#6BBF8E" : ev.accent, marginBottom: 16 }}>
+                    <div style={{ fontFamily: "var(--serif)", fontSize: 28, color: ev.price === "Gratis" ? "#C49F72" : ev.accent, marginBottom: 16 }}>
                       {ev.price}
                     </div>
                     <Link href="/contacto" className="btn solid" style={{ fontSize: 11, padding: "10px 20px" }}>

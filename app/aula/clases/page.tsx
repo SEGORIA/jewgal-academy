@@ -138,7 +138,7 @@ export default function ClasesPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {past.map((s) => (
               <div key={s.id} style={{ ...card, display: "flex", alignItems: "center", gap: 14, opacity: 0.6, padding: "16px 22px" }}>
-                <CheckCircle2 size={16} style={{ color: "#6BBF8E", flexShrink: 0 }} />
+                <CheckCircle2 size={16} style={{ color: "#C49F72", flexShrink: 0 }} />
                 <div style={{ flex: 1 }}>
                   <p style={{ fontWeight: 500, color: "var(--text)", fontSize: 14 }}>{s.title}</p>
                   <p style={{ fontSize: 12, color: "var(--text-faint)", marginTop: 2 }}>{formatDate(s.scheduledAt)} · Completada</p>
