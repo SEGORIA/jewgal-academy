@@ -22,8 +22,14 @@ export default function Navbar() {
   const [hovered, setHovered]   = useState<string | null>(null)
   const pathname                = usePathname()
 
-  const { scrollYProgress } = useScroll()
+  const { scrollYProgress, scrollY } = useScroll()
   const barScaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 })
+
+  const [showTop, setShowTop] = useState(false)
+  useEffect(() => {
+    const unsub = scrollY.on("change", (v) => setShowTop(v > 400))
+    return unsub
+  }, [scrollY])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -53,6 +59,35 @@ export default function Navbar() {
           zIndex: 200,
         }}
       />
+
+      {/* Botón volver al inicio */}
+      <AnimatePresence>
+        {showTop && (
+          <motion.button
+            key="back-to-top"
+            initial={{ opacity: 0, scale: 0.8, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 16 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ scale: 1.12 }}
+            whileTap={{ scale: 0.92 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            aria-label="Volver al inicio"
+            style={{
+              position: "fixed", bottom: 32, right: 28, zIndex: 90,
+              width: 44, height: 44, borderRadius: "50%",
+              background: "linear-gradient(135deg,#A76D61,#C49F72)",
+              border: "none", cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              boxShadow: "0 8px 28px rgba(167,109,97,.42)",
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 19V5M5 12l7-7 7 7"/>
+            </svg>
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       <nav className={`jnav${scrolled ? " scrolled" : ""}${pathname === "/" ? " over-hero" : ""}`} id="nav" aria-label="Navegación principal">
         <Link href="/" aria-label="Jewgal Academy — Inicio">

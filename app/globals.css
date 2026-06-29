@@ -501,6 +501,23 @@ nav.jnav.scrolled {
   animation: ripple 2.6s ease-out infinite;
 }
 .play .circle svg { fill: var(--aqua); margin-left: 4px; }
+
+/* Shimmer dorado en el hero h1 */
+@keyframes text-shimmer {
+  from { background-position: -300% center; }
+  to   { background-position:  300% center; }
+}
+.shimmer-word {
+  color: #C49F72;
+  background: linear-gradient(90deg,#B89460 0%,#DEC880 30%,#F5E4B0 50%,#DEC880 70%,#B89460 100%);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-shimmer 4s linear infinite;
+  animation-delay: 1.8s;
+  display: inline-block;
+}
 .play span { font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: var(--aqua); text-align: center; }
 .hero-inner { position: relative; z-index: 4; max-width: 560px; }
 .hero-inner .eyebrow { opacity: 0; animation: fadeUp .9s .2s forwards; display: block; margin-bottom: 24px; }

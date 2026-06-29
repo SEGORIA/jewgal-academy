@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
 import { TiltCard } from "@/components/motion/TiltCard"
-import { motion } from "framer-motion"
+import { motion, useScroll, useTransform } from "framer-motion"
 
 const PROGRAMS = [
   {
@@ -82,6 +82,9 @@ export default function AcademiaPage() {
     return () => window.removeEventListener("resize", check)
   }, [])
 
+  const { scrollY } = useScroll()
+  const photoY = useTransform(scrollY, [0, 800], [0, -100])
+
   return (
     <>
       <RevealInit />
@@ -95,10 +98,10 @@ export default function AcademiaPage() {
         borderBottom: "1px solid var(--line-d)",
       }}>
         {/* Foto de la comunidad, fundida con el fondo del hero */}
-        <div className="academia-hero-photo" style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "52%", zIndex: 0, display: isMobile ? "none" : undefined }}>
+        <motion.div className="academia-hero-photo" style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "52%", zIndex: 0, display: isMobile ? "none" : undefined, y: photoY }}>
           <img src="/brand/devora-grupo.webp" alt="Devora con su comunidad de alumnos" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 28%" }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, var(--bg-2) 2%, rgba(0,0,0,0) 58%)" }} />
-        </div>
+        </motion.div>
         <div className="wrap" style={{ position: "relative", zIndex: 2 }}>
           <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Jewgal Academy</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(46px,6.5vw,82px)", color: "var(--text)", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}>
