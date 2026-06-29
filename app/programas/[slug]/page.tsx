@@ -252,7 +252,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
             Todos los programas
           </Link>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 40, alignItems: "end" }}>
+          <div className="prog-hero-grid">
             <div>
               <span className="eyebrow" style={{ display: "block", marginBottom: 16, color: meta.accent }}>{meta.eyebrow}</span>
               <div style={{ fontSize: 52, color: meta.accent, lineHeight: 1, marginBottom: 12, fontFamily: "var(--serif)" }}>
@@ -311,8 +311,8 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
 
       {/* ── CONTENIDO + CHECKOUT ── */}
       <section style={{ background: "var(--navy)" }}>
-        <div className="wrap" style={{ padding: "80px 36px" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 420px", gap: 64, alignItems: "start" }}>
+        <div className="wrap prog-main-wrap">
+          <div className="prog-main-grid">
 
             {/* ── Columna izquierda ── */}
             <div>
@@ -386,7 +386,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                 }}>
                   Qué incluye
                 </h2>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 20px" }}>
+                <div className="prog-includes-grid">
                   {meta.includes.map((item) => (
                     <div key={item} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, color: "var(--on-dark)" }}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={meta.accent} strokeWidth="2">

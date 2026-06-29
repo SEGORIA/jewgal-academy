@@ -983,4 +983,31 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
   .wa-fab { padding: 13px; }
   .wa-fab-label { display: none; }
 }
+
+/* ─── Página de programa: grids responsive ─── */
+.prog-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: end;
+}
+.prog-main-wrap { padding: 80px 36px; }
+.prog-main-grid {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 64px;
+  align-items: start;
+}
+.prog-includes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
+}
+@media (max-width: 767px) {
+  .prog-hero-grid                  { grid-template-columns: 1fr; }
+  .prog-hero-grid > div:last-child { text-align: left; }
+  .prog-main-wrap                  { padding: 48px 20px; }
+  .prog-main-grid                  { grid-template-columns: 1fr; gap: 40px; }
+  .prog-includes-grid              { grid-template-columns: 1fr; }
+}
 @media (prefers-reduced-motion: reduce) { .wa-fab { transition: none; } }
