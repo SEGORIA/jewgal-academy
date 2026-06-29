@@ -157,81 +157,125 @@ export default function AcademiaPage() {
             </Link>
           </div>
 
-          {/* Cards en grid 2+3 o 1 por fila en el primero */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            {/* Primera card — ancha */}
-            <TiltCard radius={10} intensity={4}>
-            <div className="reveal" style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", borderRadius: 10, overflow: "hidden", border: "1px solid var(--line-d)" }}>
-              <div className="tone-dark" style={{ background: PROGRAMS[0].grad, padding: isMobile ? "32px 24px" : "52px 44px", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: isMobile ? "auto" : 320 }}>
-                <div>
-                  <div style={{ fontSize: 44, color: PROGRAMS[0].accent, fontFamily: "var(--serif)", marginBottom: 8, lineHeight: 1 }}>{PROGRAMS[0].icon}</div>
-                  <span style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: PROGRAMS[0].accent, display: "block", marginBottom: 12 }}>{PROGRAMS[0].tag}</span>
-                  <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 32, color: "var(--text)", lineHeight: 1.1, marginBottom: 16 }}>{PROGRAMS[0].title}</h3>
-                  <p style={{ color: "var(--on-dark)", fontSize: 15, lineHeight: 1.65, maxWidth: 360 }}>{PROGRAMS[0].desc}</p>
-                </div>
-                <Link href={`/programas/${PROGRAMS[0].slug}`} className="btn" style={{ alignSelf: "flex-start", marginTop: 24, borderColor: PROGRAMS[0].accent, color: PROGRAMS[0].accent }}>
-                  Ver programa →
-                </Link>
-              </div>
-              <div style={{ background: "var(--navy-2)", padding: isMobile ? "28px 24px" : "52px 44px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                  {PROGRAMS[0].bullets.map((b) => (
-                    <div key={b} style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 14, color: "var(--on-dark)" }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={PROGRAMS[0].accent} strokeWidth="2"><path d="M20 6L9 17l-5-5"/></svg>
-                      {b}
-                    </div>
-                  ))}
-                </div>
-                <div style={{ marginTop: 32 }}>
-                  <div style={{ fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 6 }}>Inversión</div>
-                  <div style={{ fontFamily: "var(--serif)", fontSize: 34, color: "var(--text)" }}>{PROGRAMS[0].price}</div>
-                  <div style={{ display: "flex", gap: 14, marginTop: 14, flexWrap: "wrap" }}>
-                    <span style={{ fontSize: 11, border: "1px solid var(--line-d)", borderRadius: 16, padding: "5px 13px", color: "var(--on-dark)" }}>⏱ {PROGRAMS[0].duration}</span>
-                    <span style={{ fontSize: 11, border: "1px solid var(--line-d)", borderRadius: 16, padding: "5px 13px", color: "var(--on-dark)" }}>◈ {PROGRAMS[0].level}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            </TiltCard>
-
-            {/* Resto de cards con TiltCard + stagger */}
-            <motion.div
-              initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-40px" }}
-              variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
-              style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: 20 }}
-            >
-              {PROGRAMS.slice(1).map((p) => (
-                <motion.div key={p.slug}
-                  variants={{ hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16,1,0.3,1] } } }}
-                  style={{ display: "flex", flexDirection: "column" }}
-                >
-                  <TiltCard radius={8} style={{ flex: 1, height: "100%" }}>
-                    <Link href={`/programas/${p.slug}`} style={{ textDecoration: "none", display: "flex", flexDirection: "column", height: "100%" }}>
-                      <div className="tone-dark" style={{
-                        background: p.grad, borderRadius: 8, padding: "34px 28px",
-                        border: "1px solid var(--surface-2)",
-                        display: "flex", flexDirection: "column", justifyContent: "space-between",
-                        flex: 1, cursor: "pointer",
+          {/* Grid unificado: todas las cards al mismo nivel de lujo */}
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-40px" }}
+            variants={{ visible: { transition: { staggerChildren: 0.09 } } }}
+            style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fill,minmax(280px,1fr))", gap: 22 }}
+          >
+            {PROGRAMS.map((p, i) => (
+              <motion.div key={p.slug}
+                variants={{ hidden: { opacity: 0, y: 36 }, visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.16,1,0.3,1] } } }}
+                style={{ gridColumn: i === 0 && !isMobile ? "1 / -1" : undefined }}
+              >
+                <TiltCard radius={10} intensity={i === 0 ? 3 : 5} style={{ height: "100%" }}>
+                  <Link href={`/programas/${p.slug}`} style={{ textDecoration: "none", display: "block", height: "100%" }}>
+                    <motion.div
+                      whileHover={{ borderColor: p.accent, boxShadow: `0 28px 64px -22px ${p.accent}45` }}
+                      transition={{ duration: 0.32 }}
+                      className="tone-dark"
+                      style={{
+                        background: p.grad,
+                        borderRadius: 10,
+                        border: "1px solid rgba(255,255,255,0.06)",
+                        overflow: "hidden",
+                        position: "relative",
+                        display: "grid",
+                        gridTemplateColumns: i === 0 && !isMobile ? "1fr 1fr" : "1fr",
+                        minHeight: i === 0 ? (isMobile ? "auto" : 320) : 340,
+                        height: "100%",
+                      }}
+                    >
+                      {/* Watermark número de fondo */}
+                      <div aria-hidden style={{
+                        position: "absolute",
+                        bottom: i === 0 ? undefined : -16, top: i === 0 ? -20 : undefined,
+                        right: 18,
+                        fontFamily: "var(--serif)", fontSize: i === 0 ? 160 : 110, fontWeight: 700,
+                        color: p.accent, opacity: 0.055, lineHeight: 1,
+                        userSelect: "none", pointerEvents: "none", zIndex: 0,
                       }}>
+                        {String(i + 1).padStart(2, "0")}
+                      </div>
+
+                      {/* Panel principal */}
+                      <div style={{
+                        padding: i === 0 ? (isMobile ? "36px 28px" : "52px 48px") : "36px 32px",
+                        display: "flex", flexDirection: "column", justifyContent: "space-between",
+                        position: "relative", zIndex: 1,
+                      }}>
+                        {/* Header */}
                         <div>
-                          <div style={{ fontSize: 30, color: p.accent, marginBottom: 12, lineHeight: 1 }}>{p.icon}</div>
-                          <span style={{ fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: p.accent, display: "block", marginBottom: 10 }}>{p.tag}</span>
-                          <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--text)", lineHeight: 1.15, marginBottom: 10 }}>{p.title}</h3>
-                          <p style={{ color: "var(--on-dark)", fontSize: 13, lineHeight: 1.6 }}>{p.desc}</p>
-                        </div>
-                        <div style={{ marginTop: 20 }}>
-                          <div style={{ fontFamily: "var(--serif)", fontSize: p.free ? 14 : 22, color: p.free ? "#C49F72" : p.accent, marginBottom: 10 }}>
-                            {p.price}
+                          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20 }}>
+                            <div style={{ fontSize: i === 0 ? 48 : 38, color: p.accent, lineHeight: 1, fontFamily: "var(--serif)" }}>{p.icon}</div>
+                            {p.free && (
+                              <span style={{
+                                fontSize: 9, letterSpacing: ".18em", textTransform: "uppercase",
+                                background: `${p.accent}18`, color: p.accent,
+                                padding: "5px 12px", borderRadius: 14, border: `1px solid ${p.accent}35`,
+                                whiteSpace: "nowrap",
+                              }}>Gratuito</span>
+                            )}
                           </div>
-                          <span style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: p.accent }}>Ver programa →</span>
+                          <span style={{ fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: p.accent, display: "block", marginBottom: 12 }}>{p.tag}</span>
+                          <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: i === 0 ? 32 : 22, color: "var(--text)", lineHeight: 1.1, marginBottom: 14 }}>{p.title}</h3>
+                          <p style={{ color: "var(--on-dark)", fontSize: i === 0 ? 15 : 13.5, lineHeight: 1.68, maxWidth: i === 0 ? 380 : undefined }}>{p.desc}</p>
+                        </div>
+
+                        {/* Footer */}
+                        <div style={{ marginTop: 28 }}>
+                          <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+                            <span style={{ fontSize: 10, border: "1px solid rgba(165,141,102,.2)", borderRadius: 16, padding: "4px 12px", color: "var(--on-dark)" }}>⏱ {p.duration}</span>
+                            <span style={{ fontSize: 10, border: "1px solid rgba(165,141,102,.2)", borderRadius: 16, padding: "4px 12px", color: "var(--on-dark)" }}>◈ {p.level}</span>
+                          </div>
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+                            <div style={{
+                              fontFamily: p.free ? "var(--sans)" : "var(--serif)",
+                              fontSize: p.free ? 12 : (i === 0 ? 36 : 26),
+                              color: "var(--text)",
+                              letterSpacing: p.free ? ".08em" : undefined,
+                              textTransform: p.free ? "uppercase" : undefined,
+                            }}>
+                              {p.price}
+                            </div>
+                            <span style={{
+                              fontSize: 10, letterSpacing: ".16em", textTransform: "uppercase",
+                              color: p.accent, border: `1px solid ${p.accent}50`,
+                              borderRadius: 3, padding: "8px 16px", flexShrink: 0,
+                            }}>
+                              Ver programa →
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </Link>
-                  </TiltCard>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
+
+                      {/* Panel derecho — solo en la card destacada en desktop */}
+                      {i === 0 && !isMobile && (
+                        <div style={{ background: "rgba(0,0,0,.18)", backdropFilter: "blur(2px)", padding: "52px 44px", display: "flex", flexDirection: "column", justifyContent: "space-between", borderLeft: "1px solid rgba(255,255,255,.06)", position: "relative", zIndex: 1 }}>
+                          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                            {p.bullets.map((b) => (
+                              <div key={b} style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 14, color: "var(--on-dark)" }}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={p.accent} strokeWidth="2"><path d="M20 6L9 17l-5-5"/></svg>
+                                {b}
+                              </div>
+                            ))}
+                          </div>
+                          <div>
+                            <div style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 8 }}>Programa certificado por</div>
+                            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                              {["IDC", "CEL", "FGU"].map((cert) => (
+                                <span key={cert} style={{ fontSize: 10, letterSpacing: ".12em", border: `1px solid ${p.accent}40`, borderRadius: 3, padding: "4px 10px", color: p.accent }}>{cert}</span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </motion.div>
+                  </Link>
+                </TiltCard>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
