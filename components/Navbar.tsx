@@ -5,7 +5,7 @@ import Link from "next/link"
 import BrandLogo from "@/components/BrandLogo"
 import { useSession } from "next-auth/react"
 import { usePathname } from "next/navigation"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion"
 
 const NAV_LINKS = [
   { href: "/",             label: "Inicio" },
@@ -21,6 +21,9 @@ export default function Navbar() {
   const [open, setOpen]         = useState(false)
   const [hovered, setHovered]   = useState<string | null>(null)
   const pathname                = usePathname()
+
+  const { scrollYProgress } = useScroll()
+  const barScaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 })
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -38,6 +41,19 @@ export default function Navbar() {
 
   return (
     <>
+      {/* Barra de progreso de scroll */}
+      <motion.div
+        aria-hidden
+        style={{
+          position: "fixed", top: 0, left: 0, right: 0,
+          height: 2,
+          background: "linear-gradient(90deg,#A76D61,#C49F72,#E0CCB1)",
+          transformOrigin: "0%",
+          scaleX: barScaleX,
+          zIndex: 200,
+        }}
+      />
+
       <nav className={`jnav${scrolled ? " scrolled" : ""}${pathname === "/" ? " over-hero" : ""}`} id="nav" aria-label="Navegación principal">
         <Link href="/" aria-label="Jewgal Academy — Inicio">
           <BrandLogo height={50} variant="square" priority />

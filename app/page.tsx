@@ -40,8 +40,10 @@ const PROGRAMS = [
 ]
 
 export default function HomePage() {
-  const rutaRef = useRef<HTMLDivElement>(null)
-  const rutaInView = useInView(rutaRef, { once: true, margin: "-80px" })
+  const rutaRef   = useRef<HTMLDivElement>(null)
+  const rutaInView  = useInView(rutaRef,   { once: true, margin: "-80px" })
+  const statsRef  = useRef<HTMLDivElement>(null)
+  const statsInView = useInView(statsRef,  { once: true, margin: "-60px" })
 
   /* ── Animaciones: IntersectionObserver + count-up + progress bars ── */
   useEffect(() => {
@@ -190,35 +192,42 @@ export default function HomePage() {
       {/* ── STATS ── */}
       <section className="stats">
         <div className="wrap">
-          <div className="stats-grid">
-            <div className="stat reveal">
-              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" strokeWidth="1.3">
-                <path d="M2 8l10-5 10 5-10 5z"/><path d="M6 10v5c0 1 3 3 6 3s6-2 6-3v-5"/>
-              </svg>
-              <div><div className="num" data-to="40">0</div><div className="lbl">Años de<br/>trayectoria</div></div>
-            </div>
-            <div className="stat reveal">
-              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" strokeWidth="1.3">
-                <circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>
-              </svg>
-              <div><div className="num" data-to="4">0</div><div className="lbl">Países: Argentina,<br/>Israel, Colombia, EE.UU.</div></div>
-            </div>
-            <div className="stat reveal">
-              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" strokeWidth="1.3">
-                <circle cx="12" cy="9" r="5"/><path d="M9 13l-1 8 4-2 4 2-1-8"/>
-              </svg>
-              <div><div className="num" data-to="5">0</div><div className="lbl">Programas y<br/>certificaciones</div></div>
-            </div>
-            <div className="stat reveal">
-              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" strokeWidth="1.3">
-                <circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/>
-                <path d="M2 20c0-3 3-5 6-5s6 2 6 5M14 15c3 0 6 2 6 5"/>
-              </svg>
-              <div>
-                <div className="num serif" style={{ fontSize: 30 }}>501(c)(3)</div>
-                <div className="lbl">Fundación Sholem<br/>Corazón Valiente</div>
+          <div className="stats-grid" ref={statsRef}>
+            {([
+              { to: 40,   lbl: ["Años de", "trayectoria"],                         ring: 0.82, delay: 0.05, icon: <><path d="M2 8l10-5 10 5-10 5z"/><path d="M6 10v5c0 1 3 3 6 3s6-2 6-3v-5"/></> },
+              { to: 4,    lbl: ["Países: Argentina,", "Israel, Colombia, EE.UU."], ring: 0.45, delay: 0.18, icon: <><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></> },
+              { to: 5,    lbl: ["Programas y", "certificaciones"],                  ring: 0.55, delay: 0.31, icon: <><circle cx="12" cy="9" r="5"/><path d="M9 13l-1 8 4-2 4 2-1-8"/></> },
+              { to: null, lbl: ["Fundación Sholem", "Corazón Valiente"],            ring: 1.0,  delay: 0.44, icon: <><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2 20c0-3 3-5 6-5s6 2 6 5M14 15c3 0 6 2 6 5"/></> },
+            ] as const).map((s, i) => (
+              <div key={i} className="stat reveal">
+                {/* Icono + anillo SVG animado */}
+                <div style={{ position: "relative", width: 56, height: 56, flexShrink: 0 }}>
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" strokeWidth="1.3"
+                    style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)" }}>
+                    {s.icon}
+                  </svg>
+                  <svg width="56" height="56" viewBox="0 0 56 56" style={{ position: "absolute", inset: 0 }} aria-hidden>
+                    <circle cx="28" cy="28" r="24" fill="none" stroke="rgba(196,159,114,.12)" strokeWidth="1.2"/>
+                    <g transform="rotate(-90 28 28)">
+                      <motion.circle
+                        cx="28" cy="28" r="24" fill="none"
+                        stroke="var(--gold)" strokeWidth="1.2" strokeLinecap="round"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={statsInView ? { pathLength: s.ring, opacity: 0.72 } : {}}
+                        transition={{ duration: 1.9, ease: [0.16,1,0.3,1], delay: s.delay }}
+                      />
+                    </g>
+                  </svg>
+                </div>
+                <div>
+                  {s.to != null
+                    ? <div className="num" data-to={s.to}>0</div>
+                    : <div className="num serif" style={{ fontSize: 30 }}>501(c)(3)</div>
+                  }
+                  <div className="lbl">{s.lbl[0]}<br/>{s.lbl[1]}</div>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
