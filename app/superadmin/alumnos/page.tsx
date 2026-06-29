@@ -119,9 +119,12 @@ export default function AlumnosPage() {
   const totalPaid = (s: Student) =>
     s.payments.reduce((sum, p) => sum + (p.status !== "pending" ? p.amount : 0), 0)
 
+  const totalPaidAll = students.reduce((sum, s) => sum + s.payments.reduce((a, p) => a + (p.status !== "pending" ? p.amount : 0), 0), 0)
+  const withEnrollment = students.filter((s) => s.enrollments.length > 0).length
+
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
         <div>
           <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>Admin</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Alumnos</h1>
@@ -130,10 +133,40 @@ export default function AlumnosPage() {
           </p>
         </div>
         <button onClick={() => { setModal({ type: "add" }); setError("") }}
-          style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, letterSpacing: ".08em", cursor: "pointer" }}>
-          <UserPlus size={16} /> Agregar alumno
+          style={{
+            display: "flex", alignItems: "center", gap: 8,
+            background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+            color: "#1A0E06", border: "none", borderRadius: 10, padding: "12px 22px",
+            fontSize: 13, fontWeight: 700, letterSpacing: ".06em", cursor: "pointer",
+            boxShadow: "0 6px 20px rgba(167,109,97,.38)",
+            transition: "box-shadow .2s, transform .15s",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 10px 28px rgba(167,109,97,.52)"; e.currentTarget.style.transform = "translateY(-1px)" }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "0 6px 20px rgba(167,109,97,.38)"; e.currentTarget.style.transform = "none" }}
+        >
+          <UserPlus size={15} /> Agregar alumno
         </button>
       </div>
+
+      {/* KPI pills */}
+      {!loading && (
+        <div style={{ display: "flex", gap: 12, marginBottom: 24, flexWrap: "wrap" }}>
+          {[
+            { label: "Total alumnos",     value: students.length,     color: "var(--gold)" },
+            { label: "Con inscripción",   value: withEnrollment,      color: "#A76D61" },
+            { label: "Ingresos totales",  value: totalPaidAll > 0 ? `$${totalPaidAll.toLocaleString("es")}` : "—", color: "var(--success)" },
+          ].map(({ label, value, color }) => (
+            <div key={label} style={{
+              background: "var(--surface)", border: "1px solid rgba(165,141,102,.13)",
+              borderRadius: 10, padding: "12px 18px",
+              display: "flex", alignItems: "center", gap: 10,
+            }}>
+              <span style={{ fontFamily: "var(--serif)", fontSize: 22, fontWeight: 600, color }}>{value}</span>
+              <span style={{ fontSize: 12, color: "var(--text-faint)" }}>{label}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Filtro de búsqueda */}
       <div style={{ ...card, padding: "14px 18px", marginBottom: 20 }}>

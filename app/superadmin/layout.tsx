@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation"
 import {
   LayoutDashboard, Users, BookOpen, FileText,
   CreditCard, Settings, Globe, Menu, X, LogOut,
-  ChevronRight, Newspaper, Shield, ClipboardCheck,
+  ChevronRight, Newspaper, Shield, ClipboardCheck, ExternalLink,
 } from "lucide-react"
 import { signOut } from "next-auth/react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -45,6 +45,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const isActive = (href: string) =>
     href === "/superadmin" ? pathname === href : pathname.startsWith(href)
 
+  const currentLabel = NAV.flatMap((g) => g.items).find((n) => isActive(n.href))?.label ?? "Panel"
+
   return (
     <div style={{ display: "flex", height: "100vh", background: "var(--bg-3)", overflow: "hidden" }}>
 
@@ -52,54 +54,64 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside className="sidebar-desk" style={{
         position: "fixed", insetBlock: 0, left: 0, zIndex: 40,
         width: 240,
-        background: "linear-gradient(180deg,var(--bg) 0%,var(--bg-3) 100%)",
-        borderRight: "1px solid rgba(165,141,102,.12)",
+        background: "linear-gradient(180deg, var(--bg) 0%, #1A1108 100%)",
+        borderRight: "1px solid rgba(165,141,102,.14)",
         display: "flex", flexDirection: "column",
         transition: "transform .3s",
       }}>
+
+        {/* Gold accent bar top */}
+        <div style={{ height: 2, background: "linear-gradient(90deg,transparent,var(--gold),transparent)", opacity: 0.5 }} />
+
         {/* Logo + badge */}
-        <div style={{ padding: "26px 22px 20px", borderBottom: "1px solid rgba(165,141,102,.1)" }}>
+        <div style={{ padding: "22px 22px 18px", borderBottom: "1px solid rgba(165,141,102,.1)", position: "relative" }}>
+          {/* Glow decoration */}
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 80, background: "radial-gradient(ellipse at 50% 0%,rgba(196,159,114,.08) 0%,transparent 70%)", pointerEvents: "none" }} />
           <Link href="/" target="_blank" aria-label="Ver sitio">
-            <BrandLogo height={62} variant="square" priority />
+            <BrandLogo height={58} variant="square" priority />
           </Link>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 10 }}>
-            <Shield size={11} style={{ color: "#ef4444" }} />
-            <span style={{ fontSize: 10, letterSpacing: ".18em", textTransform: "uppercase", color: "#ef4444", fontWeight: 700 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 12, padding: "5px 10px", borderRadius: 20, background: "rgba(165,141,102,.1)", border: "1px solid rgba(165,141,102,.18)", width: "fit-content" }}>
+            <Shield size={10} style={{ color: "var(--gold)" }} />
+            <span style={{ fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", fontWeight: 700 }}>
               Super Admin
             </span>
+            <span style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--success)", marginLeft: 2, boxShadow: "0 0 6px var(--success)" }} />
           </div>
         </div>
 
         {/* Nav */}
-        <nav style={{ flex: 1, padding: "16px 12px", overflowY: "auto", display: "flex", flexDirection: "column", gap: 6 }}>
+        <nav style={{ flex: 1, padding: "14px 10px", overflowY: "auto", display: "flex", flexDirection: "column", gap: 4 }}>
           {NAV.map(({ group, items }) => (
-            <div key={group} style={{ marginBottom: 8 }}>
-              <p style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(165,141,102,.7)", padding: "6px 10px", marginBottom: 2 }}>
+            <div key={group} style={{ marginBottom: 6 }}>
+              <p style={{ fontSize: 9, letterSpacing: ".24em", textTransform: "uppercase", color: "rgba(165,141,102,.45)", padding: "6px 12px", marginBottom: 2 }}>
                 {group}
               </p>
               {items.map(({ href, icon: Icon, label }) => {
                 const active = isActive(href)
                 return (
-                  <motion.div key={href} whileHover={{ x: 2 }} transition={{ type: "spring", stiffness: 400, damping: 30 }}>
+                  <motion.div key={href} whileHover={{ x: active ? 0 : 3 }} transition={{ type: "spring", stiffness: 400, damping: 30 }}>
                     <Link
                       href={href}
                       onClick={() => setOpen(false)}
                       style={{
                         display: "flex", alignItems: "center", justifyContent: "space-between",
-                        padding: "10px 12px", borderRadius: 9,
+                        padding: "9px 12px", borderRadius: 10,
                         fontSize: 13, fontWeight: active ? 600 : 400,
-                        textDecoration: "none", marginBottom: 2,
-                        background: active ? "rgba(165,141,102,.13)" : "transparent",
+                        textDecoration: "none", marginBottom: 1,
+                        background: active
+                          ? "linear-gradient(90deg,rgba(165,141,102,.18) 0%,rgba(165,141,102,.06) 100%)"
+                          : "transparent",
                         color: active ? "var(--gold)" : "var(--text-muted)",
                         borderLeft: active ? "2px solid var(--gold)" : "2px solid transparent",
+                        boxShadow: active ? "inset 0 0 0 1px rgba(165,141,102,.1)" : "none",
                         transition: "all .18s",
                       }}
                     >
                       <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        <Icon size={16} />
+                        <Icon size={15} />
                         {label}
                       </span>
-                      {active && <ChevronRight size={13} />}
+                      {active && <ChevronRight size={12} style={{ opacity: 0.6 }} />}
                     </Link>
                   </motion.div>
                 )
@@ -109,21 +121,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* Footer */}
-        <div style={{ padding: "12px 12px 20px", borderTop: "1px solid rgba(165,141,102,.08)" }}>
-          <Link href="/" target="_blank" style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 9, fontSize: 12, color: "var(--text-dim)", textDecoration: "none", marginBottom: 4, transition: "color .2s" }}
-            onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-strong)")}
-            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-dim)")}
+        <div style={{ padding: "10px 10px 18px", borderTop: "1px solid rgba(165,141,102,.08)" }}>
+          <Link href="/" target="_blank" style={{
+            display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", borderRadius: 10,
+            fontSize: 12, color: "var(--text-dim)", textDecoration: "none", marginBottom: 2, transition: "all .2s",
+          }}
+            onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.color = "var(--text-strong)"; el.style.background = "rgba(165,141,102,.07)" }}
+            onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.color = "var(--text-dim)"; el.style.background = "transparent" }}
           >
-            <Globe size={15} /> Ver sitio público
+            <ExternalLink size={13} /> Ver sitio público
           </Link>
           <motion.button
             whileHover={{ x: 2 }}
             onClick={() => signOut({ callbackUrl: "/" })}
-            style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 9, width: "100%", background: "none", border: "none", cursor: "pointer", fontSize: 13, color: "var(--text-dim)", transition: "color .2s" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--danger)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-dim)")}
+            style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", borderRadius: 10, width: "100%", background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "var(--text-dim)", transition: "color .2s" }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "var(--danger)"; e.currentTarget.style.background = "rgba(239,68,68,.06)" }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-dim)"; e.currentTarget.style.background = "transparent" }}
           >
-            <LogOut size={15} /> Salir
+            <LogOut size={13} /> Salir
           </motion.button>
         </div>
       </aside>
@@ -140,11 +155,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* ── MAIN ── */}
       <div className="aula-main" style={{ flex: 1, marginLeft: 240, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+
         {/* Topbar */}
         <header style={{
-          height: 58, borderBottom: "1px solid rgba(165,141,102,.1)",
-          padding: "0 20px", display: "flex", alignItems: "center", justifyContent: "space-between",
-          background: "var(--bar)", backdropFilter: "blur(10px)", flexShrink: 0,
+          height: 58, flexShrink: 0,
+          padding: "0 28px", display: "flex", alignItems: "center", justifyContent: "space-between",
+          background: "rgba(20,14,8,.82)",
+          backdropFilter: "blur(16px)",
+          borderBottom: "1px solid rgba(165,141,102,.1)",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <button
@@ -156,24 +174,39 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             >
               {open ? <X size={20} /> : <Menu size={20} />}
             </button>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "var(--text-dim)" }}>
-              <span>Super Admin</span>
-              <ChevronRight size={13} />
-              <span style={{ color: "var(--text-strong)" }}>
-                {NAV.flatMap((g) => g.items).find((n) => isActive(n.href))?.label ?? "Panel"}
+            {/* Breadcrumb */}
+            <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
+              <span style={{ color: "var(--text-dim)", letterSpacing: ".06em" }}>Jewgal Admin</span>
+              <span style={{ color: "rgba(165,141,102,.3)", fontSize: 10 }}>›</span>
+              <span style={{
+                color: "var(--gold)", fontWeight: 600, letterSpacing: ".04em",
+                padding: "3px 10px", borderRadius: 6,
+                background: "rgba(165,141,102,.1)",
+                border: "1px solid rgba(165,141,102,.15)",
+              }}>
+                {currentLabel}
               </span>
             </div>
           </div>
+
+          {/* Right side */}
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <span style={{ fontSize: 12, color: "var(--text-dim)" }}>admin@jewgalacademy.com</span>
-            <div style={{ width: 34, height: 34, borderRadius: "50%", background: "#ef4444", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "white" }}>
+            <span style={{ fontSize: 12, color: "var(--text-dim)", letterSpacing: ".02em" }}>admin@jewgalacademy.com</span>
+            {/* Avatar */}
+            <div style={{
+              width: 34, height: 34, borderRadius: "50%",
+              background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 13, fontWeight: 700, color: "white",
+              boxShadow: "0 0 0 2px rgba(196,159,114,.3), 0 4px 12px rgba(167,109,97,.35)",
+            }}>
               D
             </div>
           </div>
         </header>
 
         {/* Content */}
-        <main style={{ flex: 1, overflowY: "auto", padding: "32px 32px", background: "var(--bg)" }}>
+        <main style={{ flex: 1, overflowY: "auto", padding: "36px 36px 60px", background: "var(--bg)" }}>
           {children}
         </main>
       </div>

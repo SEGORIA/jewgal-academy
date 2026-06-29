@@ -32,12 +32,28 @@ function StatCard({ label, value, delta, icon: Icon, href, accent, loading }: {
   label: string; value: string; delta: string; icon: typeof Users; href: string; accent: string; loading: boolean
 }) {
   return (
-    <Link href={href} style={{ ...card, padding: "22px 20px", textDecoration: "none", display: "block", transition: "border-color .2s, box-shadow .2s" }}
-      onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = accent + "55"; el.style.boxShadow = `0 8px 32px ${accent}18` }}
-      onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(165,141,102,.13)"; el.style.boxShadow = "none" }}
+    <Link href={href} style={{
+      ...card, padding: "22px 20px", textDecoration: "none", display: "block",
+      transition: "border-color .22s, box-shadow .22s, transform .18s",
+      position: "relative", overflow: "hidden",
+    }}
+      onMouseEnter={(e) => {
+        const el = e.currentTarget as HTMLElement
+        el.style.borderColor = accent + "55"
+        el.style.boxShadow = `0 12px 40px ${accent}20, 0 0 0 1px ${accent}22 inset`
+        el.style.transform = "translateY(-2px)"
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget as HTMLElement
+        el.style.borderColor = "rgba(165,141,102,.13)"
+        el.style.boxShadow = "none"
+        el.style.transform = "none"
+      }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
-        <div style={{ width: 38, height: 38, borderRadius: 9, background: accent + "22", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      {/* Subtle corner glow */}
+      <div style={{ position: "absolute", top: -20, right: -20, width: 80, height: 80, borderRadius: "50%", background: accent + "10", pointerEvents: "none" }} />
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, position: "relative" }}>
+        <div style={{ width: 40, height: 40, borderRadius: 10, background: accent + "20", border: `1px solid ${accent}30`, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Icon size={18} style={{ color: accent }} />
         </div>
         <ArrowUpRight size={14} style={{ color: "var(--text-dim)" }} />
@@ -45,10 +61,10 @@ function StatCard({ label, value, delta, icon: Icon, href, accent, loading }: {
       {loading ? (
         <div style={{ height: 36, width: 80, background: "var(--surface-2)", borderRadius: 6, marginBottom: 4 }} />
       ) : (
-        <p style={{ fontSize: 30, fontWeight: 700, color: "var(--text)", fontFamily: "var(--serif)", marginBottom: 4 }}>{value}</p>
+        <p style={{ fontSize: 32, fontWeight: 600, color: "var(--text)", fontFamily: "var(--serif)", marginBottom: 4, letterSpacing: "-.02em" }}>{value}</p>
       )}
-      <p style={{ fontSize: 12, color: "var(--text-faint)" }}>{label}</p>
-      <p style={{ fontSize: 11, color: accent, marginTop: 4, opacity: .8 }}>{delta}</p>
+      <p style={{ fontSize: 12, color: "var(--text-faint)", marginBottom: 3 }}>{label}</p>
+      <p style={{ fontSize: 11, color: accent, opacity: .85 }}>{delta}</p>
     </Link>
   )
 }
@@ -76,16 +92,26 @@ export default function AdminDashboard() {
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
       {/* Header */}
-      <div style={{ marginBottom: 36 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
-          Jewgal Academy
-        </span>
-        <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "var(--text)", marginBottom: 6 }}>
-          Panel de control
-        </h1>
-        <p style={{ color: "var(--text-faint)", fontSize: 15 }}>
-          Gestión completa de la plataforma · {now}
-        </p>
+      <div style={{ marginBottom: 36, display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16 }}>
+        <div>
+          <span style={{ fontSize: 10, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
+            Jewgal Academy
+          </span>
+          <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "var(--text)", marginBottom: 6, letterSpacing: "-.01em" }}>
+            Panel de control
+          </h1>
+          <p style={{ color: "var(--text-faint)", fontSize: 14 }}>
+            Gestión completa de la plataforma
+          </p>
+        </div>
+        <div style={{
+          padding: "10px 16px", borderRadius: 10,
+          background: "rgba(165,141,102,.08)",
+          border: "1px solid rgba(165,141,102,.15)",
+          fontSize: 12, color: "var(--text-dim)", letterSpacing: ".04em",
+        }}>
+          {now}
+        </div>
       </div>
 
       {/* KPI Cards */}
