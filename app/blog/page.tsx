@@ -80,7 +80,7 @@ Si te interesa certificarte como instructor del Método Jewgal Adultos o Joogalk
     title: "Liderazgo con propósito: la diferencia entre dirigir y verdaderamente inspirar",
     excerpt: "El verdadero liderazgo no se trata de posición sino de influencia genuina. Descubre cómo desarrollar autoridad desde la autenticidad y los valores.",
     readTime: "4 min",
-    accent: "#B07FD8",
+    accent: "#A76D61",
     content: `Hay líderes que dirigen porque tienen autoridad formal, y hay líderes que inspiran porque tienen autoridad real. La diferencia no está en el cargo ni en el puesto: está en la autenticidad con la que ejercen su influencia.
 
 El liderazgo con propósito parte de una premisa simple pero poderosa: las personas no siguen a quienes tienen el poder, siguen a quienes les dan sentido. Un líder que conoce su propósito, que actúa desde sus valores y que tiene la valentía de ser vulnerable, genera una confianza que ninguna jerarquía puede producir artificialmente.

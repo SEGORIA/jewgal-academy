@@ -11,7 +11,7 @@ const PROGRAMS = [
   { name: "Life Coaching Integrativo", slug: "life-coaching-integrativo", accent: "#A58D66" },
   { name: "Instructor Jewgal Adultos", slug: "joogal-adultos",            accent: "var(--success)" },
   { name: "Instructor Joogalkids",     slug: "joogalkids",                accent: "#A76D61" },
-  { name: "Método Sholem",             slug: "metodo-sholem",             accent: "#B07FD8" },
+  { name: "Método Sholem",             slug: "metodo-sholem",             accent: "#A76D61" },
   { name: "Cábala Coach",              slug: "cabala-coach",              accent: "#CBB78B" },
 ]
 
@@ -19,7 +19,7 @@ const quickActions = [
   { label: "Agregar alumno",     href: "/superadmin/alumnos",  icon: UserPlus,   color: "var(--gold)" },
   { label: "Agendar clase live", href: "/superadmin/cursos",   icon: PlayCircle, color: "var(--teal)" },
   { label: "Nueva entrada blog", href: "/superadmin/blog",     icon: FileText,   color: "var(--success)" },
-  { label: "Editar sitio web",   href: "/superadmin/web",      icon: Globe,      color: "#B07FD8" },
+  { label: "Editar sitio web",   href: "/superadmin/web",      icon: Globe,      color: "#A76D61" },
 ]
 
 const card: React.CSSProperties = {
@@ -70,7 +70,7 @@ export default function AdminDashboard() {
     { label: "Alumnos activos",   value: stats ? String(stats.studentCount)    : "—", delta: "Registradas", icon: Users,      href: "/superadmin/alumnos", accent: "#A58D66" },
     { label: "Programas activos", value: "5",                                          delta: "Todos publicados", icon: BookOpen, href: "/superadmin/cursos",  accent: "#A76D61" },
     { label: "Ingresos totales",  value: stats ? `$${stats.totalRevenue.toLocaleString("es")}` : "—", delta: stats?.paymentCount ? `${stats.paymentCount} transacciones` : "Stripe pendiente", icon: CreditCard, href: "/superadmin/pagos", accent: "var(--success)" },
-    { label: "Inscripciones",     value: stats ? String(stats.enrollmentCount) : "—", delta: "Activas",     icon: TrendingUp, href: "/superadmin/alumnos", accent: "#B07FD8" },
+    { label: "Inscripciones",     value: stats ? String(stats.enrollmentCount) : "—", delta: "Activas",     icon: TrendingUp, href: "/superadmin/alumnos", accent: "#A76D61" },
   ]
 
   return (

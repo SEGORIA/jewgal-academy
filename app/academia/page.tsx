@@ -48,8 +48,8 @@ const PROGRAMS = [
     desc: "Formación de instructores para acompañar a adolescentes en el desarrollo de su identidad, liderazgo y valores con propósito.",
     price: "$360", free: false,
     duration: "3 meses", level: "Exp. con adolescentes",
-    grad: "linear-gradient(135deg,#1a0d20 0%,#31184a 100%)",
-    accent: "#B07FD8", icon: "◈",
+    grad: "linear-gradient(135deg,#21160d 0%,#3a2418 100%)",
+    accent: "#A76D61", icon: "◈",
     bullets: ["Certificado de instructor", "Manual Método Sholem", "Supervisión grupal"],
   },
   {

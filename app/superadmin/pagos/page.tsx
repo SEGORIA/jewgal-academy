@@ -14,7 +14,7 @@ const PROGRAMS_META: Record<string, { name: string; accent: string; price: numbe
   "life-coaching-integrativo": { name: "Life Coaching Integrativo", accent: "#A58D66", price: 1500 },
   "joogal-adultos":            { name: "Instructor Jewgal Adultos", accent: "var(--success)", price: 0 },
   "joogalkids":                { name: "Instructor Joogalkids",     accent: "#A76D61", price: 360 },
-  "metodo-sholem":             { name: "Método Sholem",             accent: "#B07FD8", price: 360 },
+  "metodo-sholem":             { name: "Método Sholem",             accent: "#A76D61", price: 360 },
   "cabala-coach":              { name: "Cábala Coach",              accent: "#CBB78B", price: 360 },
 }
 
@@ -105,7 +105,7 @@ export default function PagosAdminPage() {
           { label: "Ingresos totales",  value: loading ? "—" : `$${totalRevenue.toLocaleString("es")}`,  sub: "Pagos completados + demo", icon: DollarSign, accent: "#A58D66" },
           { label: "Transacciones",     value: loading ? "—" : String(completedPayments.length),          sub: "Inscripciones activas",    icon: CreditCard, accent: "#A76D61" },
           { label: "Alumnos con pago",     value: loading ? "—" : String(uniqueStudents),                   sub: "Usuarios únicos",          icon: Users,      accent: "var(--success)" },
-          { label: "Ticket promedio",   value: loading ? "—" : avgTicket > 0 ? `$${Math.round(avgTicket).toLocaleString("es")}` : "$—", sub: "Por transacción", icon: TrendingUp, accent: "#B07FD8" },
+          { label: "Ticket promedio",   value: loading ? "—" : avgTicket > 0 ? `$${Math.round(avgTicket).toLocaleString("es")}` : "$—", sub: "Por transacción", icon: TrendingUp, accent: "#A76D61" },
         ].map(({ label, value, sub, icon: Icon, accent }) => (
           <div key={label} style={{ ...card, padding: "20px 18px" }}>
             <div style={{ width: 36, height: 36, borderRadius: 8, background: accent + "22", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>

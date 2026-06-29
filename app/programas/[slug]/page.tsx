@@ -119,8 +119,8 @@ const META: Record<string, {
   },
   "metodo-sholem": {
     eyebrow: "Liderazgo Adolescente",
-    grad: "linear-gradient(135deg,#1a0d20 0%,#2a1535 55%,#31184a 100%)",
-    accent: "#B07FD8",
+    grad: "linear-gradient(135deg,#21160d 0%,#2c1f14 55%,#3a2418 100%)",
+    accent: "#A76D61",
     icon: "◈",
     duration: "3 meses",
     modality: "Online · Intensivo",
