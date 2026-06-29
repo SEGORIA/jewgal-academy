@@ -502,6 +502,13 @@ nav.jnav.scrolled {
 }
 .play .circle svg { fill: var(--aqua); margin-left: 4px; }
 
+/* Skeleton loaders */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: .45; }
+  50%       { opacity: .85; }
+}
+.skeleton { animation: skeleton-pulse 1.8s ease-in-out infinite; }
+
 /* Shimmer dorado en el hero h1 */
 @keyframes text-shimmer {
   from { background-position: -300% center; }

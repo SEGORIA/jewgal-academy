@@ -2,6 +2,7 @@ import Link from "next/link"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
+import CountdownTimer from "@/components/CountdownTimer"
 
 const EVENTS = [
   {
@@ -84,6 +85,9 @@ export default function EventosPage() {
           </p>
         </div>
       </section>
+
+      {/* ── COUNTDOWN ── */}
+      <CountdownTimer />
 
       {/* ── EVENTOS ── */}
       <section style={{ background: "var(--navy)" }}>
