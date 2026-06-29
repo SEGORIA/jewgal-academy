@@ -87,26 +87,24 @@ export default function EventosPage() {
 
       {/* ── EVENTOS ── */}
       <section style={{ background: "var(--navy)" }}>
-        <div className="wrap" style={{ padding: "100px 36px" }}>
+        <div className="wrap ev-wrap">
           <span className="eyebrow sec-eyebrow reveal" style={{ marginBottom: 52 }}>2026 · Calendario de eventos</span>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             {EVENTS.map((ev) => (
-              <div key={ev.title} className="reveal" style={{
-                display: "grid", gridTemplateColumns: "140px 1fr",
-                borderRadius: 10, overflow: "hidden",
-                border: "1px solid var(--line-d)",
-              }}>
-                {/* Fecha lateral */}
-                <div className="tone-dark" style={{ background: ev.grad, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "32px 20px", textAlign: "center" }}>
-                  <span style={{ fontFamily: "var(--serif)", fontSize: 52, color: ev.accent, lineHeight: 1, fontWeight: 500 }}>{ev.date.day}</span>
-                  <span style={{ fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--on-dark)", marginTop: 4 }}>{ev.date.month} {ev.date.year}</span>
-                  <div style={{ fontSize: 28, color: ev.accent, marginTop: 16 }}>{ev.icon}</div>
+              <div key={ev.title} className="reveal ev-card">
+                {/* Fecha — panel lateral en desktop, barra horizontal en móvil */}
+                <div className="tone-dark ev-date" style={{ background: ev.grad }}>
+                  <div>
+                    <span style={{ fontFamily: "var(--serif)", fontSize: 52, color: ev.accent, lineHeight: 1, fontWeight: 500, display: "block" }}>{ev.date.day}</span>
+                    <span style={{ fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--on-dark)", marginTop: 4, display: "block" }}>{ev.date.month} {ev.date.year}</span>
+                  </div>
+                  <div className="ev-icon" style={{ color: ev.accent }}>{ev.icon}</div>
                 </div>
 
                 {/* Contenido */}
-                <div style={{ background: "var(--navy-2)", padding: "36px 40px", display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 24 }}>
-                  <div style={{ flex: 1 }}>
+                <div className="ev-body">
+                  <div className="ev-info">
                     <div style={{ display: "flex", gap: 10, marginBottom: 14, flexWrap: "wrap" }}>
                       <span style={{ fontSize: 10, border: "1px solid var(--line-d)", borderRadius: 16, padding: "4px 12px", color: "var(--on-dark)", letterSpacing: ".12em", textTransform: "uppercase" }}>
                         {ev.type}
@@ -120,14 +118,16 @@ export default function EventosPage() {
                     </h3>
                     <p style={{ color: "var(--on-dark)", fontSize: 14.5, lineHeight: 1.65, maxWidth: 560 }}>{ev.desc}</p>
                   </div>
-                  <div style={{ flexShrink: 0, textAlign: "right" }}>
-                    <div style={{ fontSize: 10, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 4 }}>
-                      {ev.spots} plazas
+                  <div className="ev-cta">
+                    <div>
+                      <div style={{ fontSize: 10, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 4 }}>
+                        {ev.spots} plazas
+                      </div>
+                      <div style={{ fontFamily: "var(--serif)", fontSize: 28, color: ev.price === "Gratis" ? "#C49F72" : ev.accent, marginBottom: 16 }}>
+                        {ev.price}
+                      </div>
                     </div>
-                    <div style={{ fontFamily: "var(--serif)", fontSize: 28, color: ev.price === "Gratis" ? "#C49F72" : ev.accent, marginBottom: 16 }}>
-                      {ev.price}
-                    </div>
-                    <Link href="/contacto" className="btn solid" style={{ fontSize: 11, padding: "10px 20px" }}>
+                    <Link href="/contacto" className="btn solid" style={{ fontSize: 11, padding: "10px 20px", flexShrink: 0 }}>
                       Reservar lugar →
                     </Link>
                   </div>

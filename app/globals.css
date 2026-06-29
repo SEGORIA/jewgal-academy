@@ -551,6 +551,15 @@ nav.jnav.scrolled {
 .pcard .price { display: block; margin: auto 0 14px; font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--gold-deep); }
 .pcard .price.free { color: #846145; font-style: normal; font-weight: 500; font-family: var(--sans); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
 .pcard .go { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-deep); display: inline-flex; align-items: center; gap: 7px; }
+/* Eventos — base styles (responsive via media query) */
+.ev-wrap { padding: 100px 36px; }
+.ev-card { display: grid; grid-template-columns: 140px 1fr; border-radius: 10px; overflow: hidden; border: 1px solid var(--line-d); }
+.ev-date { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 20px; text-align: center; }
+.ev-icon { font-size: 28px; margin-top: 16px; }
+.ev-body { background: var(--navy-2); padding: 36px 40px; display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; }
+.ev-info { flex: 1; }
+.ev-cta  { flex-shrink: 0; text-align: right; }
+
 .thumb-overlay { position: absolute; inset: 0; background: linear-gradient(to top,rgba(44,31,20,.72) 0%,transparent 65%); display: flex; align-items: flex-end; padding: 18px 20px; opacity: 0; transition: opacity .35s ease; pointer-events: none; }
 .pcard:hover .thumb-overlay { opacity: 1; }
 .thumb-overlay-label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #F6F1E7; font-family: var(--sans); }
@@ -759,6 +768,13 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
   /* Aula layout: padding reducido en móvil */
   .avales-section { padding: 32px 0; }
   .fund-copy { padding: 30px 0 0; }
+  /* Eventos */
+  .ev-wrap  { padding: 52px 20px !important; }
+  .ev-card  { grid-template-columns: 1fr !important; }
+  .ev-date  { flex-direction: row !important; padding: 20px 24px !important; text-align: left !important; justify-content: space-between !important; align-items: center !important; }
+  .ev-icon  { margin-top: 0 !important; font-size: 24px !important; }
+  .ev-body  { flex-direction: column !important; padding: 24px 20px !important; gap: 16px !important; }
+  .ev-cta   { text-align: left !important; display: flex !important; align-items: center !important; justify-content: space-between !important; width: 100%; }
 }
 @media (max-width: 480px) {
   /* Homepage */
