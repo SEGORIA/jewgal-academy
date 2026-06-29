@@ -426,16 +426,18 @@ export default function HomePage() {
               { title: "Campus Virtual",      href: "/aula",      desc: "Tu espacio de aprendizaje personalizado, disponible 24/7.", go: "Ingresar al campus →",
                 icon: <><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></> },
             ].map((f) => (
-              <TiltCard key={f.title} className="reveal" radius={8} intensity={5}>
-                <Link href={f.href} className="feat" style={{ textDecoration: "none" }}>
-                  <div className="ico">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">{f.icon}</svg>
+              <Link key={f.title} href={f.href} style={{ display: "block", textDecoration: "none" }}>
+                <TiltCard className="reveal" radius={8} intensity={5}>
+                  <div className="feat">
+                    <div className="ico">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">{f.icon}</svg>
+                    </div>
+                    <h4>{f.title}</h4>
+                    <p>{f.desc}</p>
+                    <span className="go">{f.go}</span>
                   </div>
-                  <h4>{f.title}</h4>
-                  <p>{f.desc}</p>
-                  <span className="go">{f.go}</span>
-                </Link>
-              </TiltCard>
+                </TiltCard>
+              </Link>
             ))}
           </div>
 
