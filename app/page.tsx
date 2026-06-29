@@ -30,10 +30,10 @@ const CERT_INSTITUTES = [
 ]
 
 const PROGRAMS = [
-  { slug: "life-coaching-integrativo", title: "Life Coaching Integrativo",   desc: "Formación integral para el cambio.", price: "$1.500", free: false, img: "/brand/programs/life-coaching.svg" },
-  { slug: "joogal-adultos",            title: "Instructor Jewgal · Adultos", desc: "Certifícate como instructor oficial del método Jewgal.", price: "Gratis", free: true, img: "/brand/programs/joogal-adultos.svg" },
-  { slug: "joogalkids",                title: "Instructor Joogalkids",       desc: "Formando a los guías del desarrollo infantil.", price: "$360", free: false, img: "/brand/programs/joogalkids.svg" },
-  { slug: "metodo-sholem",             title: "Método Sholem",               desc: "Formación de instructores para líderes adolescentes.", price: "$360", free: false, img: "/brand/programs/metodo-sholem.svg" },
+  { slug: "life-coaching-integrativo", title: "Life Coaching Integrativo",   desc: "Formación integral para el cambio.", price: "$1.500", free: false, img: "/brand/programs/life-coaching.jpg" },
+  { slug: "joogal-adultos",            title: "Instructor Jewgal · Adultos", desc: "Certifícate como instructor oficial del método Jewgal.", price: "Gratis", free: true, img: "/brand/programs/joogal-adultos.jpg" },
+  { slug: "joogalkids",                title: "Instructor Joogalkids",       desc: "Formando a los guías del desarrollo infantil.", price: "$360", free: false, img: "/brand/programs/joogalkids.jpg" },
+  { slug: "metodo-sholem",             title: "Método Sholem",               desc: "Formación de instructores para líderes adolescentes.", price: "$360", free: false, img: "/brand/programs/metodo-sholem.jpg" },
   { slug: "cabala-coach",              title: "Micro Curso · Cábala Coach",  desc: "Sabiduría milenaria aplicada al bienestar personal.", price: "$360", free: false, img: "/brand/programs/cabala-coach.svg" },
 ]
 
