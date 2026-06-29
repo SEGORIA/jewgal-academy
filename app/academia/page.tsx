@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
@@ -73,6 +74,14 @@ const PILLARS = [
 ]
 
 export default function AcademiaPage() {
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener("resize", check)
+    return () => window.removeEventListener("resize", check)
+  }, [])
+
   return (
     <>
       <RevealInit />
@@ -81,12 +90,12 @@ export default function AcademiaPage() {
       {/* ── HERO ── */}
       <section style={{
         background: "var(--bg-2)",
-        paddingTop: 150, paddingBottom: 90,
+        paddingTop: isMobile ? 100 : 150, paddingBottom: isMobile ? 60 : 90,
         position: "relative", overflow: "hidden",
         borderBottom: "1px solid var(--line-d)",
       }}>
         {/* Foto de la comunidad, fundida con el fondo del hero */}
-        <div className="academia-hero-photo" style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "52%", zIndex: 0 }}>
+        <div className="academia-hero-photo" style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "52%", zIndex: 0, display: isMobile ? "none" : undefined }}>
           <img src="/brand/devora-grupo.webp" alt="Devora con su comunidad de alumnos" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 28%" }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, var(--bg-2) 2%, rgba(0,0,0,0) 58%)" }} />
         </div>
@@ -107,18 +116,18 @@ export default function AcademiaPage() {
 
       {/* ── PILARES ── */}
       <section style={{ background: "var(--navy-2)", borderBottom: "1px solid var(--line-d)" }}>
-        <div className="wrap" style={{ padding: "80px 36px" }}>
+        <div className="wrap" style={{ padding: isMobile ? "44px 20px" : "80px 36px" }}>
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }}
             variants={{ visible: { transition: { staggerChildren: 0.13 } } }}
-            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 0 }}
+            style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(auto-fit,minmax(220px,1fr))", gap: isMobile ? "24px 12px" : 0 }}
           >
             {PILLARS.map((p, i) => (
               <motion.div key={p.n}
                 variants={{ hidden: { opacity: 0, y: 22 }, visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16,1,0.3,1] } } }}
                 style={{
-                  padding: "32px 28px",
-                  borderRight: i < PILLARS.length - 1 ? "1px solid var(--line-d)" : "none",
+                  padding: isMobile ? "20px 16px" : "32px 28px",
+                  borderRight: (!isMobile && i < PILLARS.length - 1) ? "1px solid var(--line-d)" : "none",
                   cursor: "default",
                   transition: "background .3s",
                 }}
@@ -135,7 +144,7 @@ export default function AcademiaPage() {
 
       {/* ── PROGRAMAS ── */}
       <section style={{ background: "var(--navy)" }} id="programas">
-        <div className="wrap" style={{ padding: "100px 36px" }}>
+        <div className="wrap" style={{ padding: isMobile ? "52px 20px" : "100px 36px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 60, flexWrap: "wrap", gap: 16 }}>
             <div className="reveal">
               <span className="eyebrow" style={{ display: "block", marginBottom: 12 }}>Nuestros programas</span>
@@ -152,8 +161,8 @@ export default function AcademiaPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             {/* Primera card — ancha */}
             <TiltCard radius={10} intensity={4}>
-            <div className="reveal" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderRadius: 10, overflow: "hidden", border: "1px solid var(--line-d)" }}>
-              <div className="tone-dark" style={{ background: PROGRAMS[0].grad, padding: "52px 44px", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: 320 }}>
+            <div className="reveal" style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", borderRadius: 10, overflow: "hidden", border: "1px solid var(--line-d)" }}>
+              <div className="tone-dark" style={{ background: PROGRAMS[0].grad, padding: isMobile ? "32px 24px" : "52px 44px", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: isMobile ? "auto" : 320 }}>
                 <div>
                   <div style={{ fontSize: 44, color: PROGRAMS[0].accent, fontFamily: "var(--serif)", marginBottom: 8, lineHeight: 1 }}>{PROGRAMS[0].icon}</div>
                   <span style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: PROGRAMS[0].accent, display: "block", marginBottom: 12 }}>{PROGRAMS[0].tag}</span>
@@ -164,7 +173,7 @@ export default function AcademiaPage() {
                   Ver programa →
                 </Link>
               </div>
-              <div style={{ background: "var(--navy-2)", padding: "52px 44px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+              <div style={{ background: "var(--navy-2)", padding: isMobile ? "28px 24px" : "52px 44px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                   {PROGRAMS[0].bullets.map((b) => (
                     <div key={b} style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 14, color: "var(--on-dark)" }}>
