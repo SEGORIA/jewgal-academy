@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Cormorant_Garamond, Jost, Allura } from "next/font/google"
+import { Cormorant_Garamond, Jost } from "next/font/google"
 import "./globals.css"
 import Providers from "@/components/Providers"
 import ScrollProgress from "@/components/motion/ScrollProgress"
@@ -36,10 +36,11 @@ const jost = Jost({
   display: "swap",
 })
 
-const allura = Allura({
+const cormorantItalic = Cormorant_Garamond({
   variable: "--font-script",
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "500"],
+  style: ["italic"],
   display: "swap",
   preload: false,
 })
@@ -94,7 +95,7 @@ export default async function RootLayout({
     <html
       lang="es"
       data-theme={theme}
-      className={`${cormorant.variable} ${jost.variable} ${allura.variable}`}
+      className={`${cormorant.variable} ${jost.variable} ${cormorantItalic.variable}`}
     >
       <body>
         <script
