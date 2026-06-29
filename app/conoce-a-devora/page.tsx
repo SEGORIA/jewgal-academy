@@ -141,7 +141,7 @@ export default function ConoceADevorPage() {
               { num: "40+", label: "Años transformando vidas en 5 países" },
               { num: "5",   label: "Programas y certificaciones activos" },
               { num: "5",   label: "Países: Argentina · Israel · Guatemala · Colombia · EE.UU." },
-              { num: "501(c)(3)", label: "Fundación Sholem Corazón Valiente, EE.UU." },
+              { num: "Non-Profit", label: "Fundación Sholem Corazón Valiente, EE.UU." },
             ].map((s) => (
               <motion.div key={s.num}
                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.16,1,0.3,1] } } }}
@@ -265,7 +265,7 @@ export default function ConoceADevorPage() {
                 Fundación Sholem<br /><em style={{ color: "var(--gold-light)", fontStyle: "normal" }}>Corazón Valiente</em>
               </h2>
               <div style={{ display: "inline-block", border: "1px solid var(--line-d)", borderRadius: 4, padding: "8px 16px", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--gold)", marginTop: 8 }}>
-                501(c)(3) · Miami, Florida
+                Non-Profit Organization · Miami, Florida
               </div>
             </div>
             <div className="reveal">

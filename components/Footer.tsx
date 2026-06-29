@@ -69,7 +69,7 @@ export default function Footer() {
         </div>
 
         <div className="foot-bottom">
-          <small>© {new Date().getFullYear()} Jewgal Academy · Fundación Sholem Corazón Valiente 501(c)(3). Todos los derechos reservados.</small>
+          <small>© {new Date().getFullYear()} Jewgal Academy · Fundación Sholem Corazón Valiente Non-Profit Organization. Todos los derechos reservados.</small>
           <div style={{ display: "flex", gap: 20 }}>
             <Link href="/politica-privacidad" style={{ color: "var(--on-dark-faint)", fontSize: 12, textDecoration: "none" }}>Privacidad</Link>
             <Link href="/terminos" style={{ color: "var(--on-dark-faint)", fontSize: 12, textDecoration: "none" }}>Términos</Link>

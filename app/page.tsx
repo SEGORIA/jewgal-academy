@@ -222,7 +222,7 @@ export default function HomePage() {
                 <div>
                   {s.to != null
                     ? <div className="num" data-to={s.to}>0</div>
-                    : <div className="num serif" style={{ fontSize: 30 }}>501(c)(3)</div>
+                    : <div className="num serif" style={{ fontSize: 16, lineHeight: 1.3, letterSpacing: ".04em" }}>Non-Profit<br/>Organization</div>
                   }
                   <div className="lbl">{s.lbl[0]}<br/>{s.lbl[1]}</div>
                 </div>
@@ -324,7 +324,7 @@ export default function HomePage() {
               <p>Su método une Logoterapia y sentido de vida, Mindfulness y regulación del trauma, la sabiduría de la Cábala aplicada al coaching, y retiros de bienestar profundo.</p>
               <div className="fund-mission-block">
                 <span className="fund-mission-icon" aria-hidden="true">✦</span>
-                <p>Este trabajo forma parte de la misión de la <strong>Fundación Sholem Corazón Valiente</strong>, organización sin fines de lucro registrada como <strong>501(c)(3)</strong> en los Estados Unidos, creada para inspirar, empoderar y formar líderes con corazón valiente comprometidos con transformar el mundo.</p>
+                <p>Este trabajo forma parte de la misión de la <strong>Fundación Sholem Corazón Valiente</strong>, organización sin fines de lucro registrada como <strong>non-profit organization</strong> en los Estados Unidos, creada para inspirar, empoderar y formar líderes con corazón valiente comprometidos con transformar el mundo.</p>
               </div>
               <Link href="/conoce-a-devora" className="btn">Conoce su historia →</Link>
             </div>

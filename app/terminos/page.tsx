@@ -13,7 +13,7 @@ const SECTIONS = [
     title: "1. Aceptación de los términos",
     content: `Al registrarte en Jewgal Academy o al acceder a cualquiera de nuestros servicios, aceptás estos Términos de Uso en su totalidad. Si no estás de acuerdo con alguna parte, te pedimos que no utilices nuestra plataforma.
 
-Jewgal Academy es operada por Sholem Corazón Valiente Inc., organización 501(c)(3) sin fines de lucro con sede en Miami, Florida, EE.UU.`,
+Jewgal Academy es operada por Sholem Corazón Valiente Inc., non-profit organization con sede en Miami, Florida, EE.UU.`,
   },
   {
     title: "2. Descripción del servicio",

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const SECTIONS = [
   {
     title: "1. Responsable del tratamiento",
-    content: `Jewgal Academy, operada por Sholem Corazón Valiente Inc. (organización 501(c)(3) sin fines de lucro), con sede en Miami, Florida, EE.UU., es responsable del tratamiento de los datos personales recopilados a través del sitio jewgalacademy.com y sus servicios asociados.
+    content: `Jewgal Academy, operada por Sholem Corazón Valiente Inc. (non-profit organization), con sede en Miami, Florida, EE.UU., es responsable del tratamiento de los datos personales recopilados a través del sitio jewgalacademy.com y sus servicios asociados.
 
 Contacto: hola@jewgalacademy.com`,
   },
