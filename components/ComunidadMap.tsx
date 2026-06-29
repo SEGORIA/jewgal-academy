@@ -48,7 +48,7 @@ const COUNTRIES = [
     years: "2015 – presente",
     tagline: "Miami · Sede internacional",
     desc: "Desde Miami lidera programas en línea con alcance global, fundó la organización 501c3 Sholem Corazón Valiente y creó Jewgal Academy para acompañar la transformación de estudiantes en todo el mundo.",
-    accent: "#B07FD8",
+    accent: "#C49F72",
     stat: "4",
     statLabel: "continentes alcanzados",
   },
