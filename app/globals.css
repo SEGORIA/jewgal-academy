@@ -501,11 +501,8 @@ nav.jnav.scrolled {
   line-height: 1; letter-spacing: -.01em;
   color: var(--text); margin-bottom: 26px;
 }
-.hero h1 .ln { display: block; overflow: hidden; }
-.hero h1 .ln span { display: block; transform: translateY(110%); transition: transform 1.05s cubic-bezier(.16,1,.3,1); }
-.hero.in h1 .ln:nth-child(1) span { transition-delay: .25s; }
-.hero.in h1 .ln:nth-child(2) span { transition-delay: .4s; }
-.hero.in h1 .ln span { transform: translateY(0); }
+.hero h1 .ln { display: block; }
+.hero h1 .ln span { display: inline-block; } /* animación word-by-word via Framer Motion */
 .hero h1 em { font-style: normal; color: var(--gold-light); }
 .hero p { max-width: 430px; color: var(--on-dark); font-size: 16.5px; margin-bottom: 38px; opacity: 0; animation: fadeUp 1s .85s forwards; }
 .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; opacity: 0; animation: fadeUp 1s 1.05s forwards; }
@@ -544,6 +541,9 @@ nav.jnav.scrolled {
 .pcard .price { display: block; margin: auto 0 14px; font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--gold-deep); }
 .pcard .price.free { color: #846145; font-style: normal; font-weight: 500; font-family: var(--sans); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
 .pcard .go { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-deep); display: inline-flex; align-items: center; gap: 7px; }
+.thumb-overlay { position: absolute; inset: 0; background: linear-gradient(to top,rgba(44,31,20,.72) 0%,transparent 65%); display: flex; align-items: flex-end; padding: 18px 20px; opacity: 0; transition: opacity .35s ease; pointer-events: none; }
+.pcard:hover .thumb-overlay { opacity: 1; }
+.thumb-overlay-label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #F6F1E7; font-family: var(--sans); }
 .star { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
 .star svg { width: 58%; filter: drop-shadow(0 0 14px rgba(203,183,139,.6)); }
 .s-path { fill: none; stroke: var(--gold-light); stroke-width: 3; }
@@ -584,8 +584,7 @@ nav.jnav.scrolled {
 .ruta-head h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(28px,4vw,48px); color: var(--text); margin-top: 10px; }
 .steps { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; }
 .path-svg { position: absolute; top: 38px; left: 6%; width: 88%; height: 60px; z-index: 1; overflow: visible; }
-.path-svg path { fill: none; stroke: var(--gold); stroke-width: 1.5; stroke-dasharray: 1400; stroke-dashoffset: 1400; transition: stroke-dashoffset 2.6s ease; opacity: .7; }
-.ruta.in .path-svg path { stroke-dashoffset: 0; }
+.path-svg path { fill: none; stroke: var(--gold); stroke-width: 1.5; opacity: .7; } /* pathLength vía Framer Motion */
 .step { text-align: center; position: relative; }
 .step .ring {
   width: 78px; height: 78px;

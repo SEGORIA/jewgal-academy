@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import Image from "next/image"
+import { motion, useInView } from "framer-motion"
 import Navbar from "@/components/Navbar"
 import HeroVideo from "@/components/HeroVideo"
 import Footer from "@/components/Footer"
@@ -11,6 +12,7 @@ import { TiltCard } from "@/components/motion/TiltCard"
 import { FloatingParticles } from "@/components/motion/FloatingParticles"
 import { CursorLight } from "@/components/motion/CursorLight"
 import MagneticButton from "@/components/motion/MagneticButton"
+import TestimonialCarousel from "@/components/TestimonialCarousel"
 
 // Mapa interactivo: below-the-fold y con código propio → se carga diferido
 const ComunidadMap = dynamic(() => import("@/components/ComunidadMap"), {
@@ -38,6 +40,9 @@ const PROGRAMS = [
 ]
 
 export default function HomePage() {
+  const rutaRef = useRef<HTMLDivElement>(null)
+  const rutaInView = useInView(rutaRef, { once: true, margin: "-80px" })
+
   /* ── Animaciones: IntersectionObserver + count-up + progress bars ── */
   useEffect(() => {
     const hero = document.getElementById("hero")
@@ -139,8 +144,26 @@ export default function HomePage() {
           <div className="hero-inner">
             <span className="eyebrow">Jewgal Academy</span>
             <h1>
-              <span className="ln"><span>Sabiduría para vivir.</span></span>
-              <span className="ln"><span><em>Liderazgo para transformar.</em></span></span>
+              <span className="ln">
+                {["Sabiduría", "para", "vivir."].map((w, i) => (
+                  <motion.span key={w}
+                    initial={{ opacity: 0, y: 22, filter: "blur(4px)" }}
+                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    transition={{ delay: 0.25 + i * 0.1, duration: 0.8, ease: [0.16,1,0.3,1] }}
+                    style={{ display: "inline-block", marginRight: "0.28em" }}
+                  >{w}</motion.span>
+                ))}
+              </span>
+              <span className="ln">
+                {["Liderazgo", "para", "transformar."].map((w, i) => (
+                  <motion.span key={w}
+                    initial={{ opacity: 0, y: 22, filter: "blur(4px)" }}
+                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    transition={{ delay: 0.6 + i * 0.1, duration: 0.8, ease: [0.16,1,0.3,1] }}
+                    style={{ display: "inline-block", marginRight: "0.28em", fontStyle: "normal", color: "var(--gold-light)" }}
+                  >{w}</motion.span>
+                ))}
+              </span>
             </h1>
             <p>Programas, certificaciones y experiencias diseñadas para desarrollar resiliencia, bienestar emocional y crecimiento espiritual. Únete a una comunidad global de aprendizaje con propósito.</p>
             <div className="hero-cta">
@@ -222,6 +245,9 @@ export default function HomePage() {
                       height={400}
                       style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                     />
+                    <div className="thumb-overlay">
+                      <span className="thumb-overlay-label">Ver programa →</span>
+                    </div>
                   </div>
                   <div className="body">
                     <h3>{p.title}</h3>
@@ -335,9 +361,16 @@ export default function HomePage() {
             <span className="eyebrow">Ruta de aprendizaje</span>
             <h2 className="serif">Un camino probado para tu transformación</h2>
           </div>
-          <div style={{ position: "relative" }}>
+          <div ref={rutaRef} style={{ position: "relative" }}>
             <svg className="path-svg" viewBox="0 0 1000 60" preserveAspectRatio="none">
-              <path d="M40 30 Q170 -10 290 30 T540 30 T790 30 T960 30"/>
+              <motion.path
+                d="M40 30 Q170 -10 290 30 T540 30 T790 30 T960 30"
+                fill="none" stroke="var(--gold)" strokeWidth="1.5" strokeLinecap="round"
+                opacity={0.7}
+                initial={{ pathLength: 0 }}
+                animate={rutaInView ? { pathLength: 1 } : { pathLength: 0 }}
+                transition={{ duration: 2.2, ease: "easeInOut", delay: 0.15 }}
+              />
             </svg>
             <div className="steps">
               {[
@@ -368,21 +401,7 @@ export default function HomePage() {
             <span className="eyebrow">Testimonios</span>
             <h2 className="serif" style={{ color: "var(--text)", fontSize: "clamp(28px,4vw,48px)", marginTop: 10 }}>Vidas que ya se transformaron</h2>
           </div>
-          <div className="testi-grid">
-            {[
-              { text: "Qué bendición cruzarse con maestros tan empáticos que no solo educan, sino que muchas veces rescatan. Sus clases crean una profunda conexión entre quienes participamos.", who: "Constanza Wohlgemut" },
-              { text: "Tus clases de coaching y Cábala han sido un faro en mi camino, ayudándome a comprender no solo la materia, sino aspectos de mi propia vida. Estas enseñanzas me han transformado.", who: "Diana Atri" },
-              { text: "De todo corazón quiero agradecerte. Eres una guía invaluable; tu dedicación y sabiduría han marcado profundamente mi camino.", who: "Andrea Gálvez" },
-            ].map((t) => (
-              <TiltCard key={t.who} className="reveal" radius={8} intensity={5}>
-                <div className="tcard">
-                  <div className="qm">&ldquo;</div>
-                  <p>{t.text}</p>
-                  <div className="who">{t.who}</div>
-                </div>
-              </TiltCard>
-            ))}
-          </div>
+          <TestimonialCarousel />
         </div>
       </section>
 
