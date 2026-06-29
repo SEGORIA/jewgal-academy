@@ -129,12 +129,11 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Hamburger mobile */}
-        <button onClick={() => setOpen(!open)} aria-label={open ? "Cerrar menú" : "Abrir menú"} aria-expanded={open} aria-controls="mobile-menu" className="nav-toggle">
+        {/* Hamburger mobile — se oculta cuando el overlay está abierto */}
+        <button onClick={() => setOpen(!open)} aria-label={open ? "Cerrar menú" : "Abrir menú"} aria-expanded={open} aria-controls="mobile-menu" className="nav-toggle"
+          style={{ display: open ? "none" : undefined }}>
           {[0, 1, 2].map((i) => (
-            <span key={i} style={{ display: "block", width: 24, height: 1.5, background: "var(--aqua)", transition: ".3s",
-              transform: open && i === 0 ? "rotate(45deg) translate(4.5px, 4.5px)" : open && i === 1 ? "scaleX(0)" : open && i === 2 ? "rotate(-45deg) translate(4.5px,-4.5px)" : "none",
-            }} />
+            <span key={i} style={{ display: "block", width: 24, height: 1.5, background: "var(--aqua)", transition: ".3s" }} />
           ))}
         </button>
       </nav>
@@ -166,13 +165,13 @@ export default function Navbar() {
                   transition={{ delay: 0.06 + i * 0.06 }}
                 >
                   <Link href={l.href} onClick={() => setOpen(false)} style={{
-                    fontFamily: "var(--serif)", fontSize: 32, color: "var(--text)",
+                    fontFamily: "var(--serif)", fontSize: 32, color: "#F6F1E7",
                     textDecoration: "none", padding: "10px 0", display: "block",
-                    borderBottom: "1px solid rgba(165,141,102,.1)",
+                    borderBottom: "1px solid rgba(196,159,114,.18)",
                     transition: "color .2s",
                   }}
-                    onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--gold)")}
-                    onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text)")}
+                    onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#C49F72")}
+                    onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "#F6F1E7")}
                   >
                     {l.label}
                   </Link>
@@ -194,7 +193,7 @@ export default function Navbar() {
               ) : (
                 <>
                   <Link href="/login" onClick={() => setOpen(false)} style={{
-                    color: "var(--on-dark)", fontSize: 12, letterSpacing: ".2em",
+                    color: "rgba(246,241,231,.75)", fontSize: 12, letterSpacing: ".2em",
                     textTransform: "uppercase", textDecoration: "none",
                   }}>
                     Iniciar Sesión
@@ -208,7 +207,8 @@ export default function Navbar() {
 
             <button onClick={() => setOpen(false)} aria-label="Cerrar menú" style={{
               position: "absolute", top: 24, right: 24,
-              background: "none", border: "none", color: "var(--aqua)", fontSize: 28, cursor: "pointer",
+              background: "none", border: "none", color: "#F6F1E7", fontSize: 32, cursor: "pointer",
+              lineHeight: 1, padding: 4,
             }}>
               ×
             </button>
