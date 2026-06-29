@@ -843,7 +843,7 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
   font-size: 10px;
   letter-spacing: .35em;
   text-transform: uppercase;
-  color: rgba(165,141,102,.45);
+  color: rgba(132,97,69,.8);
   text-align: center;
   margin-bottom: 28px;
 }
@@ -903,7 +903,7 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
 .avales-note {
   text-align: center;
   font-size: 12px;
-  color: rgba(165,141,102,.3);
+  color: rgba(132,97,69,.65);
   margin-top: 22px;
   letter-spacing: .05em;
 }
