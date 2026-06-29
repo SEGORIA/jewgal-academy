@@ -417,24 +417,24 @@ export default function HomePage() {
         <div className="wrap">
           <div className="feat-grid">
             {[
-              { title: "Biblioteca Premium",  desc: "Artículos, meditaciones, podcasts y masterclasses exclusivas.", go: "Explorar recursos →",
+              { title: "Biblioteca Premium",  href: "/blog",      desc: "Artículos, meditaciones, podcasts y masterclasses exclusivas.", go: "Explorar recursos →",
                 icon: <><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></> },
-              { title: "Comunidad Global",    desc: "Conéctate con estudiantes y mentores en todos los continentes.", go: "Ir a la comunidad →",
+              { title: "Comunidad Global",    href: "/#comunidad", desc: "Conéctate con estudiantes y mentores en todos los continentes.", go: "Ir a la comunidad →",
                 icon: <><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></> },
-              { title: "Eventos y Retiros",   desc: "Experiencias presenciales y virtuales que transforman.", go: "Ver próximos eventos →",
+              { title: "Eventos y Retiros",   href: "/eventos",   desc: "Experiencias presenciales y virtuales que transforman.", go: "Ver próximos eventos →",
                 icon: <><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></> },
-              { title: "Campus Virtual",      desc: "Tu espacio de aprendizaje personalizado, disponible 24/7.", go: "Ingresar al campus →",
+              { title: "Campus Virtual",      href: "/aula",      desc: "Tu espacio de aprendizaje personalizado, disponible 24/7.", go: "Ingresar al campus →",
                 icon: <><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></> },
             ].map((f) => (
               <TiltCard key={f.title} className="reveal" radius={8} intensity={5}>
-                <div className="feat">
+                <Link href={f.href} className="feat" style={{ textDecoration: "none" }}>
                   <div className="ico">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">{f.icon}</svg>
                   </div>
                   <h4>{f.title}</h4>
                   <p>{f.desc}</p>
                   <span className="go">{f.go}</span>
-                </div>
+                </Link>
               </TiltCard>
             ))}
           </div>
