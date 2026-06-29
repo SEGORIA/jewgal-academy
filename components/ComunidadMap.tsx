@@ -36,7 +36,7 @@ const COUNTRIES = [
     years: "2005 – 2015",
     tagline: "Expansión latinoamericana",
     desc: "Desde Bogotá y Medellín formó a cientos de instructores Jewgal y Life Coaches certificados. Colombia se convirtió en el corazón de su red latinoamericana de bienestar y transformación.",
-    accent: "#6BBF8E",
+    accent: "#846145",
     stat: "200+",
     statLabel: "instructores formados",
   },
