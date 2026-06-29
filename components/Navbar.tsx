@@ -8,12 +8,11 @@ import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 
 const NAV_LINKS = [
-  { href: "/",                label: "Inicio" },
-  { href: "/academia",        label: "Academia" },
-  { href: "/certificaciones", label: "Certificaciones" },
-  { href: "/eventos",         label: "Eventos" },
-  { href: "/blog",            label: "Blog" },
-  { href: "/contacto",        label: "Contacto" },
+  { href: "/",             label: "Inicio" },
+  { href: "/academia",     label: "Academia" },
+  { href: "/eventos",      label: "Eventos" },
+  { href: "/blog",         label: "Blog" },
+  { href: "/contacto",     label: "Contacto" },
 ]
 
 export default function Navbar() {
