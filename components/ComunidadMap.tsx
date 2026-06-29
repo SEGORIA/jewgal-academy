@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
 const COUNTRIES = [
@@ -56,12 +56,20 @@ const COUNTRIES = [
 
 export default function ComunidadMap() {
   const [active, setActive] = useState(COUNTRIES[3]) // EE.UU. default
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener("resize", check)
+    return () => window.removeEventListener("resize", check)
+  }, [])
 
   return (
     <div style={{
       display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gap: 32,
+      gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+      gap: isMobile ? 24 : 32,
       alignItems: "stretch",
     }}>
 
@@ -73,7 +81,7 @@ export default function ComunidadMap() {
         background: "rgba(255,255,255,.025)",
         backdropFilter: "blur(4px)",
         overflow: "hidden",
-        minHeight: 340,
+        minHeight: isMobile ? 280 : 340,
       }}>
         {/* Grid de puntos decorativo */}
         <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: .18 }} aria-hidden>
@@ -198,11 +206,11 @@ export default function ComunidadMap() {
       </div>
 
       {/* ── PANEL DERECHA ── */}
-      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: 0 }}>
+      <div style={{ display: "flex", flexDirection: "column", justifyContent: isMobile ? "flex-start" : "center", gap: 0 }}>
         {/* Stat grande */}
         <div style={{ marginBottom: 8 }}>
           <span style={{
-            fontSize: 64, fontWeight: 700, lineHeight: 1,
+            fontSize: isMobile ? 44 : 64, fontWeight: 700, lineHeight: 1,
             fontFamily: "var(--serif,Georgia,serif)",
             color: active.accent,
             display: "block",
@@ -219,7 +227,7 @@ export default function ComunidadMap() {
 
         <h3 style={{
           fontFamily: "var(--serif,Georgia,serif)", fontWeight: 500,
-          fontSize: 30, color: "var(--text)", lineHeight: 1.25,
+          fontSize: isMobile ? 22 : 30, color: "var(--text)", lineHeight: 1.25,
           marginBottom: 16,
         }}>
           Una trayectoria que trasciende fronteras
