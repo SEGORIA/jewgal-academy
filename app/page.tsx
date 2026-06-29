@@ -238,13 +238,13 @@ export default function HomePage() {
 
       {/* ── DIFERENCIADOR · 3 DIMENSIONES ── */}
       <section style={{ background: "var(--navy-2)", borderTop: "1px solid var(--line-d)", borderBottom: "1px solid var(--line-d)" }}>
-        <div className="wrap" style={{ padding: "clamp(64px,8vw,110px) 0" }}>
-          <div className="reveal" style={{ textAlign: "center", maxWidth: 700, margin: "0 auto clamp(40px,5vw,64px)" }}>
-            <span className="eyebrow" style={{ display: "inline-block", marginBottom: 18 }}>Qué nos hace únicos</span>
-            <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(28px,4vw,48px)", color: "var(--text)", lineHeight: 1.12, marginBottom: 18 }}>
+        <div className="wrap" style={{ padding: "clamp(44px,8vw,110px) 0" }}>
+          <div className="reveal" style={{ textAlign: "center", maxWidth: 700, margin: "0 auto clamp(32px,5vw,64px)" }}>
+            <span className="eyebrow" style={{ display: "inline-block", marginBottom: 14 }}>Qué nos hace únicos</span>
+            <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(22px,4vw,48px)", color: "var(--text)", lineHeight: 1.18, marginBottom: 16 }}>
               Integramos tres dimensiones que <em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>rara vez conviven</em> en una misma formación
             </h2>
-            <p style={{ color: "var(--on-dark)", fontSize: "clamp(15px,1.6vw,17px)", lineHeight: 1.7 }}>
+            <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.6vw,17px)", lineHeight: 1.7 }}>
               El rigor de la ciencia, la profundidad del desarrollo humano y la sabiduría espiritual — unidos en un solo camino de transformación.
             </p>
           </div>
