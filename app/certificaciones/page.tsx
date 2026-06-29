@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
@@ -88,6 +89,14 @@ const STEPS = [
 ]
 
 export default function CertificacionesPage() {
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener("resize", check)
+    return () => window.removeEventListener("resize", check)
+  }, [])
+
   return (
     <>
       <RevealInit />
@@ -96,7 +105,7 @@ export default function CertificacionesPage() {
       {/* ── HERO ── */}
       <section style={{
         background: "linear-gradient(120deg,var(--navy-2) 0%,var(--navy) 55%,#2A1D12 100%)",
-        paddingTop: 150, paddingBottom: 90,
+        paddingTop: isMobile ? 100 : 150, paddingBottom: isMobile ? 60 : 90,
         position: "relative", overflow: "hidden",
         borderBottom: "1px solid var(--line-d)",
       }}>
@@ -114,19 +123,19 @@ export default function CertificacionesPage() {
 
       {/* ── PROCESO ── */}
       <section style={{ background: "var(--navy-2)", borderBottom: "1px solid var(--line-d)" }}>
-        <div className="wrap" style={{ padding: "80px 36px", textAlign: "center" }}>
+        <div className="wrap" style={{ padding: isMobile ? "48px 20px" : "80px 36px", textAlign: "center" }}>
           <span className="eyebrow sec-eyebrow reveal">Cómo obtener tu certificación</span>
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-40px" }}
             variants={{ visible: { transition: { staggerChildren: 0.14 } } }}
-            style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0, marginTop: 48 }}
+            style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4,1fr)", gap: isMobile ? "28px 16px" : 0, marginTop: 48 }}
           >
             {STEPS.map((s, i) => (
               <motion.div key={s.n}
                 variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16,1,0.3,1] } } }}
                 style={{
-                  padding: "0 32px",
-                  borderRight: i < 3 ? "1px solid var(--line-d)" : "none",
+                  padding: isMobile ? "0 12px" : "0 32px",
+                  borderRight: (!isMobile && i < 3) ? "1px solid var(--line-d)" : "none",
                 }}
               >
                 <motion.span
@@ -146,7 +155,7 @@ export default function CertificacionesPage() {
 
       {/* ── GRID DE CERTIFICACIONES ── */}
       <section style={{ background: "var(--navy)" }}>
-        <div className="wrap" style={{ padding: "100px 36px" }}>
+        <div className="wrap" style={{ padding: isMobile ? "52px 20px" : "100px 36px" }}>
           <span className="eyebrow sec-eyebrow reveal">Certificaciones disponibles</span>
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }}
@@ -160,12 +169,12 @@ export default function CertificacionesPage() {
               <TiltCard radius={10} intensity={3}>
               <div style={{
                 display: "grid",
-                gridTemplateColumns: "280px 1fr",
+                gridTemplateColumns: isMobile ? "1fr" : "280px 1fr",
                 borderRadius: 10, overflow: "hidden",
                 border: "1px solid var(--line-d)",
               }}>
                 {/* Panel izquierdo con gradiente */}
-                <div className="tone-dark" style={{ background: c.grad, padding: "36px 32px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                <div className="tone-dark" style={{ background: c.grad, padding: isMobile ? "28px 24px" : "36px 32px", display: "flex", flexDirection: isMobile ? "row" : "column", justifyContent: "space-between", alignItems: isMobile ? "center" : "flex-start", gap: isMobile ? 16 : 0 }}>
                   <div>
                     <div style={{ fontSize: 36, color: c.accent, marginBottom: 10, lineHeight: 1 }}>{c.icon}</div>
                     <span style={{ fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: c.accent, display: "block", marginBottom: 10 }}>{c.type}</span>
@@ -180,7 +189,7 @@ export default function CertificacionesPage() {
                 </div>
 
                 {/* Panel derecho */}
-                <div style={{ background: "var(--navy-2)", padding: "36px 40px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                <div style={{ background: "var(--navy-2)", padding: isMobile ? "24px 24px" : "36px 40px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                   <div>
                     <div style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 6 }}>Descripción</div>
                     <p style={{ color: "var(--on-dark)", fontSize: 14.5, lineHeight: 1.7, marginBottom: 24 }}>{c.desc}</p>
