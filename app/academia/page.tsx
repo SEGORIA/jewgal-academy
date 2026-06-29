@@ -194,14 +194,15 @@ export default function AcademiaPage() {
               {PROGRAMS.slice(1).map((p) => (
                 <motion.div key={p.slug}
                   variants={{ hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16,1,0.3,1] } } }}
+                  style={{ display: "flex", flexDirection: "column" }}
                 >
-                  <TiltCard radius={8}>
-                    <Link href={`/programas/${p.slug}`} style={{ textDecoration: "none" }}>
+                  <TiltCard radius={8} style={{ flex: 1, height: "100%" }}>
+                    <Link href={`/programas/${p.slug}`} style={{ textDecoration: "none", display: "flex", flexDirection: "column", height: "100%" }}>
                       <div className="tone-dark" style={{
                         background: p.grad, borderRadius: 8, padding: "34px 28px",
                         border: "1px solid var(--surface-2)",
                         display: "flex", flexDirection: "column", justifyContent: "space-between",
-                        minHeight: 340, cursor: "pointer",
+                        flex: 1, cursor: "pointer",
                       }}>
                         <div>
                           <div style={{ fontSize: 30, color: p.accent, marginBottom: 12, lineHeight: 1 }}>{p.icon}</div>

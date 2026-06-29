@@ -61,7 +61,7 @@ export function TiltCard({
       data-tilt
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
-      style={{ width: "100%", ...style }}
+      style={{ width: "100%", display: "flex", flexDirection: "column", ...style }}
       className={className}
     >
       <div
@@ -71,8 +71,9 @@ export function TiltCard({
           willChange: "transform, box-shadow",
           borderRadius: radius,
           overflow: "hidden",
-          height: "100%",
+          flex: 1,
           position: "relative",
+          display: "flex", flexDirection: "column",
         }}
       >
         {children}
