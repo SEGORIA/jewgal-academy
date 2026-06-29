@@ -65,9 +65,7 @@ export default function NotFound() {
               <Link
                 key={l.href}
                 href={l.href}
-                style={{ fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--on-dark)", textDecoration: "none", transition: "color .2s" }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "var(--gold)")}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "var(--on-dark)")}
+                className="not-found-link"
               >
                 {l.label}
               </Link>
