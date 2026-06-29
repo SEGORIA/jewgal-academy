@@ -73,8 +73,9 @@ export default function Navbar() {
             whileTap={{ scale: 0.92 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             aria-label="Volver al inicio"
+            className="back-to-top"
             style={{
-              position: "fixed", bottom: 32, right: 28, zIndex: 90,
+              zIndex: 90,
               width: 44, height: 44, borderRadius: "50%",
               background: "linear-gradient(135deg,#A76D61,#C49F72)",
               border: "none", cursor: "pointer",
