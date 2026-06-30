@@ -83,7 +83,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <nav style={{ flex: 1, padding: "14px 10px", overflowY: "auto", display: "flex", flexDirection: "column", gap: 4 }}>
           {NAV.map(({ group, items }) => (
             <div key={group} style={{ marginBottom: 6 }}>
-              <p style={{ fontSize: 9, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--text-dim)", opacity: 0.7, padding: "6px 12px", marginBottom: 2 }}>
+              <p style={{ fontSize: 9, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--text-faint)", padding: "6px 12px", marginBottom: 2 }}>
                 {group}
               </p>
               {items.map(({ href, icon: Icon, label }) => {
@@ -124,19 +124,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div style={{ padding: "10px 10px 18px", borderTop: "1px solid rgba(165,141,102,.08)" }}>
           <Link href="/" target="_blank" style={{
             display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", borderRadius: 10,
-            fontSize: 12, color: "var(--text-dim)", textDecoration: "none", marginBottom: 2, transition: "all .2s",
+            fontSize: 12, color: "var(--text-muted)", textDecoration: "none", marginBottom: 2, transition: "all .2s",
           }}
             onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.color = "var(--text-strong)"; el.style.background = "rgba(165,141,102,.07)" }}
-            onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.color = "var(--text-dim)"; el.style.background = "transparent" }}
+            onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.color = "var(--text-muted)"; el.style.background = "transparent" }}
           >
             <ExternalLink size={13} /> Ver sitio público
           </Link>
           <motion.button
             whileHover={{ x: 2 }}
             onClick={() => signOut({ callbackUrl: "/" })}
-            style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", borderRadius: 10, width: "100%", background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "var(--text-dim)", transition: "color .2s" }}
+            style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", borderRadius: 10, width: "100%", background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "var(--text-muted)", transition: "color .2s" }}
             onMouseEnter={(e) => { e.currentTarget.style.color = "var(--danger)"; e.currentTarget.style.background = "rgba(239,68,68,.06)" }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-dim)"; e.currentTarget.style.background = "transparent" }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-muted)"; e.currentTarget.style.background = "transparent" }}
           >
             <LogOut size={13} /> Salir
           </motion.button>
