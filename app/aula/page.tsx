@@ -152,10 +152,11 @@ export default function AulaDashboard() {
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          style={{ ...card, padding: "20px 24px", marginBottom: 28, display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}
+          style={{ ...card, padding: "20px 24px", marginBottom: 28, display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap", position: "relative", overflow: "hidden" }}
         >
+          <div style={{ position: "absolute", top: -30, right: -30, width: 110, height: 110, borderRadius: "50%", background: "radial-gradient(circle,rgba(196,159,114,.1) 0%,transparent 70%)", pointerEvents: "none" }} />
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ width: 48, height: 48, borderRadius: 12, background: "rgba(165,141,102,.14)", border: "1px solid rgba(165,141,102,.28)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <div style={{ width: 48, height: 48, borderRadius: 12, background: "rgba(165,141,102,.14)", border: "1px solid rgba(165,141,102,.28)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 16px rgba(165,141,102,.15)" }}>
               <SummaryLevelIcon size={24} style={{ color: "var(--gold)" }} />
             </div>
             <div>
@@ -258,7 +259,9 @@ export default function AulaDashboard() {
                       padding: "20px 22px", borderRadius: 12,
                       background: `${meta.accent}0A`,
                       border: `1px solid ${meta.accent}25`,
+                      position: "relative", overflow: "hidden",
                     }}>
+                      <div style={{ position: "absolute", top: -24, right: -24, width: 90, height: 90, borderRadius: "50%", background: `${meta.accent}12`, pointerEvents: "none" }} />
                       {/* Encabezado */}
                       <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
                         <div style={{

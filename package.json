@@ -31,6 +31,7 @@
     "@radix-ui/react-toast": "^1.2.17",
     "@stripe/stripe-js": "^9.8.0",
     "@types/bcryptjs": "^2.4.6",
+    "@vercel/analytics": "^2.0.1",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",

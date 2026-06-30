@@ -5,6 +5,7 @@ import Providers from "@/components/Providers"
 import ScrollProgress from "@/components/motion/ScrollProgress"
 import WhatsAppFab from "@/components/WhatsAppFab"
 import { getTheme } from "@/lib/theme"
+import { Analytics } from "@vercel/analytics/next"
 
 const SITE_URL = "https://jewgal-academy.vercel.app"
 
@@ -108,6 +109,7 @@ export default async function RootLayout({
           <div id="contenido">{children}</div>
         </Providers>
         <WhatsAppFab />
+        <Analytics />
       </body>
     </html>
   )
