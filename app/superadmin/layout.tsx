@@ -54,7 +54,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside className="sidebar-desk" style={{
         position: "fixed", insetBlock: 0, left: 0, zIndex: 40,
         width: 240,
-        background: "linear-gradient(180deg, var(--bg) 0%, #1A1108 100%)",
+        background: "linear-gradient(180deg, var(--bg) 0%, var(--bg-3) 100%)",
         borderRight: "1px solid rgba(165,141,102,.14)",
         display: "flex", flexDirection: "column",
         transition: "transform .3s",
@@ -83,7 +83,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <nav style={{ flex: 1, padding: "14px 10px", overflowY: "auto", display: "flex", flexDirection: "column", gap: 4 }}>
           {NAV.map(({ group, items }) => (
             <div key={group} style={{ marginBottom: 6 }}>
-              <p style={{ fontSize: 9, letterSpacing: ".24em", textTransform: "uppercase", color: "rgba(165,141,102,.45)", padding: "6px 12px", marginBottom: 2 }}>
+              <p style={{ fontSize: 9, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--text-dim)", opacity: 0.7, padding: "6px 12px", marginBottom: 2 }}>
                 {group}
               </p>
               {items.map(({ href, icon: Icon, label }) => {
