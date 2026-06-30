@@ -1062,8 +1062,8 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
   .wa-fab-label { display: none; }
 }
 
-/* Back-to-top — sube sobre el FAB de WhatsApp en móvil */
-.back-to-top { position: fixed; bottom: 32px; right: 28px; }
+/* Back-to-top — sube sobre el FAB de WhatsApp (escritorio: pill con label ~48px; móvil: ícono ~50px) */
+.back-to-top { position: fixed; bottom: 92px; right: 28px; }
 @media (max-width: 560px) {
   .back-to-top { bottom: 82px; right: 16px; }
 }
