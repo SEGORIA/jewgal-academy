@@ -11,17 +11,20 @@ const DEFAULT_PHOTOS: Photo[] = [
   { src: "/brand/hero/devora-miami.jpg",      alt: "Devora en Miami con familia" },
 ]
 
-const INTERVAL = 5000
+const INTERVAL   = 5000
+const HERO_VIDEO = "/brand/hero-intro.mp4"
 
 export default function HeroCarousel() {
-  const [photos, setPhotos] = useState<Photo[]>(DEFAULT_PHOTOS)
+  const [photos, setPhotos]     = useState<Photo[]>(DEFAULT_PHOTOS)
   const [current, setCurrent]   = useState(0)
   const [paused, setPaused]     = useState(false)
+  const [showVideo, setShowVideo] = useState(true)
   const reducedMotion = useRef(false)
 
-  /* Cargar lista desde la base de datos */
   useEffect(() => {
     reducedMotion.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    if (reducedMotion.current) setShowVideo(false)
+
     fetch("/api/hero-photos")
       .then(r => r.json())
       .then((data: Photo[]) => {
@@ -31,28 +34,57 @@ export default function HeroCarousel() {
       .catch(() => {})
   }, [])
 
+  const handleVideoEnd = useCallback(() => {
+    setShowVideo(false)
+    setCurrent(0)
+  }, [])
+
   const next = useCallback(() => setCurrent(c => (c + 1) % photos.length), [photos.length])
   const prev = useCallback(() => setCurrent(c => (c - 1 + photos.length) % photos.length), [photos.length])
 
-  /* Auto-avance */
+  /* Auto-avance del carrusel sólo cuando el video ya terminó */
   useEffect(() => {
-    if (paused || reducedMotion.current || photos.length <= 1) return
+    if (showVideo || paused || reducedMotion.current || photos.length <= 1) return
     const id = setInterval(next, INTERVAL)
     return () => clearInterval(id)
-  }, [paused, photos.length, next])
+  }, [showVideo, paused, photos.length, next])
 
   return (
     <>
-      {/* Fondo instantáneo (gradient) siempre visible */}
+      {/* Fondo instantáneo siempre visible */}
       <div className="hero-fallback" aria-hidden="true" />
 
-      {/* Slides — crossfade */}
+      {/* ── VIDEO INTRO ── */}
+      <div
+        aria-hidden={!showVideo}
+        style={{
+          position: "absolute", inset: 0, zIndex: 0,
+          opacity: showVideo ? 1 : 0,
+          transition: "opacity 1.4s ease",
+          pointerEvents: showVideo ? "auto" : "none",
+        }}
+      >
+        <video
+          src={HERO_VIDEO}
+          autoPlay
+          muted
+          playsInline
+          onEnded={handleVideoEnd}
+          style={{
+            width: "100%", height: "100%",
+            objectFit: "cover",
+            objectPosition: "center 20%",
+          }}
+        />
+      </div>
+
+      {/* ── SLIDES CARRUSEL — crossfade ── */}
       {photos.map((photo, i) => (
         <div
           key={photo.src}
           role="img"
           aria-label={photo.alt}
-          aria-hidden={i !== current}
+          aria-hidden={showVideo || i !== current}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           style={{
@@ -60,14 +92,14 @@ export default function HeroCarousel() {
             backgroundImage: `url(${photo.src})`,
             backgroundSize: "cover",
             backgroundPosition: "center 22%",
-            opacity: i === current ? 1 : 0,
+            opacity: !showVideo && i === current ? 1 : 0,
             transition: "opacity 1.2s ease",
           }}
         />
       ))}
 
-      {/* Controles — sólo si hay más de 1 foto */}
-      {photos.length > 1 && (
+      {/* ── CONTROLES — sólo cuando el carrusel está activo ── */}
+      {!showVideo && photos.length > 1 && (
         <>
           {/* Dots */}
           <div
