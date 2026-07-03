@@ -593,13 +593,13 @@ nav.jnav.scrolled {
 
 /* ─── FUNDADORA ─── */
 .fundadora {
-  background: linear-gradient(160deg, #1E0A08 0%, #4A1E16 42%, #2A1008 100%);
+  background: linear-gradient(150deg, #5C2218 0%, #8B3D2E 38%, #A76D61 58%, #7A3028 80%, #4A1810 100%);
   position: relative; overflow: hidden;
 }
 .fundadora::before {
   content: "";
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 68% 50%, rgba(167,109,97,.22) 0%, transparent 58%);
+  background: radial-gradient(ellipse at 65% 45%, rgba(196,140,120,.30) 0%, rgba(167,109,97,.12) 45%, transparent 70%);
   pointer-events: none;
 }
 .fund-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 0; }
@@ -616,9 +616,10 @@ nav.jnav.scrolled {
   font-family: var(--script); font-style: italic; font-size: 160px; color: rgba(167,109,97,.15);
 }
 .fund-copy { padding: 0 0 0 72px; }
-.fund-copy h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(34px,4vw,52px); color: var(--text); margin: 14px 0 6px; line-height: 1.05; }
-.fund-copy .sig { font-family: var(--script); font-style: italic; font-size: 38px; color: #A76D61; line-height: .9; margin-bottom: 24px; }
-.fund-copy p { color: rgba(236,218,196,.82); font-size: 16px; margin-bottom: 18px; max-width: 480px; }
+.fund-copy .eyebrow { color: #F0D5C8; }
+.fund-copy h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(34px,4vw,52px); color: #F6EEE8; margin: 14px 0 6px; line-height: 1.05; }
+.fund-copy .sig { font-family: var(--script); font-style: italic; font-size: 38px; color: #F0D5C8; line-height: .9; margin-bottom: 24px; }
+.fund-copy p { color: rgba(246,238,232,.80); font-size: 16px; margin-bottom: 18px; max-width: 480px; }
 .fund-copy .btn { margin-top: 14px; }
 
 /* ─── RUTA ─── */
