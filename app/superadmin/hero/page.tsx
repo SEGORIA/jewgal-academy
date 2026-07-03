@@ -6,10 +6,11 @@ import { GripVertical, Eye, EyeOff, ChevronUp, ChevronDown, Save, Info } from "l
 type Photo = { src: string; alt: string; active: boolean; order: number }
 
 const DEFAULT: Photo[] = [
-  { src: "/brand/hero/devora-coaching.jpg",  alt: "Devora con su grupo de coaching",  active: true, order: 0 },
-  { src: "/brand/hero/devora-tv.jpg",         alt: "Devora en televisión",              active: true, order: 1 },
-  { src: "/brand/hero/devora-ninos.jpg",      alt: "Devora con niños",                 active: true, order: 2 },
-  { src: "/brand/hero/devora-miami.jpg",      alt: "Devora en Miami con familia",       active: true, order: 3 },
+  { src: "/brand/hero/devora-coaching.jpg",  alt: "Devora con su grupo de coaching",      active: true, order: 0 },
+  { src: "/brand/hero/devora-tv.jpg",         alt: "Devora en televisión",                active: true, order: 1 },
+  { src: "/brand/hero/devora-ninos.jpg",      alt: "Devora con niños",                    active: true, order: 2 },
+  { src: "/brand/hero/devora-miami.jpg",      alt: "Devora en Miami con familia",          active: true, order: 3 },
+  { src: "/brand/hero/devora-joven.png",      alt: "Joven saludando en experiencia Jewgal", active: true, order: 4 },
 ]
 
 export default function HeroAdminPage() {
