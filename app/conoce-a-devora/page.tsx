@@ -42,7 +42,7 @@ export default function ConoceADevorPage() {
           border-top: 1px solid var(--line-d);
         }
         .devora-tray-row:last-child { border-bottom: 1px solid var(--line-d); }
-        .devora-tray-code  { font-family: var(--serif); font-size: 13px; color: var(--gold); font-style: italic; }
+        .devora-tray-code  { font-family: var(--serif); font-size: 13px; color: #A76D61; font-style: italic; }
         .devora-tray-place { font-family: var(--serif); font-weight: 500; font-size: clamp(18px,2vw,26px); color: #eef4f4; }
         .devora-tray-period { display: none; }
         .devora-tray-event { font-size: 15px; color: var(--on-dark); line-height: 1.65; }
@@ -77,7 +77,7 @@ export default function ConoceADevorPage() {
             padding: 22px 0;
           }
           .devora-tray-code   { display: none; }
-          .devora-tray-period { display: block; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+          .devora-tray-period { display: block; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #A76D61; margin-bottom: 6px; }
           .devora-tray-place  { font-family: var(--serif); font-weight: 500; font-size: 22px; color: #eef4f4; display: block; }
           .devora-tray-header { display: flex; flex-direction: column; gap: 2px; }
           .devora-tray-event  { font-size: 14px; margin-top: 4px; }
@@ -161,7 +161,7 @@ export default function ConoceADevorPage() {
           <div className="reveal" style={{ display: "flex", flexDirection: "column", gap: 20, fontSize: "clamp(15px,1.6vw,17px)", lineHeight: 1.8, color: "var(--on-dark)" }}>
             <p>Soy <strong style={{ color: "var(--text)" }}>Devora Benchimol</strong>. Master Coach Internacional, educadora, Rabbanit y fundadora de Jewgal Academy.</p>
             <p>Durante más de 40 años he acompañado personas en Argentina, Israel, Guatemala, Colombia y Estados Unidos a atravesar sus procesos más profundos — los que se viven en el cuerpo, los que duelen en el alma, y los que transforman la vida para siempre.</p>
-            <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(19px,2.2vw,24px)", color: "var(--gold-light)", lineHeight: 1.45 }}>Mi camino no nació de un aula. Nació del encuentro real con el ser humano.</p>
+            <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(19px,2.2vw,24px)", color: "#A76D61", lineHeight: 1.45 }}>Mi camino no nació de un aula. Nació del encuentro real con el ser humano.</p>
             <p>De esa trayectoria surgió una forma de trabajar que integra lo que la mayoría separa: la mente y el cuerpo, la técnica y la intuición, el conocimiento académico y la sabiduría ancestral.</p>
             <p>Soy creadora de <strong style={{ color: "var(--text)" }}>Joogalkids</strong>, un programa de Mindfulness in Motion basado en el Alef Bet, diseñado para que los niños aprendan a conectar con su mundo interior a través del movimiento, el juego y la sabiduría de las letras hebreas. Y de <strong style={{ color: "var(--text)" }}>Jewgal</strong>, su versión para adultos — una metodología propia que lleva ese mismo principio de consciencia en movimiento a quienes guían, educan y lideran.</p>
             <p style={{ marginTop: 4 }}>En cada retiro traigo conmigo todo eso:</p>
@@ -175,13 +175,69 @@ export default function ConoceADevorPage() {
                 ["Y la mirada de la ", "Psicopedagogía", " para que cada proceso sea también un aprendizaje que se integra y se sostiene."],
               ].map(([pre, strong, post]) => (
                 <li key={strong} style={{ display: "flex", gap: 12, alignItems: "baseline" }}>
-                  <span style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--gold)", flexShrink: 0, transform: "translateY(-2px)" }} />
+                  <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#A76D61", flexShrink: 0, transform: "translateY(-2px)" }} />
                   <span>{pre}<strong style={{ color: "var(--text)" }}>{strong}</strong>{post}</span>
                 </li>
               ))}
             </ul>
             <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(20px,2.4vw,26px)", color: "var(--text)", lineHeight: 1.4, marginTop: 8 }}>No vengo a darte respuestas.<br />Vengo a acompañarte a encontrar las tuyas.</p>
           </div>
+        </div>
+      </section>
+
+      {/* ── DOCUMENTAL ── */}
+      <section style={{ background: "var(--navy-2)", padding: "clamp(60px,8vw,100px) 36px", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 900, height: 500, borderRadius: "50%", background: "radial-gradient(ellipse,rgba(167,109,97,.11) 0%,transparent 65%)", pointerEvents: "none" }} />
+
+        <div className="wrap" style={{ maxWidth: 920, position: "relative", zIndex: 2 }}>
+
+          {/* Header centrado */}
+          <div style={{ textAlign: "center", marginBottom: 44 }}>
+            <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16 }}>Documental</span>
+            <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.5vw,48px)", color: "var(--text)", letterSpacing: ".01em", lineHeight: 1.15 }}>
+              Escúchala en sus propias <em style={{ color: "#A76D61", fontStyle: "normal" }}>palabras</em>
+            </h2>
+          </div>
+
+          {/* Contenedor del video — glow dorado */}
+          <motion.div
+            initial={{ opacity: 0, y: 36 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.85, ease: [0.16,1,0.3,1] }}
+            style={{
+              position: "relative",
+              borderRadius: 14,
+              overflow: "hidden",
+              boxShadow: "0 0 0 1px rgba(167,109,97,.32), 0 40px 100px rgba(0,0,0,.55), 0 0 80px rgba(167,109,97,.16)",
+            }}
+          >
+            {/* Línea terracota superior */}
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "linear-gradient(90deg,transparent,#A76D61,transparent)", zIndex: 3, pointerEvents: "none" }} />
+
+            {/* 16:9 */}
+            <div style={{ position: "relative", paddingTop: "56.25%", background: "var(--navy)" }}>
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/6zZ2TgC8_gk?rel=0&modestbranding=1&color=white"
+                title="Devora Benchimol — Documental"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                loading="lazy"
+                style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
+              />
+            </div>
+          </motion.div>
+
+          {/* Cita debajo */}
+          <p className="reveal" style={{
+            textAlign: "center",
+            fontFamily: "var(--script)", fontStyle: "italic",
+            fontSize: "clamp(16px,2vw,21px)",
+            color: "#A76D61", opacity: 0.9,
+            marginTop: 32, lineHeight: 1.4,
+          }}>
+            "Más de 40 años acompañando procesos de transformación real."
+          </p>
         </div>
       </section>
 
@@ -213,7 +269,7 @@ export default function ConoceADevorPage() {
                 <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
                   {g.items.map((it) => (
                     <li key={it} style={{ fontSize: 14, color: "var(--on-dark)", display: "flex", alignItems: "center", gap: 10 }}>
-                      <span style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--gold)", flexShrink: 0 }} />
+                      <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#A76D61", flexShrink: 0 }} />
                       {it}
                     </li>
                   ))}
