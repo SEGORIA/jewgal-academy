@@ -2,9 +2,9 @@
 
 /* ─── CSS Variables ─── */
 :root {
-  --navy:   #2C1A11;
-  --navy-2: #1D1008;
-  --navy-3: #3A2015;
+  --navy:   #2A1410;
+  --navy-2: #1A0806;
+  --navy-3: #3A1810;
   --gold:        #A58D66;
   --gold-light:  #CBB78B;
   --gold-deep:   #8A7350;
@@ -24,12 +24,12 @@
   --script: var(--font-script, cursive);
 
   /* ─── Tokens semánticos de tema (OSCURO por defecto) ─── */
-  --bg:            #1D1008;   /* fondo principal */
-  --bg-2:          #2C1A11;   /* fondo secundario */
-  --bg-3:          #120905;   /* fondo profundo (sidebar, footer) */
+  --bg:            #1A0806;   /* fondo principal — terracota profundo */
+  --bg-2:          #2A1410;   /* fondo secundario */
+  --bg-3:          #100504;   /* fondo profundo (sidebar, footer) */
   --surface:       rgba(255,255,255,.03);  /* tarjetas */
   --surface-2:     rgba(255,255,255,.05);  /* inputs / hover */
-  --surface-solid: #1D1008;                /* modales, dropdowns */
+  --surface-solid: #1A0806;                /* modales, dropdowns */
   --text:          var(--text);                 /* texto principal */
   --text-strong:   rgba(236,218,196,.88);
   --text-muted:    rgba(236,218,196,.62);
@@ -41,12 +41,12 @@
   --r-sm: 8px;
   --r-md: 12px;
   --r-lg: 16px;
-  --shadow-card: 0 8px 32px rgba(26,13,6,.20);
-  --hero-overlay-1: rgba(26,13,6,.97);
-  --hero-overlay-2: rgba(26,13,6,.55);
-  --hero-overlay-3: rgba(26,13,6,.08);
-  --bar:   rgba(20,11,5,.92);   /* barras translúcidas (topbar) */
-  --scrim: rgba(20,11,5,.85);   /* velo de modales */
+  --shadow-card: 0 8px 32px rgba(26,8,6,.20);
+  --hero-overlay-1: rgba(26,8,6,.97);
+  --hero-overlay-2: rgba(26,8,6,.55);
+  --hero-overlay-3: rgba(26,8,6,.08);
+  --bar:   rgba(16,5,4,.92);   /* barras translúcidas (topbar) */
+  --scrim: rgba(16,5,4,.85);   /* velo de modales */
   /* ─── Tokens semánticos de estado (valor pensado para contraste sobre fondo oscuro) ─── */
   --success:      #6BBF8E;
   --success-soft: rgba(107,191,142,.12);

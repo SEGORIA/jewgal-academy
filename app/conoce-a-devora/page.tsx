@@ -94,12 +94,11 @@ export default function ConoceADevorPage() {
 
       {/* ── HERO ── */}
       <section className="tone-dark" style={{
-        background: "linear-gradient(135deg, #1D0A08 0%, #5C2218 35%, #8B3D2E 55%, #3A1510 80%, #1D0A08 100%)",
+        background: "linear-gradient(to bottom, #1A0806 0%, #5C2218 32%, #7A3028 52%, #3A1510 78%, #1A0806 100%)",
         paddingTop: "clamp(100px,12vw,160px)", paddingBottom: "clamp(60px,8vw,100px)",
         position: "relative", overflow: "hidden",
       }}>
-        <div style={{ position: "absolute", top: "-30%", right: "-10%", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(167,109,97,.22),transparent 70%)", pointerEvents: "none" }} />
-        <div style={{ position: "absolute", bottom: "-20%", left: "-5%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle,rgba(196,159,114,.12),transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", top: "20%", right: "5%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle,rgba(167,109,97,.18),transparent 70%)", pointerEvents: "none" }} />
 
         <div className="wrap devora-hero-grid">
           {/* Foto */}
@@ -131,7 +130,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── STAT BANNER ── */}
-      <section className="tone-dark" style={{ background: "linear-gradient(135deg, #3A1510 0%, #6B2E22 50%, #3A1510 100%)", borderTop: "1px solid rgba(167,109,97,.25)", borderBottom: "1px solid rgba(167,109,97,.25)" }}>
+      <section className="tone-dark" style={{ background: "linear-gradient(to bottom, #1A0806 0%, #3A1510 25%, #5C2218 50%, #3A1510 75%, #1A0806 100%)" }}>
         <div className="wrap" style={{ padding: "clamp(40px,6vw,72px) 36px" }}>
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }}
@@ -156,7 +155,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── EN SUS PALABRAS (bio) ── */}
-      <section className="tone-dark" style={{ background: "linear-gradient(160deg, #3A1510 0%, #6B2E22 45%, #5C2218 65%, #3A1510 100%)" }}>
+      <section className="tone-dark" style={{ background: "linear-gradient(to bottom, #1A0806 0%, #2A1210 40%, #2A1210 60%, #1A0806 100%)" }}>
         <div className="wrap devora-section-pad" style={{ maxWidth: 860 }}>
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 28 }}>En sus palabras</span>
           <div className="reveal" style={{ display: "flex", flexDirection: "column", gap: 20, fontSize: "clamp(15px,1.6vw,17px)", lineHeight: 1.8, color: "var(--on-dark)" }}>
@@ -187,7 +186,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── DOCUMENTAL ── */}
-      <section className="tone-dark" style={{ background: "linear-gradient(160deg,#1A0B09 0%,#2A1410 60%,#1A0B09 100%)", padding: "clamp(60px,8vw,100px) 36px", position: "relative", overflow: "hidden" }}>
+      <section className="tone-dark" style={{ background: "linear-gradient(to bottom, #1A0806 0%, #1A0806 100%)", padding: "clamp(60px,8vw,100px) 36px", position: "relative", overflow: "hidden" }}>
         {/* Glow terracota central */}
         <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 1000, height: 600, borderRadius: "50%", background: "radial-gradient(ellipse,rgba(167,109,97,.28) 0%,rgba(167,109,97,.06) 45%,transparent 70%)", pointerEvents: "none" }} />
         {/* Borde superior terracota */}
@@ -247,10 +246,10 @@ export default function ConoceADevorPage() {
 
       {/* ── MISIÓN ── */}
       <section className="tone-dark" style={{
-        background: "linear-gradient(150deg, #5C2218 0%, #8B3D2E 38%, #A76D61 58%, #7A3028 80%, #4A1810 100%)",
+        background: "linear-gradient(to bottom, #1A0806 0%, #5C2218 20%, #8B3D2E 45%, #A76D61 55%, #7A3028 78%, #1A0806 100%)",
         position: "relative", overflow: "hidden",
       }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 40% 50%, rgba(196,140,120,.28) 0%, rgba(167,109,97,.10) 45%, transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 50%, rgba(196,140,120,.22) 0%, transparent 70%)", pointerEvents: "none" }} />
         <div className="wrap devora-section-pad" style={{ position: "relative", zIndex: 1 }}>
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 24, color: "#F0D5C8" }}>Mi misión</span>
           <p className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(20px,3vw,40px)", color: "#F6EEE8", lineHeight: 1.35, maxWidth: 820, letterSpacing: ".01em" }}>
@@ -261,7 +260,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── CREDENCIALES ── */}
-      <section className="tone-dark" style={{ background: "linear-gradient(135deg, #4A1810 0%, #8B3D2E 50%, #4A1810 100%)" }}>
+      <section className="tone-dark" style={{ background: "linear-gradient(to bottom, #1A0806 0%, #2A1210 35%, #3A1810 50%, #2A1210 65%, #1A0806 100%)" }}>
         <div className="wrap devora-section-pad">
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16 }}>Formación</span>
           <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.5vw,48px)", color: "var(--text)", letterSpacing: ".01em", marginBottom: "clamp(32px,5vw,56px)" }}>
@@ -289,7 +288,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── TRAYECTORIA ── */}
-      <section className="tone-dark" style={{ background: "linear-gradient(180deg, #2A1008 0%, #4A1D16 50%, #2A1008 100%)", position: "relative" }}>
+      <section className="tone-dark" style={{ background: "linear-gradient(to bottom, #1A0806 0%, #2A1210 40%, #3A1510 55%, #2A1210 75%, #1A0806 100%)", position: "relative" }}>
         <div style={{ position: "absolute", inset: 0, opacity: .35, backgroundImage: "radial-gradient(1px 1px at 20% 30%,#A76D61,transparent),radial-gradient(1px 1px at 70% 60%,#C49F72,transparent),radial-gradient(1px 1px at 50% 80%,#A76D61,transparent)" }} />
         <div className="wrap devora-section-pad" style={{ position: "relative", zIndex: 2 }}>
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16 }}>Trayectoria</span>
@@ -320,7 +319,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── FUNDACIÓN ── */}
-      <section className="tone-dark" style={{ background: "linear-gradient(150deg, #4A1810 0%, #7A3028 40%, #5C2218 70%, #3A1510 100%)", borderTop: "1px solid rgba(167,109,97,.30)" }}>
+      <section className="tone-dark" style={{ background: "linear-gradient(to bottom, #1A0806 0%, #3A1510 25%, #6B2E22 50%, #3A1510 75%, #1A0806 100%)" }}>
         <div className="wrap devora-section-pad">
           <div className="devora-fund-grid">
             <div className="reveal">
