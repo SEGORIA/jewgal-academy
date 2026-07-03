@@ -15,7 +15,7 @@ const csp = [
   "img-src 'self' data: blob: https:",
   "media-src 'self'",
   "connect-src 'self' https://api.stripe.com https://www.paypal.com",
-  "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.paypal.com",
+  "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.paypal.com https://www.youtube-nocookie.com https://www.youtube.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

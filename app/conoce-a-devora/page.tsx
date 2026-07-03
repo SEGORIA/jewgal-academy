@@ -186,14 +186,17 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── DOCUMENTAL ── */}
-      <section className="tone-dark" style={{ background: "var(--navy-2)", padding: "clamp(60px,8vw,100px) 36px", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 900, height: 500, borderRadius: "50%", background: "radial-gradient(ellipse,rgba(167,109,97,.11) 0%,transparent 65%)", pointerEvents: "none" }} />
+      <section className="tone-dark" style={{ background: "linear-gradient(160deg,#1A0B09 0%,#2A1410 60%,#1A0B09 100%)", padding: "clamp(60px,8vw,100px) 36px", position: "relative", overflow: "hidden" }}>
+        {/* Glow terracota central */}
+        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 1000, height: 600, borderRadius: "50%", background: "radial-gradient(ellipse,rgba(167,109,97,.28) 0%,rgba(167,109,97,.06) 45%,transparent 70%)", pointerEvents: "none" }} />
+        {/* Borde superior terracota */}
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "linear-gradient(90deg,transparent,#A76D61 30%,#C49F72 50%,#A76D61 70%,transparent)", opacity: 0.7, pointerEvents: "none" }} />
 
         <div className="wrap" style={{ maxWidth: 920, position: "relative", zIndex: 2 }}>
 
           {/* Header centrado */}
           <div style={{ textAlign: "center", marginBottom: 44 }}>
-            <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16 }}>Documental</span>
+            <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16, color: "#A76D61" }}>Documental</span>
             <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.5vw,48px)", color: "var(--text)", letterSpacing: ".01em", lineHeight: 1.15 }}>
               Escúchala en sus propias <em style={{ color: "#A76D61", fontStyle: "normal" }}>palabras</em>
             </h2>
@@ -209,7 +212,7 @@ export default function ConoceADevorPage() {
               position: "relative",
               borderRadius: 14,
               overflow: "hidden",
-              boxShadow: "0 0 0 1px rgba(167,109,97,.32), 0 40px 100px rgba(0,0,0,.55), 0 0 80px rgba(167,109,97,.16)",
+              boxShadow: "0 0 0 1px rgba(167,109,97,.55), 0 40px 100px rgba(0,0,0,.65), 0 0 100px rgba(167,109,97,.35)",
             }}
           >
             {/* Línea terracota superior */}
