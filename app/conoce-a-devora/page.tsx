@@ -94,11 +94,12 @@ export default function ConoceADevorPage() {
 
       {/* ── HERO ── */}
       <section className="tone-dark" style={{
-        background: "linear-gradient(120deg,var(--navy-2) 0%,var(--navy) 52%,#2A1D12 100%)",
+        background: "linear-gradient(135deg, #1D0A08 0%, #5C2218 35%, #8B3D2E 55%, #3A1510 80%, #1D0A08 100%)",
         paddingTop: "clamp(100px,12vw,160px)", paddingBottom: "clamp(60px,8vw,100px)",
         position: "relative", overflow: "hidden",
       }}>
-        <div style={{ position: "absolute", top: "-30%", right: "-10%", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(165,141,102,.08),transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", top: "-30%", right: "-10%", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(167,109,97,.22),transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: "-20%", left: "-5%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle,rgba(196,159,114,.12),transparent 70%)", pointerEvents: "none" }} />
 
         <div className="wrap devora-hero-grid">
           {/* Foto */}
@@ -130,7 +131,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── STAT BANNER ── */}
-      <section className="tone-dark" style={{ background: "var(--navy-2)", borderTop: "1px solid var(--line-d)", borderBottom: "1px solid var(--line-d)" }}>
+      <section className="tone-dark" style={{ background: "linear-gradient(135deg, #3A1510 0%, #6B2E22 50%, #3A1510 100%)", borderTop: "1px solid rgba(167,109,97,.25)", borderBottom: "1px solid rgba(167,109,97,.25)" }}>
         <div className="wrap" style={{ padding: "clamp(40px,6vw,72px) 36px" }}>
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }}
@@ -245,10 +246,14 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── MISIÓN ── */}
-      <section className="tone-dark" style={{ background: "var(--navy-2)" }}>
-        <div className="wrap devora-section-pad">
-          <span className="eyebrow reveal" style={{ display: "block", marginBottom: 24 }}>Mi misión</span>
-          <p className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(20px,3vw,40px)", color: "var(--text)", lineHeight: 1.35, maxWidth: 820, letterSpacing: ".01em" }}>
+      <section className="tone-dark" style={{
+        background: "linear-gradient(150deg, #5C2218 0%, #8B3D2E 38%, #A76D61 58%, #7A3028 80%, #4A1810 100%)",
+        position: "relative", overflow: "hidden",
+      }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 40% 50%, rgba(196,140,120,.28) 0%, rgba(167,109,97,.10) 45%, transparent 70%)", pointerEvents: "none" }} />
+        <div className="wrap devora-section-pad" style={{ position: "relative", zIndex: 1 }}>
+          <span className="eyebrow reveal" style={{ display: "block", marginBottom: 24, color: "#F0D5C8" }}>Mi misión</span>
+          <p className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(20px,3vw,40px)", color: "#F6EEE8", lineHeight: 1.35, maxWidth: 820, letterSpacing: ".01em" }}>
             "Facilitar procesos de transformación que integren mente, cuerpo y alma,
             ayudando a cada persona a alcanzar su máximo potencial y liderazgo personal."
           </p>
@@ -284,8 +289,8 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── TRAYECTORIA ── */}
-      <section className="tone-dark" style={{ background: "linear-gradient(180deg,var(--navy-2),#2A1D12)", position: "relative" }}>
-        <div style={{ position: "absolute", inset: 0, opacity: .4, backgroundImage: "radial-gradient(1px 1px at 20% 30%,#cbb78b,transparent),radial-gradient(1px 1px at 70% 60%,#cbb78b,transparent),radial-gradient(1px 1px at 50% 80%,#c0d5d6,transparent)" }} />
+      <section className="tone-dark" style={{ background: "linear-gradient(180deg, #2A1008 0%, #4A1D16 50%, #2A1008 100%)", position: "relative" }}>
+        <div style={{ position: "absolute", inset: 0, opacity: .35, backgroundImage: "radial-gradient(1px 1px at 20% 30%,#A76D61,transparent),radial-gradient(1px 1px at 70% 60%,#C49F72,transparent),radial-gradient(1px 1px at 50% 80%,#A76D61,transparent)" }} />
         <div className="wrap devora-section-pad" style={{ position: "relative", zIndex: 2 }}>
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16 }}>Trayectoria</span>
           <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.5vw,48px)", color: "var(--text)", letterSpacing: ".01em", marginBottom: "clamp(32px,5vw,56px)" }}>
