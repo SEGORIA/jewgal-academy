@@ -187,7 +187,7 @@ export default function HeroAdminPage() {
         ))}
       </div>
 
-      {/* Nota: cÃ³mo agregar fotos nuevas */}
+      {/* Nota: cómo agregar fotos nuevas */}
       <div style={{
         marginTop: 32, padding: "18px 20px", borderRadius: 12,
         background: "rgba(165,141,102,.06)", border: "1px solid rgba(165,141,102,.14)",
@@ -196,12 +196,12 @@ export default function HeroAdminPage() {
         <Info size={18} style={{ color: accent, flexShrink: 0, marginTop: 2 }} />
         <div>
           <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", marginBottom: 6 }}>
-            Â¿QuerÃ©s agregar fotos nuevas?
+            ¿Querés agregar fotos nuevas?
           </p>
           <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6 }}>
-            GuardÃ¡ la foto en la carpeta <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4, fontSize: 12 }}>public/brand/hero/</code> del proyecto
-            y hacÃ© un push a main. DespuÃ©s, agregÃ¡ la ruta aquÃ­ y guardÃ¡.
-            Las fotos deben ser JPG o WebP, mÃ­nimo 1400&nbsp;px de ancho y relaciÃ³n 16:9 aproximada.
+            Guardá la foto en la carpeta <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4, fontSize: 12 }}>public/brand/hero/</code> del proyecto
+            y hacé un push a main. Después, agregá la ruta aquí y guardá.
+            Las fotos deben ser JPG o WebP, mínimo 1400&nbsp;px de ancho y relación 16:9 aproximada.
           </p>
         </div>
       </div>
