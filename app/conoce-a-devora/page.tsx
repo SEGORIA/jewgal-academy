@@ -8,13 +8,13 @@ import { motion } from "framer-motion"
 
 const credentials = [
   { n: "01", category: "Coaching",            items: ["Master Coach Internacional", "Formación de Coaches Integrativa", "Life Coaching Transformador"] },
-  { n: "02", category: "Psicología & Terapia", items: ["Logoterapia y Propósito", "Tratamiento del Trauma", "Psicopedagogía", "Ciencias de la Educación"] },
+  { n: "02", category: "Mindfulness & Desarrollo", items: ["Logoterapia y Propósito", "Tratamiento del Trauma", "Mindfulness aplicado", "Desarrollo integral"] },
   { n: "03", category: "Bienestar Holístico",  items: ["Mindfulness Certificada", "Flores de Bach", "Técnica del Tapping", "Masaje Terapéutico"] },
   { n: "04", category: "Tradición & Movimiento", items: ["Cabalá Aplicada", "Expresión Corporal", "Danza Terapéutica", "Educación Judía"] },
 ]
 
 const timeline = [
-  { code: "AR", place: "Argentina",     period: "Inicio · Formación", event: "Comienzos en Buenos Aires. Formación en psicopedagogía y ciencias de la educación." },
+  { code: "AR", place: "Argentina",     period: "Inicio · Formación", event: "Comienzos en Buenos Aires. Primeros pasos en desarrollo humano, bienestar y acompañamiento integral." },
   { code: "IL", place: "Israel",        period: "Espiritualidad",     event: "Inmersión en la Cabalá y la espiritualidad judía aplicada al desarrollo personal." },
   { code: "GT", place: "Guatemala",     period: "Comunidad",          event: "Acompañamiento de procesos de transformación y formación de líderes en Centroamérica." },
   { code: "CO", place: "Colombia",      period: "Expansión",          event: "Expansión del método Jewgal y formación de coaches en Latinoamérica." },
@@ -93,7 +93,7 @@ export default function ConoceADevorPage() {
       <Navbar />
 
       {/* ── HERO ── */}
-      <section style={{
+      <section className="tone-dark" style={{
         background: "linear-gradient(120deg,var(--navy-2) 0%,var(--navy) 52%,#2A1D12 100%)",
         paddingTop: "clamp(100px,12vw,160px)", paddingBottom: "clamp(60px,8vw,100px)",
         position: "relative", overflow: "hidden",
@@ -112,10 +112,10 @@ export default function ConoceADevorPage() {
           {/* Texto */}
           <div>
             <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Conoce a la fundadora</span>
-            <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(38px,5vw,70px)", lineHeight: 1.02, color: "var(--text)", letterSpacing: "-.01em", marginBottom: 20 }}>
+            <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(38px,5vw,70px)", lineHeight: 1.02, color: "var(--text)", letterSpacing: "-.01em", marginBottom: 28 }}>
               Devora<br /><em style={{ color: "var(--gold-light)", fontStyle: "normal" }}>Benchimol</em>
             </h1>
-            <div style={{ fontFamily: "var(--script)", fontStyle: "italic", fontSize: "clamp(20px,2.5vw,28px)", color: "var(--gold-light)", marginBottom: 24, lineHeight: 1.2 }}>
+            <div style={{ fontFamily: "var(--script)", fontStyle: "italic", fontSize: "clamp(20px,2.5vw,28px)", color: "#A76D61", marginBottom: 24, lineHeight: 1.2 }}>
               Master Coach · Educadora · Fundadora
             </div>
             <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.5vw,16px)", maxWidth: 440, marginBottom: 16, lineHeight: 1.7 }}>
@@ -130,7 +130,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── STAT BANNER ── */}
-      <section style={{ background: "var(--navy-2)", borderTop: "1px solid var(--line-d)", borderBottom: "1px solid var(--line-d)" }}>
+      <section className="tone-dark" style={{ background: "var(--navy-2)", borderTop: "1px solid var(--line-d)", borderBottom: "1px solid var(--line-d)" }}>
         <div className="wrap" style={{ padding: "clamp(40px,6vw,72px) 36px" }}>
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }}
@@ -155,7 +155,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── EN SUS PALABRAS (bio) ── */}
-      <section style={{ background: "var(--navy)" }}>
+      <section className="tone-dark" style={{ background: "var(--navy)" }}>
         <div className="wrap devora-section-pad" style={{ maxWidth: 860 }}>
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 28 }}>En sus palabras</span>
           <div className="reveal" style={{ display: "flex", flexDirection: "column", gap: 20, fontSize: "clamp(15px,1.6vw,17px)", lineHeight: 1.8, color: "var(--on-dark)" }}>
@@ -172,7 +172,7 @@ export default function ConoceADevorPage() {
                 ["La sabiduría de la ", "Cabalá", " como mapa del alma y herramienta de transformación real."],
                 ["El lenguaje del ", "cuerpo", " a través de la Expresión Corporal, la Danza y el Masaje Terapéutico."],
                 ["La delicadeza de las ", "Flores de Bach y el Tapping", " para liberar lo que las palabras no alcanzan."],
-                ["Y la mirada de la ", "Psicopedagogía", " para que cada proceso sea también un aprendizaje que se integra y se sostiene."],
+                ["Y la mirada de la ", "educación consciente", " para que cada proceso sea también un aprendizaje que se integra y se sostiene."],
               ].map(([pre, strong, post]) => (
                 <li key={strong} style={{ display: "flex", gap: 12, alignItems: "baseline" }}>
                   <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#A76D61", flexShrink: 0, transform: "translateY(-2px)" }} />
@@ -186,7 +186,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── DOCUMENTAL ── */}
-      <section style={{ background: "var(--navy-2)", padding: "clamp(60px,8vw,100px) 36px", position: "relative", overflow: "hidden" }}>
+      <section className="tone-dark" style={{ background: "var(--navy-2)", padding: "clamp(60px,8vw,100px) 36px", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 900, height: 500, borderRadius: "50%", background: "radial-gradient(ellipse,rgba(167,109,97,.11) 0%,transparent 65%)", pointerEvents: "none" }} />
 
         <div className="wrap" style={{ maxWidth: 920, position: "relative", zIndex: 2 }}>
@@ -242,7 +242,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── MISIÓN ── */}
-      <section style={{ background: "var(--navy-2)" }}>
+      <section className="tone-dark" style={{ background: "var(--navy-2)" }}>
         <div className="wrap devora-section-pad">
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 24 }}>Mi misión</span>
           <p className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(20px,3vw,40px)", color: "var(--text)", lineHeight: 1.35, maxWidth: 820, letterSpacing: ".01em" }}>
@@ -253,7 +253,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── CREDENCIALES ── */}
-      <section style={{ background: "var(--navy)" }}>
+      <section className="tone-dark" style={{ background: "var(--navy)" }}>
         <div className="wrap devora-section-pad">
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16 }}>Formación</span>
           <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.5vw,48px)", color: "var(--text)", letterSpacing: ".01em", marginBottom: "clamp(32px,5vw,56px)" }}>
@@ -281,7 +281,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── TRAYECTORIA ── */}
-      <section style={{ background: "linear-gradient(180deg,var(--navy-2),#2A1D12)", position: "relative" }}>
+      <section className="tone-dark" style={{ background: "linear-gradient(180deg,var(--navy-2),#2A1D12)", position: "relative" }}>
         <div style={{ position: "absolute", inset: 0, opacity: .4, backgroundImage: "radial-gradient(1px 1px at 20% 30%,#cbb78b,transparent),radial-gradient(1px 1px at 70% 60%,#cbb78b,transparent),radial-gradient(1px 1px at 50% 80%,#c0d5d6,transparent)" }} />
         <div className="wrap devora-section-pad" style={{ position: "relative", zIndex: 2 }}>
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16 }}>Trayectoria</span>
@@ -312,7 +312,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── FUNDACIÓN ── */}
-      <section style={{ background: "var(--navy)", borderTop: "1px solid var(--line-d)" }}>
+      <section className="tone-dark" style={{ background: "var(--navy)", borderTop: "1px solid var(--line-d)" }}>
         <div className="wrap devora-section-pad">
           <div className="devora-fund-grid">
             <div className="reveal">

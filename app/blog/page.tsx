@@ -47,7 +47,7 @@ Si estás pensando en formarte como coach o en iniciar un proceso personal, el c
     accent: "#CBB78B",
     content: `La Cabalá no es religión, ni magia, ni esotericismo. Es un mapa. Un sistema de sabiduría milenaria que describe cómo funciona el alma humana, cuáles son sus dimensiones y cómo cada persona puede conocerse y transformarse desde adentro.
 
-El Árbol de la Vida es la herramienta central de esta tradición. Está compuesto por diez sefirot, que representan diferentes cualidades del ser humano: la sabiduría, la comprensión, la bondad, el rigor, la compasión, el éxito, la constancia, el esplendor, el fundamento y la manifestación. Cada sefirá nos habla de un aspecto de nuestra psicología y nuestra espiritualidad.
+El Árbol de la Vida es la herramienta central de esta tradición. Está compuesto por diez sefirot, que representan diferentes cualidades del ser humano: la sabiduría, la comprensión, la bondad, la fortaleza, la compasión, el éxito, la constancia, el esplendor, el fundamento y la manifestación. Cada sefirá nos habla de un aspecto de nuestra psicología y nuestra espiritualidad.
 
 Aplicado al coaching, el Árbol de la Vida se convierte en un espejo. Cuando un cliente llega con dificultades para tomar decisiones, podemos explorar juntos si hay un desequilibrio entre la sabiduría (Jojmá) y la comprensión (Biná). Cuando hay bloqueos para actuar, el trabajo puede estar en fortalecer Iessod, el pilar de la acción.
 
@@ -95,7 +95,7 @@ Si trabajas con equipos, comunidades o adolescentes, te invitamos a preguntarte:
     slug: "metodo-sholem-adolescentes",
     category: "Educación",
     date: "08 May 2026",
-    title: "Método Sholem: formando líderes adolescentes desde los valores y la identidad",
+    title: "Método Sholem: acompañando jóvenes desde los valores, la identidad y el propósito",
     excerpt: "Un enfoque único para acompañar a los jóvenes en la construcción de una identidad sólida, un sentido de pertenencia y un liderazgo con corazón.",
     readTime: "5 min",
     accent: "#A76D61",

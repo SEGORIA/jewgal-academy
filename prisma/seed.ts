@@ -61,9 +61,9 @@ async function main() {
     {
       title: "Método Sholem",
       slug: "metodo-sholem",
-      shortDesc: "Formación de instructores para líderes adolescentes.",
+      shortDesc: "Formación de instructores para el acompañamiento de jóvenes.",
       description:
-        "Programa para formar instructores especializados en acompañar adolescentes hacia su potencial máximo y liderazgo personal.",
+        "Programa para formar instructores especializados en acompañar el desarrollo consciente de jóvenes con valores, identidad y propósito.",
       price: 360,
       isFree: false,
       isPublished: true,

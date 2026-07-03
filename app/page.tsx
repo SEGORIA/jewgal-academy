@@ -35,7 +35,7 @@ const PROGRAMS = [
   { slug: "life-coaching-integrativo", title: "Life Coaching Integrativo",   desc: "Formación integral para el cambio.", price: "$1.500", free: false, img: "/brand/programs/life-coaching.jpg" },
   { slug: "joogal-adultos",            title: "Instructor Jewgal · Adultos", desc: "Certifícate como instructor oficial del método Jewgal.", price: "Gratis", free: true, img: "/brand/programs/joogal-adultos.jpg" },
   { slug: "joogalkids",                title: "Instructor Joogalkids",       desc: "Formando a los guías del desarrollo infantil.", price: "$360", free: false, img: "/brand/programs/joogalkids.jpg" },
-  { slug: "metodo-sholem",             title: "Método Sholem",               desc: "Formación de instructores para líderes adolescentes.", price: "$360", free: false, img: "/brand/programs/metodo-sholem.jpg" },
+  { slug: "metodo-sholem",             title: "Método Sholem",               desc: "Formación de instructores para el acompañamiento de jóvenes.", price: "$360", free: false, img: "/brand/programs/metodo-sholem.jpg" },
   { slug: "cabala-coach",              title: "Micro Curso · Cábala Coach",  desc: "Sabiduría milenaria aplicada al bienestar personal.", price: "$360", free: false, img: "/brand/programs/cabala-coach.svg" },
 ]
 
@@ -280,12 +280,12 @@ export default function HomePage() {
               Integramos tres dimensiones que <em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>rara vez conviven</em> en una misma formación
             </h2>
             <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.6vw,17px)", lineHeight: 1.7 }}>
-              El rigor de la ciencia, la profundidad del desarrollo humano y la sabiduría espiritual — unidos en un solo camino de transformación.
+              La responsabilidad profesional, la profundidad del desarrollo humano y la sabiduría espiritual — unidos en un solo camino de transformación.
             </p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: "clamp(20px,2.5vw,32px)" }}>
             {[
-              { n: "01", title: "Rigor profesional",    desc: "Método con respaldo científico y certificación reconocida.", items: ["Coaching avalado", "Regulación emocional", "Logoterapia"] },
+              { n: "01", title: "Responsabilidad profesional", desc: "Método avalado y certificación reconocida, orientado al bienestar integral.", items: ["Coaching certificado", "Regulación emocional", "Logoterapia"] },
               { n: "02", title: "Desarrollo humano",    desc: "Herramientas para crecer y para acompañar a otros.",          items: ["Resiliencia", "Autoconocimiento", "Liderazgo consciente"] },
               { n: "03", title: "Sabiduría espiritual", desc: "La raíz ancestral como mapa del alma y del propósito.",       items: ["Cábala", "Consciencia", "Propósito de vida"] },
             ].map((d) => (

@@ -111,7 +111,7 @@ const META: Record<string, {
     ],
     forWhom: [
       "Maestras y docentes de educación inicial",
-      "Psicopedagogos y psicólogos infantiles",
+      "Guías y educadores conscientes del desarrollo infantil",
       "Instructores que quieren trabajar con niños",
       "Madres y padres interesados en el desarrollo consciente",
     ],
@@ -147,7 +147,7 @@ const META: Record<string, {
       "Profesionales que trabajan con adolescentes",
       "Rabinos, cantores y educators judíos",
     ],
-    outcome: "Serás instructor certificado del Método Sholem, preparado para formar líderes adolescentes con valores, identidad y propósito.",
+    outcome: "Serás instructor certificado del Método Sholem, preparado para acompañar el desarrollo consciente de jóvenes con valores, identidad y propósito.",
   },
   "cabala-coach": {
     eyebrow: "Micro Curso · Sabiduría Ancestral",

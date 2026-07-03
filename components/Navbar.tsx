@@ -92,7 +92,7 @@ export default function Navbar() {
 
       <nav className={`jnav${scrolled ? " scrolled" : ""}${pathname === "/" ? " over-hero" : ""}`} id="nav" aria-label="Navegación principal">
         <Link href="/" aria-label="Jewgal Academy — Inicio">
-          <BrandLogo height={50} variant="square" priority />
+          <BrandLogo height={44} variant="horizontal" priority />
         </Link>
 
         <div className="nav-links">
