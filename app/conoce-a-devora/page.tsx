@@ -156,7 +156,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── EN SUS PALABRAS (bio) ── */}
-      <section className="tone-dark" style={{ background: "linear-gradient(160deg, #2A1008 0%, #4A1D16 55%, #2A1008 100%)" }}>
+      <section className="tone-dark" style={{ background: "linear-gradient(160deg, #3A1510 0%, #6B2E22 45%, #5C2218 65%, #3A1510 100%)" }}>
         <div className="wrap devora-section-pad" style={{ maxWidth: 860 }}>
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 28 }}>En sus palabras</span>
           <div className="reveal" style={{ display: "flex", flexDirection: "column", gap: 20, fontSize: "clamp(15px,1.6vw,17px)", lineHeight: 1.8, color: "var(--on-dark)" }}>
@@ -261,7 +261,7 @@ export default function ConoceADevorPage() {
       </section>
 
       {/* ── CREDENCIALES ── */}
-      <section className="tone-dark" style={{ background: "linear-gradient(135deg, #3A1510 0%, #6B2E22 50%, #3A1510 100%)" }}>
+      <section className="tone-dark" style={{ background: "linear-gradient(135deg, #4A1810 0%, #8B3D2E 50%, #4A1810 100%)" }}>
         <div className="wrap devora-section-pad">
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16 }}>Formación</span>
           <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.5vw,48px)", color: "var(--text)", letterSpacing: ".01em", marginBottom: "clamp(32px,5vw,56px)" }}>
