@@ -457,15 +457,15 @@ nav.jnav.scrolled {
   pointer-events: none;
 }
 .hero-video.loaded { opacity: 1; }
-/* Overlay izquierda → transparente — tonalidad café cálida */
+/* Overlay izquierda → transparente — rosa terracota */
 .hero-overlay {
   position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(
     to right,
-    rgba(44,31,20,.96) 0%,
-    rgba(44,31,20,.86) 36%,
-    rgba(44,31,20,.52) 60%,
-    rgba(44,31,20,.06) 100%
+    rgba(92,34,24,.96) 0%,
+    rgba(139,61,46,.85) 36%,
+    rgba(167,109,97,.48) 62%,
+    rgba(167,109,97,.06) 100%
   );
 }
 /* Circuit/network SVG (bottom-left) */
