@@ -6,7 +6,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { motion, useInView } from "framer-motion"
 import Navbar from "@/components/Navbar"
-import HeroVideo from "@/components/HeroVideo"
+import HeroCarousel from "@/components/HeroCarousel"
 import Footer from "@/components/Footer"
 import { TiltCard } from "@/components/motion/TiltCard"
 import { FloatingParticles } from "@/components/motion/FloatingParticles"
@@ -93,8 +93,8 @@ export default function HomePage() {
 
       {/* ── HERO ── */}
       <header className="hero" id="hero">
-        {/* Video hero con carga inteligente (fondo premium instantáneo + video diferido) */}
-        <HeroVideo />
+        {/* Carrusel de fotos del hero (administrable desde superadmin) */}
+        <HeroCarousel />
 
         {/* Gradiente oscuro izquierda → transparente derecha */}
         <div className="hero-overlay" />
