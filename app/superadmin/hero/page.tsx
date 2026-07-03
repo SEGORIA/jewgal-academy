@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useState, useEffect } from "react"
 import { GripVertical, Eye, EyeOff, ChevronUp, ChevronDown, Save, Info } from "lucide-react"
@@ -6,11 +6,11 @@ import { GripVertical, Eye, EyeOff, ChevronUp, ChevronDown, Save, Info } from "l
 type Photo = { src: string; alt: string; active: boolean; order: number }
 
 const DEFAULT: Photo[] = [
-  { src: "/brand/hero/devora-coaching.jpg",  alt: "Devora con su grupo de coaching",      active: true, order: 0 },
-  { src: "/brand/hero/devora-tv.jpg",         alt: "Devora en televisión",                active: true, order: 1 },
-  { src: "/brand/hero/devora-ninos.jpg",      alt: "Devora con niños",                    active: true, order: 2 },
-  { src: "/brand/hero/devora-miami.jpg",      alt: "Devora en Miami con familia",          active: true, order: 3 },
-  { src: "/brand/hero/devora-joven.png",      alt: "Joven saludando en experiencia Jewgal", active: true, order: 4 },
+  { src: "/brand/hero/devora-coaching.webp",  alt: "Devora con su grupo de coaching",      active: true, order: 0 },
+  { src: "/brand/hero/devora-tv.webp",         alt: "Devora en televisión",                active: true, order: 1 },
+  { src: "/brand/hero/devora-ninos.webp",      alt: "Devora con niños",                    active: true, order: 2 },
+  { src: "/brand/hero/devora-miami.webp",      alt: "Devora en Miami con familia",          active: true, order: 3 },
+  { src: "/brand/hero/devora-joven.webp",      alt: "Joven saludando en experiencia Jewgal", active: true, order: 4 },
 ]
 
 export default function HeroAdminPage() {
@@ -187,7 +187,7 @@ export default function HeroAdminPage() {
         ))}
       </div>
 
-      {/* Nota: cómo agregar fotos nuevas */}
+      {/* Nota: cÃ³mo agregar fotos nuevas */}
       <div style={{
         marginTop: 32, padding: "18px 20px", borderRadius: 12,
         background: "rgba(165,141,102,.06)", border: "1px solid rgba(165,141,102,.14)",
@@ -196,12 +196,12 @@ export default function HeroAdminPage() {
         <Info size={18} style={{ color: accent, flexShrink: 0, marginTop: 2 }} />
         <div>
           <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", marginBottom: 6 }}>
-            ¿Querés agregar fotos nuevas?
+            Â¿QuerÃ©s agregar fotos nuevas?
           </p>
           <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6 }}>
-            Guardá la foto en la carpeta <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4, fontSize: 12 }}>public/brand/hero/</code> del proyecto
-            y hacé un push a main. Después, agregá la ruta aquí y guardá.
-            Las fotos deben ser JPG o WebP, mínimo 1400&nbsp;px de ancho y relación 16:9 aproximada.
+            GuardÃ¡ la foto en la carpeta <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4, fontSize: 12 }}>public/brand/hero/</code> del proyecto
+            y hacÃ© un push a main. DespuÃ©s, agregÃ¡ la ruta aquÃ­ y guardÃ¡.
+            Las fotos deben ser JPG o WebP, mÃ­nimo 1400&nbsp;px de ancho y relaciÃ³n 16:9 aproximada.
           </p>
         </div>
       </div>
