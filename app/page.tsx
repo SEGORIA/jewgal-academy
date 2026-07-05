@@ -195,7 +195,7 @@ export default function HomePage() {
           <div className="stats-grid" ref={statsRef}>
             {([
               { to: 40,   lbl: ["Años de", "trayectoria"],                         ring: 0.82, delay: 0.05, icon: <><path d="M2 8l10-5 10 5-10 5z"/><path d="M6 10v5c0 1 3 3 6 3s6-2 6-3v-5"/></> },
-              { to: 4,    lbl: ["Países: Argentina,", "Israel, Colombia, EE.UU."], ring: 0.45, delay: 0.18, icon: <><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></> },
+              { to: 5,    lbl: ["Países: Argentina, Israel,", "Guatemala, Colombia, EE.UU."], ring: 0.45, delay: 0.18, icon: <><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></> },
               { to: 5,    lbl: ["Programas y", "certificaciones"],                  ring: 0.55, delay: 0.31, icon: <><circle cx="12" cy="9" r="5"/><path d="M9 13l-1 8 4-2 4 2-1-8"/></> },
               { to: null, lbl: ["Fundación Sholem", "Corazón Valiente"],            ring: 1.0,  delay: 0.44, icon: <><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2 20c0-3 3-5 6-5s6 2 6 5M14 15c3 0 6 2 6 5"/></> },
             ] as const).map((s, i) => (
@@ -320,7 +320,7 @@ export default function HomePage() {
               <span className="eyebrow">Conoce a la fundadora</span>
               <h2>Devora Benchimol</h2>
               <div className="sig">Master Coach Internacional · Educadora</div>
-              <p>Más de 40 años facilitando procesos de transformación que integran mente, cuerpo y alma, con trayectoria internacional en Argentina, Israel, Colombia y Estados Unidos.</p>
+              <p>Más de 40 años facilitando procesos de transformación que integran mente, cuerpo y alma, con trayectoria internacional en Argentina, Israel, Guatemala, Colombia y Estados Unidos.</p>
               <p>Su método une Logoterapia y sentido de vida, Mindfulness y regulación del trauma, la sabiduría de la Cábala aplicada al coaching, y retiros de bienestar profundo.</p>
               <div className="fund-mission-block">
                 <span className="fund-mission-icon" aria-hidden="true">✦</span>

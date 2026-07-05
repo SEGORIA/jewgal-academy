@@ -436,6 +436,26 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                   {meta.outcome}
                 </p>
               </div>
+
+              {/* Sitio hermano para adolescentes y familias */}
+              {slug === "metodo-sholem" && (
+                <div className="reveal" style={{
+                  background: "var(--surface)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 8, padding: 24,
+                  display: "flex", flexDirection: "column", gap: 8,
+                }}>
+                  <div style={{ fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: meta.accent }}>
+                    ¿Eres adolescente o familia?
+                  </div>
+                  <p style={{ fontSize: 14.5, color: "var(--on-dark)", lineHeight: 1.65 }}>
+                    Esta formación certifica instructores. Si buscas la experiencia del Método Sholem para adolescentes, visita el sitio dedicado.
+                  </p>
+                  <a href="https://www.sholemethod.com" target="_blank" rel="noopener noreferrer" style={{ color: meta.accent, fontSize: 14.5, fontWeight: 600 }}>
+                    www.sholemethod.com →
+                  </a>
+                </div>
+              )}
             </div>
 
             {/* ── Columna derecha: Checkout sticky ── */}

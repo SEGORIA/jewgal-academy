@@ -1018,9 +1018,9 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
 .fund-mission-block p {
   font-size: 13.5px;
   line-height: 1.65;
-  color: var(--text-muted);
+  color: rgba(246,238,232,.82);
 }
-.fund-mission-block strong { color: rgba(196,140,120,.90); font-weight: 600; }
+.fund-mission-block strong { color: #F6D8C8; font-weight: 600; }
 
 /* ─── Pages that need light background (login, aula, admin) ─── */
 .page-light {

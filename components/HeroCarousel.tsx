@@ -15,16 +15,28 @@ const DEFAULT_PHOTOS: Photo[] = [
 const INTERVAL   = 5000
 const HERO_VIDEO = "/brand/hero-intro.mp4"
 
+/* Recortes alternativos para mobile — "cover" en un viewport angosto
+   sólo muestra la franja central de fotos panorámicas y corta al grupo */
+const MOBILE_SRC: Record<string, string> = {
+  "/brand/hero/devora-coaching.webp": "/brand/hero/devora-coaching-mobile.webp",
+}
+
 export default function HeroCarousel() {
   const [photos, setPhotos]     = useState<Photo[]>(DEFAULT_PHOTOS)
   const [current, setCurrent]   = useState(0)
   const [paused, setPaused]     = useState(false)
   const [showVideo, setShowVideo] = useState(true)
+  const [isMobile, setIsMobile] = useState(false)
   const reducedMotion = useRef(false)
 
   useEffect(() => {
     reducedMotion.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     if (reducedMotion.current) setShowVideo(false)
+
+    const mq = window.matchMedia("(max-width: 720px)")
+    setIsMobile(mq.matches)
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener("change", onChange)
 
     fetch("/api/hero-photos")
       .then(r => r.json())
@@ -33,6 +45,8 @@ export default function HeroCarousel() {
         if (active.length) setPhotos(active)
       })
       .catch(() => {})
+
+    return () => mq.removeEventListener("change", onChange)
   }, [])
 
   const handleVideoEnd = useCallback(() => {
@@ -80,24 +94,27 @@ export default function HeroCarousel() {
       </div>
 
       {/* ── SLIDES CARRUSEL — crossfade ── */}
-      {photos.map((photo, i) => (
-        <div
-          key={photo.src}
-          role="img"
-          aria-label={photo.alt}
-          aria-hidden={showVideo || i !== current}
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-          style={{
-            position: "absolute", inset: 0, zIndex: 0,
-            backgroundImage: `url(${photo.src})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center 22%",
-            opacity: !showVideo && i === current ? 1 : 0,
-            transition: "opacity 1.2s ease",
-          }}
-        />
-      ))}
+      {photos.map((photo, i) => {
+        const src = (isMobile && MOBILE_SRC[photo.src]) || photo.src
+        return (
+          <div
+            key={photo.src}
+            role="img"
+            aria-label={photo.alt}
+            aria-hidden={showVideo || i !== current}
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+            style={{
+              position: "absolute", inset: 0, zIndex: 0,
+              backgroundImage: `url(${src})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center 22%",
+              opacity: !showVideo && i === current ? 1 : 0,
+              transition: "opacity 1.2s ease",
+            }}
+          />
+        )
+      })}
 
       {/* ── CONTROLES — sólo cuando el carrusel está activo ── */}
       {!showVideo && photos.length > 1 && (
