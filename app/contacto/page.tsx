@@ -164,7 +164,8 @@ export default function ContactoPage() {
               </h2>
               <p style={{ color: "var(--on-dark)", fontSize: 15, lineHeight: 1.75, marginBottom: 32 }}>
                 Respondo personalmente cada mensaje. Puedes escribirme sobre cualquier programa,
-                una sesión de exploración gratuita o cualquier duda que tengas.
+                agendar una sesión de coaching personal 1:1 conmigo, pedir orientación gratuita
+                para elegir un programa, o cualquier duda que tengas.
               </p>
 
               {/* Redes sociales */}
@@ -246,7 +247,8 @@ export default function ContactoPage() {
                     <option value="joogalkids">Instructor Joogalkids</option>
                     <option value="cabala">Cábala Coach</option>
                     <option value="metodo-sholem">Método Sholem</option>
-                    <option value="sesion-exploratoria">Sesión exploratoria gratuita</option>
+                    <option value="coaching-1-1">Coaching personal 1:1 con Devora</option>
+                    <option value="sesion-exploratoria">Orientación gratuita para elegir programa</option>
                     <option value="otro">Otro</option>
                   </select>
                 </div>

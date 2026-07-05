@@ -326,7 +326,10 @@ export default function HomePage() {
                 <span className="fund-mission-icon" aria-hidden="true">✦</span>
                 <p>Este trabajo forma parte de la misión de la <strong>Fundación Sholem Corazón Valiente</strong>, organización sin fines de lucro registrada como <strong>non-profit organization</strong> en los Estados Unidos, creada para inspirar, empoderar y formar líderes con corazón valiente comprometidos con transformar el mundo.</p>
               </div>
-              <Link href="/conoce-a-devora" className="btn">Conoce su historia →</Link>
+              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                <Link href="/conoce-a-devora" className="btn">Conoce su historia →</Link>
+                <Link href="/conoce-a-devora#coaching-1-1" className="btn solid">Coaching personal 1:1 →</Link>
+              </div>
             </div>
           </div>
         </div>
