@@ -1,53 +1,66 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
+import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 
-const contactInfo = [
-  {
-    n: "01",
-    label: "Correo electrónico",
-    value: "Hola@devorabenchimol.com",
-    href: "mailto:Hola@devorabenchimol.com",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
-        <rect x="2" y="4" width="20" height="16" rx="2"/>
-        <path d="M2 8l10 7 10-7"/>
-      </svg>
-    ),
-  },
-  {
-    n: "02",
-    label: "Teléfono / WhatsApp",
-    value: "+1 (786) 483-5893",
-    href: "tel:+17864835893",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
-        <path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3.1-8.7A2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 2 .7 2.9a2 2 0 01-.5 2.1L8.1 9.9a16 16 0 006 6l1.2-1.2a2 2 0 012.1-.5c.9.3 1.9.6 2.9.7A2 2 0 0122 16.9z"/>
-      </svg>
-    ),
-  },
-  {
-    n: "03",
-    label: "Ubicación",
-    value: "Miami, Florida · EE.UU.",
-    href: null,
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
-        <path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z"/>
-        <circle cx="12" cy="9" r="2.5"/>
-      </svg>
-    ),
-  },
-]
+function buildContactInfo(content: SiteContent) {
+  return [
+    {
+      n: "01",
+      label: "Correo electrónico",
+      value: content.contacto.email,
+      href: `mailto:${content.contacto.email}`,
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="M2 8l10 7 10-7"/>
+        </svg>
+      ),
+    },
+    {
+      n: "02",
+      label: "Teléfono / WhatsApp",
+      value: content.contacto.phone,
+      href: `tel:${content.contacto.phone.replace(/[^\d+]/g, "")}`,
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+          <path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3.1-8.7A2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 2 .7 2.9a2 2 0 01-.5 2.1L8.1 9.9a16 16 0 006 6l1.2-1.2a2 2 0 012.1-.5c.9.3 1.9.6 2.9.7A2 2 0 0122 16.9z"/>
+        </svg>
+      ),
+    },
+    {
+      n: "03",
+      label: "Ubicación",
+      value: content.contacto.city,
+      href: null,
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+          <path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z"/>
+          <circle cx="12" cy="9" r="2.5"/>
+        </svg>
+      ),
+    },
+  ]
+}
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function ContactoPage() {
   const [form, setForm] = useState({ nombre: "", email: "", asunto: "", mensaje: "" })
+  const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
+
+  useEffect(() => {
+    fetch("/api/site-content")
+      .then((r) => r.json())
+      .then((d) => setContent(d))
+      .catch(() => {})
+  }, [])
+
+  const contactInfo = buildContactInfo(content)
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle")
   const [errorMsg, setErrorMsg] = useState("")
@@ -175,11 +188,13 @@ export default function ContactoPage() {
                 </div>
                 <div style={{ display: "flex", gap: 14 }}>
                   {[
-                    { label: "Instagram", href: "https://instagram.com/devora_benchimol_",
+                    content.contacto.ig && { label: "Instagram", href: content.contacto.ig,
                       icon: <><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></> },
-                    { label: "YouTube", href: "https://youtube.com",
+                    content.contacto.yt && { label: "YouTube", href: content.contacto.yt,
                       icon: <><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></> },
-                  ].map((s) => (
+                    content.contacto.fb && { label: "Facebook", href: content.contacto.fb,
+                      icon: <><path d="M14 8h3V4h-3a4 4 0 00-4 4v2H7v4h3v6h4v-6h3l1-4h-4V8a1 1 0 011-1z"/></> },
+                  ].filter((s): s is Exclude<typeof s, ""> => !!s).map((s) => (
                     <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}
                       style={{
                         width: 42, height: 42, borderRadius: 4,

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import Image from "next/image"
@@ -13,6 +13,7 @@ import { FloatingParticles } from "@/components/motion/FloatingParticles"
 import { CursorLight } from "@/components/motion/CursorLight"
 import MagneticButton from "@/components/motion/MagneticButton"
 import TestimonialCarousel from "@/components/TestimonialCarousel"
+import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 
 // Mapa interactivo: below-the-fold y con código propio → se carga diferido
 const ComunidadMap = dynamic(() => import("@/components/ComunidadMap"), {
@@ -44,6 +45,14 @@ export default function HomePage() {
   const rutaInView  = useInView(rutaRef,   { once: true, margin: "-80px" })
   const statsRef  = useRef<HTMLDivElement>(null)
   const statsInView = useInView(statsRef,  { once: true, margin: "-60px" })
+  const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
+
+  useEffect(() => {
+    fetch("/api/site-content")
+      .then((r) => r.json())
+      .then((d) => setContent(d))
+      .catch(() => {})
+  }, [])
 
   /* ── Animaciones: IntersectionObserver + count-up + progress bars ── */
   useEffect(() => {
@@ -147,8 +156,8 @@ export default function HomePage() {
             <span className="eyebrow">Jewgal Academy</span>
             <h1>
               <span className="ln">
-                {["Sabiduría", "para", "vivir."].map((w, i) => (
-                  <motion.span key={w}
+                {content.hero.headline1.split(" ").map((w, i) => (
+                  <motion.span key={i}
                     initial={{ opacity: 0, y: 22, filter: "blur(4px)" }}
                     animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                     transition={{ delay: 0.25 + i * 0.1, duration: 0.8, ease: [0.16,1,0.3,1] }}
@@ -157,8 +166,8 @@ export default function HomePage() {
                 ))}
               </span>
               <span className="ln">
-                {["Liderazgo", "para", "transformar."].map((w, i) => (
-                  <motion.span key={w}
+                {content.hero.headline2.split(" ").map((w, i) => (
+                  <motion.span key={i}
                     initial={{ opacity: 0, y: 22, filter: "blur(4px)" }}
                     animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                     transition={{ delay: 0.6 + i * 0.1, duration: 0.8, ease: [0.16,1,0.3,1] }}
@@ -167,10 +176,10 @@ export default function HomePage() {
                 ))}
               </span>
             </h1>
-            <p>Programas, certificaciones y experiencias diseñadas para desarrollar resiliencia, bienestar emocional y crecimiento espiritual. Únete a una comunidad global de aprendizaje con propósito.</p>
+            <p>{content.hero.subtext}</p>
             <div className="hero-cta">
-              <MagneticButton href="#programas" className="btn solid">Explorar programas →</MagneticButton>
-              <MagneticButton href="/conoce-a-devora" className="btn">Conocer a Devora</MagneticButton>
+              <MagneticButton href="#programas" className="btn solid">{content.hero.cta1}</MagneticButton>
+              <MagneticButton href="/conoce-a-devora" className="btn">{content.hero.cta2}</MagneticButton>
             </div>
           </div>
         </div>
@@ -313,18 +322,18 @@ export default function HomePage() {
           <div className="fund-grid">
             <div className="fund-photo reveal">
               <div className="bg" style={{ backgroundImage: "url('/brand/devora-portrait.webp')" }} />
-              <div className="mono">D</div>
-              <div className="tag">Devora Benchimol</div>
+              <div className="mono">{content.fundadora.name.charAt(0)}</div>
+              <div className="tag">{content.fundadora.name}</div>
             </div>
             <div className="fund-copy reveal">
               <span className="eyebrow">Conoce a la fundadora</span>
-              <h2>Devora Benchimol</h2>
-              <div className="sig">Master Coach Internacional · Educadora</div>
-              <p>Más de 40 años facilitando procesos de transformación que integran mente, cuerpo y alma, con trayectoria internacional en Argentina, Israel, Guatemala, Colombia y Estados Unidos.</p>
-              <p>Su método une Logoterapia y sentido de vida, Mindfulness y regulación del trauma, la sabiduría de la Cábala aplicada al coaching, y retiros de bienestar profundo.</p>
+              <h2>{content.fundadora.name}</h2>
+              <div className="sig">{content.fundadora.sig}</div>
+              <p>{content.fundadora.p1}</p>
+              <p>{content.fundadora.p2}</p>
               <div className="fund-mission-block">
                 <span className="fund-mission-icon" aria-hidden="true">✦</span>
-                <p>Este trabajo forma parte de la misión de la <strong>Fundación Sholem Corazón Valiente</strong>, organización sin fines de lucro registrada como <strong>non-profit organization</strong> en los Estados Unidos, creada para inspirar, empoderar y formar líderes con corazón valiente comprometidos con transformar el mundo.</p>
+                <p>Este trabajo forma parte de la misión de la <strong>Fundación Sholem Corazón Valiente</strong>, organización sin fines de lucro registrada como <strong>non-profit organization</strong> en los Estados Unidos, fundada y dirigida por Devora como <strong>CEO y creadora</strong>, creada para inspirar, empoderar y formar líderes con corazón valiente comprometidos con transformar el mundo.</p>
               </div>
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                 <Link href="/conoce-a-devora" className="btn">Conoce su historia →</Link>
