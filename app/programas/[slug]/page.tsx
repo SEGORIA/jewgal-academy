@@ -20,12 +20,14 @@ const META: Record<string, {
   modules: { title: string; items: string[] }[]
   forWhom: string[]
   outcome: string
+  certs: string[]
 }> = {
   "life-coaching-integrativo": {
     eyebrow: "Formación Profesional",
-    grad: "linear-gradient(135deg,var(--bg) 0%,var(--bg-2) 55%,#3A2817 100%)",
+    grad: "linear-gradient(135deg,#3A2410 0%,#5C3A1E 100%)",
     accent: "#A58D66",
     icon: "⟡",
+    certs: ["idc", "cel", "fgu"],
     duration: "6 meses",
     modality: "Online · Clases en vivo",
     level: "Principiante a avanzado",
@@ -55,9 +57,10 @@ const META: Record<string, {
   },
   "joogal-adultos": {
     eyebrow: "Certificación Oficial",
-    grad: "linear-gradient(135deg,#1a0f08 0%,#0d2b1e 55%,#2c1f14 100%)",
+    grad: "linear-gradient(135deg,#3A2818 0%,#5C4026 100%)",
     accent: "#C49F72",
     icon: "✦",
+    certs: ["idc", "cel", "fgu"],
     duration: "3 meses",
     modality: "Online · Híbrido",
     level: "Sin requisitos previos",
@@ -87,9 +90,10 @@ const META: Record<string, {
   },
   "joogalkids": {
     eyebrow: "Certificación Infantil",
-    grad: "linear-gradient(135deg,#241A10 0%,#2C1F14 55%,#3A2817 100%)",
+    grad: "linear-gradient(135deg,#4A2418 0%,#6B3826 100%)",
     accent: "#A76D61",
     icon: "★",
+    certs: ["idc", "cel", "fgu"],
     duration: "3 meses",
     modality: "Online · Clases en vivo",
     level: "Sin requisitos previos",
@@ -119,9 +123,10 @@ const META: Record<string, {
   },
   "metodo-sholem": {
     eyebrow: "Liderazgo Adolescente",
-    grad: "linear-gradient(135deg,#21160d 0%,#2c1f14 55%,#3a2418 100%)",
+    grad: "linear-gradient(135deg,#42200F 0%,#653322 100%)",
     accent: "#A76D61",
     icon: "◈",
+    certs: ["idc", "cel", "fgu"],
     duration: "3 meses",
     modality: "Online · Intensivo",
     level: "Experiencia con adolescentes",
@@ -151,9 +156,10 @@ const META: Record<string, {
   },
   "cabala-coach": {
     eyebrow: "Micro Curso · Sabiduría Ancestral",
-    grad: "linear-gradient(135deg,#130e03 0%,#231700 55%,#2e1f00 100%)",
+    grad: "linear-gradient(135deg,#332508 0%,#4F3A12 100%)",
     accent: "#CBB78B",
     icon: "❂",
+    certs: ["idc", "cel", "fgu"],
     duration: "4 semanas",
     modality: "Online · A tu ritmo",
     level: "Todos los niveles",
@@ -305,6 +311,18 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                 <span>{c.label}</span>
               </div>
             ))}
+          </div>
+
+          {/* Certificado por */}
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 10, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--on-dark-faint)" }}>Certificado por</span>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              {meta.certs.map((certSlug) => (
+                <span key={certSlug} style={{ background: "#f7f3ec", borderRadius: 5, padding: "5px 10px", display: "flex", alignItems: "center" }}>
+                  <img src={`/brand/certs/${certSlug}.webp`} alt={certSlug.toUpperCase()} style={{ height: 16, width: "auto", objectFit: "contain", display: "block" }} loading="lazy" />
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </section>
