@@ -16,9 +16,10 @@ const PROGRAMS = [
     desc: "Formación integral que une logoterapia, mindfulness y herramientas de coaching para acompañar procesos de transformación profunda.",
     price: "$1.500", free: false,
     duration: "6 meses", level: "Todos los niveles",
-    grad: "linear-gradient(135deg,var(--bg) 0%,#3A2817 100%)",
+    grad: "linear-gradient(135deg,#3A2410 0%,#5C3A1E 100%)",
     accent: "#A58D66", icon: "⟡",
     bullets: ["Certificado internacional", "Clases en vivo + grabaciones", "Supervisión individual"],
+    certs: ["idc", "cel", "fgu"],
   },
   {
     slug: "joogal-adultos",
@@ -27,9 +28,10 @@ const PROGRAMS = [
     desc: "Certifícate como instructor del Método Jewgal y desarrolla tu práctica como guía de bienestar y movimiento consciente.",
     price: "Gratis", free: true,
     duration: "3 meses", level: "Sin requisitos",
-    grad: "linear-gradient(135deg,#1a0f08 0%,#2c1f14 100%)",
+    grad: "linear-gradient(135deg,#3A2818 0%,#5C4026 100%)",
     accent: "#C49F72", icon: "✦",
     bullets: ["Certificado oficial Jewgal", "Manual completo incluido", "Mentoring grupal mensual"],
+    certs: ["idc", "cel", "fgu"],
   },
   {
     slug: "joogalkids",
@@ -38,9 +40,10 @@ const PROGRAMS = [
     desc: "Formación especializada para guiar el desarrollo integral de niños a través del movimiento, la creatividad y el juego consciente.",
     price: "$360", free: false,
     duration: "3 meses", level: "Sin requisitos",
-    grad: "linear-gradient(135deg,#241A10 0%,#3A2817 100%)",
+    grad: "linear-gradient(135deg,#4A2418 0%,#6B3826 100%)",
     accent: "#A76D61", icon: "★",
     bullets: ["Certificado oficial Joogalkids", "Recursos lúdicos descargables", "Mentoring mensual"],
+    certs: ["idc", "cel", "fgu"],
   },
   {
     slug: "metodo-sholem",
@@ -49,9 +52,10 @@ const PROGRAMS = [
     desc: "Formación de instructores para acompañar a adolescentes en el desarrollo de su identidad, liderazgo y valores con propósito.",
     price: "$360", free: false,
     duration: "3 meses", level: "Exp. con adolescentes",
-    grad: "linear-gradient(135deg,#21160d 0%,#3a2418 100%)",
+    grad: "linear-gradient(135deg,#42200F 0%,#653322 100%)",
     accent: "#A76D61", icon: "◈",
     bullets: ["Certificado de instructor", "Manual Método Sholem", "Supervisión grupal"],
+    certs: ["idc", "cel", "fgu"],
   },
   {
     slug: "cabala-coach",
@@ -60,9 +64,10 @@ const PROGRAMS = [
     desc: "Integra la sabiduría milenaria de la Cabalá como herramienta práctica de autoconocimiento, coaching y transformación personal.",
     price: "$360", free: false,
     duration: "4 semanas", level: "Todos los niveles",
-    grad: "linear-gradient(135deg,#130e03 0%,#2e1f00 100%)",
+    grad: "linear-gradient(135deg,#332508 0%,#4F3A12 100%)",
     accent: "#CBB78B", icon: "❂",
     bullets: ["Acceso de por vida", "Videos HD + guías PDF", "Comunidad privada"],
+    certs: ["idc", "cel", "fgu"],
   },
 ]
 
@@ -227,9 +232,19 @@ export default function AcademiaPage() {
 
                         {/* Footer */}
                         <div style={{ marginTop: 28 }}>
-                          <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+                          <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
                             <span style={{ fontSize: 10, border: "1px solid rgba(165,141,102,.2)", borderRadius: 16, padding: "4px 12px", color: "var(--on-dark)" }}>⏱ {p.duration}</span>
                             <span style={{ fontSize: 10, border: "1px solid rgba(165,141,102,.2)", borderRadius: 16, padding: "4px 12px", color: "var(--on-dark)" }}>◈ {p.level}</span>
+                          </div>
+                          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
+                            <span style={{ fontSize: 9, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--on-dark-faint)", flexShrink: 0 }}>Certificado por</span>
+                            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                              {p.certs.map((slug) => (
+                                <span key={slug} style={{ background: "#f7f3ec", borderRadius: 4, padding: "4px 8px", display: "flex", alignItems: "center" }}>
+                                  <img src={`/brand/certs/${slug}.webp`} alt={slug.toUpperCase()} style={{ height: 14, width: "auto", objectFit: "contain", display: "block" }} loading="lazy" />
+                                </span>
+                              ))}
+                            </div>
                           </div>
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
                             <div style={{
@@ -254,7 +269,7 @@ export default function AcademiaPage() {
 
                       {/* Panel derecho — solo en la card destacada en desktop */}
                       {i === 0 && !isMobile && (
-                        <div style={{ background: "rgba(0,0,0,.18)", backdropFilter: "blur(2px)", padding: "52px 44px", display: "flex", flexDirection: "column", justifyContent: "space-between", borderLeft: "1px solid rgba(255,255,255,.06)", position: "relative", zIndex: 1 }}>
+                        <div style={{ background: "rgba(0,0,0,.18)", backdropFilter: "blur(2px)", padding: "52px 44px", display: "flex", flexDirection: "column", justifyContent: "center", borderLeft: "1px solid rgba(255,255,255,.06)", position: "relative", zIndex: 1 }}>
                           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                             {p.bullets.map((b) => (
                               <div key={b} style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 14, color: "var(--on-dark)" }}>
@@ -262,14 +277,6 @@ export default function AcademiaPage() {
                                 {b}
                               </div>
                             ))}
-                          </div>
-                          <div>
-                            <div style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 8 }}>Programa certificado por</div>
-                            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                              {["IDC", "CEL", "FGU"].map((cert) => (
-                                <span key={cert} style={{ fontSize: 10, letterSpacing: ".12em", border: `1px solid ${p.accent}40`, borderRadius: 3, padding: "4px 10px", color: p.accent }}>{cert}</span>
-                              ))}
-                            </div>
                           </div>
                         </div>
                       )}

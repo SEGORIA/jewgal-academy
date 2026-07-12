@@ -246,9 +246,12 @@ export default function ConoceADevorPage() {
           {/* Header centrado */}
           <div style={{ textAlign: "center", marginBottom: 44 }}>
             <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16, color: "#A76D61" }}>Documental</span>
-            <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.5vw,48px)", color: "var(--text)", letterSpacing: ".01em", lineHeight: 1.15 }}>
+            <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.5vw,48px)", color: "var(--text)", letterSpacing: ".01em", lineHeight: 1.15, marginBottom: 14 }}>
               Escúchala en sus propias <em style={{ color: "#A76D61", fontStyle: "normal" }}>palabras</em>
             </h2>
+            <p className="reveal" style={{ fontSize: 13, letterSpacing: ".08em", color: "rgba(246,238,232,.55)" }}>
+              Dirigido por <span style={{ color: "#A76D61" }}>Devora Benchimol</span>
+            </p>
           </div>
 
           {/* Contenedor del video — glow dorado */}
@@ -382,7 +385,7 @@ export default function ConoceADevorPage() {
             </div>
             <div className="reveal">
               <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.5vw,16px)", lineHeight: 1.75, marginBottom: 18 }}>
-                Organización sin fines de lucro comprometida con inspirar, empoderar y formar líderes con corazón valiente, comprometidos con transformar el mundo desde los valores judíos y el amor.
+                Fundada por <strong style={{ color: "var(--text)" }}>Devora Benchimol</strong>, CEO y creadora. Organización sin fines de lucro comprometida con inspirar, empoderar y formar líderes con corazón valiente, comprometidos con transformar el mundo desde los valores judíos y el amor.
               </p>
               <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.5vw,16px)", lineHeight: 1.75 }}>
                 A través de programas educativos, retiros y formaciones, acompañamos a personas de todas las edades a descubrir su propósito y construir comunidades más compasivas y conscientes.
