@@ -113,13 +113,15 @@ export default function ContactoPage() {
         borderBottom: "1px solid var(--line-d)",
         position: "relative", overflow: "hidden",
       }}>
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "url(/brand/pages/hero-contacto.webp)", backgroundSize: "cover", backgroundPosition: "right center", zIndex: 0 }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(100deg,var(--navy-2) 0%,var(--navy) 42%,rgba(0,0,0,0) 82%)", zIndex: 1 }} />
         <div style={{
           position: "absolute", top: "-40%", right: "-5%",
           width: 500, height: 500, borderRadius: "50%",
           background: "radial-gradient(circle,rgba(165,141,102,.07),transparent 70%)",
-          pointerEvents: "none",
+          pointerEvents: "none", zIndex: 1,
         }} />
-        <div className="wrap">
+        <div className="wrap" style={{ position: "relative", zIndex: 2 }}>
           <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Escríbeme</span>
           <h1 style={{
             fontFamily: "var(--serif)", fontWeight: 500,

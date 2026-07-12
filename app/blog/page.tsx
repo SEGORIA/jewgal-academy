@@ -47,8 +47,10 @@ export default function BlogPage() {
         position: "relative", overflow: "hidden",
         borderBottom: "1px solid var(--line-d)",
       }}>
-        <div style={{ position: "absolute", top: "-30%", right: 0, width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(165,141,102,.07),transparent 70%)", pointerEvents: "none" }} />
-        <div className="wrap">
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "url(/brand/pages/hero-blog.webp)", backgroundSize: "cover", backgroundPosition: "right center", zIndex: 0 }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(100deg,var(--navy-2) 0%,var(--navy) 42%,rgba(0,0,0,0) 82%)", zIndex: 1 }} />
+        <div style={{ position: "absolute", top: "-30%", right: 0, width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(165,141,102,.07),transparent 70%)", pointerEvents: "none", zIndex: 1 }} />
+        <div className="wrap" style={{ position: "relative", zIndex: 2 }}>
           <motion.span
             className="eyebrow"
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}

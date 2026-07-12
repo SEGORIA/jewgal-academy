@@ -74,8 +74,10 @@ export default function EventosPage() {
         position: "relative", overflow: "hidden",
         borderBottom: "1px solid var(--line-d)",
       }}>
-        <div style={{ position: "absolute", top: "-30%", right: "0", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(165,141,102,.07),transparent 70%)", pointerEvents: "none" }} />
-        <div className="wrap">
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "url(/brand/pages/hero-eventos.webp)", backgroundSize: "cover", backgroundPosition: "right center", zIndex: 0 }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(100deg,var(--navy-2) 0%,var(--navy) 42%,rgba(0,0,0,0) 82%)", zIndex: 1 }} />
+        <div style={{ position: "absolute", top: "-30%", right: "0", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(165,141,102,.07),transparent 70%)", pointerEvents: "none", zIndex: 1 }} />
+        <div className="wrap" style={{ position: "relative", zIndex: 2 }}>
           <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Agenda</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(44px,6vw,78px)", color: "var(--text)", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}>
             Próximos<br /><em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>Eventos</em>
