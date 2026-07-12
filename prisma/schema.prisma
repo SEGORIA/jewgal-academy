@@ -15,6 +15,12 @@ model User {
   image            String?
   role             String       @default("student")
   stripeCustomerId String?
+  phone            String?
+  country          String?
+  city             String?
+  job              String?
+  bio              String?
+  interests        String[]     @default([])
   enrollments      Enrollment[]
   payments         Payment[]
   createdAt        DateTime     @default(now())
@@ -124,4 +130,17 @@ model SiteSetting {
   key       String   @id
   value     String
   updatedAt DateTime @updatedAt @default(now())
+}
+
+model Post {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  category    String
+  excerpt     String
+  content     String
+  isPublished Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }

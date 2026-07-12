@@ -2,9 +2,9 @@ import { Skeleton, SkeletonCard } from "@/components/ui/Skeleton"
 
 export default function AulaLoading() {
   return (
-    <div style={{ background: "var(--navy)", minHeight: "100svh" }}>
+    <div style={{ background: "var(--bg)", minHeight: "100svh" }}>
       {/* Barra de navegación del aula */}
-      <div style={{ height: 68, background: "var(--navy-2)", borderBottom: "1px solid var(--line-d)" }} />
+      <div style={{ height: 68, background: "var(--bg-2)", borderBottom: "1px solid rgba(165,141,102,.14)" }} />
 
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(32px,5vw,60px) clamp(20px,4vw,40px)" }}>
 
@@ -16,7 +16,7 @@ export default function AulaLoading() {
         </div>
 
         {/* Progreso global */}
-        <div style={{ border: "1px solid var(--line-d)", borderRadius: 10, padding: 28, background: "var(--navy-2)", marginBottom: 32 }}>
+        <div style={{ border: "1px solid rgba(165,141,102,.14)", borderRadius: 10, padding: 28, background: "var(--bg-2)", marginBottom: 32 }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
             <Skeleton style={{ height: 18, width: "40%" }} />
             <Skeleton style={{ height: 18, width: "15%" }} />

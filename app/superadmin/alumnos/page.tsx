@@ -23,14 +23,7 @@ type Student = {
   payments: { amount: number; status: string; paidAt: string | null }[]
 }
 
-const COURSES = [
-  { id: "", label: "Sin programa" },
-  { id: "life-coaching-integrativo", label: "Life Coaching Integrativo" },
-  { id: "joogal-adultos",            label: "Instructor Jewgal Adultos" },
-  { id: "joogalkids",                label: "Instructor Joogalkids" },
-  { id: "metodo-sholem",             label: "Método Sholem" },
-  { id: "cabala-coach",              label: "Cábala Coach" },
-]
+type CourseOption = { id: string; title: string }
 
 type Modal = null | { type: "add" } | { type: "detail"; student: Student } | { type: "delete"; student: Student }
 
@@ -60,9 +53,12 @@ export default function AlumnosPage() {
   const [saving,   setSaving]     = useState(false)
   const [error,    setError]      = useState("")
 
-  const [form, setForm] = useState({ name: "", email: "", password: "", courseSlug: "" })
+  const [form, setForm] = useState({ name: "", email: "", password: "", courseId: "" })
   const [edit, setEdit] = useState<Record<string, { progress: number; hours: number }>>({})
   const [savingId, setSavingId] = useState<string | null>(null)
+  const [courses, setCourses] = useState<CourseOption[]>([])
+  const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState("")
 
   async function saveMetrics(enrollmentId: string) {
     const v = edit[enrollmentId]
@@ -88,6 +84,13 @@ export default function AlumnosPage() {
 
   useEffect(() => { load() }, [load])
 
+  useEffect(() => {
+    fetch("/api/admin/courses")
+      .then((r) => r.json())
+      .then((d) => setCourses((d.courses ?? []).map((c: { id: string; title: string }) => ({ id: c.id, title: c.title }))))
+      .catch(() => {})
+  }, [])
+
   const filtered = students.filter((s) =>
     s.name.toLowerCase().includes(search.toLowerCase()) ||
     s.email.toLowerCase().includes(search.toLowerCase())
@@ -97,20 +100,30 @@ export default function AlumnosPage() {
     if (!form.name || !form.email || !form.password) { setError("Completá todos los campos."); return }
     if (form.password.length < 6) { setError("La contraseña debe tener al menos 6 caracteres."); return }
     setSaving(true); setError("")
-    const courseId = form.courseSlug
-      ? (await fetch(`/api/admin/students?slug=${form.courseSlug}`).then(() => null).catch(() => null), form.courseSlug)
-      : undefined
     const res = await fetch("/api/admin/students", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: form.name, email: form.email, password: form.password, courseId }),
+      body: JSON.stringify({ name: form.name, email: form.email, password: form.password, courseId: form.courseId || undefined }),
     })
     const data = await res.json()
     setSaving(false)
     if (!res.ok) { setError(data.error || "Error al crear la cuenta"); return }
     setModal(null)
-    setForm({ name: "", email: "", password: "", courseSlug: "" })
+    setForm({ name: "", email: "", password: "", courseId: "" })
     load()
+  }
+
+  async function deleteStudent(id: string) {
+    setDeleting(true); setDeleteError("")
+    try {
+      const res = await fetch(`/api/admin/students/${id}`, { method: "DELETE" })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) { setDeleteError(data.error || "No se pudo eliminar la cuenta."); return }
+      setModal(null)
+      load()
+    } finally {
+      setDeleting(false)
+    }
   }
 
   const programName = (s: Student) =>
@@ -252,7 +265,7 @@ export default function AlumnosPage() {
                           {[
                             { label: "Ver detalle",  icon: Eye,    action: () => { setModal({ type: "detail", student: s }); setMenuOpen(null) } },
                             { label: "Enviar email", icon: Mail,   action: () => { window.location.href = `mailto:${s.email}`; setMenuOpen(null) } },
-                            { label: "Eliminar",     icon: Trash2, action: () => { setModal({ type: "delete", student: s }); setMenuOpen(null) }, danger: true },
+                            { label: "Eliminar",     icon: Trash2, action: () => { setModal({ type: "delete", student: s }); setMenuOpen(null); setDeleteError("") }, danger: true },
                           ].map(({ label, icon: Icon, action, danger }) => (
                             <button key={label} onClick={action}
                               style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", background: "none", border: "none", padding: "10px 16px", fontSize: 13, cursor: "pointer", color: danger ? "var(--danger)" : "var(--text-strong)", transition: "background .15s" }}
@@ -306,8 +319,9 @@ export default function AlumnosPage() {
                   ))}
                   <div>
                     <label style={labelStyle}>Programa (opcional)</label>
-                    <select value={form.courseSlug} onChange={(e) => setForm((f) => ({ ...f, courseSlug: e.target.value }))} style={{ ...inputStyle, cursor: "pointer" }}>
-                      {COURSES.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+                    <select value={form.courseId} onChange={(e) => setForm((f) => ({ ...f, courseId: e.target.value }))} style={{ ...inputStyle, cursor: "pointer" }}>
+                      <option value="">Sin programa</option>
+                      {courses.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
                     </select>
                   </div>
                 </div>
@@ -328,15 +342,21 @@ export default function AlumnosPage() {
               <>
                 <h2 style={{ fontFamily: "var(--serif)", fontSize: 24, color: "var(--danger)", marginBottom: 8 }}>Eliminar alumno</h2>
                 <p style={{ color: "var(--text-muted)", fontSize: 14, marginBottom: 24 }}>
-                  Esta acción eliminará la cuenta de <strong style={{ color: "var(--text)" }}>{modal.student.name}</strong> y todas sus inscripciones. No se puede deshacer.
+                  Esta acción eliminará la cuenta de <strong style={{ color: "var(--text)" }}>{modal.student.name}</strong> de forma permanente. No se puede deshacer.
                 </p>
+                {deleteError && (
+                  <div style={{ background: "rgba(239,68,68,.1)", border: "1px solid rgba(239,68,68,.3)", borderRadius: 9, padding: "12px 14px", fontSize: 13, color: "var(--danger)", marginBottom: 16, lineHeight: 1.5 }}>
+                    {deleteError}
+                  </div>
+                )}
                 <div style={{ display: "flex", gap: 10 }}>
-                  <button onClick={() => setModal(null)} style={{ flex: 1, background: "var(--surface-2)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 10, padding: "12px 0", fontSize: 13, color: "var(--text-muted)", cursor: "pointer" }}>Cancelar</button>
-                  <button onClick={() => setModal(null)} style={{ flex: 2, background: "rgba(239,68,68,.85)", border: "none", borderRadius: 10, padding: "12px 0", fontSize: 13, fontWeight: 700, color: "white", cursor: "pointer" }}>
-                    Contactar al soporte
+                  <button onClick={() => { setModal(null); setDeleteError("") }} style={{ flex: 1, background: "var(--surface-2)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 10, padding: "12px 0", fontSize: 13, color: "var(--text-muted)", cursor: "pointer" }}>Cancelar</button>
+                  <button onClick={() => deleteStudent(modal.student.id)} disabled={deleting}
+                    style={{ flex: 2, background: "rgba(239,68,68,.85)", border: "none", borderRadius: 10, padding: "12px 0", fontSize: 13, fontWeight: 700, color: "white", cursor: deleting ? "not-allowed" : "pointer", opacity: deleting ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                    {deleting ? <><Loader2 size={15} style={{ animation: "spin 1s linear infinite" }} /> Eliminando…</> : "Eliminar cuenta"}
                   </button>
                 </div>
-                <p style={{ fontSize: 11, color: "var(--text-dim)", marginTop: 12, textAlign: "center" }}>Por seguridad, la eliminación definitiva requiere confirmación por email.</p>
+                <p style={{ fontSize: 11, color: "var(--text-dim)", marginTop: 12, textAlign: "center" }}>Si tiene inscripciones o pagos registrados, no se podrá eliminar por integridad de los registros.</p>
               </>
             )}
 

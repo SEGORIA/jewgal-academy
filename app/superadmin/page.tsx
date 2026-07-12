@@ -5,15 +5,16 @@ import Link from "next/link"
 import { Users, BookOpen, CreditCard, TrendingUp, ArrowUpRight, UserPlus, PlayCircle, FileText, Globe } from "lucide-react"
 import { motion } from "framer-motion"
 
-type Stats = { studentCount: number; enrollmentCount: number; totalRevenue: number; paymentCount: number; enrollmentsByProgram: { slug: string | null; count: number }[] }
+type Stats = {
+  studentCount: number; enrollmentCount: number; totalRevenue: number; paymentCount: number
+  enrollmentsByProgram: { slug: string | null; count: number }[]
+  courses: { id: string; slug: string; title: string; isPublished: boolean }[]
+  publishedCourseCount: number
+  integrations: { stripe: boolean; paypal: boolean; email: boolean }
+}
 
-const PROGRAMS = [
-  { name: "Life Coaching Integrativo", slug: "life-coaching-integrativo", accent: "#A58D66" },
-  { name: "Instructor Jewgal Adultos", slug: "joogal-adultos",            accent: "var(--success)" },
-  { name: "Instructor Joogalkids",     slug: "joogalkids",                accent: "#A76D61" },
-  { name: "Método Sholem",             slug: "metodo-sholem",             accent: "#A76D61" },
-  { name: "Cábala Coach",              slug: "cabala-coach",              accent: "#CBB78B" },
-]
+const ACCENTS = ["#A58D66", "#A76D61", "#C49F72", "#CBB78B", "#8FBF9F"]
+const accentFor = (i: number) => ACCENTS[i % ACCENTS.length]
 
 const quickActions = [
   { label: "Agregar alumno",     href: "/superadmin/alumnos",  icon: UserPlus,   color: "var(--gold)" },
@@ -82,10 +83,11 @@ export default function AdminDashboard() {
       .finally(() => setLoading(false))
   }, [])
 
+  const totalCourses = stats?.courses.length ?? 0
   const statCards = [
     { label: "Alumnos activos",   value: stats ? String(stats.studentCount)    : "—", delta: "Registradas", icon: Users,      href: "/superadmin/alumnos", accent: "#A58D66" },
-    { label: "Programas activos", value: "5",                                          delta: "Todos publicados", icon: BookOpen, href: "/superadmin/cursos",  accent: "#A76D61" },
-    { label: "Ingresos totales",  value: stats ? `$${stats.totalRevenue.toLocaleString("es")}` : "—", delta: stats?.paymentCount ? `${stats.paymentCount} transacciones` : "Stripe pendiente", icon: CreditCard, href: "/superadmin/pagos", accent: "var(--success)" },
+    { label: "Programas activos", value: stats ? String(stats.publishedCourseCount) : "—", delta: stats ? `${stats.publishedCourseCount} de ${totalCourses} publicados` : "—", icon: BookOpen, href: "/superadmin/cursos",  accent: "#A76D61" },
+    { label: "Ingresos totales",  value: stats ? `$${stats.totalRevenue.toLocaleString("es")}` : "—", delta: stats?.paymentCount ? `${stats.paymentCount} transacciones` : "Sin transacciones", icon: CreditCard, href: "/superadmin/pagos", accent: "var(--success)" },
     { label: "Inscripciones",     value: stats ? String(stats.enrollmentCount) : "—", delta: "Activas",     icon: TrendingUp, href: "/superadmin/alumnos", accent: "#A76D61" },
   ]
 
@@ -159,9 +161,26 @@ export default function AdminDashboard() {
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {[
               { dot: "var(--success)", title: "Base de datos", sub: "Neon PostgreSQL · Operativa" },
-              { dot: "var(--success)", title: "5 programas publicados", sub: "Accesibles desde el sitio" },
-              { dot: "var(--warning)", title: "Stripe", sub: "Configurar STRIPE_SECRET_KEY para activar pagos reales" },
-              { dot: "var(--warning)", title: "PayPal", sub: "Configurar PAYPAL_CLIENT_ID para activar PayPal" },
+              {
+                dot: stats && stats.publishedCourseCount > 0 ? "var(--success)" : "var(--warning)",
+                title: stats ? `${stats.publishedCourseCount} programa${stats.publishedCourseCount === 1 ? "" : "s"} publicado${stats.publishedCourseCount === 1 ? "" : "s"}` : "Programas",
+                sub: "Accesibles desde el sitio",
+              },
+              {
+                dot: stats?.integrations.stripe ? "var(--success)" : "var(--warning)",
+                title: "Stripe",
+                sub: stats?.integrations.stripe ? "Configurado" : "Configurar STRIPE_SECRET_KEY para activar pagos reales",
+              },
+              {
+                dot: stats?.integrations.paypal ? "var(--success)" : "var(--warning)",
+                title: "PayPal",
+                sub: stats?.integrations.paypal ? "Configurado" : "Configurar PAYPAL_CLIENT_ID para activar PayPal",
+              },
+              {
+                dot: stats?.integrations.email ? "var(--success)" : "var(--warning)",
+                title: "Email (Resend)",
+                sub: stats?.integrations.email ? "Configurado" : "Configurar RESEND_API_KEY para enviar emails",
+              },
             ].map((item, i) => (
               <motion.div key={i} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}
                 style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
@@ -192,20 +211,28 @@ export default function AdminDashboard() {
               <span key={h} style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--text-dim)" }}>{h}</span>
             ))}
           </div>
-          {PROGRAMS.map((p, i) => {
-            const enrolled = stats?.enrollmentsByProgram?.find((e) => e.slug === p.slug)?.count ?? 0
+          {!loading && (stats?.courses.length ?? 0) === 0 && (
+            <p style={{ padding: "20px 14px", color: "var(--text-dim)", fontSize: 13 }}>No hay programas creados todavía.</p>
+          )}
+          {stats?.courses.map((p, i) => {
+            const enrolled = stats.enrollmentsByProgram?.find((e) => e.slug === p.slug)?.count ?? 0
             return (
-              <motion.div key={p.slug} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }}
+              <motion.div key={p.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }}
                 style={{ display: "grid", gridTemplateColumns: "1fr 120px 120px", gap: 12, padding: "14px", borderBottom: "1px solid var(--surface)", alignItems: "center" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: p.accent, flexShrink: 0 }} />
-                  <span style={{ fontSize: 13, color: "var(--text-strong)" }}>{p.name}</span>
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: accentFor(i), flexShrink: 0 }} />
+                  <span style={{ fontSize: 13, color: "var(--text-strong)" }}>{p.title}</span>
                 </div>
-                <span style={{ fontSize: 11, color: "var(--success)", background: "rgba(196,159,114,.1)", border: "1px solid rgba(196,159,114,.2)", borderRadius: 20, padding: "3px 10px", display: "inline-block" }}>
-                  Activo
+                <span style={{
+                  fontSize: 11, borderRadius: 20, padding: "3px 10px", display: "inline-block",
+                  color: p.isPublished ? "var(--success)" : "var(--text-dim)",
+                  background: p.isPublished ? "rgba(196,159,114,.1)" : "rgba(255,255,255,.04)",
+                  border: p.isPublished ? "1px solid rgba(196,159,114,.2)" : "1px solid rgba(255,255,255,.08)",
+                }}>
+                  {p.isPublished ? "Activo" : "Oculto"}
                 </span>
                 <span style={{ fontSize: 13, color: "var(--text-faint)" }}>
-                  {loading ? "—" : enrolled}
+                  {enrolled}
                 </span>
               </motion.div>
             )

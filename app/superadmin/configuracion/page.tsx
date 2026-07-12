@@ -1,28 +1,66 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Save, Eye, EyeOff, KeyRound, Users, CreditCard, Mail, Search, Moon, Sun, Loader2 } from "lucide-react"
+import { useState, useEffect, useCallback } from "react"
+import { Save, KeyRound, Users, CreditCard, Mail, Search, Moon, Sun, Loader2, ExternalLink, CheckCircle2, AlertCircle } from "lucide-react"
 
 const card: React.CSSProperties = { background: "var(--surface)", border: "1px solid rgba(165,141,102,.13)", borderRadius: 14 }
 const inputStyle: React.CSSProperties = { background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 14px", fontSize: 13, color: "var(--text)", outline: "none", fontFamily: "inherit", width: "100%" }
 const labelStyle: React.CSSProperties = { fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--text-faint)", display: "block", marginBottom: 7 }
 
 type Tab = "general" | "pagos" | "email" | "contrasenas"
+type StudentRow = { id: string; name: string; email: string }
+
+function StatusBadge({ ok }: { ok: boolean }) {
+  return ok ? (
+    <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--success)", background: "rgba(107,191,142,.1)", border: "1px solid rgba(107,191,142,.25)", borderRadius: 20, padding: "4px 12px" }}>
+      <CheckCircle2 size={12} /> Configurado
+    </span>
+  ) : (
+    <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--danger)", background: "rgba(239,68,68,.1)", border: "1px solid rgba(239,68,68,.25)", borderRadius: 20, padding: "4px 12px" }}>
+      <AlertCircle size={12} /> No conectado
+    </span>
+  )
+}
 
 export default function ConfiguracionPage() {
   const [tab, setTab]             = useState<Tab>("general")
-  const [saved, setSaved]         = useState(false)
-  const [showStripe, setShowStripe] = useState(false)
-  const [showPayPal, setShowPayPal] = useState(false)
-  const [pwSearch, setPwSearch]   = useState("")
-  const [newPw, setNewPw]         = useState("")
-  const [pwSaved, setPwSaved]     = useState(false)
   const [theme, setTheme]         = useState<"dark" | "light">("dark")
   const [themeSaving, setThemeSaving] = useState(false)
+
+  // General
+  const [general, setGeneral] = useState({ name: "", url: "", email: "", phone: "", metaDescription: "" })
+  const [generalLoading, setGeneralLoading] = useState(true)
+  const [generalSaving, setGeneralSaving] = useState(false)
+  const [generalSaved, setGeneralSaved] = useState(false)
+
+  // Integraciones (solo lectura, vienen de env vars)
+  const [integrations, setIntegrations] = useState<{ stripe: boolean; paypal: boolean; email: boolean } | null>(null)
+
+  // Reset password alumno
+  const [students, setStudents] = useState<StudentRow[]>([])
+  const [pwSearch, setPwSearch] = useState("")
+  const [selectedStudent, setSelectedStudent] = useState<StudentRow | null>(null)
+  const [resetting, setResetting] = useState(false)
+  const [tempPassword, setTempPassword] = useState("")
+  const [resetError, setResetError] = useState("")
+
+  // Mi contraseña (admin)
+  const [pwCurrent, setPwCurrent] = useState("")
+  const [pwNew, setPwNew] = useState("")
+  const [pwConfirm, setPwConfirm] = useState("")
+  const [myPwSaving, setMyPwSaving] = useState(false)
+  const [myPwSaved, setMyPwSaved] = useState(false)
+  const [myPwError, setMyPwError] = useState("")
 
   useEffect(() => {
     const t = document.documentElement.getAttribute("data-theme")
     setTheme(t === "light" ? "light" : "dark")
+  }, [])
+
+  useEffect(() => {
+    fetch("/api/admin/settings/general").then((r) => r.json()).then(setGeneral).catch(() => {}).finally(() => setGeneralLoading(false))
+    fetch("/api/admin/stats").then((r) => r.json()).then((d) => setIntegrations(d.integrations ?? null)).catch(() => {})
+    fetch("/api/admin/students").then((r) => r.json()).then((d) => setStudents((d.students ?? []).map((s: StudentRow) => ({ id: s.id, name: s.name, email: s.email })))).catch(() => {})
   }, [])
 
   async function changeTheme(t: "dark" | "light") {
@@ -36,14 +74,61 @@ export default function ConfiguracionPage() {
     if (res.ok) {
       document.documentElement.setAttribute("data-theme", t)
       setTheme(t)
-      window.location.reload() // refresca el layout para aplicar el tema en toda la plataforma
+      window.location.reload()
     } else {
       setThemeSaving(false)
     }
   }
 
-  function handleSave() { setSaved(true); setTimeout(() => setSaved(false), 2500) }
-  function handlePwSave() { setPwSaved(true); setTimeout(() => setPwSaved(false), 2500) }
+  async function saveGeneral() {
+    setGeneralSaving(true)
+    try {
+      const res = await fetch("/api/admin/settings/general", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(general),
+      })
+      if (res.ok) { setGeneralSaved(true); setTimeout(() => setGeneralSaved(false), 2500) }
+    } finally {
+      setGeneralSaving(false)
+    }
+  }
+
+  const filteredStudents = pwSearch.length > 1
+    ? students.filter((s) => s.name.toLowerCase().includes(pwSearch.toLowerCase()) || s.email.toLowerCase().includes(pwSearch.toLowerCase()))
+    : []
+
+  async function resetStudentPassword() {
+    if (!selectedStudent) return
+    setResetting(true); setResetError(""); setTempPassword("")
+    try {
+      const res = await fetch(`/api/admin/students/${selectedStudent.id}/reset-password`, { method: "POST" })
+      const data = await res.json()
+      if (!res.ok) { setResetError(data.error || "No se pudo resetear la contraseña"); return }
+      setTempPassword(data.tempPassword)
+    } finally {
+      setResetting(false)
+    }
+  }
+
+  async function saveMyPassword() {
+    if (!pwNew || pwNew !== pwConfirm) return
+    setMyPwSaving(true); setMyPwError("")
+    try {
+      const res = await fetch("/api/me/password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword: pwCurrent, newPassword: pwNew }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setMyPwError(data.error || "No se pudo actualizar"); return }
+      setMyPwSaved(true)
+      setPwCurrent(""); setPwNew(""); setPwConfirm("")
+      setTimeout(() => setMyPwSaved(false), 2500)
+    } finally {
+      setMyPwSaving(false)
+    }
+  }
 
   const TABS: { key: Tab; label: string; icon: typeof Save }[] = [
     { key: "general",     label: "General",           icon: Save },
@@ -80,33 +165,40 @@ export default function ConfiguracionPage() {
       {tab === "general" && (
         <div style={{ ...card, padding: "28px 26px" }}>
           <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--text)", marginBottom: 22 }}>Información general</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-            {[
-              { label: "Nombre de la academia", key: "name", val: "Jewgal Academy" },
-              { label: "URL del sitio", key: "url", val: "https://jewgalacademy.com" },
-              { label: "Email de contacto", key: "email", val: "hola@jewgalacademy.com" },
-              { label: "Teléfono / WhatsApp", key: "phone", val: "+1 (305) 000-0000" },
-            ].map(({ label, key, val }) => (
-              <div key={key}>
-                <label style={labelStyle}>{label}</label>
-                <input defaultValue={val} style={inputStyle} />
+          {generalLoading ? (
+            <p style={{ color: "var(--text-faint)", fontSize: 13 }}>Cargando…</p>
+          ) : (
+            <>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <div>
+                  <label style={labelStyle}>Nombre de la academia</label>
+                  <input value={general.name} onChange={(e) => setGeneral((g) => ({ ...g, name: e.target.value }))} style={inputStyle} />
+                </div>
+                <div>
+                  <label style={labelStyle}>URL del sitio</label>
+                  <input value={general.url} onChange={(e) => setGeneral((g) => ({ ...g, url: e.target.value }))} style={inputStyle} />
+                </div>
+                <div>
+                  <label style={labelStyle}>Email de contacto</label>
+                  <input value={general.email} onChange={(e) => setGeneral((g) => ({ ...g, email: e.target.value }))} style={inputStyle} />
+                </div>
+                <div>
+                  <label style={labelStyle}>Teléfono / WhatsApp</label>
+                  <input value={general.phone} onChange={(e) => setGeneral((g) => ({ ...g, phone: e.target.value }))} style={inputStyle} />
+                </div>
+                <div style={{ gridColumn: "span 2" }}>
+                  <label style={labelStyle}>Descripción breve (meta description)</label>
+                  <textarea value={general.metaDescription} onChange={(e) => setGeneral((g) => ({ ...g, metaDescription: e.target.value }))} rows={3} style={{ ...inputStyle, resize: "vertical", lineHeight: 1.7 }} />
+                </div>
               </div>
-            ))}
-            <div style={{ gridColumn: "span 2" }}>
-              <label style={labelStyle}>Descripción breve (meta description)</label>
-              <textarea defaultValue="Programas de Life Coaching Integrativo, Cabalá y bienestar para transformación consciente." rows={3} style={{ ...inputStyle, resize: "vertical", lineHeight: 1.7 }} />
-            </div>
-          </div>
-          <div style={{ marginTop: 22 }}>
-            <label style={{ ...labelStyle, marginBottom: 12 }}>Modo de la plataforma</label>
-            <div style={{ display: "flex", gap: 10 }}>
-              {["Producción", "Modo demo (sin cobros reales)", "Mantenimiento"].map((m, i) => (
-                <label key={m} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 13, color: "var(--text-strong)" }}>
-                  <input type="radio" name="mode" defaultChecked={i === 1} style={{ accentColor: "var(--gold)" }} /> {m}
-                </label>
-              ))}
-            </div>
-          </div>
+
+              <button onClick={saveGeneral} disabled={generalSaving} style={{ marginTop: 22, background: generalSaved ? "var(--success)" : "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 10, padding: "12px 28px", fontSize: 13, fontWeight: 700, cursor: generalSaving ? "not-allowed" : "pointer", opacity: generalSaving ? 0.7 : 1, display: "flex", alignItems: "center", gap: 8, transition: "background .3s" }}>
+                {generalSaving ? <Loader2 size={15} style={{ animation: "spin 1s linear infinite" }} /> : <Save size={15} />}
+                {generalSaving ? "Guardando…" : generalSaved ? "¡Guardado!" : "Guardar cambios"}
+              </button>
+            </>
+          )}
+
           {/* Apariencia / Tema global */}
           <div style={{ marginTop: 26, paddingTop: 24, borderTop: "1px solid rgba(255,255,255,.07)" }}>
             <label style={{ ...labelStyle, marginBottom: 6 }}>Apariencia de la plataforma</label>
@@ -142,78 +234,51 @@ export default function ConfiguracionPage() {
               </p>
             )}
           </div>
-
-          <button onClick={handleSave} style={{ marginTop: 24, background: saved ? "var(--success)" : "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 10, padding: "12px 28px", fontSize: 13, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "background .3s" }}>
-            <Save size={15} /> {saved ? "¡Guardado!" : "Guardar cambios"}
-          </button>
         </div>
       )}
 
       {/* PAGOS */}
       {tab === "pagos" && (
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div style={{ ...card, padding: "18px 22px", display: "flex", gap: 12, alignItems: "flex-start", borderColor: "rgba(251,191,36,.15)", background: "rgba(251,191,36,.03)" }}>
+            <AlertCircle size={16} style={{ color: "var(--warning)", flexShrink: 0, marginTop: 2 }} />
+            <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6 }}>
+              Por seguridad, las claves secretas de pago se configuran como variables de entorno en Vercel, no desde este panel. Acá solo ves el estado de la conexión.
+            </p>
+          </div>
+
           {/* Stripe */}
           <div style={{ ...card, padding: "26px 24px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
               <div>
                 <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)", marginBottom: 4 }}>Stripe</h2>
                 <p style={{ fontSize: 13, color: "var(--text-faint)" }}>Tarjetas de crédito y débito</p>
               </div>
-              <span style={{ fontSize: 11, color: "var(--danger)", background: "rgba(239,68,68,.1)", border: "1px solid rgba(239,68,68,.25)", borderRadius: 20, padding: "4px 12px" }}>No conectado</span>
+              {integrations ? <StatusBadge ok={integrations.stripe} /> : <span style={{ fontSize: 12, color: "var(--text-dim)" }}>Verificando…</span>}
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-              {[
-                { label: "Secret Key (sk_...)", key: "stripe_sk", placeholder: "sk_test_..." },
-                { label: "Publishable Key (pk_...)", key: "stripe_pk", placeholder: "pk_test_..." },
-                { label: "Webhook Secret (whsec_...)", key: "stripe_wh", placeholder: "whsec_..." },
-              ].map(({ label, key, placeholder }) => (
-                <div key={key} style={{ gridColumn: key === "stripe_wh" ? "span 2" : undefined }}>
-                  <label style={labelStyle}>{label}</label>
-                  <div style={{ position: "relative" }}>
-                    <input type={showStripe ? "text" : "password"} placeholder={placeholder} style={{ ...inputStyle, paddingRight: 40 }} />
-                    <button type="button" onClick={() => setShowStripe(!showStripe)} aria-label={showStripe ? "Ocultar clave" : "Mostrar clave"} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-dim)" }}>
-                      {showStripe ? <EyeOff size={15} /> : <Eye size={15} />}
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <button onClick={handleSave} style={{ marginTop: 18, background: "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 9, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-              Conectar Stripe
-            </button>
+            <p style={{ fontSize: 12.5, color: "var(--text-dim)", marginBottom: 12 }}>
+              Variables requeridas: <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4 }}>STRIPE_SECRET_KEY</code>, <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4 }}>STRIPE_PUBLISHABLE_KEY</code>, <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4 }}>STRIPE_WEBHOOK_SECRET</code>.
+            </p>
+            <a href="https://vercel.com/dashboard" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 18px", fontSize: 13, color: "var(--text-muted)", textDecoration: "none" }}>
+              <ExternalLink size={14} /> Configurar en Vercel
+            </a>
           </div>
 
           {/* PayPal */}
           <div style={{ ...card, padding: "26px 24px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
               <div>
                 <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)", marginBottom: 4 }}>PayPal</h2>
                 <p style={{ fontSize: 13, color: "var(--text-faint)" }}>Pagos vía cuenta PayPal</p>
               </div>
-              <span style={{ fontSize: 11, color: "var(--danger)", background: "rgba(239,68,68,.1)", border: "1px solid rgba(239,68,68,.25)", borderRadius: 20, padding: "4px 12px" }}>No conectado</span>
+              {integrations ? <StatusBadge ok={integrations.paypal} /> : <span style={{ fontSize: 12, color: "var(--text-dim)" }}>Verificando…</span>}
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
-              {[
-                { label: "Client ID", placeholder: "Client ID de PayPal" },
-                { label: "Client Secret", placeholder: "Client Secret de PayPal" },
-              ].map(({ label, placeholder }) => (
-                <div key={label}>
-                  <label style={labelStyle}>{label}</label>
-                  <div style={{ position: "relative" }}>
-                    <input type={showPayPal ? "text" : "password"} placeholder={placeholder} style={{ ...inputStyle, paddingRight: 40 }} />
-                    <button type="button" onClick={() => setShowPayPal(!showPayPal)} aria-label={showPayPal ? "Ocultar clave" : "Mostrar clave"} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-dim)" }}>
-                      {showPayPal ? <EyeOff size={15} /> : <Eye size={15} />}
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 13, color: "var(--text-muted)", marginBottom: 16 }}>
-              <input type="checkbox" style={{ accentColor: "var(--gold)" }} /> Modo sandbox (pruebas)
-            </label>
-            <button onClick={handleSave} style={{ background: "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 9, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-              Conectar PayPal
-            </button>
+            <p style={{ fontSize: 12.5, color: "var(--text-dim)", marginBottom: 12 }}>
+              Variables requeridas: <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4 }}>PAYPAL_CLIENT_ID</code>, <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4 }}>PAYPAL_CLIENT_SECRET</code>.
+            </p>
+            <a href="https://vercel.com/dashboard" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 18px", fontSize: 13, color: "var(--text-muted)", textDecoration: "none" }}>
+              <ExternalLink size={14} /> Configurar en Vercel
+            </a>
           </div>
         </div>
       )}
@@ -221,38 +286,22 @@ export default function ConfiguracionPage() {
       {/* EMAIL */}
       {tab === "email" && (
         <div style={{ ...card, padding: "28px 26px" }}>
-          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--text)", marginBottom: 6 }}>Configuración de email</h2>
-          <p style={{ color: "var(--text-faint)", fontSize: 14, marginBottom: 24 }}>El sistema usa Resend para enviar emails de confirmación, bienvenida y recordatorios.</p>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
-            <div style={{ gridColumn: "span 2" }}>
-              <label style={labelStyle}>API Key de Resend</label>
-              <input type="password" placeholder="re_xxxxxxxxxxxxxxxxxx" style={inputStyle} />
-            </div>
-            <div>
-              <label style={labelStyle}>Nombre del remitente</label>
-              <input defaultValue="Jewgal Academy" style={inputStyle} />
-            </div>
-            <div>
-              <label style={labelStyle}>Email del remitente</label>
-              <input defaultValue="hola@jewgalacademy.com" style={inputStyle} />
-            </div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
+            <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--text)" }}>Email (Resend)</h2>
+            {integrations ? <StatusBadge ok={integrations.email} /> : <span style={{ fontSize: 12, color: "var(--text-dim)" }}>Verificando…</span>}
           </div>
-          <p style={{ fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 14 }}>Emails automáticos activados</p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 24 }}>
-            {[
-              "Email de bienvenida al inscribirse",
-              "Confirmación de pago",
-              "Recordatorio de clase (24h antes)",
-              "Reseteo de contraseña",
-            ].map((label) => (
-              <label key={label} style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", fontSize: 13, color: "var(--text-muted)" }}>
-                <input type="checkbox" defaultChecked style={{ accentColor: "var(--gold)" }} /> {label}
-              </label>
-            ))}
+          <p style={{ color: "var(--text-faint)", fontSize: 14, marginBottom: 20 }}>
+            La API key de Resend se configura como variable de entorno en Vercel, no desde este panel.
+          </p>
+          <div style={{ display: "flex", gap: 10, alignItems: "flex-start", background: "rgba(251,191,36,.06)", border: "1px solid rgba(251,191,36,.15)", borderRadius: 9, padding: "12px 14px", marginBottom: 20 }}>
+            <AlertCircle size={15} style={{ color: "var(--warning)", flexShrink: 0, marginTop: 1 }} />
+            <p style={{ fontSize: 12.5, color: "var(--text-muted)", lineHeight: 1.6 }}>
+              El envío automático de emails (bienvenida, confirmación de pago, recordatorios) todavía no está implementado en el código — la key de Resend está lista para usarse, pero ningún flujo la dispara todavía.
+            </p>
           </div>
-          <button onClick={handleSave} style={{ background: saved ? "var(--success)" : "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 10, padding: "12px 28px", fontSize: 13, fontWeight: 700, cursor: "pointer", transition: "background .3s" }}>
-            {saved ? "¡Guardado!" : "Guardar configuración"}
-          </button>
+          <a href="https://vercel.com/dashboard" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 18px", fontSize: 13, color: "var(--text-muted)", textDecoration: "none" }}>
+            <ExternalLink size={14} /> Configurar RESEND_API_KEY en Vercel
+          </a>
         </div>
       )}
 
@@ -265,33 +314,45 @@ export default function ConfiguracionPage() {
               <Users size={18} style={{ color: "var(--gold)" }} />
               <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)" }}>Resetear contraseña de alumno</h2>
             </div>
-            <p style={{ fontSize: 13, color: "var(--text-faint)", marginBottom: 22 }}>Buscá un alumno por email y asignale una nueva contraseña temporal.</p>
+            <p style={{ fontSize: 13, color: "var(--text-faint)", marginBottom: 22 }}>Buscá un alumno por email y generá una contraseña temporal.</p>
 
             <div style={{ position: "relative", marginBottom: 16 }}>
               <Search size={15} style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "var(--text-dim)" }} />
               <input
-                value={pwSearch} onChange={(e) => setPwSearch(e.target.value)}
+                value={pwSearch} onChange={(e) => { setPwSearch(e.target.value); setSelectedStudent(null); setTempPassword(""); setResetError("") }}
                 placeholder="Buscar por email o nombre…"
                 style={{ ...inputStyle, paddingLeft: 38 }}
               />
             </div>
 
-            {pwSearch.length > 2 && (
-              <div style={{ background: "var(--surface)", border: "1px solid rgba(165,141,102,.15)", borderRadius: 10, marginBottom: 16 }}>
-                <p style={{ padding: "16px 18px", fontSize: 13, color: "var(--text-dim)" }}>No se encontraron alumnos con ese criterio.</p>
+            {pwSearch.length > 1 && !selectedStudent && (
+              <div style={{ background: "var(--surface)", border: "1px solid rgba(165,141,102,.15)", borderRadius: 10, marginBottom: 16, overflow: "hidden" }}>
+                {filteredStudents.length === 0 ? (
+                  <p style={{ padding: "16px 18px", fontSize: 13, color: "var(--text-dim)" }}>No se encontraron alumnos con ese criterio.</p>
+                ) : (
+                  filteredStudents.slice(0, 6).map((s) => (
+                    <button key={s.id} onClick={() => { setSelectedStudent(s); setPwSearch(s.name) }}
+                      style={{ display: "block", width: "100%", textAlign: "left", padding: "12px 18px", background: "none", border: "none", borderBottom: "1px solid var(--surface-2)", cursor: "pointer", color: "var(--text-strong)", fontSize: 13 }}>
+                      {s.name} <span style={{ color: "var(--text-dim)", fontSize: 12 }}>· {s.email}</span>
+                    </button>
+                  ))
+                )}
               </div>
             )}
 
-            <div style={{ marginBottom: 12 }}>
-              <label style={labelStyle}>Nueva contraseña</label>
-              <input type="password" value={newPw} onChange={(e) => setNewPw(e.target.value)} placeholder="Mínimo 8 caracteres" style={inputStyle} />
-            </div>
-            <div>
-              <label style={labelStyle}>Confirmar contraseña</label>
-              <input type="password" placeholder="Repetir contraseña" style={inputStyle} />
-            </div>
-            <button onClick={handlePwSave} style={{ marginTop: 18, background: pwSaved ? "var(--success)" : "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 9, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "background .3s" }}>
-              <KeyRound size={14} /> {pwSaved ? "¡Contraseña actualizada!" : "Actualizar contraseña"}
+            {resetError && <p style={{ fontSize: 13, color: "var(--danger)", marginBottom: 14 }}>{resetError}</p>}
+
+            {tempPassword && (
+              <div style={{ background: "rgba(107,191,142,.08)", border: "1px solid rgba(107,191,142,.25)", borderRadius: 9, padding: "14px 16px", marginBottom: 16 }}>
+                <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 6 }}>Nueva contraseña temporal para {selectedStudent?.name} — copiala y compartila de forma segura:</p>
+                <code style={{ fontSize: 15, fontWeight: 700, color: "var(--success)", letterSpacing: ".04em" }}>{tempPassword}</code>
+              </div>
+            )}
+
+            <button onClick={resetStudentPassword} disabled={!selectedStudent || resetting}
+              style={{ background: tempPassword ? "var(--success)" : "var(--gold)", color: tempPassword ? "var(--bg)" : "#2C1F14", border: "none", borderRadius: 9, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: !selectedStudent || resetting ? "not-allowed" : "pointer", opacity: !selectedStudent || resetting ? 0.5 : 1, display: "flex", alignItems: "center", gap: 8, transition: "background .3s" }}>
+              {resetting ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : <KeyRound size={14} />}
+              {resetting ? "Generando…" : tempPassword ? "Generar otra contraseña" : "Generar contraseña temporal"}
             </button>
           </div>
 
@@ -302,13 +363,16 @@ export default function ConfiguracionPage() {
               <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)" }}>Mi contraseña (admin)</h2>
             </div>
             <p style={{ fontSize: 13, color: "var(--text-faint)", marginBottom: 22 }}>Cambiá la contraseña de acceso al panel de administración.</p>
+            {myPwError && <p style={{ fontSize: 13, color: "var(--danger)", marginBottom: 14 }}>{myPwError}</p>}
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <div><label style={labelStyle}>Contraseña actual</label><input type="password" placeholder="••••••••" style={inputStyle} /></div>
-              <div><label style={labelStyle}>Nueva contraseña</label><input type="password" placeholder="Mínimo 8 caracteres" style={inputStyle} /></div>
-              <div><label style={labelStyle}>Confirmar nueva contraseña</label><input type="password" placeholder="Repetir contraseña" style={inputStyle} /></div>
+              <div><label style={labelStyle}>Contraseña actual</label><input type="password" value={pwCurrent} onChange={(e) => setPwCurrent(e.target.value)} placeholder="••••••••" style={inputStyle} /></div>
+              <div><label style={labelStyle}>Nueva contraseña</label><input type="password" value={pwNew} onChange={(e) => setPwNew(e.target.value)} placeholder="Mínimo 6 caracteres" style={inputStyle} /></div>
+              <div><label style={labelStyle}>Confirmar nueva contraseña</label><input type="password" value={pwConfirm} onChange={(e) => setPwConfirm(e.target.value)} placeholder="Repetir contraseña" style={inputStyle} /></div>
             </div>
-            <button onClick={handleSave} style={{ marginTop: 18, background: saved ? "var(--success)" : "#A76D61", color: "white", border: "none", borderRadius: 9, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer", transition: "background .3s" }}>
-              {saved ? "¡Contraseña actualizada!" : "Cambiar mi contraseña"}
+            <button onClick={saveMyPassword} disabled={!pwCurrent || !pwNew || pwNew !== pwConfirm || myPwSaving}
+              style={{ marginTop: 18, background: myPwSaved ? "var(--success)" : "#A76D61", color: "white", border: "none", borderRadius: 9, padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: !pwCurrent || !pwNew || pwNew !== pwConfirm ? "not-allowed" : "pointer", opacity: !pwCurrent || !pwNew || pwNew !== pwConfirm ? 0.5 : 1, transition: "background .3s", display: "flex", alignItems: "center", gap: 8 }}>
+              {myPwSaving ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : null}
+              {myPwSaved ? "¡Contraseña actualizada!" : "Cambiar mi contraseña"}
             </button>
           </div>
         </div>

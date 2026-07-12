@@ -1,11 +1,11 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import BrandLogo from "@/components/BrandLogo"
 import { usePathname } from "next/navigation"
 import { LayoutDashboard, Video, BookOpen, PlayCircle, Menu, X, LogOut, UserCircle, Award, CreditCard, Sparkles, ExternalLink } from "lucide-react"
-import { signOut } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import { motion, AnimatePresence } from "framer-motion"
 
 const navItems = [
@@ -20,24 +20,10 @@ const navItems = [
 
 export default function AulaLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const { data: session } = useSession()
   const [open, setOpen]         = useState(false)
-  const [profilePhoto, setProfilePhoto] = useState<string | null>(null)
-  const [profileName,  setProfileName]  = useState("")
-
-  function loadProfile() {
-    const p = localStorage.getItem("ja_profile")
-    if (p) {
-      const d = JSON.parse(p)
-      setProfilePhoto(d.photo ?? null)
-      setProfileName(d.name  ?? "")
-    }
-  }
-
-  useEffect(() => {
-    loadProfile()
-    window.addEventListener("ja_profile_update", loadProfile)
-    return () => window.removeEventListener("ja_profile_update", loadProfile)
-  }, [])
+  const profilePhoto = session?.user?.image ?? null
+  const profileName  = session?.user?.name ?? ""
 
   const currentLabel = navItems.find((n) => n.href === pathname)?.label ?? "Aula"
 

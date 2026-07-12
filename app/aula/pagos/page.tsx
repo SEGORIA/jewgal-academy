@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { CreditCard, CheckCircle2, Clock, AlertCircle, ArrowRight, Loader2 } from "lucide-react"
+import { CreditCard, CheckCircle2, Clock, AlertCircle, ArrowRight, Loader2, XCircle, RotateCcw } from "lucide-react"
 
 type Payment = {
   id: string; amount: number; currency: string; status: string
   paidAt: string | null; createdAt: string
+  stripePaymentId: string | null
   course: { title: string; slug: string }
 }
 
@@ -22,6 +23,8 @@ const STATUS = {
   completed: { label: "Completado", color: "#C49F72", bg: "rgba(196,159,114,.1)",  border: "rgba(196,159,114,.25)", icon: CheckCircle2 },
   demo:      { label: "Demo",       color: "var(--gold)", bg: "rgba(165,141,102,.1)",  border: "rgba(165,141,102,.25)", icon: CheckCircle2 },
   pending:   { label: "Pendiente",  color: "var(--warning)", bg: "rgba(251,191,36,.08)",  border: "rgba(251,191,36,.25)",  icon: Clock },
+  failed:    { label: "Fallido",    color: "var(--danger)", bg: "rgba(239,68,68,.08)",  border: "rgba(239,68,68,.25)",  icon: XCircle },
+  refunded:  { label: "Reembolsado", color: "var(--text-muted)", bg: "rgba(255,255,255,.04)",  border: "rgba(255,255,255,.12)",  icon: RotateCcw },
 }
 
 const card: React.CSSProperties = {
@@ -119,7 +122,7 @@ export default function PagosPage() {
           <div>
             {payments.map((p) => {
               const meta = PROGRAM_META[p.course.slug] ?? { icon: "✦", accent: "#A58D66" }
-              const st   = STATUS[p.status as keyof typeof STATUS] ?? STATUS.pending
+              const st   = STATUS[p.status as keyof typeof STATUS] ?? { label: p.status, color: "var(--text-dim)", bg: "rgba(255,255,255,.04)", border: "rgba(255,255,255,.1)", icon: AlertCircle }
               const StIcon = st.icon
               return (
                 <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 16, padding: "18px 22px", borderBottom: "1px solid var(--surface)", transition: "background .15s" }}
@@ -141,6 +144,7 @@ export default function PagosPage() {
                         ? new Date(p.paidAt).toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" })
                         : new Date(p.createdAt).toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" })
                       }
+                      {p.stripePaymentId && <span style={{ color: "var(--text-dim)" }}> · Ref: {p.stripePaymentId}</span>}
                     </p>
                   </div>
 

@@ -186,6 +186,10 @@ export default function CertificacionesPage() {
                 style={{ display: "flex", alignItems: "center", gap: 7, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.35)", color: "var(--gold)", borderRadius: 9, padding: "10px 20px", fontSize: 13, cursor: "pointer" }}>
                 <Download size={15} /> Imprimir / Descargar
               </button>
+              <Link href={`/verificar/${active.certificateNumber}`} target="_blank"
+                style={{ display: "flex", alignItems: "center", gap: 7, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.35)", color: "var(--gold)", borderRadius: 9, padding: "10px 20px", fontSize: 13, textDecoration: "none" }}>
+                <ExternalLink size={15} /> Verificar en línea
+              </Link>
               <button onClick={() => setActive(null)}
                 style={{ display: "flex", alignItems: "center", gap: 7, background: "var(--surface-2)", border: "1px solid rgba(255,255,255,.1)", color: "var(--text-muted)", borderRadius: 9, padding: "10px 16px", fontSize: 13, cursor: "pointer" }}>
                 <X size={15} /> Cerrar

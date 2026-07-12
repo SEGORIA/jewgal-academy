@@ -1,9 +1,24 @@
-import { PlayCircle, Clock, Lock } from "lucide-react"
+"use client"
 
-const mockRecordings = [
-  { id: "1", title: "Clase 1 – Bienvenida e Introducción",            moduleNumber: 1, duration: "1h 20min", videoUrl: null, isAvailable: false },
-  { id: "2", title: "Clase 2 – Herramientas de Auto-conocimiento",    moduleNumber: 1, duration: "1h 05min", videoUrl: null, isAvailable: false },
-]
+import { useEffect, useState } from "react"
+import { PlayCircle, Clock, Lock, Loader2 } from "lucide-react"
+
+type LiveSession = {
+  id: string; title: string; scheduledAt: string; durationMin: number
+  recordingUrl: string | null; courseId: string; courseTitle: string
+}
+
+function isRealUrl(url: string | null): boolean {
+  if (!url) return false
+  if (url.includes("placeholder") || url === "#") return false
+  try { new URL(url); return true } catch { return false }
+}
+
+function formatDuration(min: number) {
+  const h = Math.floor(min / 60)
+  const m = min % 60
+  return h > 0 ? `${h}h ${m > 0 ? `${m}min` : ""}`.trim() : `${m}min`
+}
 
 const card: React.CSSProperties = {
   background: "var(--surface)",
@@ -12,8 +27,28 @@ const card: React.CSSProperties = {
 }
 
 export default function GrabacionesPage() {
-  const available = mockRecordings.filter((r) => r.isAvailable)
-  const coming    = mockRecordings.filter((r) => !r.isAvailable)
+  const [sessions, setSessions] = useState<LiveSession[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch("/api/me/live-sessions")
+      .then((r) => r.json())
+      .then((d) => setSessions(d.sessions ?? []))
+      .catch(() => setSessions([]))
+      .finally(() => setLoading(false))
+  }, [])
+
+  const available = sessions.filter((s) => isRealUrl(s.recordingUrl))
+  const coming = sessions.filter((s) => !isRealUrl(s.recordingUrl))
+  const multiCourse = new Set(sessions.map((s) => s.courseId)).size > 1
+
+  if (loading) {
+    return (
+      <div style={{ maxWidth: 760, margin: "0 auto", display: "flex", alignItems: "center", gap: 10, color: "var(--text-dim)", padding: "40px 0" }}>
+        <Loader2 size={18} style={{ animation: "spin 1s linear infinite" }} /> Cargando grabaciones…
+      </div>
+    )
+  }
 
   return (
     <div style={{ maxWidth: 760, margin: "0 auto" }}>
@@ -38,20 +73,21 @@ export default function GrabacionesPage() {
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {available.map((rec) => (
-              <div key={rec.id} style={{ ...card, overflow: "hidden" }}>
+              <a key={rec.id} href={rec.recordingUrl!} target="_blank" rel="noopener noreferrer" style={{ ...card, overflow: "hidden", display: "block", textDecoration: "none" }}>
                 <div style={{ aspectRatio: "16/9", background: "linear-gradient(135deg,var(--surface-solid),var(--bg))", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                   <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(165,141,102,.2)", border: "2px solid rgba(165,141,102,.4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <PlayCircle size={32} style={{ color: "var(--gold)" }} />
                   </div>
                 </div>
                 <div style={{ padding: "20px 24px" }}>
+                  {multiCourse && <p style={{ fontSize: 11, color: "var(--gold)", marginBottom: 4 }}>{rec.courseTitle}</p>}
                   <h3 style={{ fontWeight: 600, color: "var(--text)", fontSize: 15, marginBottom: 8 }}>{rec.title}</h3>
                   <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--text-faint)" }}>
                     <Clock size={12} style={{ color: "var(--gold)" }} />
-                    {rec.duration} · Módulo {rec.moduleNumber}
+                    {formatDuration(rec.durationMin)}
                   </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </section>
@@ -69,7 +105,7 @@ export default function GrabacionesPage() {
               <Lock size={24} style={{ color: "var(--gold)" }} />
             </div>
             <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--text)", marginBottom: 8 }}>
-              Las grabaciones estarán disponibles pronto
+              {sessions.length === 0 ? "Todavía no hay clases programadas" : "Las grabaciones estarán disponibles pronto"}
             </h3>
             <p style={{ color: "var(--text-faint)", fontSize: 14, lineHeight: 1.7, maxWidth: 440, margin: "0 auto" }}>
               Después de cada clase en vivo, Devora sube la grabación aquí para que puedas revisarla cuando quieras.
@@ -84,8 +120,9 @@ export default function GrabacionesPage() {
                 <PlayCircle size={18} style={{ color: "var(--text-dim)" }} />
               </div>
               <div style={{ flex: 1 }}>
+                {multiCourse && <p style={{ fontSize: 10, color: "var(--gold)", marginBottom: 2 }}>{rec.courseTitle}</p>}
                 <p style={{ fontWeight: 500, color: "var(--text)", fontSize: 14 }}>{rec.title}</p>
-                <p style={{ fontSize: 12, color: "var(--text-dim)", marginTop: 2 }}>Módulo {rec.moduleNumber} · {rec.duration}</p>
+                <p style={{ fontSize: 12, color: "var(--text-dim)", marginTop: 2 }}>{formatDuration(rec.durationMin)}</p>
               </div>
               <span style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "rgba(165,141,102,.5)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 20, padding: "4px 12px" }}>
                 Pronto
