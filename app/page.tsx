@@ -46,6 +46,7 @@ export default function HomePage() {
   const statsRef  = useRef<HTMLDivElement>(null)
   const statsInView = useInView(statsRef,  { once: true, margin: "-60px" })
   const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
+  const [heroSlide, setHeroSlide] = useState<number | null>(null)
 
   useEffect(() => {
     fetch("/api/site-content")
@@ -103,10 +104,10 @@ export default function HomePage() {
       {/* ── HERO ── */}
       <header className="hero" id="hero">
         {/* Carrusel de fotos del hero (administrable desde superadmin) */}
-        <HeroCarousel />
+        <HeroCarousel onSlideChange={setHeroSlide} />
 
-        {/* Gradiente oscuro izquierda → transparente derecha */}
-        <div className="hero-overlay" />
+        {/* Gradiente oscuro izquierda → transparente derecha — sin overlay en la primera foto (mariposas); el texto pasa a oscuro para leerse ahí */}
+        <div className="hero-overlay" style={{ opacity: heroSlide === 0 ? 0 : 1 }} />
 
         {/* Partículas flotantes decorativas */}
         <FloatingParticles />
@@ -152,7 +153,7 @@ export default function HomePage() {
 
         {/* Contenido izquierda */}
         <div className="wrap">
-          <div className="hero-inner">
+          <div className={`hero-inner${heroSlide === 0 ? " hero-inner--light-bg" : ""}`}>
             <span className="eyebrow">Jewgal Academy</span>
             <h1>
               <span className="ln">

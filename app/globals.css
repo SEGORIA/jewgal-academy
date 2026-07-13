@@ -462,11 +462,12 @@ nav.jnav.scrolled {
   position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(
     to right,
-    rgba(92,34,24,.96) 0%,
-    rgba(139,61,46,.85) 36%,
-    rgba(167,109,97,.48) 62%,
-    rgba(167,109,97,.06) 100%
+    rgba(92,34,24,.65) 0%,
+    rgba(139,61,46,.50) 36%,
+    rgba(167,109,97,.28) 62%,
+    rgba(167,109,97,.04) 100%
   );
+  transition: opacity 1s ease;
 }
 /* Circuit/network SVG (bottom-left) */
 .circuit {
@@ -539,6 +540,18 @@ nav.jnav.scrolled {
 .hero h1 .ln span { display: inline-block; } /* animación word-by-word via Framer Motion */
 .hero h1 em { font-style: normal; color: var(--gold-light); }
 .hero p { max-width: 430px; color: var(--on-dark); font-size: 16.5px; margin-bottom: 38px; opacity: 0; animation: fadeUp 1s .85s forwards; }
+
+/* Foto de mariposas del hero: fondo claro sin overlay → texto pasa a tonos oscuros de marca para leerse */
+.hero-inner--light-bg .eyebrow { color: #A76D61; }
+.hero-inner--light-bg h1 { color: #463018; }
+.hero-inner--light-bg h1 em { color: #8A5F43; }
+.hero-inner--light-bg .shimmer-word {
+  background: none;
+  -webkit-text-fill-color: initial;
+  color: #463018;
+  animation: none;
+}
+.hero-inner--light-bg p { color: #6B4A2E; }
 .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; opacity: 0; animation: fadeUp 1s 1.05s forwards; }
 .dots {
   position: absolute; right: 34px; top: 50%;

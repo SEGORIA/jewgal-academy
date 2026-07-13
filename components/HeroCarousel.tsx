@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback, useRef } from "react"
 type Photo = { src: string; alt: string; active?: boolean; order?: number }
 
 const DEFAULT_PHOTOS: Photo[] = [
+  { src: "/brand/hero/mariposas.webp",       alt: "Ilustración de mariposas Jewgal Academy" },
   { src: "/brand/hero/devora-coaching.webp", alt: "Devora con su grupo de coaching" },
   { src: "/brand/hero/devora-tv.webp",        alt: "Devora en televisión" },
   { src: "/brand/hero/devora-ninos.webp",     alt: "Devora con niños" },
@@ -21,13 +22,20 @@ const MOBILE_SRC: Record<string, string> = {
   "/brand/hero/devora-coaching.webp": "/brand/hero/devora-coaching-mobile.webp",
 }
 
-export default function HeroCarousel() {
+type Props = { onSlideChange?: (index: number) => void }
+
+export default function HeroCarousel({ onSlideChange }: Props) {
   const [photos, setPhotos]     = useState<Photo[]>(DEFAULT_PHOTOS)
   const [current, setCurrent]   = useState(0)
   const [paused, setPaused]     = useState(false)
   const [showVideo, setShowVideo] = useState(true)
   const [isMobile, setIsMobile] = useState(false)
   const reducedMotion = useRef(false)
+
+  /* Notifica a la página qué foto está activa (la primera, sin overlay, se maneja distinto) */
+  useEffect(() => {
+    if (!showVideo) onSlideChange?.(current)
+  }, [current, showVideo, onSlideChange])
 
   useEffect(() => {
     reducedMotion.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches
