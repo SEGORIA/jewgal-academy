@@ -8,12 +8,14 @@ export const contentType = "image/png"
 export const runtime = "nodejs"
 
 const TITLE = "Jewgal Academy"
+const EYEBROW = "SABIDURÍA PARA VIVIR · LIDERAZGO PARA TRANSFORMAR"
+const SUBTITLE = "Devora Benchimol · Master Coach Internacional"
 
-async function loadGoogleFont(text: string) {
-  const url = `https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&text=${encodeURIComponent(text)}`
+async function loadGoogleFont(family: string, weight: string, text: string) {
+  const url = `https://fonts.googleapis.com/css2?family=${family}:wght@${weight}&text=${encodeURIComponent(text)}`
   const css = await (await fetch(url)).text()
   const match = css.match(/src: url\(([^)]+)\) format\('(?:opentype|truetype)'\)/)
-  if (!match) throw new Error("No se pudo cargar la fuente Cormorant Garamond")
+  if (!match) throw new Error(`No se pudo cargar la fuente ${family}`)
   const res = await fetch(match[1])
   return res.arrayBuffer()
 }
@@ -22,7 +24,10 @@ async function loadGoogleFont(text: string) {
 export default async function OpengraphImage() {
   const photoData = readFileSync(join(process.cwd(), "public/brand/og-devora.jpg")).toString("base64")
   const logoData = readFileSync(join(process.cwd(), "public/brand/og-logo.png")).toString("base64")
-  const serifFont = await loadGoogleFont(TITLE)
+  const [serifFont, sansFont] = await Promise.all([
+    loadGoogleFont("Cormorant+Garamond", "600", TITLE),
+    loadGoogleFont("Jost", "500", EYEBROW + SUBTITLE),
+  ])
 
   return new ImageResponse(
     (
@@ -34,7 +39,7 @@ export default async function OpengraphImage() {
           position: "relative",
           background: "#F4EAE7",
           color: "#463018",
-          fontFamily: "sans-serif",
+          fontFamily: "Jost",
         }}
       >
         {/* Foto de Devora, a sangre a la derecha */}
@@ -88,7 +93,7 @@ export default async function OpengraphImage() {
             style={{ display: "flex", marginBottom: 28, opacity: 0.92 }}
           />
           <div style={{ display: "flex", color: "#A76D61", fontSize: 19, letterSpacing: 3, marginBottom: 22 }}>
-            SABIDURÍA PARA VIVIR · LIDERAZGO PARA TRANSFORMAR
+            {EYEBROW}
           </div>
           <div
             style={{
@@ -103,7 +108,7 @@ export default async function OpengraphImage() {
             {TITLE}
           </div>
           <div style={{ display: "flex", fontSize: 28, color: "#8A5F43", lineHeight: 1.3 }}>
-            Devora Benchimol · Master Coach Internacional
+            {SUBTITLE}
           </div>
           <div style={{ display: "flex", width: 140, height: 4, background: "#C49F72", marginTop: 40 }} />
         </div>
@@ -111,7 +116,10 @@ export default async function OpengraphImage() {
     ),
     {
       ...size,
-      fonts: [{ name: "Cormorant Garamond", data: serifFont, weight: 600, style: "normal" }],
+      fonts: [
+        { name: "Cormorant Garamond", data: serifFont, weight: 600, style: "normal" },
+        { name: "Jost", data: sansFont, weight: 500, style: "normal" },
+      ],
     }
   )
 }
