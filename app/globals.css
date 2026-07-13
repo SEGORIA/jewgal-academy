@@ -794,7 +794,7 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
 .blog-filters     { padding: 20px 36px; display: flex; gap: 10px; flex-wrap: wrap; }
 .blog-section     { padding: 80px 36px; }
 .blog-featured    { display: grid; grid-template-columns: 1fr 1fr; border-radius: 10px; overflow: hidden; border: 1px solid var(--line-d); margin-bottom: 28px; cursor: pointer; }
-.blog-featured-l  { background: linear-gradient(135deg,var(--bg),#3A2817); padding: 52px 44px; display: flex; flex-direction: column; justify-content: space-between; min-height: 360px; }
+.blog-featured-l  { background: linear-gradient(135deg,var(--bg),var(--bg-2)); padding: 52px 44px; display: flex; flex-direction: column; justify-content: space-between; min-height: 360px; }
 .blog-featured-r  { background: var(--navy-2); padding: 52px 44px; display: flex; align-items: center; }
 .blog-grid        { display: grid; grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap: 20px; }
 .blog-modal-wrap  { position: fixed; inset: 0; z-index: 81; display: flex; align-items: center; justify-content: center; padding: 24px 20px; pointer-events: none; }
