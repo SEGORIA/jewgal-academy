@@ -32,8 +32,8 @@ export default async function OpengraphImage() {
           height: "100%",
           display: "flex",
           position: "relative",
-          background: "#1a0f08",
-          color: "#F6F1E7",
+          background: "#F4EAE7",
+          color: "#463018",
           fontFamily: "sans-serif",
         }}
       >
@@ -52,7 +52,7 @@ export default async function OpengraphImage() {
             inset: 0,
             display: "flex",
             background:
-              "linear-gradient(100deg, #1a0f08 0%, #1a0f08 54%, rgba(26,15,8,.75) 62%, rgba(26,15,8,0) 70%)",
+              "linear-gradient(100deg, #F4EAE7 0%, #F4EAE7 54%, rgba(244,234,231,.75) 62%, rgba(244,234,231,0) 70%)",
           }}
         />
 
@@ -66,7 +66,7 @@ export default async function OpengraphImage() {
             height: 560,
             display: "flex",
             borderRadius: 9999,
-            background: "radial-gradient(circle, rgba(167,109,97,.28), transparent 70%)",
+            background: "radial-gradient(circle, rgba(167,109,97,.16), transparent 70%)",
           }}
         />
 
@@ -87,7 +87,7 @@ export default async function OpengraphImage() {
             height={50}
             style={{ display: "flex", marginBottom: 28, opacity: 0.92 }}
           />
-          <div style={{ display: "flex", color: "#c9a86a", fontSize: 19, letterSpacing: 3, marginBottom: 22 }}>
+          <div style={{ display: "flex", color: "#A76D61", fontSize: 19, letterSpacing: 3, marginBottom: 22 }}>
             SABIDURÍA PARA VIVIR · LIDERAZGO PARA TRANSFORMAR
           </div>
           <div
@@ -102,10 +102,10 @@ export default async function OpengraphImage() {
           >
             {TITLE}
           </div>
-          <div style={{ display: "flex", fontSize: 28, color: "#D8B98C", lineHeight: 1.3 }}>
+          <div style={{ display: "flex", fontSize: 28, color: "#8A5F43", lineHeight: 1.3 }}>
             Devora Benchimol · Master Coach Internacional
           </div>
-          <div style={{ display: "flex", width: 140, height: 4, background: "#c9a86a", marginTop: 40 }} />
+          <div style={{ display: "flex", width: 140, height: 4, background: "#C49F72", marginTop: 40 }} />
         </div>
       </div>
     ),
