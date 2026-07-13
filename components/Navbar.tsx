@@ -201,7 +201,7 @@ export default function Navbar() {
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             style={{
               position: "fixed", inset: 0, zIndex: 55,
-              background: "rgba(44,31,20,.97)",
+              background: "linear-gradient(150deg, rgba(92,34,24,.97) 0%, rgba(74,24,16,.97) 100%)",
               backdropFilter: "blur(20px)",
               display: "flex", flexDirection: "column",
               justifyContent: "center", padding: "0 32px",

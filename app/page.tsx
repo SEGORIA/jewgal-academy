@@ -185,18 +185,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Play button decorativo — lado derecho */}
-        <div className="play">
-          <span className="circle">
-            <svg width="20" height="22" viewBox="0 0 20 22"><path d="M0 0l20 11L0 22z" fill="currentColor"/></svg>
-          </span>
-          <span>Ver vídeo<br/>institucional</span>
-        </div>
-
-        {/* Dots navegación */}
-        <div className="dots">
-          <i /><i /><i className="on" /><i /><i />
-        </div>
       </header>
 
       {/* ── STATS ── */}
