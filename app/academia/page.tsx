@@ -7,6 +7,7 @@ import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
 import { TiltCard } from "@/components/motion/TiltCard"
 import { motion, useScroll, useTransform } from "framer-motion"
+import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 
 const PROGRAMS = [
   {
@@ -80,11 +81,19 @@ const PILLARS = [
 
 export default function AcademiaPage() {
   const [isMobile, setIsMobile] = useState(false)
+  const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768)
     check()
     window.addEventListener("resize", check)
     return () => window.removeEventListener("resize", check)
+  }, [])
+
+  useEffect(() => {
+    fetch("/api/site-content")
+      .then((r) => r.json())
+      .then((d) => setContent(d))
+      .catch(() => {})
   }, [])
 
   const { scrollY } = useScroll()
@@ -108,12 +117,12 @@ export default function AcademiaPage() {
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, var(--bg-2) 2%, rgba(0,0,0,0) 58%)" }} />
         </motion.div>
         <div className="wrap" style={{ position: "relative", zIndex: 2 }}>
-          <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Jewgal Academy</span>
+          <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>{content.pages.academia.eyebrow}</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(46px,6.5vw,82px)", color: "var(--text)", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}>
-            La Academia
+            {content.pages.academia.title}
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: 17, maxWidth: 520, lineHeight: 1.7, marginBottom: 36 }}>
-            Programas, certificaciones y formaciones que integran coaching, logoterapia y sabiduría ancestral. Más de 40 años de experiencia al servicio de tu transformación.
+            {content.pages.academia.subtext}
           </p>
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
             <Link href="#programas" className="btn solid">Ver programas →</Link>

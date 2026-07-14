@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react"
 import { Eye, Save, ChevronDown, ChevronUp, Loader2, Info } from "lucide-react"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 
-type SectionId = "hero" | "stats" | "fundadora" | "contacto" | "footer"
+type SectionId = "hero" | "stats" | "fundadora" | "contacto" | "footer" | "pg_academia" | "pg_certificaciones" | "pg_eventos" | "pg_blog" | "pg_contacto"
 
 const SECTION_LABELS: Record<SectionId, string> = {
   hero: "Hero / Portada",
@@ -12,6 +12,11 @@ const SECTION_LABELS: Record<SectionId, string> = {
   fundadora: "Sección «Conoce a Devora»",
   contacto: "Información de contacto",
   footer: "Pie de página (footer)",
+  pg_academia: "Página Academia — Encabezado",
+  pg_certificaciones: "Página Certificaciones — Encabezado",
+  pg_eventos: "Página Eventos — Encabezado",
+  pg_blog: "Página Blog — Encabezado",
+  pg_contacto: "Página Contacto — Encabezado",
 }
 
 const card: React.CSSProperties = { background: "var(--surface)", border: "1px solid rgba(165,141,102,.13)", borderRadius: 14 }
@@ -165,11 +170,81 @@ export default function WebAdminPage() {
             </div>
           )}
         </div>
+
+        {/* ── SEPARADOR ── */}
+        <div style={{ padding: "18px 0 6px", display: "flex", alignItems: "center", gap: 14 }}>
+          <div style={{ flex: 1, height: 1, background: "var(--surface-2)" }} />
+          <span style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--text-dim)", whiteSpace: "nowrap" }}>Encabezados de páginas internas</span>
+          <div style={{ flex: 1, height: 1, background: "var(--surface-2)" }} />
+        </div>
+
+        {/* ── ACADEMIA ── */}
+        <div style={card}>
+          <SectionHeader id="pg_academia" expanded={expanded} setExpanded={setExpanded} />
+          {expanded === "pg_academia" && (
+            <div style={{ padding: "0 22px 22px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, borderTop: "1px solid var(--surface-2)", paddingTop: 20 }}>
+              <Field label="Eyebrow (etiqueta pequeña)" value={content.pages.academia.eyebrow} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, academia: { ...c.pages.academia, eyebrow: v } } }))} />
+              <Field label="Título principal" value={content.pages.academia.title} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, academia: { ...c.pages.academia, title: v } } }))} />
+              <Field label="Subtítulo / descripción" type="textarea" span2 value={content.pages.academia.subtext} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, academia: { ...c.pages.academia, subtext: v } } }))} />
+            </div>
+          )}
+        </div>
+
+        {/* ── CERTIFICACIONES ── */}
+        <div style={card}>
+          <SectionHeader id="pg_certificaciones" expanded={expanded} setExpanded={setExpanded} />
+          {expanded === "pg_certificaciones" && (
+            <div style={{ padding: "0 22px 22px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, borderTop: "1px solid var(--surface-2)", paddingTop: 20 }}>
+              <Field label="Eyebrow (etiqueta pequeña)" value={content.pages.certificaciones.eyebrow} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, certificaciones: { ...c.pages.certificaciones, eyebrow: v } } }))} />
+              <Field label="Título principal" value={content.pages.certificaciones.title} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, certificaciones: { ...c.pages.certificaciones, title: v } } }))} />
+              <Field label="Subtítulo / descripción" type="textarea" span2 value={content.pages.certificaciones.subtext} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, certificaciones: { ...c.pages.certificaciones, subtext: v } } }))} />
+            </div>
+          )}
+        </div>
+
+        {/* ── EVENTOS ── */}
+        <div style={card}>
+          <SectionHeader id="pg_eventos" expanded={expanded} setExpanded={setExpanded} />
+          {expanded === "pg_eventos" && (
+            <div style={{ padding: "0 22px 22px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, borderTop: "1px solid var(--surface-2)", paddingTop: 20 }}>
+              <Field label="Eyebrow (etiqueta pequeña)" value={content.pages.eventos.eyebrow} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, eventos: { ...c.pages.eventos, eyebrow: v } } }))} />
+              <Field label="Título — línea 1" value={content.pages.eventos.title1} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, eventos: { ...c.pages.eventos, title1: v } } }))} />
+              <Field label="Título — línea 2 (dorada)" value={content.pages.eventos.title2} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, eventos: { ...c.pages.eventos, title2: v } } }))} />
+              <Field label="Subtítulo / descripción" type="textarea" span2 value={content.pages.eventos.subtext} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, eventos: { ...c.pages.eventos, subtext: v } } }))} />
+            </div>
+          )}
+        </div>
+
+        {/* ── BLOG ── */}
+        <div style={card}>
+          <SectionHeader id="pg_blog" expanded={expanded} setExpanded={setExpanded} />
+          {expanded === "pg_blog" && (
+            <div style={{ padding: "0 22px 22px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, borderTop: "1px solid var(--surface-2)", paddingTop: 20 }}>
+              <Field label="Eyebrow (etiqueta pequeña)" value={content.pages.blog.eyebrow} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, blog: { ...c.pages.blog, eyebrow: v } } }))} />
+              <Field label="Título — línea 1" value={content.pages.blog.title1} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, blog: { ...c.pages.blog, title1: v } } }))} />
+              <Field label="Título — línea 2 (dorada)" value={content.pages.blog.title2} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, blog: { ...c.pages.blog, title2: v } } }))} />
+              <Field label="Subtítulo / descripción" type="textarea" span2 value={content.pages.blog.subtext} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, blog: { ...c.pages.blog, subtext: v } } }))} />
+            </div>
+          )}
+        </div>
+
+        {/* ── CONTACTO ── */}
+        <div style={card}>
+          <SectionHeader id="pg_contacto" expanded={expanded} setExpanded={setExpanded} />
+          {expanded === "pg_contacto" && (
+            <div style={{ padding: "0 22px 22px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, borderTop: "1px solid var(--surface-2)", paddingTop: 20 }}>
+              <Field label="Eyebrow (etiqueta pequeña)" value={content.pages.contacto.eyebrow} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, contacto: { ...c.pages.contacto, eyebrow: v } } }))} />
+              <Field label="Título — línea 1" value={content.pages.contacto.title1} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, contacto: { ...c.pages.contacto, title1: v } } }))} />
+              <Field label="Título — línea 2 (dorada)" value={content.pages.contacto.title2} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, contacto: { ...c.pages.contacto, title2: v } } }))} />
+              <Field label="Subtítulo / descripción" type="textarea" span2 value={content.pages.contacto.subtext} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, contacto: { ...c.pages.contacto, subtext: v } } }))} />
+            </div>
+          )}
+        </div>
       </div>
 
       <div style={{ ...card, padding: "20px 22px", marginTop: 20, borderColor: "rgba(251,191,36,.15)", background: "rgba(251,191,36,.03)" }}>
         <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.7 }}>
-          <strong style={{ color: "var(--text-strong)" }}>Nota:</strong> Hero, Conoce a Devora, Contacto y Footer se aplican al instante en el sitio público al guardar. Para cambios de diseño (colores, imágenes, fuentes), editá los archivos de código con Claude Code.
+          <strong style={{ color: "var(--text-strong)" }}>Nota:</strong> Todos los textos se aplican al instante en el sitio público al guardar. Para cambios de diseño (colores, imágenes, fuentes), editá los archivos de código con Claude Code.
         </p>
       </div>
     </div>

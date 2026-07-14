@@ -4,6 +4,13 @@ export type SiteContent = {
   fundadora: { name: string; sig: string; p1: string; p2: string }
   contacto: { email: string; phone: string; city: string; ig: string; fb: string; yt: string }
   footer: { tagline: string; copyright: string }
+  pages: {
+    academia: { eyebrow: string; title: string; subtext: string }
+    certificaciones: { eyebrow: string; title: string; subtext: string }
+    eventos: { eyebrow: string; title1: string; title2: string; subtext: string }
+    blog: { eyebrow: string; title1: string; title2: string; subtext: string }
+    contacto: { eyebrow: string; title1: string; title2: string; subtext: string }
+  }
 }
 
 // Refleja el copy real vigente en el sitio — sirve de fallback si no hay override guardado en la DB.
@@ -38,6 +45,36 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
     tagline: "Transformación consciente para una vida con propósito.",
     copyright: "Jewgal Academy · Fundación Sholem Corazón Valiente Non-Profit Organization. Todos los derechos reservados.",
   },
+  pages: {
+    academia: {
+      eyebrow: "Jewgal Academy",
+      title: "La Academia",
+      subtext: "Programas, certificaciones y formaciones que integran coaching, logoterapia y sabiduría ancestral. Más de 40 años de experiencia al servicio de tu transformación.",
+    },
+    certificaciones: {
+      eyebrow: "Jewgal Academy",
+      title: "Certificaciones",
+      subtext: "Cada programa culmina con una certificación reconocida. Conviértete en un profesional acreditado del coaching, el bienestar y el liderazgo consciente.",
+    },
+    eventos: {
+      eyebrow: "Agenda",
+      title1: "Próximos",
+      title2: "Eventos",
+      subtext: "Retiros, masterclasses y talleres intensivos diseñados para acelerar tu transformación. Presenciales y en línea.",
+    },
+    blog: {
+      eyebrow: "Jewgal Academy",
+      title1: "Blog &",
+      title2: "Recursos",
+      subtext: "Artículos, reflexiones y herramientas sobre coaching, Cabalá, bienestar y liderazgo consciente.",
+    },
+    contacto: {
+      eyebrow: "Escríbeme",
+      title1: "Estoy aquí",
+      title2: "para ti.",
+      subtext: "¿Tienes preguntas sobre los programas, quieres comenzar tu proceso de coaching o simplemente deseas conocer más? Escríbeme con confianza.",
+    },
+  },
 }
 
 export function mergeSiteContent(partial: Partial<SiteContent> | null | undefined): SiteContent {
@@ -48,5 +85,12 @@ export function mergeSiteContent(partial: Partial<SiteContent> | null | undefine
     fundadora: { ...DEFAULT_SITE_CONTENT.fundadora, ...partial.fundadora },
     contacto: { ...DEFAULT_SITE_CONTENT.contacto, ...partial.contacto },
     footer: { ...DEFAULT_SITE_CONTENT.footer, ...partial.footer },
+    pages: {
+      academia: { ...DEFAULT_SITE_CONTENT.pages.academia, ...partial.pages?.academia },
+      certificaciones: { ...DEFAULT_SITE_CONTENT.pages.certificaciones, ...partial.pages?.certificaciones },
+      eventos: { ...DEFAULT_SITE_CONTENT.pages.eventos, ...partial.pages?.eventos },
+      blog: { ...DEFAULT_SITE_CONTENT.pages.blog, ...partial.pages?.blog },
+      contacto: { ...DEFAULT_SITE_CONTENT.pages.contacto, ...partial.pages?.contacto },
+    },
   }
 }

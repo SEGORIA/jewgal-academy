@@ -122,17 +122,16 @@ export default function ContactoPage() {
           pointerEvents: "none", zIndex: 1,
         }} />
         <div className="wrap" style={{ position: "relative", zIndex: 2 }}>
-          <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Escríbeme</span>
+          <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>{content.pages.contacto.eyebrow}</span>
           <h1 style={{
             fontFamily: "var(--serif)", fontWeight: 500,
             fontSize: "clamp(40px,6vw,80px)", color: "var(--text)",
             lineHeight: 1.02, letterSpacing: "-.01em",
           }}>
-            Estoy aquí<br /><em style={{ color: "var(--gold-light)", fontStyle: "normal" }}>para ti.</em>
+            {content.pages.contacto.title1}<br /><em style={{ color: "var(--gold-light)", fontStyle: "normal" }}>{content.pages.contacto.title2}</em>
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: 16, maxWidth: 440, marginTop: 22, lineHeight: 1.7 }}>
-            ¿Tienes preguntas sobre los programas, quieres comenzar tu proceso de coaching o simplemente
-            deseas conocer más? Escríbeme con confianza.
+            {content.pages.contacto.subtext}
           </p>
         </div>
       </section>

@@ -1,8 +1,12 @@
+"use client"
+
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
 import CountdownTimer from "@/components/CountdownTimer"
+import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 
 const EVENTS = [
   {
@@ -62,6 +66,15 @@ const PAST = [
 ]
 
 export default function EventosPage() {
+  const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
+
+  useEffect(() => {
+    fetch("/api/site-content")
+      .then((r) => r.json())
+      .then((d) => setContent(d))
+      .catch(() => {})
+  }, [])
+
   return (
     <>
       <RevealInit />
@@ -78,12 +91,12 @@ export default function EventosPage() {
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(100deg,var(--navy-2) 0%,var(--navy) 42%,rgba(0,0,0,0) 82%)", zIndex: 1 }} />
         <div style={{ position: "absolute", top: "-30%", right: "0", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(165,141,102,.07),transparent 70%)", pointerEvents: "none", zIndex: 1 }} />
         <div className="wrap" style={{ position: "relative", zIndex: 2 }}>
-          <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Agenda</span>
+          <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>{content.pages.eventos.eyebrow}</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(44px,6vw,78px)", color: "var(--text)", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}>
-            Próximos<br /><em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>Eventos</em>
+            {content.pages.eventos.title1}<br /><em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>{content.pages.eventos.title2}</em>
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: 17, maxWidth: 500, lineHeight: 1.7 }}>
-            Retiros, masterclasses y talleres intensivos diseñados para acelerar tu transformación. Presenciales y en línea.
+            {content.pages.eventos.subtext}
           </p>
         </div>
       </section>

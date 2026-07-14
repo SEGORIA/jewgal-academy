@@ -8,6 +8,7 @@ import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
 import { accentForCategory, estimateReadTime } from "@/lib/blog"
 import { Loader2 } from "lucide-react"
+import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 
 type Post = {
   id: string; slug: string; category: string; title: string
@@ -23,6 +24,7 @@ export default function BlogPage() {
   const [loading, setLoading]       = useState(true)
   const [openPost, setOpenPost]     = useState<Post | null>(null)
   const [activeCategory, setActiveCategory] = useState("Todo")
+  const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
 
   useEffect(() => {
     fetch("/api/blog")
@@ -30,6 +32,10 @@ export default function BlogPage() {
       .then((d) => setPosts(d.posts ?? []))
       .catch(() => setPosts([]))
       .finally(() => setLoading(false))
+    fetch("/api/site-content")
+      .then((r) => r.json())
+      .then((d) => setContent(d))
+      .catch(() => {})
   }, [])
 
   const filtered = activeCategory === "Todo" ? posts : posts.filter((p) => p.category === activeCategory)
@@ -56,19 +62,19 @@ export default function BlogPage() {
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
             style={{ display: "block", marginBottom: 20 }}
           >
-            Jewgal Academy
+            {content.pages.blog.eyebrow}
           </motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, ...spring }}
             style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(44px,6vw,78px)", color: "var(--text)", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}
           >
-            Blog &amp;<br /><em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>Recursos</em>
+            {content.pages.blog.title1}<br /><em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>{content.pages.blog.title2}</em>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.32, ...spring }}
             style={{ color: "var(--on-dark)", fontSize: 17, maxWidth: 500, lineHeight: 1.7 }}
           >
-            Artículos, reflexiones y herramientas sobre coaching, Cabalá, bienestar y liderazgo consciente.
+            {content.pages.blog.subtext}
           </motion.p>
         </div>
       </section>

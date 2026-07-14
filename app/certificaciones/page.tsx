@@ -7,6 +7,7 @@ import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
 import { TiltCard } from "@/components/motion/TiltCard"
 import { motion } from "framer-motion"
+import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 
 const CERTS = [
   {
@@ -90,11 +91,20 @@ const STEPS = [
 
 export default function CertificacionesPage() {
   const [isMobile, setIsMobile] = useState(false)
+  const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
+
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768)
     check()
     window.addEventListener("resize", check)
     return () => window.removeEventListener("resize", check)
+  }, [])
+
+  useEffect(() => {
+    fetch("/api/site-content")
+      .then((r) => r.json())
+      .then((d) => setContent(d))
+      .catch(() => {})
   }, [])
 
   return (
@@ -111,12 +121,12 @@ export default function CertificacionesPage() {
       }}>
         <div style={{ position: "absolute", top: "-30%", right: "0%", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(165,141,102,.07),transparent 70%)", pointerEvents: "none" }} />
         <div className="wrap">
-          <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Jewgal Academy</span>
+          <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>{content.pages.certificaciones.eyebrow}</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(44px,6vw,78px)", color: "var(--text)", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}>
-            Certificaciones
+            {content.pages.certificaciones.title}
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: 17, maxWidth: 500, lineHeight: 1.7 }}>
-            Cada programa culmina con una certificación reconocida. Conviértete en un profesional acreditado del coaching, el bienestar y el liderazgo consciente.
+            {content.pages.certificaciones.subtext}
           </p>
         </div>
       </section>
