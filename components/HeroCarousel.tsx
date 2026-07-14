@@ -5,7 +5,6 @@ import { useState, useEffect, useCallback, useRef } from "react"
 type Photo = { src: string; alt: string; active?: boolean; order?: number }
 
 const DEFAULT_PHOTOS: Photo[] = [
-  { src: "/brand/hero/mariposas.webp",       alt: "Ilustración de mariposas Jewgal Academy" },
   { src: "/brand/hero/devora-coaching.webp", alt: "Devora con su grupo de coaching" },
   { src: "/brand/hero/devora-tv.webp",        alt: "Devora en televisión" },
   { src: "/brand/hero/devora-ninos.webp",     alt: "Devora con niños" },
@@ -13,11 +12,9 @@ const DEFAULT_PHOTOS: Photo[] = [
   { src: "/brand/hero/devora-joven.webp",     alt: "Joven saludando en experiencia Jewgal" },
 ]
 
-const INTERVAL   = 5000
-const HERO_VIDEO = "/brand/hero-intro.mp4"
+const INTERVAL = 5000
 
-/* Recortes alternativos para mobile — "cover" en un viewport angosto
-   sólo muestra la franja central de fotos panorámicas y corta al grupo */
+/* Recortes alternativos para mobile */
 const MOBILE_SRC: Record<string, string> = {
   "/brand/hero/devora-coaching.webp": "/brand/hero/devora-coaching-mobile.webp",
 }
@@ -25,21 +22,18 @@ const MOBILE_SRC: Record<string, string> = {
 type Props = { onSlideChange?: (index: number) => void }
 
 export default function HeroCarousel({ onSlideChange }: Props) {
-  const [photos, setPhotos]     = useState<Photo[]>(DEFAULT_PHOTOS)
-  const [current, setCurrent]   = useState(0)
-  const [paused, setPaused]     = useState(false)
-  const [showVideo, setShowVideo] = useState(true)
+  const [photos, setPhotos]   = useState<Photo[]>(DEFAULT_PHOTOS)
+  const [current, setCurrent] = useState(0)
+  const [paused, setPaused]   = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const reducedMotion = useRef(false)
 
-  /* Notifica a la página qué foto está activa (la primera, sin overlay, se maneja distinto) */
   useEffect(() => {
-    if (!showVideo) onSlideChange?.(current)
-  }, [current, showVideo, onSlideChange])
+    onSlideChange?.(current)
+  }, [current, onSlideChange])
 
   useEffect(() => {
     reducedMotion.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    if (reducedMotion.current) setShowVideo(false)
 
     const mq = window.matchMedia("(max-width: 720px)")
     setIsMobile(mq.matches)
@@ -57,49 +51,19 @@ export default function HeroCarousel({ onSlideChange }: Props) {
     return () => mq.removeEventListener("change", onChange)
   }, [])
 
-  const handleVideoEnd = useCallback(() => {
-    setShowVideo(false)
-    setCurrent(0)
-  }, [])
-
   const next = useCallback(() => setCurrent(c => (c + 1) % photos.length), [photos.length])
   const prev = useCallback(() => setCurrent(c => (c - 1 + photos.length) % photos.length), [photos.length])
 
-  /* Auto-avance del carrusel sólo cuando el video ya terminó */
   useEffect(() => {
-    if (showVideo || paused || reducedMotion.current || photos.length <= 1) return
+    if (paused || reducedMotion.current || photos.length <= 1) return
     const id = setInterval(next, INTERVAL)
     return () => clearInterval(id)
-  }, [showVideo, paused, photos.length, next])
+  }, [paused, photos.length, next])
 
   return (
     <>
       {/* Fondo instantáneo siempre visible */}
       <div className="hero-fallback" aria-hidden="true" />
-
-      {/* ── VIDEO INTRO ── */}
-      <div
-        aria-hidden={!showVideo}
-        style={{
-          position: "absolute", inset: 0, zIndex: 0,
-          opacity: showVideo ? 1 : 0,
-          transition: "opacity 1.4s ease",
-          pointerEvents: showVideo ? "auto" : "none",
-        }}
-      >
-        <video
-          src={HERO_VIDEO}
-          autoPlay
-          muted
-          playsInline
-          onEnded={handleVideoEnd}
-          style={{
-            width: "100%", height: "100%",
-            objectFit: "cover",
-            objectPosition: "center 20%",
-          }}
-        />
-      </div>
 
       {/* ── SLIDES CARRUSEL — crossfade ── */}
       {photos.map((photo, i) => {
@@ -109,7 +73,7 @@ export default function HeroCarousel({ onSlideChange }: Props) {
             key={photo.src}
             role="img"
             aria-label={photo.alt}
-            aria-hidden={showVideo || i !== current}
+            aria-hidden={i !== current}
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
             style={{
@@ -117,15 +81,15 @@ export default function HeroCarousel({ onSlideChange }: Props) {
               backgroundImage: `url(${src})`,
               backgroundSize: "cover",
               backgroundPosition: "center 22%",
-              opacity: !showVideo && i === current ? 1 : 0,
+              opacity: i === current ? 1 : 0,
               transition: "opacity 1.2s ease",
             }}
           />
         )
       })}
 
-      {/* ── CONTROLES — sólo cuando el carrusel está activo ── */}
-      {!showVideo && photos.length > 1 && (
+      {/* ── CONTROLES ── */}
+      {photos.length > 1 && (
         <>
           {/* Dots */}
           <div

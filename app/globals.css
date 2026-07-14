@@ -542,17 +542,7 @@ nav.jnav.scrolled {
 .hero h1 em { font-style: normal; color: var(--gold-light); }
 .hero p { max-width: 430px; color: var(--on-dark); font-size: 16.5px; margin-bottom: 38px; opacity: 0; animation: fadeUp 1s .85s forwards; }
 
-/* Foto de mariposas del hero: fondo claro sin overlay → texto pasa a tonos oscuros de marca para leerse */
-.hero-inner--light-bg .eyebrow { color: #A76D61; }
-.hero-inner--light-bg h1 { color: #463018; }
-.hero-inner--light-bg h1 em { color: #8A5F43; }
-.hero-inner--light-bg .shimmer-word {
-  background: none;
-  -webkit-text-fill-color: initial;
-  color: #463018;
-  animation: none;
-}
-.hero-inner--light-bg p { color: #6B4A2E; }
+
 .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; opacity: 0; animation: fadeUp 1s 1.05s forwards; }
 .dots {
   position: absolute; right: 34px; top: 50%;

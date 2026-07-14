@@ -20,6 +20,9 @@ export async function GET() {
   return NextResponse.json(mergeSiteContent(null))
 }
 
+const pageHeading2 = z.object({ eyebrow: z.string(), title1: z.string(), title2: z.string(), subtext: z.string() })
+const pageHeading1 = z.object({ eyebrow: z.string(), title: z.string(), subtext: z.string() })
+
 const schema = z.object({
   hero: z.object({
     headline1: z.string().min(1), headline2: z.string().min(1), subtext: z.string().min(1),
@@ -32,6 +35,13 @@ const schema = z.object({
     ig: z.string(), fb: z.string(), yt: z.string(),
   }),
   footer: z.object({ tagline: z.string().min(1), copyright: z.string().min(1) }),
+  pages: z.object({
+    academia: pageHeading1,
+    certificaciones: pageHeading1,
+    eventos: pageHeading2,
+    blog: pageHeading2,
+    contacto: pageHeading2,
+  }).optional(),
 })
 
 export async function POST(req: NextRequest) {
@@ -52,6 +62,10 @@ export async function POST(req: NextRequest) {
   })
 
   revalidatePath("/", "page")
+  revalidatePath("/academia")
+  revalidatePath("/certificaciones")
+  revalidatePath("/eventos")
+  revalidatePath("/blog")
   revalidatePath("/contacto")
 
   return NextResponse.json({ ok: true })
