@@ -34,7 +34,7 @@ export default function ConfiguracionPage() {
   const [generalSaved, setGeneralSaved] = useState(false)
 
   // Integraciones (solo lectura, vienen de env vars)
-  const [integrations, setIntegrations] = useState<{ stripe: boolean; paypal: boolean; email: boolean } | null>(null)
+  const [integrations, setIntegrations] = useState<{ stripe: boolean; paypal: boolean; email: boolean; ai: boolean; cloudinary: boolean } | null>(null)
 
   // Reset password alumno
   const [students, setStudents] = useState<StudentRow[]>([])
@@ -275,6 +275,40 @@ export default function ConfiguracionPage() {
             </div>
             <p style={{ fontSize: 12.5, color: "var(--text-dim)", marginBottom: 12 }}>
               Variables requeridas: <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4 }}>PAYPAL_CLIENT_ID</code>, <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4 }}>PAYPAL_CLIENT_SECRET</code>.
+            </p>
+            <a href="https://vercel.com/dashboard" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 18px", fontSize: 13, color: "var(--text-muted)", textDecoration: "none" }}>
+              <ExternalLink size={14} /> Configurar en Vercel
+            </a>
+          </div>
+
+          {/* Asistente IA (Anthropic) */}
+          <div style={{ ...card, padding: "26px 24px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <div>
+                <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)", marginBottom: 4 }}>Asistente IA (Groq)</h2>
+                <p style={{ fontSize: 13, color: "var(--text-faint)" }}>Chat de acompañamiento para los alumnos</p>
+              </div>
+              {integrations ? <StatusBadge ok={integrations.ai} /> : <span style={{ fontSize: 12, color: "var(--text-dim)" }}>Verificando…</span>}
+            </div>
+            <p style={{ fontSize: 12.5, color: "var(--text-dim)", marginBottom: 12 }}>
+              Variable requerida: <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4 }}>GROQ_API_KEY</code>.
+            </p>
+            <a href="https://vercel.com/dashboard" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 18px", fontSize: 13, color: "var(--text-muted)", textDecoration: "none" }}>
+              <ExternalLink size={14} /> Configurar en Vercel
+            </a>
+          </div>
+
+          {/* Cloudinary */}
+          <div style={{ ...card, padding: "26px 24px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <div>
+                <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)", marginBottom: 4 }}>Cloudinary</h2>
+                <p style={{ fontSize: 13, color: "var(--text-faint)" }}>Almacenamiento de audios y videos de recursos exclusivos</p>
+              </div>
+              {integrations ? <StatusBadge ok={integrations.cloudinary} /> : <span style={{ fontSize: 12, color: "var(--text-dim)" }}>Verificando…</span>}
+            </div>
+            <p style={{ fontSize: 12.5, color: "var(--text-dim)", marginBottom: 12 }}>
+              Variables requeridas: <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4 }}>CLOUDINARY_CLOUD_NAME</code>, <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4 }}>CLOUDINARY_API_KEY</code>, <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4 }}>CLOUDINARY_API_SECRET</code>.
             </p>
             <a href="https://vercel.com/dashboard" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 18px", fontSize: 13, color: "var(--text-muted)", textDecoration: "none" }}>
               <ExternalLink size={14} /> Configurar en Vercel

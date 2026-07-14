@@ -41,6 +41,8 @@ export async function GET() {
       stripe: !!process.env.STRIPE_SECRET_KEY,
       paypal: !!process.env.PAYPAL_CLIENT_ID,
       email: !!process.env.RESEND_API_KEY,
+      ai: !!(process.env.GROQ_API_KEY && process.env.GROQ_API_KEY.startsWith("gsk_")),
+      cloudinary: !!(process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET),
     },
   })
 }

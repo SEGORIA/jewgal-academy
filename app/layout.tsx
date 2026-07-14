@@ -4,6 +4,7 @@ import "./globals.css"
 import Providers from "@/components/Providers"
 import ScrollProgress from "@/components/motion/ScrollProgress"
 import WhatsAppFab from "@/components/WhatsAppFab"
+import PwaRegister from "@/components/PwaRegister"
 import { getTheme } from "@/lib/theme"
 import { Analytics } from "@vercel/analytics/next"
 
@@ -77,6 +78,15 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
   alternates: { canonical: SITE_URL },
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Jewgal Academy",
+  },
+  icons: {
+    apple: "/icons/apple-touch-icon.png",
+  },
 }
 
 export const viewport: Viewport = {
@@ -107,6 +117,7 @@ export default async function RootLayout({
         <ScrollProgress />
         <Providers>
           <div id="contenido">{children}</div>
+          <PwaRegister />
         </Providers>
         <WhatsAppFab />
         <Analytics />

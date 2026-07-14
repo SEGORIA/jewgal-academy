@@ -4,7 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import BrandLogo from "@/components/BrandLogo"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, Video, BookOpen, PlayCircle, Menu, X, LogOut, UserCircle, Award, CreditCard, Sparkles, ExternalLink } from "lucide-react"
+import { LayoutDashboard, Video, BookOpen, PlayCircle, Menu, X, LogOut, UserCircle, Award, CreditCard, Sparkles, ExternalLink, MessageCircle, Headphones } from "lucide-react"
 import { signOut, useSession } from "next-auth/react"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -13,6 +13,8 @@ const navItems = [
   { href: "/aula/clases",           icon: Video,           label: "Clases en vivo",  group: "aprende" },
   { href: "/aula/materiales",       icon: BookOpen,        label: "Materiales",      group: "aprende" },
   { href: "/aula/grabaciones",      icon: PlayCircle,      label: "Grabaciones",     group: "aprende" },
+  { href: "/aula/asistente",        icon: MessageCircle,   label: "Asistente IA",    group: "aprende" },
+  { href: "/aula/recursos",         icon: Headphones,      label: "Recursos",        group: "aprende" },
   { href: "/aula/certificaciones",  icon: Award,           label: "Certificaciones", group: "cuenta"  },
   { href: "/aula/pagos",            icon: CreditCard,      label: "Mis pagos",       group: "cuenta"  },
   { href: "/aula/perfil",           icon: UserCircle,      label: "Mi perfil",       group: "cuenta"  },
