@@ -115,7 +115,7 @@ export default function ConoceADevorPage() {
             <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(38px,5vw,70px)", lineHeight: 1.02, color: "var(--text)", letterSpacing: "-.01em", marginBottom: 28 }}>
               Devora<br /><em style={{ color: "var(--gold-light)", fontStyle: "normal" }}>Benchimol</em>
             </h1>
-            <div style={{ fontFamily: "var(--script)", fontStyle: "italic", fontSize: "clamp(20px,2.5vw,28px)", color: "#A76D61", marginBottom: 24, lineHeight: 1.2 }}>
+            <div style={{ fontFamily: "var(--script)", fontStyle: "italic", fontSize: "clamp(20px,2.5vw,28px)", color: "#FFFFFF", marginBottom: 24, lineHeight: 1.2 }}>
               Master Coach · Educadora · Fundadora
             </div>
             <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.5vw,16px)", maxWidth: 440, marginBottom: 16, lineHeight: 1.7 }}>

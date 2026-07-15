@@ -1,15 +1,10 @@
-export const BLOG_CATEGORIES = ["Coaching", "Cabalá", "Jewgal", "Liderazgo", "Educación"]
+export const BLOG_CATEGORIES = ["Coaching", "Cabalá", "Jewgal", "Liderazgo", "Formación"]
 
-const CATEGORY_ACCENTS: Record<string, string> = {
-  "Coaching": "#A58D66",
-  "Cabalá": "#CBB78B",
-  "Jewgal": "#C49F72",
-  "Liderazgo": "#A76D61",
-  "Educación": "#A76D61",
-}
+// Todas las categorías comparten el dorado de marca (decisión cliente jul-2026)
+const CATEGORY_ACCENT = "#C49F72"
 
-export function accentForCategory(category: string) {
-  return CATEGORY_ACCENTS[category] ?? "#A76D61"
+export function accentForCategory(_category: string) {
+  return CATEGORY_ACCENT
 }
 
 export function estimateReadTime(content: string) {

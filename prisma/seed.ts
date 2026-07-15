@@ -211,7 +211,7 @@ Si trabajas con equipos, comunidades o adolescentes, te invitamos a preguntarte:
     {
       slug: "metodo-sholem-adolescentes",
       title: "Método Sholem: acompañando jóvenes desde los valores, la identidad y el propósito",
-      category: "Educación",
+      category: "Formación",
       excerpt: "Un enfoque único para acompañar a los jóvenes en la construcción de una identidad sólida, un sentido de pertenencia y un liderazgo con corazón.",
       content: `Los adolescentes de hoy enfrentan un desafío que ninguna generación anterior tuvo que afrontar de la misma manera: construir una identidad en el contexto de las redes sociales, la sobreinformación y la presión de ser alguien antes de saber quién uno quiere ser.
 

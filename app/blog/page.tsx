@@ -15,7 +15,7 @@ type Post = {
   excerpt: string; content: string; publishedAt: string | null; createdAt: string
 }
 
-const CATEGORIES = ["Todo", "Coaching", "Cabalá", "Jewgal", "Liderazgo", "Educación"]
+const CATEGORIES = ["Todo", "Coaching", "Cabalá", "Jewgal", "Liderazgo", "Formación"]
 
 const spring = { type: "spring" as const, stiffness: 280, damping: 26 }
 
