@@ -9,7 +9,6 @@ const DEFAULT_PHOTOS: Photo[] = [
   { src: "/brand/hero/devora-tv.webp",        alt: "Devora en televisión" },
   { src: "/brand/hero/devora-ninos.webp",     alt: "Devora con niños" },
   { src: "/brand/hero/devora-miami.webp",     alt: "Devora en Miami con familia" },
-  { src: "/brand/hero/devora-joven.webp",     alt: "Joven saludando en experiencia Jewgal" },
 ]
 
 const INTERVAL = 5000

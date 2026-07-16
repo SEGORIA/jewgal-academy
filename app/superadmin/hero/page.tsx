@@ -10,7 +10,6 @@ const DEFAULT: Photo[] = [
   { src: "/brand/hero/devora-tv.webp",        alt: "Devora en televisión",                 active: true, order: 1 },
   { src: "/brand/hero/devora-ninos.webp",     alt: "Devora con niños",                     active: true, order: 2 },
   { src: "/brand/hero/devora-miami.webp",     alt: "Devora en Miami con familia",           active: true, order: 3 },
-  { src: "/brand/hero/devora-joven.webp",     alt: "Joven saludando en experiencia Jewgal", active: true, order: 4 },
 ]
 
 export default function HeroAdminPage() {
