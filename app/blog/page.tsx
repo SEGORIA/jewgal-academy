@@ -120,97 +120,47 @@ export default function BlogPage() {
               </p>
             </div>
           ) : (
-            <>
-              {/* Post destacado */}
-              <AnimatePresence mode="wait">
-                {filtered[0] && (
+            /* Grid de posts — todas las cards con el mismo estilo */
+            <div className="blog-grid">
+              <AnimatePresence>
+                {filtered.map((post, i) => (
                   <motion.div
-                    key={filtered[0].slug + "-featured"}
-                    className="blog-featured"
+                    key={post.slug}
+                    layout
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={spring}
-                    onClick={() => setOpenPost(filtered[0])}
-                    whileHover={{ y: -4, boxShadow: "0 24px 64px rgba(0,0,0,.32)" }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ ...spring, delay: i * 0.06 }}
+                    onClick={() => setOpenPost(post)}
+                    whileHover={{ y: -6, boxShadow: "0 16px 48px rgba(0,0,0,.28)" }}
+                    style={{
+                      border: "1px solid var(--line-d)", borderRadius: 10,
+                      background: "var(--surface)",
+                      display: "flex", flexDirection: "column", justifyContent: "space-between",
+                      cursor: "pointer", overflow: "hidden",
+                      borderTop: `3px solid ${accentForCategory(post.category)}`,
+                    }}
                   >
-                    <div className="blog-featured-l">
-                      <div>
-                        <div style={{ display: "flex", gap: 10, marginBottom: 20, alignItems: "center" }}>
-                          <span style={{ fontSize: 11, border: `1px solid ${accentForCategory(filtered[0].category)}40`, borderRadius: 16, padding: "4px 14px", color: accentForCategory(filtered[0].category), letterSpacing: ".12em", textTransform: "uppercase", background: `${accentForCategory(filtered[0].category)}10` }}>
-                            {filtered[0].category}
-                          </span>
-                          <span style={{ fontSize: 11, color: "var(--on-dark-faint)", letterSpacing: ".08em" }}>⏱ {estimateReadTime(filtered[0].content)}</span>
-                          <span style={{ fontSize: 11, color: "var(--on-dark-faint)" }}>·</span>
-                          <span style={{ fontSize: 11, color: "var(--on-dark-faint)" }}>{dateOf(filtered[0])}</span>
-                        </div>
-                        <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(22px,2.8vw,34px)", color: "var(--text)", lineHeight: 1.2, marginBottom: 18 }}>
-                          {filtered[0].title}
-                        </h2>
-                        <p style={{ color: "var(--on-dark)", fontSize: 15.5, lineHeight: 1.7 }}>{filtered[0].excerpt}</p>
+                    <div style={{ padding: "28px 28px 0" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                        <span style={{ fontSize: 11, background: `${accentForCategory(post.category)}15`, border: `1px solid ${accentForCategory(post.category)}35`, borderRadius: 16, padding: "4px 12px", color: accentForCategory(post.category), letterSpacing: ".12em", textTransform: "uppercase" }}>
+                          {post.category}
+                        </span>
+                        <span style={{ fontSize: 11, color: "var(--on-dark-faint)" }}>⏱ {estimateReadTime(post.content)}</span>
                       </div>
-                      <motion.span
-                        whileHover={{ x: 5 }}
-                        style={{ fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: accentForCategory(filtered[0].category), marginTop: 28, display: "inline-flex", alignItems: "center", gap: 6 }}
-                      >
-                        Leer artículo →
+                      <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 19, color: "var(--text)", lineHeight: 1.25, marginBottom: 10 }}>{post.title}</h3>
+                      <p style={{ color: "var(--on-dark)", fontSize: 14, lineHeight: 1.65 }}>{post.excerpt}</p>
+                    </div>
+                    <div style={{ padding: "18px 28px 24px", marginTop: 8, borderTop: "1px solid var(--line-d)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span style={{ fontSize: 12, color: "var(--on-dark-faint)" }}>{dateOf(post)}</span>
+                      <motion.span whileHover={{ x: 4 }} style={{ fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: accentForCategory(post.category), display: "inline-block" }}>
+                        Leer →
                       </motion.span>
                     </div>
-
-                    <div className="blog-featured-r">
-                      <blockquote style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(16px,1.8vw,24px)", color: "var(--text)", lineHeight: 1.55, borderLeft: `3px solid ${accentForCategory(filtered[0].category)}`, paddingLeft: 24 }}>
-                        "El coaching integrativo no es solo una metodología. Es una manera de habitar el cambio desde adentro."
-                        <cite style={{ display: "block", fontStyle: "normal", fontFamily: "var(--sans)", fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginTop: 18 }}>
-                          — Devora Benchimol
-                        </cite>
-                      </blockquote>
-                    </div>
                   </motion.div>
-                )}
+                ))}
               </AnimatePresence>
-
-              {/* Grid de posts */}
-              <div className="blog-grid">
-                <AnimatePresence>
-                  {filtered.slice(1).map((post, i) => (
-                    <motion.div
-                      key={post.slug}
-                      layout
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{ ...spring, delay: i * 0.06 }}
-                      onClick={() => setOpenPost(post)}
-                      whileHover={{ y: -6, boxShadow: "0 16px 48px rgba(0,0,0,.28)" }}
-                      style={{
-                        border: "1px solid var(--line-d)", borderRadius: 10,
-                        background: "var(--surface)",
-                        display: "flex", flexDirection: "column", justifyContent: "space-between",
-                        cursor: "pointer", overflow: "hidden",
-                        borderTop: `3px solid ${accentForCategory(post.category)}`,
-                      }}
-                    >
-                      <div style={{ padding: "28px 28px 0" }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-                          <span style={{ fontSize: 11, background: `${accentForCategory(post.category)}15`, border: `1px solid ${accentForCategory(post.category)}35`, borderRadius: 16, padding: "4px 12px", color: accentForCategory(post.category), letterSpacing: ".12em", textTransform: "uppercase" }}>
-                            {post.category}
-                          </span>
-                          <span style={{ fontSize: 11, color: "var(--on-dark-faint)" }}>⏱ {estimateReadTime(post.content)}</span>
-                        </div>
-                        <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 19, color: "var(--text)", lineHeight: 1.25, marginBottom: 10 }}>{post.title}</h3>
-                        <p style={{ color: "var(--on-dark)", fontSize: 14, lineHeight: 1.65 }}>{post.excerpt}</p>
-                      </div>
-                      <div style={{ padding: "18px 28px 24px", marginTop: 8, borderTop: "1px solid var(--line-d)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <span style={{ fontSize: 12, color: "var(--on-dark-faint)" }}>{dateOf(post)}</span>
-                        <motion.span whileHover={{ x: 4 }} style={{ fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: accentForCategory(post.category), display: "inline-block" }}>
-                          Leer →
-                        </motion.span>
-                      </div>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </div>
-            </>
+            </div>
           )}
         </div>
       </section>

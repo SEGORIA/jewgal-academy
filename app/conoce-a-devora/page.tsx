@@ -247,10 +247,10 @@ export default function ConoceADevorPage() {
           <div style={{ textAlign: "center", marginBottom: 44 }}>
             <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16, color: "#A76D61" }}>Documental</span>
             <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.5vw,48px)", color: "var(--text)", letterSpacing: ".01em", lineHeight: 1.15, marginBottom: 14 }}>
-              Escúchala en sus propias <em style={{ color: "#A76D61", fontStyle: "normal" }}>palabras</em>
+              Una historia de <em style={{ color: "#A76D61", fontStyle: "normal" }}>resiliencia</em> y propósito
             </h2>
-            <p className="reveal" style={{ fontSize: 13, letterSpacing: ".08em", color: "rgba(246,238,232,.55)" }}>
-              Dirigido por <span style={{ color: "#A76D61" }}>Devora Benchimol</span>
+            <p className="reveal" style={{ fontSize: 15, color: "rgba(246,238,232,.75)", maxWidth: 560, margin: "0 auto", lineHeight: 1.6 }}>
+              Conocé el documental <em>Sholem Soul Goal</em> — una historia real sobre identidad, pertenencia y el valor de ser auténtico.
             </p>
           </div>
 
@@ -387,9 +387,12 @@ export default function ConoceADevorPage() {
               <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.5vw,16px)", lineHeight: 1.75, marginBottom: 18 }}>
                 Fundada por <strong style={{ color: "var(--text)" }}>Devora Benchimol</strong>, CEO y creadora. Organización sin fines de lucro comprometida con inspirar, empoderar y formar líderes con corazón valiente, comprometidos con transformar el mundo desde los valores judíos y el amor.
               </p>
-              <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.5vw,16px)", lineHeight: 1.75 }}>
+              <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.5vw,16px)", lineHeight: 1.75, marginBottom: 28 }}>
                 A través de programas educativos, retiros y formaciones, acompañamos a personas de todas las edades a descubrir su propósito y construir comunidades más compasivas y conscientes.
               </p>
+              <a href="https://sholemcorazonvaliente.org/" target="_blank" rel="noopener noreferrer" className="btn solid">
+                Conocé la Fundación →
+              </a>
             </div>
           </div>
         </div>

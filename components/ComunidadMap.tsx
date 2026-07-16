@@ -8,7 +8,7 @@ const COUNTRIES = [
     id: "argentina",
     label: "Argentina",
     flag: "🇦🇷",
-    top: "67%", left: "28%",
+    top: "83%", left: "28%",
     years: "1984 – 2005",
     tagline: "Los orígenes del método",
     desc: "En Buenos Aires nació el método Jewgal y comenzaron los primeros procesos de Life Coaching. Formó las primeras comunidades de bienestar y sentó las bases de su filosofía integrativa que hoy llega a todo el mundo.",

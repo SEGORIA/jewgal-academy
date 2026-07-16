@@ -307,13 +307,8 @@ export default function HomePage() {
       {/* ── FUNDADORA ── */}
       <section className="fundadora pad" id="fundadora">
         <div className="wrap">
-          <div className="fund-grid">
-            <div className="fund-photo reveal">
-              <div className="bg" style={{ backgroundImage: "url('/brand/devora-portrait.webp')" }} />
-              <div className="mono">{content.fundadora.name.charAt(0)}</div>
-              <div className="tag">{content.fundadora.name}</div>
-            </div>
-            <div className="fund-copy reveal">
+          <div className="fund-grid" style={{ gridTemplateColumns: "1fr" }}>
+            <div className="fund-copy reveal" style={{ maxWidth: 780 }}>
               <span className="eyebrow">Conoce a la fundadora</span>
               <h2>{content.fundadora.name}</h2>
               <div className="sig">{content.fundadora.sig}</div>
@@ -321,11 +316,12 @@ export default function HomePage() {
               <p>{content.fundadora.p2}</p>
               <div className="fund-mission-block">
                 <span className="fund-mission-icon" aria-hidden="true">✦</span>
-                <p>Este trabajo forma parte de la misión de la <strong>Fundación Sholem Corazón Valiente</strong>, organización sin fines de lucro registrada como <strong>non-profit organization</strong> en los Estados Unidos, fundada y dirigida por Devora como <strong>CEO y creadora</strong>, creada para inspirar, empoderar y formar líderes con corazón valiente comprometidos con transformar el mundo.</p>
+                <p>Jewgal Academy apoya y trabaja en alineación con la misión de la <strong>Fundación Sholem Corazón Valiente</strong>, organización sin fines de lucro registrada como <strong>non-profit organization</strong> en los Estados Unidos, fundada y dirigida por Devora como <strong>CEO y creadora</strong>. La Fundación está comprometida con inspirar, empoderar y formar líderes con corazón valiente, transformando comunidades desde los valores judíos y el amor.</p>
               </div>
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                 <Link href="/conoce-a-devora" className="btn">Conoce su historia →</Link>
                 <Link href="/conoce-a-devora#coaching-1-1" className="btn solid">Coaching personal 1:1 →</Link>
+                <a href="https://sholemcorazonvaliente.org/" target="_blank" rel="noopener noreferrer" className="btn" style={{ borderColor: "var(--gold)", color: "var(--gold)" }}>Conocé la Fundación →</a>
               </div>
             </div>
           </div>
