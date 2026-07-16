@@ -222,6 +222,11 @@ export default function HomePage() {
                     : <div className="num serif" style={{ fontSize: 16, lineHeight: 1.3, letterSpacing: ".04em" }}>Non-Profit<br/>Organization</div>
                   }
                   <div className="lbl">{s.lbl[0]}<br/>{s.lbl[1]}</div>
+                  {s.to == null && (
+                    <a href="https://sholemcorazonvaliente.org/" target="_blank" rel="noopener noreferrer" className="btn solid" style={{ marginTop: 12, fontSize: 11, padding: "8px 16px" }}>
+                      Conocé la fundación →
+                    </a>
+                  )}
                 </div>
               </div>
             ))}
