@@ -15,7 +15,7 @@ export const AI_MODEL = "llama-3.3-70b-versatile"
 
 export async function buildSystemPrompt(userId: string): Promise<string> {
   const enrollments = await db.enrollment.findMany({
-    where: { userId, status: "active" },
+    where: { userId, status: { in: ["active", "completed"] } },
     include: {
       course: {
         include: {

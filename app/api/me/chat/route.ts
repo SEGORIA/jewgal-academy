@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 
   // Verificar inscripción activa
   const activeEnrollment = await db.enrollment.findFirst({
-    where: { userId: session.user.id, status: "active" },
+    where: { userId: session.user.id, status: { in: ["active", "completed"] } },
   })
   if (!activeEnrollment) {
     return NextResponse.json(

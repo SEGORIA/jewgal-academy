@@ -10,7 +10,7 @@ export async function GET() {
 
   // Obtener cursos con inscripción activa del alumno
   const enrollments = await db.enrollment.findMany({
-    where: { userId: session.user.id, status: "active" },
+    where: { userId: session.user.id, status: { in: ["active", "completed"] } },
     select: { courseId: true },
   })
   const activeCourseIds = enrollments.map((e) => e.courseId)
