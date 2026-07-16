@@ -78,7 +78,7 @@ export default function AsistentePage() {
       const res = await fetch("/api/me/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, conversationId: activeId }),
+        body: JSON.stringify({ message: text, ...(activeId ? { conversationId: activeId } : {}) }),
       })
 
       if (!res.ok) {
