@@ -185,52 +185,21 @@ export default function ConoceADevorPage() {
         </div>
       </section>
 
-      {/* ── COACHING PERSONAL 1:1 ── */}
-      <section id="coaching-1-1" className="tone-dark" style={{
+      {/* ── COACHING PERSONAL 1:1 (teaser) ── */}
+      <section className="tone-dark" style={{
         background: "linear-gradient(to bottom, #1A0806 0%, #5C2218 22%, #8B3D2E 45%, #7A3028 68%, #1A0806 100%)",
         position: "relative", overflow: "hidden",
       }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 30% 40%, rgba(196,140,120,.22) 0%, transparent 65%)", pointerEvents: "none" }} />
-        <div className="wrap devora-section-pad" style={{ maxWidth: 720, position: "relative", zIndex: 1 }}>
+        <div className="wrap devora-section-pad" style={{ maxWidth: 720, position: "relative", zIndex: 1, textAlign: "center" }}>
           <span className="eyebrow reveal" style={{ display: "block", marginBottom: 20, color: "#F0D5C8" }}>Coaching personal</span>
           <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(28px,3.8vw,48px)", color: "#F6EEE8", letterSpacing: ".01em", lineHeight: 1.15, marginBottom: 20 }}>
             Sesiones 1:1 con Devora
           </h2>
-          <p className="reveal" style={{ color: "rgba(246,238,232,.85)", fontSize: "clamp(15px,1.6vw,17px)", lineHeight: 1.75, marginBottom: 28, maxWidth: 600 }}>
+          <p className="reveal" style={{ color: "rgba(246,238,232,.85)", fontSize: "clamp(15px,1.6vw,17px)", lineHeight: 1.75, marginBottom: 32, maxWidth: 560, marginLeft: "auto", marginRight: "auto" }}>
             Un espacio de acompañamiento individual — vos y Devora, trabajando tu proceso particular. No es un curso ni una certificación: es tiempo dedicado enteramente a tu transformación.
           </p>
-
-          <ul className="reveal" style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 12, paddingLeft: 0, marginBottom: 32 }}>
-            {[
-              "Logoterapia y sentido de vida",
-              "Mindfulness y regulación emocional",
-              "Sabiduría de la Cábala aplicada al coaching",
-              "Herramientas de expresión corporal y trabajo somático",
-            ].map((item) => (
-              <li key={item} style={{ display: "flex", gap: 12, alignItems: "baseline" }}>
-                <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#F0D5C8", flexShrink: 0, transform: "translateY(-2px)" }} />
-                <span style={{ color: "rgba(246,238,232,.85)", fontSize: 15 }}>{item}</span>
-              </li>
-            ))}
-          </ul>
-
-          <div className="reveal" style={{
-            display: "flex", flexWrap: "wrap", gap: "24px 48px",
-            padding: "20px 24px", borderRadius: 8,
-            background: "rgba(0,0,0,.15)", border: "1px solid rgba(246,238,232,.15)",
-            marginBottom: 32,
-          }}>
-            <div>
-              <div style={{ fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", color: "#F0D5C8", marginBottom: 4 }}>Modalidad</div>
-              <div style={{ fontSize: 14.5, color: "rgba(246,238,232,.85)" }}>Online o presencial — a coordinar</div>
-            </div>
-            <div>
-              <div style={{ fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", color: "#F0D5C8", marginBottom: 4 }}>Duración y precio</div>
-              <div style={{ fontSize: 14.5, color: "rgba(246,238,232,.85)" }}>Se definen en la primera conversación, según tu proceso</div>
-            </div>
-          </div>
-
-          <Link href="/contacto" className="btn solid">Agendar mi sesión de coaching →</Link>
+          <Link href="/coaching-1-1" className="btn solid">Conocer las sesiones 1:1 →</Link>
         </div>
       </section>
 

@@ -325,7 +325,7 @@ export default function HomePage() {
               </div>
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                 <Link href="/conoce-a-devora" className="btn">Conoce su historia →</Link>
-                <Link href="/conoce-a-devora#coaching-1-1" className="btn solid">Coaching personal 1:1 →</Link>
+                <Link href="/coaching-1-1" className="btn solid">Coaching personal 1:1 →</Link>
                 <a href="https://sholemcorazonvaliente.org/" target="_blank" rel="noopener noreferrer" className="btn" style={{ borderColor: "var(--gold)", color: "var(--gold)" }}>Conocé la Fundación →</a>
               </div>
             </div>

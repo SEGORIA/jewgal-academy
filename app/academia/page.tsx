@@ -310,7 +310,7 @@ export default function AcademiaPage() {
             <Link href="/certificaciones" className="btn">Ver certificaciones</Link>
           </div>
           <p style={{ marginTop: 20, fontSize: 13.5 }}>
-            ¿Buscas coaching personal, no un programa? <Link href="/conoce-a-devora#coaching-1-1" style={{ color: "var(--gold-light)", textDecoration: "underline" }}>Conoce las sesiones 1:1 con Devora →</Link>
+            ¿Buscas coaching personal, no un programa? <Link href="/coaching-1-1" style={{ color: "var(--gold-light)", textDecoration: "underline" }}>Conoce las sesiones 1:1 con Devora →</Link>
           </p>
         </div>
       </section>

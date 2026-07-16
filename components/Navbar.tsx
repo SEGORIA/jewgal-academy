@@ -10,6 +10,7 @@ import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion"
 const NAV_LINKS = [
   { href: "/",             label: "Inicio" },
   { href: "/academia",     label: "Academia" },
+  { href: "/coaching-1-1", label: "Coaching 1:1" },
   { href: "/eventos",      label: "Eventos" },
   { href: "/blog",         label: "Blog" },
   { href: "/contacto",     label: "Contacto" },
