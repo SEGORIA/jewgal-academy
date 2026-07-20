@@ -100,7 +100,12 @@ export default function Checkout({ course }: { course: Course }) {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || "Error al inscribir")
       setSuccess(true)
-      setTimeout(() => autoLogin(data.email, data.tempPassword), 1200)
+      if (data.tempPassword) {
+        setTimeout(() => autoLogin(data.email, data.tempPassword), 1200)
+      } else {
+        // Usuario existente: inscripto, pero entra con su contraseña de siempre
+        setTimeout(() => router.push("/login?enrolled=true"), 1200)
+      }
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Error al inscribir")
       setLoading(false)

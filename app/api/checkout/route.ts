@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       },
     ],
     metadata: { courseId: course.id },
-    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/aula?enrolled=true`,
+    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/compra-exitosa?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/programas/${course.slug}`,
   })
 
