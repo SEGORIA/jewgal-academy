@@ -3,13 +3,7 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
-
-const NEXT_EVENT = {
-  date:     new Date("2026-07-14T10:00:00"),
-  title:    "Retiro de Bienestar · Jewgal Experience",
-  subtitle: "14 · 15 · 16 Jul 2026 — Miami, Florida",
-  spots:    "20 plazas disponibles",
-}
+import { fechaDisplay, type EventoItem } from "@/lib/eventos"
 
 function pad(n: number) { return String(n).padStart(2, "0") }
 
@@ -59,13 +53,20 @@ function Colon() {
   )
 }
 
-export default function CountdownTimer() {
+export default function CountdownTimer({ eventos = [] }: { eventos?: EventoItem[] }) {
   const [t, setT]       = useState({ d: 0, h: 0, m: 0, s: 0 })
   const [ready, setReady] = useState(false)
 
+  // Próximo evento visible con fecha futura (el más cercano)
+  const next = eventos
+    .filter((ev) => ev.active && new Date(ev.datetime).getTime() > Date.now())
+    .sort((a, b) => a.datetime.localeCompare(b.datetime))[0]
+
   useEffect(() => {
+    if (!next) return
+    const target = new Date(next.datetime).getTime()
     const calc = () => {
-      const diff = Math.max(0, NEXT_EVENT.date.getTime() - Date.now())
+      const diff = Math.max(0, target - Date.now())
       setT({
         d: Math.floor(diff / 86400000),
         h: Math.floor((diff % 86400000) / 3600000),
@@ -77,9 +78,16 @@ export default function CountdownTimer() {
     calc()
     const id = setInterval(calc, 1000)
     return () => clearInterval(id)
-  }, [])
+  }, [next?.datetime])
 
-  if (!ready) return null
+  if (!next || !ready) return null
+
+  const f = fechaDisplay(next.datetime)
+  const NEXT_EVENT = {
+    title: next.title,
+    subtitle: `${f.day} ${f.month} ${f.year} — ${next.location}`,
+    spots: next.spots ? `${next.spots} plazas disponibles` : "Plazas limitadas",
+  }
 
   return (
     <section style={{

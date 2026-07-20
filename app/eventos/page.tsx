@@ -7,73 +7,37 @@ import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
 import CountdownTimer from "@/components/CountdownTimer"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
+import { DEFAULT_EVENTOS, fechaDisplay, type EventosData } from "@/lib/eventos"
 
-const EVENTS = [
-  {
-    date: { day: "14", month: "Jul", year: "2026" },
-    title: "Retiro de Bienestar · Jewgal Experience",
-    type: "Retiro presencial",
-    location: "Miami, Florida",
-    desc: "Un fin de semana de reconexión profunda: movimiento Jewgal, meditación, círculos de coaching y sabiduría de la Cábala. Plazas muy limitadas.",
-    accent: "#A58D66",
-    grad: "linear-gradient(135deg,#3A2410,#5C3A1E)",
-    spots: 20,
-    price: "$450",
-    icon: "◎",
-  },
-  {
-    date: { day: "22", month: "Jul", year: "2026" },
-    title: "Masterclass Gratuita · Cabalá y Propósito",
-    type: "Evento online",
-    location: "Zoom · En vivo",
-    desc: "Una sesión introductoria con Devora Benchimol sobre cómo la Cabalá puede transformar tu forma de entender el propósito y el liderazgo personal.",
-    accent: "#CBB78B",
-    grad: "linear-gradient(135deg,#332508,#4F3A12)",
-    spots: 200,
-    price: "Gratis",
-    icon: "❂",
-  },
-  {
-    date: { day: "05", month: "Ago", year: "2026" },
-    title: "Formación Intensiva · Life Coaching Weekend",
-    type: "Intensivo presencial",
-    location: "Miami, Florida",
-    desc: "Dos días de inmersión en herramientas prácticas de Life Coaching Integrativo. Válido como módulo optativo para alumnos de la Academia.",
-    accent: "#A76D61",
-    grad: "linear-gradient(135deg,#42200F,#653322)",
-    spots: 30,
-    price: "$280",
-    icon: "⟡",
-  },
-  {
-    date: { day: "12", month: "Sep", year: "2026" },
-    title: "Encuentro Jewgal · Medellín",
-    type: "Evento presencial",
-    location: "Medellín, Colombia",
-    desc: "Un encuentro de transformación y movimiento consciente con Devora Benchimol en Colombia: talleres de Jewgal, círculos de coaching y sabiduría de la Cábala. Plazas limitadas.",
-    accent: "#C49F72",
-    grad: "linear-gradient(135deg,#3A2818,#5C4026)",
-    spots: 40,
-    price: "Por confirmar",
-    icon: "✦",
-  },
-]
-
-const PAST = [
-  { title: "Retiro Sholem · Buenos Aires", date: "Marzo 2026", location: "Argentina" },
-  { title: "Masterclass Jewgal · Bogotá", date: "Enero 2026", location: "Colombia" },
-  { title: "Taller Cábala y Crianza", date: "Noviembre 2025", location: "Miami, FL" },
+// Estilos visuales asignados en ciclo según posición (no editables desde el admin)
+const EV_STYLES = [
+  { accent: "#A58D66", grad: "linear-gradient(135deg,#3A2410,#5C3A1E)", icon: "◎" },
+  { accent: "#CBB78B", grad: "linear-gradient(135deg,#332508,#4F3A12)", icon: "❂" },
+  { accent: "#A76D61", grad: "linear-gradient(135deg,#42200F,#653322)", icon: "⟡" },
+  { accent: "#C49F72", grad: "linear-gradient(135deg,#3A2818,#5C4026)", icon: "✦" },
 ]
 
 export default function EventosPage() {
   const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
+  const [eventos, setEventos] = useState<EventosData>(DEFAULT_EVENTOS)
 
   useEffect(() => {
     fetch("/api/site-content")
       .then((r) => r.json())
       .then((d) => setContent(d))
       .catch(() => {})
+    fetch("/api/eventos")
+      .then((r) => r.json())
+      .then((d: EventosData) => {
+        if (d && Array.isArray(d.upcoming) && Array.isArray(d.past)) setEventos(d)
+      })
+      .catch(() => {})
   }, [])
+
+  const EVENTS = eventos.upcoming
+    .filter((ev) => ev.active)
+    .map((ev, i) => ({ ...ev, date: fechaDisplay(ev.datetime), ...EV_STYLES[i % EV_STYLES.length] }))
+  const PAST = eventos.past
 
   return (
     <>
@@ -101,14 +65,19 @@ export default function EventosPage() {
         </div>
       </section>
 
-      {/* ── COUNTDOWN ── */}
-      <CountdownTimer />
+      {/* ── COUNTDOWN (próximo evento visible con fecha futura) ── */}
+      <CountdownTimer eventos={eventos.upcoming} />
 
       {/* ── EVENTOS ── */}
       <section style={{ background: "var(--navy)" }}>
         <div className="wrap ev-wrap">
           <span className="eyebrow sec-eyebrow reveal" style={{ marginBottom: 52 }}>2026 · Calendario de eventos</span>
 
+          {EVENTS.length === 0 && (
+            <p style={{ color: "var(--on-dark)", fontSize: 15, padding: "20px 0" }}>
+              Estamos preparando nuevos eventos. Suscríbete abajo para enterarte antes que nadie.
+            </p>
+          )}
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             {EVENTS.map((ev) => (
               <div key={ev.title} className="reveal ev-card">

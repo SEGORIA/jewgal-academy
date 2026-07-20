@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation"
 import {
   LayoutDashboard, Users, BookOpen, FileText,
   CreditCard, Settings, Globe, Menu, X, LogOut,
-  ChevronRight, Newspaper, Shield, ClipboardCheck, ExternalLink, ImageIcon, Headphones,
+  ChevronRight, Newspaper, Shield, ClipboardCheck, ExternalLink, ImageIcon, Headphones, CalendarDays,
 } from "lucide-react"
 import { signOut } from "next-auth/react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -28,6 +28,7 @@ const NAV = [
       { href: "/superadmin/cursos",       icon: BookOpen,        label: "Programas" },
       { href: "/superadmin/recursos",     icon: Headphones,      label: "Recursos" },
       { href: "/superadmin/blog",         icon: Newspaper,       label: "Blog" },
+      { href: "/superadmin/eventos",      icon: CalendarDays,    label: "Eventos" },
       { href: "/superadmin/hero",          icon: ImageIcon,       label: "Fotos hero" },
       { href: "/superadmin/web",          icon: Globe,           label: "Sitio web" },
     ],
