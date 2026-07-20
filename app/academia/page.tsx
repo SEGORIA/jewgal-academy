@@ -8,6 +8,9 @@ import RevealInit from "@/components/RevealInit"
 import { TiltCard } from "@/components/motion/TiltCard"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
+import { formatPrice } from "@/lib/utils"
+
+type CourseInfo = { slug: string; price: number; currency: string; isFree: boolean }
 
 const PROGRAMS = [
   {
@@ -89,12 +92,29 @@ export default function AcademiaPage() {
     return () => window.removeEventListener("resize", check)
   }, [])
 
+  const [dbCourses, setDbCourses] = useState<Record<string, CourseInfo>>({})
+
   useEffect(() => {
     fetch("/api/site-content")
       .then((r) => r.json())
       .then((d) => setContent(d))
       .catch(() => {})
+    fetch("/api/courses")
+      .then((r) => r.json())
+      .then((d: { courses: CourseInfo[] }) => {
+        if (Array.isArray(d?.courses)) {
+          setDbCourses(Object.fromEntries(d.courses.map((c) => [c.slug, c])))
+        }
+      })
+      .catch(() => {})
   }, [])
+
+  // Precio real de la DB cuando existe; si no, el valor por defecto del array
+  const programs = PROGRAMS.map((p) => {
+    const c = dbCourses[p.slug]
+    if (!c) return p
+    return { ...p, price: c.isFree ? "Gratis" : formatPrice(c.price, c.currency), free: c.isFree }
+  })
 
   const { scrollY } = useScroll()
   const photoY = useTransform(scrollY, [0, 800], [0, -100])
@@ -180,7 +200,7 @@ export default function AcademiaPage() {
             variants={{ visible: { transition: { staggerChildren: 0.09 } } }}
             style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fill,minmax(280px,1fr))", gap: 22 }}
           >
-            {PROGRAMS.map((p, i) => (
+            {programs.map((p, i) => (
               <motion.div key={p.slug}
                 variants={{ hidden: { opacity: 0, y: 36 }, visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.16,1,0.3,1] } } }}
                 style={{ gridColumn: i === 0 && !isMobile ? "1 / -1" : undefined }}

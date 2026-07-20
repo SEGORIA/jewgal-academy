@@ -14,6 +14,9 @@ import { CursorLight } from "@/components/motion/CursorLight"
 import MagneticButton from "@/components/motion/MagneticButton"
 import TestimonialCarousel from "@/components/TestimonialCarousel"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
+import { formatPrice } from "@/lib/utils"
+
+type CourseInfo = { slug: string; price: number; currency: string; isFree: boolean }
 
 // Mapa interactivo: below-the-fold y con código propio → se carga diferido
 const ComunidadMap = dynamic(() => import("@/components/ComunidadMap"), {
@@ -47,12 +50,32 @@ export default function HomePage() {
   const statsInView = useInView(statsRef,  { once: true, margin: "-60px" })
   const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
 
+  const [dbCourses, setDbCourses] = useState<Record<string, CourseInfo>>({})
+
   useEffect(() => {
     fetch("/api/site-content")
       .then((r) => r.json())
       .then((d) => setContent(d))
       .catch(() => {})
+    fetch("/api/courses")
+      .then((r) => r.json())
+      .then((d: { courses: CourseInfo[] }) => {
+        if (Array.isArray(d?.courses)) {
+          setDbCourses(Object.fromEntries(d.courses.map((c) => [c.slug, c])))
+        }
+      })
+      .catch(() => {})
   }, [])
+
+  // Precio real de la DB cuando existe; si no, el valor por defecto del array
+  const programs = PROGRAMS.map((p) => {
+    const c = dbCourses[p.slug]
+    if (!c) return p
+    return { ...p, price: c.isFree ? "Gratis" : formatPrice(c.price, c.currency), free: c.isFree }
+  })
+
+  const paidPrices = Object.values(dbCourses).filter((c) => !c.isFree && c.price > 0).map((c) => c.price)
+  const minPrice = paidPrices.length ? formatPrice(Math.min(...paidPrices)) : "$360"
 
   /* ── Animaciones: IntersectionObserver + count-up + progress bars ── */
   useEffect(() => {
@@ -245,7 +268,7 @@ export default function HomePage() {
             Modalidad <strong style={{ color: "var(--ink)" }}>presencial, online o híbrida</strong> según el programa — elige la que mejor se adapte a tu ritmo y lugar.
           </p>
           <div className="prog-grid">
-            {PROGRAMS.map((p) => (
+            {programs.map((p) => (
               <TiltCard key={p.slug} className="reveal" radius={6}>
                 <Link href={`/programas/${p.slug}`} className="pcard">
                   <div className="thumb">
@@ -492,7 +515,7 @@ export default function HomePage() {
           <p>Una comunidad que se forma para guiar. Elige el plan que acompaña tu camino y empieza hoy.</p>
           <div className="join-actions">
             <Link href="#programas" className="btn solid">Empieza ahora →</Link>
-            <span className="price-line">desde <b>$360</b></span>
+            <span className="price-line">desde <b>{minPrice}</b></span>
           </div>
         </div>
       </section>
