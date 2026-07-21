@@ -45,7 +45,10 @@ export async function sendWelcomeEmail(input: {
   }
 
   await resend.emails.send({
-    from: process.env.RESEND_FROM || "Jewgal Academy <onboarding@resend.dev>",
+    // EMAIL_FROM es el nombre de variable ya configurado en Vercel; RESEND_FROM
+    // queda como alias por si se prefiere ese nombre. Sin dominio verificado en
+    // Resend, el remitente de sandbox (onboarding@resend.dev) es el único que funciona.
+    from: process.env.EMAIL_FROM || process.env.RESEND_FROM || "Jewgal Academy <onboarding@resend.dev>",
     to: input.email,
     subject: render(tpl.welcomeSubject, vars),
     text: render(tpl.welcomeBody, vars),
