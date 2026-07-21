@@ -44,13 +44,19 @@ export async function sendWelcomeEmail(input: {
     password: input.tempPassword,
   }
 
-  await resend.emails.send({
-    // EMAIL_FROM es el nombre de variable ya configurado en Vercel; RESEND_FROM
-    // queda como alias por si se prefiere ese nombre. Sin dominio verificado en
-    // Resend, el remitente de sandbox (onboarding@resend.dev) es el único que funciona.
+  // El SDK de Resend v6 NO lanza excepción ante errores de la API (dominio sin
+  // verificar, remitente inválido, etc.) — devuelve { data, error }. Sin este
+  // chequeo, un envío fallido queda completamente invisible.
+  const { data, error } = await resend.emails.send({
     from: process.env.EMAIL_FROM || process.env.RESEND_FROM || "Jewgal Academy <onboarding@resend.dev>",
     to: input.email,
     subject: render(tpl.welcomeSubject, vars),
     text: render(tpl.welcomeBody, vars),
   })
+
+  if (error) {
+    console.error("[sendWelcomeEmail] Resend devolvió un error:", error)
+  } else {
+    console.log("[sendWelcomeEmail] enviado, id:", data?.id)
+  }
 }
