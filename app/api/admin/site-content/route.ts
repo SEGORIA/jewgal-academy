@@ -29,6 +29,10 @@ const schema = z.object({
     cta1: z.string().min(1), cta2: z.string().min(1),
   }),
   stats: z.array(z.object({ n: z.string(), l: z.string() })).length(3),
+  fundacionStat: z.object({
+    bigText: z.string(), label1: z.string(), label2: z.string(),
+    buttonText: z.string(), buttonUrl: z.string(),
+  }).optional(),
   fundadora: z.object({ name: z.string().min(1), sig: z.string().min(1), p1: z.string().min(1), p2: z.string().min(1) }),
   contacto: z.object({
     email: z.string().min(1), phone: z.string().min(1), city: z.string().min(1),

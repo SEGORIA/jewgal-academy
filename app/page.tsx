@@ -84,13 +84,14 @@ export default function HomePage() {
 
     const animateCount = (el: HTMLElement) => {
       const to = +(el.dataset.to ?? 0)
+      const finalText = el.dataset.display // texto exacto editado (ej. "40+"); si no hay, se formatea el número
       const dur = 1600
       const t0 = performance.now()
-      const fmt = (n: number) => to >= 1000 ? Math.round(n).toLocaleString("es") : Math.round(n) + (to >= 30 ? "+" : "")
+      const fmt = (n: number) => to >= 1000 ? Math.round(n).toLocaleString("es") : String(Math.round(n))
       const tick = (t: number) => {
         const p = Math.min((t - t0) / dur, 1)
         const e = 1 - Math.pow(1 - p, 3)
-        el.textContent = fmt(to * e)
+        el.textContent = p >= 1 && finalText ? finalText : fmt(to * e)
         if (p < 1) requestAnimationFrame(tick)
       }
       requestAnimationFrame(tick)
@@ -214,17 +215,21 @@ export default function HomePage() {
         <div className="wrap">
           <div className="stats-grid" ref={statsRef}>
             {([
-              { to: 40,   lbl: ["Años de", "trayectoria"],                         ring: 0.82, delay: 0.05, icon: <><path d="M2 8l10-5 10 5-10 5z"/><path d="M6 10v5c0 1 3 3 6 3s6-2 6-3v-5"/></> },
-              { to: 5,    lbl: ["Países: Argentina, Israel,", "Guatemala, Colombia, EE.UU."], ring: 0.45, delay: 0.18, icon: <><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></> },
-              { to: 5,    lbl: ["Programas y", "certificaciones"],                  ring: 0.55, delay: 0.31, icon: <><circle cx="12" cy="9" r="5"/><path d="M9 13l-1 8 4-2 4 2-1-8"/></> },
-              { to: null, lbl: ["Fundación Sholem", "Corazón Valiente"],            ring: 1.0,  delay: 0.44, icon: <><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2 20c0-3 3-5 6-5s6 2 6 5M14 15c3 0 6 2 6 5"/></> },
-            ] as const).map((s, i) => (
+              { ring: 0.82, delay: 0.05, icon: <><path d="M2 8l10-5 10 5-10 5z"/><path d="M6 10v5c0 1 3 3 6 3s6-2 6-3v-5"/></> },
+              { ring: 0.45, delay: 0.18, icon: <><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></> },
+              { ring: 0.55, delay: 0.31, icon: <><circle cx="12" cy="9" r="5"/><path d="M9 13l-1 8 4-2 4 2-1-8"/></> },
+              { ring: 1.0,  delay: 0.44, icon: <><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2 20c0-3 3-5 6-5s6 2 6 5M14 15c3 0 6 2 6 5"/></> },
+            ] as const).map((meta, i) => {
+              const isFundacion = i === 3
+              const stat = content.stats[i]
+              const numDigits = stat ? parseInt(stat.n.replace(/\D/g, ""), 10) || 0 : 0
+              return (
               <div key={i} className="stat reveal">
                 {/* Icono + anillo SVG animado */}
                 <div style={{ position: "relative", width: 56, height: 56, flexShrink: 0 }}>
                   <svg width="34" height="34" viewBox="0 0 24 24" fill="none" strokeWidth="1.3"
                     style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)" }}>
-                    {s.icon}
+                    {meta.icon}
                   </svg>
                   <svg width="56" height="56" viewBox="0 0 56 56" style={{ position: "absolute", inset: 0 }} aria-hidden>
                     <circle cx="28" cy="28" r="24" fill="none" stroke="rgba(196,159,114,.12)" strokeWidth="1.2"/>
@@ -233,26 +238,30 @@ export default function HomePage() {
                         cx="28" cy="28" r="24" fill="none"
                         stroke="var(--gold)" strokeWidth="1.2" strokeLinecap="round"
                         initial={{ pathLength: 0, opacity: 0 }}
-                        animate={statsInView ? { pathLength: s.ring, opacity: 0.72 } : {}}
-                        transition={{ duration: 1.9, ease: [0.16,1,0.3,1], delay: s.delay }}
+                        animate={statsInView ? { pathLength: meta.ring, opacity: 0.72 } : {}}
+                        transition={{ duration: 1.9, ease: [0.16,1,0.3,1], delay: meta.delay }}
                       />
                     </g>
                   </svg>
                 </div>
                 <div>
-                  {s.to != null
-                    ? <div className="num" data-to={s.to}>0</div>
-                    : <div className="num serif" style={{ fontSize: 16, lineHeight: 1.3, letterSpacing: ".04em" }}>Non-Profit<br/>Organization</div>
+                  {isFundacion
+                    ? <div className="num serif" style={{ fontSize: 16, lineHeight: 1.3, letterSpacing: ".04em" }}>{content.fundacionStat.bigText}</div>
+                    : <div className="num" data-to={numDigits} data-display={stat?.n}>0</div>
                   }
-                  <div className="lbl">{s.lbl[0]}<br/>{s.lbl[1]}</div>
-                  {s.to == null && (
-                    <a href="https://sholemcorazonvaliente.org/" target="_blank" rel="noopener noreferrer" className="btn solid" style={{ marginTop: 12, fontSize: 11, padding: "8px 16px" }}>
-                      Conocé la fundación →
+                  <div className="lbl">
+                    {isFundacion
+                      ? <>{content.fundacionStat.label1}<br/>{content.fundacionStat.label2}</>
+                      : stat?.l}
+                  </div>
+                  {isFundacion && content.fundacionStat.buttonUrl && (
+                    <a href={content.fundacionStat.buttonUrl} target="_blank" rel="noopener noreferrer" className="btn solid" style={{ marginTop: 12, fontSize: 11, padding: "8px 16px" }}>
+                      {content.fundacionStat.buttonText}
                     </a>
                   )}
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         </div>
       </section>

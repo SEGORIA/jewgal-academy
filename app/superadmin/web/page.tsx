@@ -114,10 +114,10 @@ export default function WebAdminPage() {
           <SectionHeader id="stats" expanded={expanded} setExpanded={setExpanded} />
           {expanded === "stats" && (
             <div style={{ padding: "0 22px 22px", borderTop: "1px solid var(--surface-2)", paddingTop: 20 }}>
-              <div style={{ display: "flex", gap: 10, alignItems: "flex-start", background: "rgba(251,191,36,.06)", border: "1px solid rgba(251,191,36,.15)", borderRadius: 9, padding: "12px 14px", marginBottom: 16 }}>
-                <Info size={15} style={{ color: "var(--warning)", flexShrink: 0, marginTop: 1 }} />
+              <div style={{ display: "flex", gap: 10, alignItems: "flex-start", background: "rgba(107,191,142,.06)", border: "1px solid rgba(107,191,142,.18)", borderRadius: 9, padding: "12px 14px", marginBottom: 16 }}>
+                <Info size={15} style={{ color: "var(--success)", flexShrink: 0, marginTop: 1 }} />
                 <p style={{ fontSize: 12.5, color: "var(--text-muted)", lineHeight: 1.6 }}>
-                  Estos valores se guardan, pero el contador animado del home todavía usa los números de código (por el efecto de conteo). Pedile a tu desarrollador que los conecte si querés editarlos en vivo.
+                  El número se anima con un conteo y termina mostrando el texto exacto que escribas (ej. <strong>40+</strong>, <strong>5</strong>). Podés usar "+" u otros símbolos.
                 </p>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
@@ -127,6 +127,22 @@ export default function WebAdminPage() {
                     <Field label={`Stat ${i + 1} — Etiqueta`} value={s.l} onChange={(v) => setContent((c) => ({ ...c, stats: c.stats.map((x, j) => j === i ? { ...x, l: v } : x) }))} />
                   </div>
                 ))}
+              </div>
+
+              {/* Bloque Fundación (4º stat) */}
+              <div style={{ marginTop: 22, paddingTop: 18, borderTop: "1px solid var(--surface-2)" }}>
+                <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 4 }}>Bloque de la Fundación (4º recuadro)</p>
+                <p style={{ fontSize: 12.5, color: "var(--text-faint)", lineHeight: 1.6, marginBottom: 16 }}>
+                  El recuadro con el botón que enlaza a la fundación. Dejá el enlace vacío si querés ocultar el botón.
+                </p>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                  <Field label="Texto grande" value={content.fundacionStat.bigText} onChange={(v) => setContent((c) => ({ ...c, fundacionStat: { ...c.fundacionStat, bigText: v } }))} />
+                  <div />
+                  <Field label="Etiqueta — línea 1" value={content.fundacionStat.label1} onChange={(v) => setContent((c) => ({ ...c, fundacionStat: { ...c.fundacionStat, label1: v } }))} />
+                  <Field label="Etiqueta — línea 2" value={content.fundacionStat.label2} onChange={(v) => setContent((c) => ({ ...c, fundacionStat: { ...c.fundacionStat, label2: v } }))} />
+                  <Field label="Texto del botón" value={content.fundacionStat.buttonText} onChange={(v) => setContent((c) => ({ ...c, fundacionStat: { ...c.fundacionStat, buttonText: v } }))} />
+                  <Field label="Enlace del botón (URL)" value={content.fundacionStat.buttonUrl} onChange={(v) => setContent((c) => ({ ...c, fundacionStat: { ...c.fundacionStat, buttonUrl: v } }))} />
+                </div>
               </div>
             </div>
           )}
