@@ -1,12 +1,14 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Users, FileText, Eye, EyeOff, Plus, X, Video, Trash2, Pencil, Loader2, ExternalLink, Download, PlayCircle } from "lucide-react"
+import { Users, FileText, Eye, EyeOff, Plus, X, Video, Trash2, Pencil, Loader2, ExternalLink, Download, PlayCircle, ListChecks, ChevronUp, ChevronDown, Save, AlertCircle, GripVertical } from "lucide-react"
+import { getProgramContent, getYouTubeEmbedUrl, EMPTY_PROGRAM_CONTENT, type ProgramContent } from "@/lib/program-content"
 
 type Course = {
   id: string; title: string; slug: string; shortDesc: string; description: string
   price: number; currency: string; isFree: boolean; isPublished: boolean
   totalHours: number | null; durationWeeks: number | null; thumbnail: string | null
+  videoUrl: string | null; content: string | null
   _count: { enrollments: number; materials: number; liveSessions: number }
 }
 type Material = {
@@ -24,7 +26,7 @@ type StudentRow = {
   enrollments: { courseId: string; progress: number; hoursCompleted: number; certificateNumber: string | null }[]
 }
 
-type Tab = "materiales" | "sesiones" | "alumnos"
+type Tab = "contenido" | "materiales" | "sesiones" | "alumnos"
 
 const card: React.CSSProperties = { background: "var(--surface)", border: "1px solid rgba(165,141,102,.13)", borderRadius: 14 }
 const inputStyle: React.CSSProperties = { background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 14px", fontSize: 13, color: "var(--text)", outline: "none", fontFamily: "inherit", width: "100%" }
@@ -67,6 +69,12 @@ export default function CursosAdminPage() {
   const [students, setStudents] = useState<StudentRow[]>([])
   const [loadingStudents, setLoadingStudents] = useState(false)
 
+  const [progContent, setProgContent] = useState<ProgramContent>(EMPTY_PROGRAM_CONTENT)
+  const [videoUrlInput, setVideoUrlInput] = useState("")
+  const [savingContent, setSavingContent] = useState(false)
+  const [contentSaved, setContentSaved] = useState(false)
+  const [contentError, setContentError] = useState("")
+
   const selected = courses.find((c) => c.id === selectedId) || null
 
   const loadCourses = useCallback(() => {
@@ -94,7 +102,36 @@ export default function CursosAdminPage() {
     if (!selected) return
     if (tab === "materiales") loadMaterials(selected.id)
     if (tab === "sesiones") loadSessions(selected.id)
-  }, [selected, tab, loadMaterials, loadSessions])
+    if (tab === "contenido") {
+      setProgContent(getProgramContent(selected.slug, selected.content))
+      setVideoUrlInput(selected.videoUrl ?? "")
+      setContentError("")
+      setContentSaved(false)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected?.id, tab])
+
+  async function saveProgramContent() {
+    if (!selected) return
+    setSavingContent(true)
+    setContentError("")
+    try {
+      const res = await fetch(`/api/admin/courses/${selected.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ videoUrl: videoUrlInput.trim() || "", content: progContent }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || "No se pudo guardar")
+      setContentSaved(true)
+      setTimeout(() => setContentSaved(false), 2500)
+      loadCourses()
+    } catch (e) {
+      setContentError(e instanceof Error ? e.message : "Error al guardar")
+    } finally {
+      setSavingContent(false)
+    }
+  }
 
   function openNewCourse() {
     setCourseForm(emptyCourseForm)
@@ -397,6 +434,7 @@ export default function CursosAdminPage() {
             {/* Tabs */}
             <div style={{ display: "flex", gap: 4, marginBottom: 24, background: "var(--surface)", borderRadius: 10, padding: 4 }}>
               {([
+                { key: "contenido", icon: ListChecks, label: "Contenido" },
                 { key: "materiales", icon: FileText, label: "Materiales" },
                 { key: "sesiones", icon: Video, label: "Clases en vivo" },
                 { key: "alumnos", icon: Users, label: "Alumnos" },
@@ -413,6 +451,100 @@ export default function CursosAdminPage() {
                 </button>
               ))}
             </div>
+
+            {/* CONTENIDO */}
+            {tab === "contenido" && (
+              <div>
+                {contentError && (
+                  <div style={{ background: "rgba(220,38,38,.1)", border: "1px solid rgba(220,38,38,.3)", borderRadius: 8, padding: "10px 14px", marginBottom: 16, color: "#f87171", fontSize: 13 }}>
+                    {contentError}
+                  </div>
+                )}
+
+                {/* Video de YouTube */}
+                <div style={{ marginBottom: 28 }}>
+                  <label style={labelStyle}><Video size={12} style={{ display: "inline", marginRight: 5, verticalAlign: -2 }} />Video del programa (link de YouTube)</label>
+                  <input
+                    value={videoUrlInput}
+                    onChange={(e) => setVideoUrlInput(e.target.value)}
+                    placeholder="https://www.youtube.com/watch?v=…"
+                    style={inputStyle}
+                  />
+                  {videoUrlInput.trim() && (
+                    getYouTubeEmbedUrl(videoUrlInput) ? (
+                      <div style={{ marginTop: 12, borderRadius: 10, overflow: "hidden", border: "1px solid rgba(165,141,102,.18)", maxWidth: 420, aspectRatio: "16 / 9", position: "relative" }}>
+                        <iframe
+                          src={getYouTubeEmbedUrl(videoUrlInput)!}
+                          title="Vista previa"
+                          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
+                          allowFullScreen
+                        />
+                      </div>
+                    ) : (
+                      <p style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--warning)", marginTop: 8 }}>
+                        <AlertCircle size={13} /> No parece un link válido de YouTube. Se guardará igual, pero el video no se mostrará en el sitio.
+                      </p>
+                    )
+                  )}
+                  <p style={{ fontSize: 11.5, color: "var(--text-dim)", marginTop: 8 }}>Se muestra debajo de "Sobre el programa" en la página pública. Dejá el campo vacío para no mostrar ningún video.</p>
+                </div>
+
+                {/* Chips: eyebrow / duración / modalidad / nivel */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28 }}>
+                  <div>
+                    <label style={labelStyle}>Etiqueta (eyebrow)</label>
+                    <input value={progContent.eyebrow} onChange={(e) => setProgContent((c) => ({ ...c, eyebrow: e.target.value }))} placeholder="Ej: Certificación Infantil" style={inputStyle} />
+                  </div>
+                  <div>
+                    <label style={labelStyle}>Duración</label>
+                    <input value={progContent.duration} onChange={(e) => setProgContent((c) => ({ ...c, duration: e.target.value }))} placeholder="Ej: 3 meses" style={inputStyle} />
+                  </div>
+                  <div>
+                    <label style={labelStyle}>Modalidad</label>
+                    <input value={progContent.modality} onChange={(e) => setProgContent((c) => ({ ...c, modality: e.target.value }))} placeholder="Ej: Online · Clases en vivo" style={inputStyle} />
+                  </div>
+                  <div>
+                    <label style={labelStyle}>Nivel</label>
+                    <input value={progContent.level} onChange={(e) => setProgContent((c) => ({ ...c, level: e.target.value }))} placeholder="Ej: Sin requisitos previos" style={inputStyle} />
+                  </div>
+                </div>
+
+                {/* Qué incluye */}
+                <div style={{ marginBottom: 28 }}>
+                  <label style={labelStyle}>Qué incluye</label>
+                  <StringListEditor items={progContent.includes} onChange={(items) => setProgContent((c) => ({ ...c, includes: items }))} placeholder="Ej: Certificado al completar" />
+                </div>
+
+                {/* Contenido del programa (módulos) */}
+                <div style={{ marginBottom: 28 }}>
+                  <label style={labelStyle}>Contenido del programa (módulos)</label>
+                  <ModulesEditor modules={progContent.modules} onChange={(modules) => setProgContent((c) => ({ ...c, modules }))} />
+                </div>
+
+                {/* Para quién */}
+                <div style={{ marginBottom: 28 }}>
+                  <label style={labelStyle}>¿Para quién es este programa?</label>
+                  <StringListEditor items={progContent.forWhom} onChange={(items) => setProgContent((c) => ({ ...c, forWhom: items }))} placeholder="Ej: Docentes de nivel inicial" />
+                </div>
+
+                {/* Al finalizar */}
+                <div style={{ marginBottom: 28 }}>
+                  <label style={labelStyle}>Al finalizar (resultado)</label>
+                  <textarea
+                    value={progContent.outcome}
+                    onChange={(e) => setProgContent((c) => ({ ...c, outcome: e.target.value }))}
+                    rows={3}
+                    placeholder="Qué logrará el alumno al completar el programa…"
+                    style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
+                  />
+                </div>
+
+                <button onClick={saveProgramContent} disabled={savingContent} style={{ ...btnPrimary(contentSaved ? "var(--success)" : "var(--gold)"), justifyContent: "center", opacity: savingContent ? 0.6 : 1 }}>
+                  {savingContent ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : <Save size={14} />}
+                  {savingContent ? "Guardando…" : contentSaved ? "¡Guardado!" : "Guardar contenido"}
+                </button>
+              </div>
+            )}
 
             {/* MATERIALES */}
             {tab === "materiales" && (
@@ -577,6 +709,102 @@ export default function CursosAdminPage() {
           </div>
         )}
       </div>
+    </div>
+  )
+}
+
+/* ── Editor de lista de textos (Qué incluye / Para quién) ── */
+function StringListEditor({ items, onChange, placeholder }: { items: string[]; onChange: (items: string[]) => void; placeholder?: string }) {
+  const [draft, setDraft] = useState("")
+
+  function update(i: number, value: string) {
+    onChange(items.map((it, idx) => (idx === i ? value : it)))
+  }
+  function remove(i: number) {
+    onChange(items.filter((_, idx) => idx !== i))
+  }
+  function move(i: number, dir: -1 | 1) {
+    const j = i + dir
+    if (j < 0 || j >= items.length) return
+    const next = [...items]
+    ;[next[i], next[j]] = [next[j], next[i]]
+    onChange(next)
+  }
+  function add() {
+    const v = draft.trim()
+    if (!v) return
+    onChange([...items, v])
+    setDraft("")
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 4 }}>
+      {items.map((item, i) => (
+        <div key={i} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <GripVertical size={13} style={{ color: "var(--text-faint)", flexShrink: 0 }} />
+          <input value={item} onChange={(e) => update(i, e.target.value)} style={{ ...inputStyle, flex: 1 }} />
+          <button onClick={() => move(i, -1)} disabled={i === 0} title="Subir" style={{ width: 28, height: 28, borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface-2)", cursor: i === 0 ? "default" : "pointer", color: "var(--text-muted)", opacity: i === 0 ? 0.3 : 1, flexShrink: 0 }}><ChevronUp size={13} /></button>
+          <button onClick={() => move(i, 1)} disabled={i === items.length - 1} title="Bajar" style={{ width: 28, height: 28, borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface-2)", cursor: i === items.length - 1 ? "default" : "pointer", color: "var(--text-muted)", opacity: i === items.length - 1 ? 0.3 : 1, flexShrink: 0 }}><ChevronDown size={13} /></button>
+          <button onClick={() => remove(i)} title="Eliminar" style={{ width: 28, height: 28, borderRadius: 7, border: "1px solid rgba(239,68,68,.25)", background: "rgba(239,68,68,.06)", cursor: "pointer", color: "var(--danger)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}><Trash2 size={12} /></button>
+        </div>
+      ))}
+      <div style={{ display: "flex", gap: 6, marginTop: 2 }}>
+        <input
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); add() } }}
+          placeholder={placeholder || "Agregar…"}
+          style={{ ...inputStyle, flex: 1 }}
+        />
+        <button onClick={add} style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold)", borderRadius: 8, padding: "0 14px", fontSize: 12, fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>
+          <Plus size={13} /> Agregar
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/* ── Editor de módulos (Contenido del programa) ── */
+function ModulesEditor({ modules, onChange }: { modules: { title: string; items: string[] }[]; onChange: (modules: { title: string; items: string[] }[]) => void }) {
+  function updateTitle(i: number, title: string) {
+    onChange(modules.map((m, idx) => (idx === i ? { ...m, title } : m)))
+  }
+  function updateItems(i: number, items: string[]) {
+    onChange(modules.map((m, idx) => (idx === i ? { ...m, items } : m)))
+  }
+  function remove(i: number) {
+    onChange(modules.filter((_, idx) => idx !== i))
+  }
+  function move(i: number, dir: -1 | 1) {
+    const j = i + dir
+    if (j < 0 || j >= modules.length) return
+    const next = [...modules]
+    ;[next[i], next[j]] = [next[j], next[i]]
+    onChange(next)
+  }
+  function addModule() {
+    onChange([...modules, { title: "", items: [] }])
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 4 }}>
+      {modules.map((mod, i) => (
+        <div key={i} style={{ background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.15)", borderRadius: 10, padding: "14px 14px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
+            <span style={{ fontFamily: "var(--serif)", fontSize: 12, fontStyle: "italic", color: "var(--gold)", flexShrink: 0, width: 20 }}>{String(i + 1).padStart(2, "0")}</span>
+            <input value={mod.title} onChange={(e) => updateTitle(i, e.target.value)} placeholder="Título del módulo" style={{ ...inputStyle, flex: 1, background: "var(--surface)" }} />
+            <button onClick={() => move(i, -1)} disabled={i === 0} title="Subir" style={{ width: 28, height: 28, borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface)", cursor: i === 0 ? "default" : "pointer", color: "var(--text-muted)", opacity: i === 0 ? 0.3 : 1, flexShrink: 0 }}><ChevronUp size={13} /></button>
+            <button onClick={() => move(i, 1)} disabled={i === modules.length - 1} title="Bajar" style={{ width: 28, height: 28, borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface)", cursor: i === modules.length - 1 ? "default" : "pointer", color: "var(--text-muted)", opacity: i === modules.length - 1 ? 0.3 : 1, flexShrink: 0 }}><ChevronDown size={13} /></button>
+            <button onClick={() => remove(i)} title="Eliminar módulo" style={{ width: 28, height: 28, borderRadius: 7, border: "1px solid rgba(239,68,68,.25)", background: "rgba(239,68,68,.06)", cursor: "pointer", color: "var(--danger)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}><Trash2 size={12} /></button>
+          </div>
+          <div style={{ paddingLeft: 26 }}>
+            <StringListEditor items={mod.items} onChange={(items) => updateItems(i, items)} placeholder="Agregar tema del módulo…" />
+          </div>
+        </div>
+      ))}
+      <button onClick={addModule} style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold)", borderRadius: 9, padding: "10px 16px", fontSize: 13, fontWeight: 600, cursor: "pointer", alignSelf: "flex-start" }}>
+        <Plus size={14} /> Agregar módulo
+      </button>
     </div>
   )
 }

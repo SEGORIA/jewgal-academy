@@ -4,6 +4,18 @@ import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 
+const moduleSchema = z.object({ title: z.string(), items: z.array(z.string()) })
+const contentSchema = z.object({
+  eyebrow: z.string(),
+  duration: z.string(),
+  modality: z.string(),
+  level: z.string(),
+  includes: z.array(z.string()),
+  modules: z.array(moduleSchema),
+  forWhom: z.array(z.string()),
+  outcome: z.string(),
+})
+
 const patchSchema = z.object({
   title: z.string().min(2).optional(),
   shortDesc: z.string().min(1).optional(),
@@ -15,6 +27,8 @@ const patchSchema = z.object({
   totalHours: z.number().min(0).nullable().optional(),
   durationWeeks: z.number().int().min(0).nullable().optional(),
   thumbnail: z.string().url().nullable().optional().or(z.literal("")),
+  videoUrl: z.string().nullable().optional().or(z.literal("")),
+  content: contentSchema.optional(),
 })
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -29,8 +43,11 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     return NextResponse.json({ error: "Datos inválidos", details: parsed.error.flatten() }, { status: 400 })
   }
 
-  const data = { ...parsed.data }
+  const { content, ...rest } = parsed.data
+  const data: Record<string, unknown> = { ...rest }
   if (data.thumbnail === "") data.thumbnail = null
+  if (data.videoUrl === "") data.videoUrl = null
+  if (content) data.content = JSON.stringify(content)
 
   const course = await db.course.update({ where: { id }, data }).catch(() => null)
   if (!course) {

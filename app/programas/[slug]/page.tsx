@@ -6,187 +6,15 @@ import Footer from "@/components/Footer"
 import Checkout from "@/components/Checkout"
 import RevealInit from "@/components/RevealInit"
 import { formatPrice } from "@/lib/utils"
+import { getProgramContent, getYouTubeEmbedUrl } from "@/lib/program-content"
 
-/* ── Metadata estática por slug ── */
-const META: Record<string, {
-  eyebrow: string
-  grad: string
-  accent: string
-  icon: string
-  duration: string
-  modality: string
-  level: string
-  includes: string[]
-  modules: { title: string; items: string[] }[]
-  forWhom: string[]
-  outcome: string
-  certs: string[]
-}> = {
-  "life-coaching-integrativo": {
-    eyebrow: "Formación Profesional",
-    grad: "linear-gradient(135deg,#3A2410 0%,#5C3A1E 100%)",
-    accent: "#A58D66",
-    icon: "⟡",
-    certs: ["idc", "cel", "fgu"],
-    duration: "6 meses",
-    modality: "Online · Clases en vivo",
-    level: "Principiante a avanzado",
-    includes: [
-      "Acceso al aula virtual 24/7",
-      "Clases en vivo por Zoom",
-      "Materiales de estudio descargables",
-      "Grabaciones de cada clase",
-      "Certificado al completar",
-      "Comunidad de alumnos",
-      "Supervisión individual",
-      "Herramientas prácticas aplicables",
-    ],
-    modules: [
-      { title: "Fundamentos del Coaching", items: ["¿Qué es el coaching?", "Bases de la escucha activa", "El modelo GROW"] },
-      { title: "Enfoque Integrativo", items: ["Logoterapia y sentido de vida", "Regulación emocional", "Creencias limitantes"] },
-      { title: "Herramientas Prácticas", items: ["Rueda de la vida", "Plan de acción", "Feedback transformador"] },
-      { title: "Práctica Profesional", items: ["Ética del coach", "Construcción de tu práctica", "Primeras sesiones reales"] },
-    ],
-    forWhom: [
-      "Personas que desean acompañar a otros en su transformación",
-      "Psicólogos, terapeutas y educadores que quieren ampliar sus herramientas",
-      "Líderes y managers que buscan desarrollar equipos más conscientes",
-      "Emprendedores que quieren integrar el coaching en su propuesta",
-    ],
-    outcome: "Al completar la formación serás un coach certificado capaz de acompañar procesos de transformación personal y profesional desde una perspectiva integrativa.",
-  },
-  "joogal-adultos": {
-    eyebrow: "Certificación Oficial",
-    grad: "linear-gradient(135deg,#3A2818 0%,#5C4026 100%)",
-    accent: "#C49F72",
-    icon: "✦",
-    certs: ["idc", "cel", "fgu"],
-    duration: "3 meses",
-    modality: "Online · Híbrido",
-    level: "Sin requisitos previos",
-    includes: [
-      "Acceso al aula virtual 24/7",
-      "Clases en vivo por Zoom",
-      "Manual oficial Jewgal Adultos",
-      "Grabaciones de cada clase",
-      "Certificado oficial de instructor",
-      "Comunidad de instructores",
-      "Mentoring grupal mensual",
-      "Kit de materiales descargables",
-    ],
-    modules: [
-      { title: "Bases del Método Jewgal", items: ["Historia y filosofía", "Principios del movimiento consciente", "El cuerpo como herramienta"] },
-      { title: "Anatomía y Movimiento", items: ["Anatomía funcional", "Biomecánica segura", "Adaptaciones para adultos"] },
-      { title: "Didáctica de Clases", items: ["Estructura de una sesión", "Lenguaje del instructor", "Gestión del grupo"] },
-      { title: "Práctica y Certificación", items: ["Clases prácticas supervisadas", "Evaluación teórica", "Presentación final"] },
-    ],
-    forWhom: [
-      "Amantes del movimiento y el bienestar",
-      "Profesores de yoga, pilates o danza que quieren ampliar su oferta",
-      "Personas que buscan una segunda vocación o fuente de ingresos",
-      "Líderes comunitarios que desean implementar bienestar en sus grupos",
-    ],
-    outcome: "Serás instructor certificado del Método Jewgal Adultos, con las herramientas para dictar tus propias clases, talleres y retiros.",
-  },
-  "joogalkids": {
-    eyebrow: "Certificación Infantil",
-    grad: "linear-gradient(135deg,#4A2418 0%,#6B3826 100%)",
-    accent: "#A76D61",
-    icon: "★",
-    certs: ["idc", "cel", "fgu"],
-    duration: "3 meses",
-    modality: "Online · Clases en vivo",
-    level: "Sin requisitos previos",
-    includes: [
-      "Acceso al aula virtual 24/7",
-      "Clases en vivo por Zoom",
-      "Manual Jewgalkids oficial",
-      "Grabaciones de cada clase",
-      "Certificado oficial de instructor",
-      "Comunidad de instructores",
-      "Mentoring grupal mensual",
-      "Recursos lúdicos descargables",
-    ],
-    modules: [
-      { title: "Sensopercepción y Movimiento", items: ["Sensopercepción", "Mindfulness en movimiento", "Expresión corporal"] },
-      { title: "Movimiento y Creatividad", items: ["El cuerpo en la infancia", "Juegos de movimiento", "Expresión libre"] },
-      { title: "Pedagogía Lúdica", items: ["Diseño de actividades", "Manejo de grupos infantiles", "Recursos creativos"] },
-      { title: "Práctica y Certificación", items: ["Clases prácticas", "Evaluación pedagógica", "Presentación final"] },
-    ],
-    forWhom: [
-      "Maestras y docentes de educación inicial",
-      "Guías y educadores conscientes del desarrollo infantil",
-      "Instructores que quieren trabajar con niños",
-      "Madres y padres interesados en el desarrollo consciente",
-    ],
-    outcome: "Serás instructor certificado del Método Jewgalkids, capaz de crear experiencias de movimiento significativas para niños de 3 a 12 años.",
-  },
-  "metodo-sholem": {
-    eyebrow: "Liderazgo Adolescente",
-    grad: "linear-gradient(135deg,#42200F 0%,#653322 100%)",
-    accent: "#A76D61",
-    icon: "◈",
-    certs: ["idc", "cel", "fgu"],
-    duration: "3 meses",
-    modality: "Online · Intensivo",
-    level: "Experiencia con adolescentes",
-    includes: [
-      "Acceso al aula virtual 24/7",
-      "Clases en vivo por Zoom",
-      "Manual Método Sholem",
-      "Grabaciones de cada clase",
-      "Certificado de instructor",
-      "Comunidad de educadores",
-      "Supervisión grupal",
-      "Recursos para talleres",
-    ],
-    modules: [
-      { title: "El Adolescente de Hoy", items: ["Desarrollo emocional", "Identidad y pertenencia", "Desafíos actuales"] },
-      { title: "Liderazgo con Valores", items: ["Bases del Método Sholem", "Valores judíos aplicados", "Liderazgo positivo"] },
-      { title: "Facilitación de Grupos", items: ["Dinámica de grupos", "Resolución de conflictos", "Creación de comunidad"] },
-      { title: "Programa y Práctica", items: ["Diseño de programas", "Práctica facilitada", "Evaluación final"] },
-    ],
-    forWhom: [
-      "Educadores y docentes de nivel secundario",
-      "Líderes de juventud en organizaciones comunitarias",
-      "Profesionales que trabajan con adolescentes",
-      "Rabinos, cantores y educators judíos",
-    ],
-    outcome: "Serás instructor certificado del Método Sholem, preparado para acompañar el desarrollo consciente de jóvenes con valores, identidad y propósito.",
-  },
-  "cabala-coach": {
-    eyebrow: "Micro Curso · Sabiduría Ancestral",
-    grad: "linear-gradient(135deg,#332508 0%,#4F3A12 100%)",
-    accent: "#CBB78B",
-    icon: "❂",
-    certs: ["idc", "cel", "fgu"],
-    duration: "4 semanas",
-    modality: "Online · A tu ritmo",
-    level: "Todos los niveles",
-    includes: [
-      "Acceso al aula virtual 24/7",
-      "Videos grabados HD",
-      "Guía de estudio PDF",
-      "Ejercicios prácticos",
-      "Certificado al completar",
-      "Acceso de por vida",
-      "Material de meditación",
-      "Comunidad privada",
-    ],
-    modules: [
-      { title: "Introducción a la Cabalá", items: ["¿Qué es la Cabalá?", "El Árbol de la Vida", "Las sefirot"] },
-      { title: "Cabalá y Coaching", items: ["Aplicaciones prácticas", "Arquetipos cabalísticos", "Lenguaje del alma"] },
-      { title: "Herramientas de Transformación", items: ["Meditaciones guiadas", "Diálogos del yo", "Integración personal"] },
-      { title: "Vivir con Propósito", items: ["Tu tikún personal", "El mapa de tu vida", "Acción con conciencia"] },
-    ],
-    forWhom: [
-      "Personas curiosas por la espiritualidad judía",
-      "Coaches que quieren enriquecer su práctica",
-      "Buscadores espirituales de cualquier tradición",
-      "Estudiantes de desarrollo personal",
-    ],
-    outcome: "Integrarás la sabiduría de la Cabalá como herramienta práctica de autoconocimiento y transformación personal, aplicable en tu vida cotidiana y tu práctica profesional.",
-  },
+/* ── Identidad visual por slug (no editable desde el admin) ── */
+const META: Record<string, { grad: string; accent: string; icon: string; certs: string[] }> = {
+  "life-coaching-integrativo": { grad: "linear-gradient(135deg,#3A2410 0%,#5C3A1E 100%)", accent: "#A58D66", icon: "⟡", certs: ["idc", "cel", "fgu"] },
+  "joogal-adultos":            { grad: "linear-gradient(135deg,#3A2818 0%,#5C4026 100%)", accent: "#C49F72", icon: "✦", certs: ["idc", "cel", "fgu"] },
+  "joogalkids":                { grad: "linear-gradient(135deg,#4A2418 0%,#6B3826 100%)", accent: "#A76D61", icon: "★", certs: ["idc", "cel", "fgu"] },
+  "metodo-sholem":              { grad: "linear-gradient(135deg,#42200F 0%,#653322 100%)", accent: "#A76D61", icon: "◈", certs: ["idc", "cel", "fgu"] },
+  "cabala-coach":               { grad: "linear-gradient(135deg,#332508 0%,#4F3A12 100%)", accent: "#CBB78B", icon: "❂", certs: ["idc", "cel", "fgu"] },
 }
 
 const DEFAULT_META = META["life-coaching-integrativo"]
@@ -197,6 +25,8 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
   if (!course) notFound()
 
   const meta = META[slug] ?? DEFAULT_META
+  const content = getProgramContent(slug, course.content)
+  const embedUrl = getYouTubeEmbedUrl(course.videoUrl)
   const priceLabel = course.isFree ? "Gratis" : formatPrice(course.price, course.currency)
 
   const courseJsonLd = {
@@ -260,7 +90,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
 
           <div className="prog-hero-grid">
             <div>
-              <span className="eyebrow" style={{ display: "block", marginBottom: 16, color: meta.accent }}>{meta.eyebrow}</span>
+              <span className="eyebrow" style={{ display: "block", marginBottom: 16, color: meta.accent }}>{content.eyebrow}</span>
               <div style={{ fontSize: 52, color: meta.accent, lineHeight: 1, marginBottom: 12, fontFamily: "var(--serif)" }}>
                 {meta.icon}
               </div>
@@ -296,10 +126,10 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
           {/* Chips de info rápida */}
           <div style={{ display: "flex", gap: 12, marginTop: 36, flexWrap: "wrap" }}>
             {[
-              { label: meta.duration,   icon: "⏱" },
-              { label: meta.modality,   icon: "🎓" },
-              { label: meta.level,      icon: "◈" },
-            ].map((c) => (
+              { label: content.duration, icon: "⏱" },
+              { label: content.modality, icon: "🎓" },
+              { label: content.level,    icon: "◈" },
+            ].filter((c) => c.label).map((c) => (
               <div key={c.label} style={{
                 display: "flex", alignItems: "center", gap: 7,
                 border: "1px solid rgba(165,141,102,.25)", borderRadius: 20,
@@ -349,7 +179,28 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                 </p>
               </div>
 
+              {/* Video del programa */}
+              {embedUrl && (
+                <div className="reveal" style={{ marginBottom: 60 }}>
+                  <div style={{
+                    position: "relative", width: "100%", aspectRatio: "16 / 9",
+                    borderRadius: 10, overflow: "hidden",
+                    border: "1px solid var(--line-d)",
+                    boxShadow: "0 20px 50px -20px rgba(0,0,0,.4)",
+                  }}>
+                    <iframe
+                      src={embedUrl}
+                      title={`Video — ${course.title}`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
+                    />
+                  </div>
+                </div>
+              )}
+
               {/* Módulos */}
+              {content.modules.length > 0 && (
               <div className="reveal" style={{ marginBottom: 60 }}>
                 <h2 style={{
                   fontFamily: "var(--serif)", fontWeight: 500,
@@ -359,7 +210,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                   Contenido del programa
                 </h2>
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                  {meta.modules.map((mod, i) => (
+                  {content.modules.map((mod, i) => (
                     <details key={mod.title} style={{
                       borderTop: "1px solid var(--line-d)",
                       paddingTop: 16,
@@ -394,8 +245,10 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                   <div style={{ borderTop: "1px solid var(--line-d)" }} />
                 </div>
               </div>
+              )}
 
               {/* Qué incluye */}
+              {content.includes.length > 0 && (
               <div className="reveal" style={{ marginBottom: 60 }}>
                 <h2 style={{
                   fontFamily: "var(--serif)", fontWeight: 500,
@@ -405,7 +258,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                   Qué incluye
                 </h2>
                 <div className="prog-includes-grid">
-                  {meta.includes.map((item) => (
+                  {content.includes.map((item) => (
                     <div key={item} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, color: "var(--on-dark)" }}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={meta.accent} strokeWidth="2">
                         <path d="M20 6L9 17l-5-5"/>
@@ -415,8 +268,10 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                   ))}
                 </div>
               </div>
+              )}
 
               {/* Para quién */}
+              {content.forWhom.length > 0 && (
               <div className="reveal" style={{ marginBottom: 60 }}>
                 <h2 style={{
                   fontFamily: "var(--serif)", fontWeight: 500,
@@ -426,7 +281,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                   ¿Para quién es este programa?
                 </h2>
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                  {meta.forWhom.map((fw) => (
+                  {content.forWhom.map((fw) => (
                     <div key={fw} style={{
                       display: "flex", alignItems: "flex-start", gap: 14,
                       padding: "14px 18px",
@@ -440,8 +295,10 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                   ))}
                 </div>
               </div>
+              )}
 
               {/* Lo que lograrás */}
+              {content.outcome && (
               <div className="reveal" style={{
                 background: `linear-gradient(135deg,${meta.accent}12,transparent)`,
                 border: `1px solid ${meta.accent}30`,
@@ -451,9 +308,10 @@ export default async function ProgramaPage({ params }: { params: Promise<{ slug:
                   Al finalizar
                 </div>
                 <p style={{ fontFamily: "var(--serif)", fontSize: 18, color: "var(--text)", lineHeight: 1.6 }}>
-                  {meta.outcome}
+                  {content.outcome}
                 </p>
               </div>
+              )}
 
               {/* Sitio hermano para adolescentes y familias */}
               {slug === "metodo-sholem" && (

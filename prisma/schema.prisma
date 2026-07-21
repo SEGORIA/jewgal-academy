@@ -43,6 +43,8 @@ model Course {
   isFree          Boolean       @default(false)
   totalHours      Float?        // intensidad horaria total del programa
   durationWeeks   Int?          // duración estimada en semanas
+  videoUrl        String?       // link de YouTube mostrado en la página del programa
+  content         String?       // JSON: eyebrow/duración/modalidad/nivel/módulos/incluye/para quién/resultado
   enrollments        Enrollment[]
   materials          Material[]
   liveSessions       LiveSession[]
