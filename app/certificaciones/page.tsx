@@ -40,8 +40,8 @@ const CERTS = [
   },
   {
     n: "03",
-    title: "Instructor Joogalkids",
-    program: "Instructor Joogalkids",
+    title: "Instructor Jewgalkids",
+    program: "Instructor Jewgalkids",
     slug: "joogalkids",
     entity: "Método Jewgal · Certificación Infantil",
     accent: "#A76D61",

@@ -22,11 +22,11 @@ export default function EventosPage() {
   const [eventos, setEventos] = useState<EventosData>(DEFAULT_EVENTOS)
 
   useEffect(() => {
-    fetch("/api/site-content")
+    fetch("/api/site-content", { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => setContent(d))
       .catch(() => {})
-    fetch("/api/eventos")
+    fetch("/api/eventos", { cache: "no-store" })
       .then((r) => r.json())
       .then((d: EventosData) => {
         if (d && Array.isArray(d.upcoming) && Array.isArray(d.past)) setEventos(d)

@@ -17,7 +17,7 @@ type Enrollment = {
 const PROGRAM_META: Record<string, { icon: string; accent: string; desc: string }> = {
   "life-coaching-integrativo": { icon: "⟡", accent: "#A58D66", desc: "Life Coaching Integrativo" },
   "joogal-adultos":            { icon: "✦", accent: "#C49F72", desc: "Instructor Jewgal · Adultos" },
-  "joogalkids":                { icon: "★", accent: "#A76D61", desc: "Instructor Joogalkids" },
+  "joogalkids":                { icon: "★", accent: "#A76D61", desc: "Instructor Jewgalkids" },
   "metodo-sholem":             { icon: "◈", accent: "#A76D61", desc: "Método Sholem" },
   "cabala-coach":              { icon: "❂", accent: "#CBB78B", desc: "Cábala Coach" },
 }

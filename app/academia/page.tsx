@@ -39,14 +39,14 @@ const PROGRAMS = [
   },
   {
     slug: "joogalkids",
-    title: "Instructor Joogalkids",
+    title: "Instructor Jewgalkids",
     tag: "Certificación infantil",
     desc: "Formación especializada para guiar el desarrollo integral de niños a través del movimiento, la creatividad y el juego consciente.",
     price: "$360", free: false,
     duration: "3 meses", level: "Sin requisitos",
     grad: "linear-gradient(135deg,#4A2418 0%,#6B3826 100%)",
     accent: "#A76D61", icon: "★",
-    bullets: ["Certificado oficial Joogalkids", "Recursos lúdicos descargables", "Mentoring mensual"],
+    bullets: ["Certificado oficial Jewgalkids", "Recursos lúdicos descargables", "Mentoring mensual"],
     certs: ["idc", "cel", "fgu"],
   },
   {
@@ -193,6 +193,74 @@ export default function AcademiaPage() {
               Ver certificaciones →
             </Link>
           </div>
+
+          {/* ── FICHA DESTACADA: Método Sholem (juego educativo) → sholemethod.org ── */}
+          <motion.a
+            href="https://www.sholemethod.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="reveal"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ y: -4, boxShadow: "0 30px 70px -24px rgba(167,109,97,.55)" }}
+            style={{
+              display: "block", position: "relative", overflow: "hidden",
+              borderRadius: 14, marginBottom: 22, textDecoration: "none",
+              border: "1px solid rgba(255,255,255,.08)",
+              minHeight: isMobile ? 420 : 360,
+              // Foto de fondo — cambiable: cualquier imagen de /public/brand
+              backgroundImage: "url('/brand/hero/devora-ninos.webp')",
+              backgroundSize: "cover", backgroundPosition: "center 22%",
+            }}
+          >
+            {/* Overlay para legibilidad */}
+            <div aria-hidden style={{
+              position: "absolute", inset: 0,
+              background: isMobile
+                ? "linear-gradient(to top, rgba(26,8,6,.94) 0%, rgba(42,16,14,.78) 45%, rgba(42,16,14,.35) 100%)"
+                : "linear-gradient(100deg, rgba(26,8,6,.94) 0%, rgba(42,16,14,.86) 42%, rgba(42,16,14,.30) 100%)",
+            }} />
+
+            {/* Botón flecha externa arriba a la derecha */}
+            <div aria-hidden style={{
+              position: "absolute", top: 22, right: 22, zIndex: 2,
+              width: 46, height: 46, borderRadius: "50%",
+              border: "1px solid rgba(246,238,232,.35)",
+              background: "rgba(26,8,6,.35)", backdropFilter: "blur(4px)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              color: "#F6EEE8", fontSize: 20, lineHeight: 1,
+            }}>↗</div>
+
+            {/* Contenido */}
+            <div style={{
+              position: "relative", zIndex: 1,
+              padding: isMobile ? "40px 28px" : "56px 52px",
+              maxWidth: isMobile ? "100%" : 560,
+              minHeight: isMobile ? 420 : 360,
+              display: "flex", flexDirection: "column", justifyContent: "flex-end",
+            }}>
+              <span style={{ fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--gold-light)", marginBottom: 14, display: "block" }}>
+                Programa educativo insignia
+              </span>
+              <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(30px,4vw,46px)", color: "#F6EEE8", lineHeight: 1.05, marginBottom: 18 }}>
+                Método Sholem
+              </h3>
+              <p style={{ color: "rgba(246,238,232,.86)", fontSize: "clamp(14px,1.6vw,16px)", lineHeight: 1.65, maxWidth: 440, marginBottom: 26 }}>
+                Un juego educativo único que convierte el liderazgo, el coaching y la identidad en una experiencia transformadora — ya está cambiando escuelas, comunidades y familias.
+              </p>
+              <span style={{
+                display: "inline-flex", alignItems: "center", gap: 10, alignSelf: "flex-start",
+                background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+                color: "#fff", fontSize: 13, fontWeight: 700,
+                padding: "13px 28px", borderRadius: 30,
+                boxShadow: "0 10px 30px -8px rgba(167,109,97,.6)",
+              }}>
+                Conócelo <span aria-hidden style={{ fontSize: 15 }}>↗</span>
+              </span>
+            </div>
+          </motion.a>
 
           {/* Grid unificado: todas las cards al mismo nivel de lujo */}
           <motion.div

@@ -260,7 +260,7 @@ export default function ContactoPage() {
                     <option value="">Selecciona un tema…</option>
                     <option value="life-coaching">Life Coaching Integrativo</option>
                     <option value="joogal-adultos">Instructor Jewgal Adultos</option>
-                    <option value="joogalkids">Instructor Joogalkids</option>
+                    <option value="joogalkids">Instructor Jewgalkids</option>
                     <option value="cabala">Cábala Coach</option>
                     <option value="metodo-sholem">Método Sholem</option>
                     <option value="coaching-1-1">Coaching personal 1:1 con Devora</option>

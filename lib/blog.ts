@@ -1,4 +1,6 @@
-export const BLOG_CATEGORIES = ["Coaching", "Cabalá", "Jewgal", "Liderazgo", "Formación"]
+// Categorías por defecto (fallback). Las reales se administran desde el superadmin
+// y se guardan en SiteSetting key "blog_categories". Ver /api/blog-categories.
+export const DEFAULT_BLOG_CATEGORIES = ["Coaching", "Cabalá", "Jewgal", "Liderazgo", "Formación"]
 
 // Todas las categorías comparten el dorado de marca (decisión cliente jul-2026)
 const CATEGORY_ACCENT = "#C49F72"

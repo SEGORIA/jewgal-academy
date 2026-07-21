@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Plus, Pencil, Trash2, Eye, X, Loader2 } from "lucide-react"
-import { BLOG_CATEGORIES } from "@/lib/blog"
+import { Plus, Pencil, Trash2, Eye, X, Loader2, Tag, Save, GripVertical } from "lucide-react"
+import { DEFAULT_BLOG_CATEGORIES } from "@/lib/blog"
 
 type Post = {
   id: string; slug: string; title: string; category: string
@@ -14,7 +14,7 @@ const card: React.CSSProperties = { background: "var(--surface)", border: "1px s
 const inputStyle: React.CSSProperties = { background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 14px", fontSize: 13, color: "var(--text)", outline: "none", fontFamily: "inherit", width: "100%" }
 const labelStyle: React.CSSProperties = { fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--text-faint)", display: "block", marginBottom: 7 }
 
-const emptyForm = { title: "", category: BLOG_CATEGORIES[0], excerpt: "", content: "", isPublished: false }
+const emptyForm = { title: "", category: "", excerpt: "", content: "", isPublished: false }
 
 export default function BlogAdminPage() {
   const [posts, setPosts]     = useState<Post[]>([])
@@ -24,6 +24,8 @@ export default function BlogAdminPage() {
   const [form, setForm]       = useState(emptyForm)
   const [saving, setSaving]   = useState(false)
   const [error, setError]     = useState("")
+  const [categories, setCategories] = useState<string[]>(DEFAULT_BLOG_CATEGORIES)
+  const [showCats, setShowCats] = useState(false)
 
   const load = useCallback(() => {
     setLoading(true)
@@ -34,10 +36,17 @@ export default function BlogAdminPage() {
       .finally(() => setLoading(false))
   }, [])
 
-  useEffect(() => { load() }, [load])
+  const loadCategories = useCallback(() => {
+    fetch("/api/admin/blog-categories")
+      .then((r) => r.json())
+      .then((d) => { if (Array.isArray(d.categories) && d.categories.length) setCategories(d.categories) })
+      .catch(() => {})
+  }, [])
+
+  useEffect(() => { load(); loadCategories() }, [load, loadCategories])
 
   function openNew() {
-    setForm(emptyForm)
+    setForm({ ...emptyForm, category: categories[0] ?? "" })
     setIsNew(true)
     setEditing(null)
     setError("")
@@ -96,10 +105,17 @@ export default function BlogAdminPage() {
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Blog</h1>
           <p style={{ color: "var(--text-faint)", fontSize: 14 }}>{posts.length} entradas · {posts.filter((p) => p.isPublished).length} publicadas</p>
         </div>
-        <button onClick={openNew} style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-          <Plus size={16} /> Nueva entrada
-        </button>
+        <div style={{ display: "flex", gap: 10 }}>
+          <button onClick={() => setShowCats(true)} style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--surface-2)", color: "var(--text-muted)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 10, padding: "11px 18px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+            <Tag size={15} /> Categorías
+          </button>
+          <button onClick={openNew} style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+            <Plus size={16} /> Nueva entrada
+          </button>
+        </div>
       </div>
+
+      {showCats && <CategoryManager categories={categories} onClose={() => setShowCats(false)} onSaved={(cats) => { setCategories(cats); loadCategories() }} />}
 
       <div style={{ display: "grid", gridTemplateColumns: showEditor ? "1fr 420px" : "1fr", gap: 20, alignItems: "start" }}>
 
@@ -168,7 +184,7 @@ export default function BlogAdminPage() {
                 <div>
                   <label style={labelStyle}>Categoría</label>
                   <select value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))} style={{ ...inputStyle, cursor: "pointer" }}>
-                    {BLOG_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                    {categories.map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
                 <div>
@@ -198,6 +214,122 @@ export default function BlogAdminPage() {
             </div>
           </div>
         )}
+      </div>
+    </div>
+  )
+}
+
+function CategoryManager({ categories, onClose, onSaved }: { categories: string[]; onClose: () => void; onSaved: (cats: string[]) => void }) {
+  const [items, setItems] = useState<string[]>(categories)
+  const [nueva, setNueva] = useState("")
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState("")
+
+  function add() {
+    const v = nueva.trim()
+    if (!v) return
+    if (items.some((c) => c.toLowerCase() === v.toLowerCase())) { setError("Esa categoría ya existe."); return }
+    setItems((prev) => [...prev, v])
+    setNueva("")
+    setError("")
+  }
+
+  function rename(i: number, value: string) {
+    setItems((prev) => prev.map((c, idx) => (idx === i ? value : c)))
+  }
+
+  function remove(i: number) {
+    if (items.length <= 1) { setError("Debe quedar al menos una categoría."); return }
+    setItems((prev) => prev.filter((_, idx) => idx !== i))
+  }
+
+  function move(i: number, dir: -1 | 1) {
+    const j = i + dir
+    if (j < 0 || j >= items.length) return
+    const next = [...items]
+    ;[next[i], next[j]] = [next[j], next[i]]
+    setItems(next)
+  }
+
+  async function save() {
+    const clean = items.map((c) => c.trim()).filter(Boolean)
+    if (clean.length === 0) { setError("Debe haber al menos una categoría."); return }
+    setSaving(true); setError("")
+    try {
+      const res = await fetch("/api/admin/blog-categories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ categories: clean }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setError(data.error || "No se pudo guardar"); return }
+      onSaved(data.categories ?? clean)
+      onClose()
+    } catch {
+      setError("Error de conexión.")
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div
+      onClick={onClose}
+      style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(20,14,8,.72)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}
+    >
+      <div onClick={(e) => e.stopPropagation()} style={{ ...card, width: "100%", maxWidth: 480, padding: "26px 24px", maxHeight: "85vh", overflowY: "auto" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+          <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--text)", display: "flex", alignItems: "center", gap: 8 }}>
+            <Tag size={17} style={{ color: "var(--gold)" }} /> Categorías del blog
+          </h2>
+          <button onClick={onClose} style={{ background: "none", border: "none", color: "var(--text-dim)", cursor: "pointer" }}>
+            <X size={18} />
+          </button>
+        </div>
+        <p style={{ fontSize: 12.5, color: "var(--text-faint)", lineHeight: 1.6, marginBottom: 18 }}>
+          Se usan en el filtro del blog público y al crear entradas. Renombrar aquí no cambia la categoría ya asignada a entradas existentes.
+        </p>
+
+        {error && (
+          <div style={{ background: "rgba(220,38,38,.1)", border: "1px solid rgba(220,38,38,.3)", borderRadius: 8, padding: "9px 13px", marginBottom: 14, color: "#f87171", fontSize: 13 }}>
+            {error}
+          </div>
+        )}
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
+          {items.map((c, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <GripVertical size={15} style={{ color: "var(--text-faint)", flexShrink: 0 }} />
+              <input value={c} onChange={(e) => rename(i, e.target.value)} style={{ ...inputStyle, flex: 1 }} />
+              <button onClick={() => move(i, -1)} disabled={i === 0} title="Subir" style={{ width: 30, height: 30, borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface-2)", cursor: i === 0 ? "default" : "pointer", color: "var(--text-muted)", opacity: i === 0 ? 0.3 : 1, flexShrink: 0 }}>↑</button>
+              <button onClick={() => move(i, 1)} disabled={i === items.length - 1} title="Bajar" style={{ width: 30, height: 30, borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface-2)", cursor: i === items.length - 1 ? "default" : "pointer", color: "var(--text-muted)", opacity: i === items.length - 1 ? 0.3 : 1, flexShrink: 0 }}>↓</button>
+              <button onClick={() => remove(i)} title="Eliminar" style={{ width: 30, height: 30, borderRadius: 7, border: "1px solid rgba(239,68,68,.25)", background: "rgba(239,68,68,.06)", cursor: "pointer", color: "var(--danger)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Trash2 size={13} />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+          <input
+            value={nueva}
+            onChange={(e) => setNueva(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); add() } }}
+            placeholder="Nueva categoría…"
+            style={{ ...inputStyle, flex: 1 }}
+          />
+          <button onClick={add} style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold)", borderRadius: 9, padding: "0 16px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+            <Plus size={15} /> Agregar
+          </button>
+        </div>
+
+        <div style={{ display: "flex", gap: 10 }}>
+          <button onClick={onClose} style={{ flex: 1, background: "var(--surface-2)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 9, padding: "11px 0", fontSize: 13, color: "var(--text-muted)", cursor: "pointer" }}>Cancelar</button>
+          <button onClick={save} disabled={saving} style={{ flex: 2, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: "var(--gold)", border: "none", borderRadius: 9, padding: "11px 0", fontSize: 13, fontWeight: 700, color: "#2C1F14", cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1 }}>
+            {saving ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : <Save size={14} />}
+            Guardar categorías
+          </button>
+        </div>
       </div>
     </div>
   )

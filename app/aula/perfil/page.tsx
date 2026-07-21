@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Camera, Save, KeyRound, Eye, EyeOff, Check, User, Phone, MapPin, Briefcase, Sparkles, Loader2 } from "lucide-react"
 
-const INTERESTS = ["Life Coaching", "Cabalá", "Jewgal · Adultos", "Joogalkids", "Método Sholem", "Mindfulness", "Liderazgo", "Bienestar"]
+const INTERESTS = ["Life Coaching", "Cabalá", "Jewgal · Adultos", "Jewgalkids", "Método Sholem", "Mindfulness", "Liderazgo", "Bienestar"]
 const COUNTRIES  = ["Argentina", "Colombia", "México", "España", "Estados Unidos", "Israel", "Venezuela", "Chile", "Uruguay", "Otro"]
 
 const MAX_AVATAR_DIM = 400

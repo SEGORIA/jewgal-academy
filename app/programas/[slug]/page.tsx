@@ -100,7 +100,7 @@ const META: Record<string, {
     includes: [
       "Acceso al aula virtual 24/7",
       "Clases en vivo por Zoom",
-      "Manual Joogalkids oficial",
+      "Manual Jewgalkids oficial",
       "Grabaciones de cada clase",
       "Certificado oficial de instructor",
       "Comunidad de instructores",
@@ -119,7 +119,7 @@ const META: Record<string, {
       "Instructores que quieren trabajar con niños",
       "Madres y padres interesados en el desarrollo consciente",
     ],
-    outcome: "Serás instructor certificado del Método Joogalkids, capaz de crear experiencias de movimiento significativas para niños de 3 a 12 años.",
+    outcome: "Serás instructor certificado del Método Jewgalkids, capaz de crear experiencias de movimiento significativas para niños de 3 a 12 años.",
   },
   "metodo-sholem": {
     eyebrow: "Liderazgo Adolescente",

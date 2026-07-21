@@ -3,11 +3,9 @@ import { revalidatePath } from "next/cache"
 import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
-import { BLOG_CATEGORIES } from "@/lib/blog"
-
 const patchSchema = z.object({
   title: z.string().min(2).optional(),
-  category: z.enum(BLOG_CATEGORIES as [string, ...string[]]).optional(),
+  category: z.string().trim().min(1).max(40).optional(),
   excerpt: z.string().min(1).optional(),
   content: z.string().min(1).optional(),
   isPublished: z.boolean().optional(),

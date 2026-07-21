@@ -15,8 +15,6 @@ type Post = {
   excerpt: string; content: string; publishedAt: string | null; createdAt: string
 }
 
-const CATEGORIES = ["Todo", "Coaching", "Cabalá", "Jewgal", "Liderazgo", "Formación"]
-
 const spring = { type: "spring" as const, stiffness: 280, damping: 26 }
 
 export default function BlogPage() {
@@ -25,18 +23,25 @@ export default function BlogPage() {
   const [openPost, setOpenPost]     = useState<Post | null>(null)
   const [activeCategory, setActiveCategory] = useState("Todo")
   const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
+  const [categories, setCategories] = useState<string[]>([])
 
   useEffect(() => {
-    fetch("/api/blog")
+    fetch("/api/blog", { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => setPosts(d.posts ?? []))
       .catch(() => setPosts([]))
       .finally(() => setLoading(false))
-    fetch("/api/site-content")
+    fetch("/api/site-content", { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => setContent(d))
       .catch(() => {})
+    fetch("/api/blog-categories", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d) => { if (Array.isArray(d.categories)) setCategories(d.categories) })
+      .catch(() => {})
   }, [])
+
+  const CATEGORIES = ["Todo", ...categories]
 
   const filtered = activeCategory === "Todo" ? posts : posts.filter((p) => p.category === activeCategory)
 

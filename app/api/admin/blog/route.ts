@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache"
 import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
-import { slugifyPost, BLOG_CATEGORIES } from "@/lib/blog"
+import { slugifyPost } from "@/lib/blog"
 
 export async function GET() {
   const session = await auth()
@@ -17,7 +17,7 @@ export async function GET() {
 
 const createSchema = z.object({
   title: z.string().min(2),
-  category: z.enum(BLOG_CATEGORIES as [string, ...string[]]),
+  category: z.string().trim().min(1).max(40),
   excerpt: z.string().min(1),
   content: z.string().min(1),
   isPublished: z.boolean().default(false),
