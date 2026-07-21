@@ -35,6 +35,7 @@ export default function ConfiguracionPage() {
 
   // Integraciones (solo lectura, vienen de env vars)
   const [integrations, setIntegrations] = useState<{ stripe: boolean; paypal: boolean; email: boolean; ai: boolean; cloudinary: boolean } | null>(null)
+  const [subscribers, setSubscribers] = useState<{ email: string; date: string }[]>([])
 
   // Reset password alumno
   const [students, setStudents] = useState<StudentRow[]>([])
@@ -61,6 +62,7 @@ export default function ConfiguracionPage() {
     fetch("/api/admin/settings/general").then((r) => r.json()).then(setGeneral).catch(() => {}).finally(() => setGeneralLoading(false))
     fetch("/api/admin/stats").then((r) => r.json()).then((d) => setIntegrations(d.integrations ?? null)).catch(() => {})
     fetch("/api/admin/students").then((r) => r.json()).then((d) => setStudents((d.students ?? []).map((s: StudentRow) => ({ id: s.id, name: s.name, email: s.email })))).catch(() => {})
+    fetch("/api/admin/newsletter").then((r) => r.json()).then((d) => setSubscribers(d.subscribers ?? [])).catch(() => {})
   }, [])
 
   async function changeTheme(t: "dark" | "light") {
@@ -330,12 +332,35 @@ export default function ConfiguracionPage() {
           <div style={{ display: "flex", gap: 10, alignItems: "flex-start", background: "rgba(251,191,36,.06)", border: "1px solid rgba(251,191,36,.15)", borderRadius: 9, padding: "12px 14px", marginBottom: 20 }}>
             <AlertCircle size={15} style={{ color: "var(--warning)", flexShrink: 0, marginTop: 1 }} />
             <p style={{ fontSize: 12.5, color: "var(--text-muted)", lineHeight: 1.6 }}>
-              El envío automático de emails (bienvenida, confirmación de pago, recordatorios) todavía no está implementado en el código — la key de Resend está lista para usarse, pero ningún flujo la dispara todavía.
+              El <strong>correo de bienvenida</strong> (nueva cuenta al comprar o inscribirse) ya está implementado y se activa
+              automáticamente al configurar la key. El mensaje se edita en <strong>Sitio web → Correo de bienvenida</strong>.
             </p>
           </div>
           <a href="https://vercel.com/dashboard" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 18px", fontSize: 13, color: "var(--text-muted)", textDecoration: "none" }}>
             <ExternalLink size={14} /> Configurar RESEND_API_KEY en Vercel
           </a>
+
+          {/* Suscriptores del newsletter (footer del sitio) */}
+          <div style={{ marginTop: 28, borderTop: "1px solid var(--surface-2)", paddingTop: 22 }}>
+            <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 17, color: "var(--text)", marginBottom: 4 }}>
+              Suscriptores del newsletter
+            </h3>
+            <p style={{ fontSize: 13, color: "var(--text-faint)", marginBottom: 16 }}>
+              Emails dejados en el formulario "Únete a la comunidad" del pie de página del sitio. Total: {subscribers.length}
+            </p>
+            {subscribers.length === 0 ? (
+              <p style={{ fontSize: 13, color: "var(--text-dim)" }}>Todavía no hay suscriptores.</p>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", maxHeight: 320, overflowY: "auto", border: "1px solid var(--surface-2)", borderRadius: 10 }}>
+                {[...subscribers].reverse().map((s) => (
+                  <div key={s.email} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "10px 14px", borderBottom: "1px solid var(--surface-2)", fontSize: 13 }}>
+                    <span style={{ color: "var(--text)", overflowWrap: "anywhere" }}>{s.email}</span>
+                    <span style={{ color: "var(--text-dim)", flexShrink: 0 }}>{new Date(s.date).toLocaleDateString("es")}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
 

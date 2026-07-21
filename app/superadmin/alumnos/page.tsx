@@ -64,13 +64,18 @@ export default function AlumnosPage() {
     const v = edit[enrollmentId]
     if (!v) return
     setSavingId(enrollmentId)
-    const res = await fetch("/api/admin/enrollments", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ enrollmentId, progress: v.progress, hoursCompleted: v.hours }),
-    })
-    setSavingId(null)
-    if (res.ok) { load(); setModal(null) }
+    try {
+      const res = await fetch("/api/admin/enrollments", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enrollmentId, progress: v.progress, hoursCompleted: v.hours }),
+      })
+      if (res.ok) { load(); setModal(null) }
+    } catch {
+      // Error de red: se libera el botón para poder reintentar
+    } finally {
+      setSavingId(null)
+    }
   }
 
   const load = useCallback(() => {

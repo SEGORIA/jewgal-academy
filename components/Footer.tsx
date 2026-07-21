@@ -7,6 +7,8 @@ import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 
 export default function Footer() {
   const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
+  const [nlEmail, setNlEmail] = useState("")
+  const [nlStatus, setNlStatus] = useState<"idle" | "sending" | "ok" | "error">("idle")
 
   useEffect(() => {
     fetch("/api/site-content")
@@ -14,6 +16,26 @@ export default function Footer() {
       .then((d) => setContent(d))
       .catch(() => {})
   }, [])
+
+  async function subscribe() {
+    if (!nlEmail.includes("@") || nlStatus === "sending") {
+      if (!nlEmail.includes("@")) setNlStatus("error")
+      return
+    }
+    setNlStatus("sending")
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: nlEmail }),
+      })
+      if (!res.ok) throw new Error()
+      setNlStatus("ok")
+      setNlEmail("")
+    } catch {
+      setNlStatus("error")
+    }
+  }
 
   return (
     <footer className="jfoot">
@@ -81,9 +103,29 @@ export default function Footer() {
             <h5>Únete a la comunidad</h5>
             <p>Contenido exclusivo y novedades de Jewgal Academy.</p>
             <div className="row">
-              <input type="email" placeholder="Tu correo electrónico" aria-label="Correo electrónico" />
-              <button type="button" aria-label="Suscribirse">→</button>
+              <input
+                type="email"
+                placeholder="Tu correo electrónico"
+                aria-label="Correo electrónico"
+                value={nlEmail}
+                onChange={(e) => { setNlEmail(e.target.value); if (nlStatus !== "idle") setNlStatus("idle") }}
+                onKeyDown={(e) => { if (e.key === "Enter") subscribe() }}
+                disabled={nlStatus === "sending"}
+              />
+              <button type="button" aria-label="Suscribirse" onClick={subscribe} disabled={nlStatus === "sending"}>
+                {nlStatus === "sending" ? "…" : "→"}
+              </button>
             </div>
+            {nlStatus === "ok" && (
+              <p role="status" style={{ color: "var(--gold-light)", fontSize: 12, marginTop: 8 }}>
+                ¡Listo! Ya formas parte de la comunidad.
+              </p>
+            )}
+            {nlStatus === "error" && (
+              <p role="alert" style={{ color: "#E8A1A1", fontSize: 12, marginTop: 8 }}>
+                Revisa el email e intenta de nuevo.
+              </p>
+            )}
           </div>
         </div>
 
