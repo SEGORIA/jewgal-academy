@@ -5,6 +5,7 @@ import { enrollUserInCourse } from "@/lib/enroll"
 import { rateLimit, getClientIp } from "@/lib/security"
 import { isStripeConfigured } from "@/lib/stripe"
 import { isPayPalConfigured } from "@/lib/paypal"
+import { sendWelcomeEmail } from "@/lib/email"
 
 /**
  * DEMO checkout — simula un pago exitoso SIN cobrar nada.
@@ -66,6 +67,15 @@ export async function POST(req: NextRequest) {
     currency: course.currency,
     provider: "demo",
   })
+
+  if (result.tempPassword) {
+    sendWelcomeEmail({
+      email: email.trim().toLowerCase(),
+      name: name || "Estudiante",
+      courseTitle: course.title,
+      tempPassword: result.tempPassword,
+    }).catch(() => {})
+  }
 
   // Usuario existente: NUNCA tocar su contraseña (sería un vector de robo de cuenta).
   // Se inscribe y se lo manda a iniciar sesión con su contraseña de siempre.

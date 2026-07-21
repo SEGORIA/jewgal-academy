@@ -11,6 +11,7 @@ export type SiteContent = {
     blog: { eyebrow: string; title1: string; title2: string; subtext: string }
     contacto: { eyebrow: string; title1: string; title2: string; subtext: string }
   }
+  emails: { welcomeSubject: string; welcomeBody: string }
 }
 
 // Refleja el copy real vigente en el sitio — sirve de fallback si no hay override guardado en la DB.
@@ -75,6 +76,12 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
       subtext: "¿Tienes preguntas sobre los programas, quieres comenzar tu proceso de coaching o simplemente deseas conocer más? Escríbeme con confianza.",
     },
   },
+  // Placeholders disponibles: {nombre}, {curso}, {email}, {password}
+  emails: {
+    welcomeSubject: "¡Bienvenido/a a Jewgal Academy! Tu acceso al aula",
+    welcomeBody:
+      "Hola {nombre},\n\n¡Bienvenido/a a Jewgal Academy! Tu inscripción en {curso} está confirmada.\n\nEstos son tus datos de acceso al aula virtual:\n\nUsuario: {email}\nContraseña temporal: {password}\n\nEntra en https://jewgal-academy.vercel.app/login y cambia tu contraseña desde \"Mi perfil\" cuando quieras.\n\nNos vemos dentro,\nDevora Benchimol · Jewgal Academy",
+  },
 }
 
 export function mergeSiteContent(partial: Partial<SiteContent> | null | undefined): SiteContent {
@@ -92,5 +99,6 @@ export function mergeSiteContent(partial: Partial<SiteContent> | null | undefine
       blog: { ...DEFAULT_SITE_CONTENT.pages.blog, ...partial.pages?.blog },
       contacto: { ...DEFAULT_SITE_CONTENT.pages.contacto, ...partial.pages?.contacto },
     },
+    emails: { ...DEFAULT_SITE_CONTENT.emails, ...partial.emails },
   }
 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { stripe } from "@/lib/stripe"
 import { db } from "@/lib/db"
 import { enrollUserInCourse } from "@/lib/enroll"
+import { sendWelcomeEmail } from "@/lib/email"
 import Stripe from "stripe"
 
 export async function POST(req: NextRequest) {
@@ -28,7 +29,7 @@ export async function POST(req: NextRequest) {
     const course = await db.course.findUnique({ where: { id: courseId } })
     if (!course) return NextResponse.json({ error: "Course not found" }, { status: 404 })
 
-    await enrollUserInCourse({
+    const result = await enrollUserInCourse({
       email,
       name,
       courseId,
@@ -37,6 +38,10 @@ export async function POST(req: NextRequest) {
       provider: "stripe",
       paymentRef: session.id,
     })
+
+    if (result.tempPassword) {
+      sendWelcomeEmail({ email, name, courseTitle: course.title, tempPassword: result.tempPassword }).catch(() => {})
+    }
   }
 
   return NextResponse.json({ received: true })

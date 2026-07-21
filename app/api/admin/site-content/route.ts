@@ -42,6 +42,10 @@ const schema = z.object({
     blog: pageHeading2,
     contacto: pageHeading2,
   }).optional(),
+  emails: z.object({
+    welcomeSubject: z.string().min(1),
+    welcomeBody: z.string().min(1),
+  }).optional(),
 })
 
 export async function POST(req: NextRequest) {

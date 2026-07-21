@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { capturePayPalOrder, isPayPalConfigured } from "@/lib/paypal"
 import { db } from "@/lib/db"
 import { enrollUserInCourse } from "@/lib/enroll"
+import { sendWelcomeEmail } from "@/lib/email"
 
 export async function POST(req: NextRequest) {
   if (!isPayPalConfigured()) {
@@ -30,6 +31,15 @@ export async function POST(req: NextRequest) {
     provider: "paypal",
     paymentRef: capture.id,
   })
+
+  if (result.tempPassword) {
+    sendWelcomeEmail({
+      email: String(email).trim().toLowerCase(),
+      name: name || "Estudiante",
+      courseTitle: course.title,
+      tempPassword: result.tempPassword,
+    }).catch(() => {})
+  }
 
   return NextResponse.json({ ok: true, ...result })
 }

@@ -5,6 +5,7 @@ import { stripe, isStripeConfigured } from "@/lib/stripe"
 import { db } from "@/lib/db"
 import { enrollUserInCourse } from "@/lib/enroll"
 import { generateTempPassword, rateLimit, getClientIp } from "@/lib/security"
+import { sendWelcomeEmail } from "@/lib/email"
 
 /**
  * Confirmación del checkout de Stripe desde el navegador del comprador.
@@ -77,6 +78,10 @@ export async function POST(req: NextRequest) {
         where: { id: user.id },
         data: { password: await bcrypt.hash(tempPassword, 10) },
       })
+    }
+
+    if (tempPassword) {
+      sendWelcomeEmail({ email, name, courseTitle: course.title, tempPassword }).catch(() => {})
     }
 
     return NextResponse.json({

@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react"
 import { Eye, Save, ChevronDown, ChevronUp, Loader2, Info } from "lucide-react"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 
-type SectionId = "hero" | "stats" | "fundadora" | "contacto" | "footer" | "pg_academia" | "pg_certificaciones" | "pg_eventos" | "pg_blog" | "pg_contacto"
+type SectionId = "hero" | "stats" | "fundadora" | "contacto" | "footer" | "pg_academia" | "pg_certificaciones" | "pg_eventos" | "pg_blog" | "pg_contacto" | "email_bienvenida"
 
 const SECTION_LABELS: Record<SectionId, string> = {
   hero: "Hero / Portada",
@@ -17,6 +17,7 @@ const SECTION_LABELS: Record<SectionId, string> = {
   pg_eventos: "Página Eventos — Encabezado",
   pg_blog: "Página Blog — Encabezado",
   pg_contacto: "Página Contacto — Encabezado",
+  email_bienvenida: "Correo de bienvenida (nueva cuenta)",
 }
 
 const card: React.CSSProperties = { background: "var(--surface)", border: "1px solid rgba(165,141,102,.13)", borderRadius: 14 }
@@ -237,6 +238,40 @@ export default function WebAdminPage() {
               <Field label="Título — línea 1" value={content.pages.contacto.title1} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, contacto: { ...c.pages.contacto, title1: v } } }))} />
               <Field label="Título — línea 2 (dorada)" value={content.pages.contacto.title2} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, contacto: { ...c.pages.contacto, title2: v } } }))} />
               <Field label="Subtítulo / descripción" type="textarea" span2 value={content.pages.contacto.subtext} onChange={(v) => setContent((c) => ({ ...c, pages: { ...c.pages, contacto: { ...c.pages.contacto, subtext: v } } }))} />
+            </div>
+          )}
+        </div>
+
+        {/* ── SEPARADOR CORREOS ── */}
+        <div style={{ padding: "18px 0 6px", display: "flex", alignItems: "center", gap: 14 }}>
+          <div style={{ flex: 1, height: 1, background: "var(--surface-2)" }} />
+          <span style={{ fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--text-dim)", whiteSpace: "nowrap" }}>Correos automáticos</span>
+          <div style={{ flex: 1, height: 1, background: "var(--surface-2)" }} />
+        </div>
+
+        {/* ── EMAIL DE BIENVENIDA ── */}
+        <div style={card}>
+          <SectionHeader id="email_bienvenida" expanded={expanded} setExpanded={setExpanded} />
+          {expanded === "email_bienvenida" && (
+            <div style={{ padding: "0 22px 22px", display: "grid", gridTemplateColumns: "1fr", gap: 14, borderTop: "1px solid var(--surface-2)", paddingTop: 20 }}>
+              <p style={{ fontSize: 12.5, color: "var(--text-muted)", lineHeight: 1.7 }}>
+                Se envía automáticamente cuando una compra o inscripción crea una <strong>cuenta nueva</strong> de alumno.
+                Puedes usar estos comodines y se reemplazan solos: <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4 }}>{"{nombre}"}</code>{" "}
+                <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4 }}>{"{curso}"}</code>{" "}
+                <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4 }}>{"{email}"}</code>{" "}
+                <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4 }}>{"{password}"}</code>.
+                Requiere RESEND_API_KEY configurada en Vercel (ver Configuración → Email); si no está, simplemente no se envía nada.
+              </p>
+              <Field label="Asunto" value={content.emails.welcomeSubject} onChange={(v) => setContent((c) => ({ ...c, emails: { ...c.emails, welcomeSubject: v } }))} />
+              <div>
+                <label style={labelStyle}>Mensaje</label>
+                <textarea
+                  value={content.emails.welcomeBody}
+                  onChange={(e) => setContent((c) => ({ ...c, emails: { ...c.emails, welcomeBody: e.target.value } }))}
+                  rows={10}
+                  style={{ ...inputBase, resize: "vertical", lineHeight: 1.7 }}
+                />
+              </div>
             </div>
           )}
         </div>
