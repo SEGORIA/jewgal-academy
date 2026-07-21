@@ -275,9 +275,9 @@ function CategoryManager({ categories, onClose, onSaved }: { categories: string[
   return (
     <div
       onClick={onClose}
-      style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(20,14,8,.72)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}
+      style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(16,5,4,.82)", backdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}
     >
-      <div onClick={(e) => e.stopPropagation()} style={{ ...card, width: "100%", maxWidth: 480, padding: "26px 24px", maxHeight: "85vh", overflowY: "auto" }}>
+      <div onClick={(e) => e.stopPropagation()} style={{ ...card, background: "var(--surface-solid)", boxShadow: "0 30px 90px rgba(0,0,0,.5)", width: "100%", maxWidth: 480, padding: "26px 24px", maxHeight: "85vh", overflowY: "auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
           <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--text)", display: "flex", alignItems: "center", gap: 8 }}>
             <Tag size={17} style={{ color: "var(--gold)" }} /> Categorías del blog
