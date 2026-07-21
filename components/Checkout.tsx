@@ -118,6 +118,7 @@ export default function Checkout({ course }: { course: Course }) {
         await wait(1900)
       }
 
+      setDemoStage("idle") // si no, la pantalla de éxito nunca llega a mostrarse (queda tapada por el recibo)
       setSuccess(true)
       if (data.tempPassword) {
         setTimeout(() => autoLogin(data.email, data.tempPassword), 1200)
