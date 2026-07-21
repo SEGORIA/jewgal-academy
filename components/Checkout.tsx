@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js"
-import { CreditCard, ShieldCheck, Sparkles } from "lucide-react"
+import { CreditCard, ShieldCheck, Sparkles, CheckCircle2 } from "lucide-react"
+import { formatPrice } from "@/lib/utils"
 
 type Course = { id: string; title: string; slug: string; price: number; currency: string; isFree: boolean }
 type Config = { stripe: boolean; paypal: boolean; paypalClientId: string | null; demo: boolean }
@@ -68,6 +69,7 @@ export default function Checkout({ course }: { course: Course }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
+  const [demoStage, setDemoStage] = useState<"idle" | "processing" | "receipt">("idle")
 
   useEffect(() => {
     fetch("/api/payment-config").then((r) => r.json()).then(setConfig)
@@ -88,17 +90,34 @@ export default function Checkout({ course }: { course: Course }) {
     router.refresh()
   }
 
+  function wait(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+  }
+
   async function handleDemoOrFree() {
     if (!requireValid()) return
+    // Simulación de pago: solo cuando es un curso pago y no hay pasarela real activa
+    // (un curso gratis no "simula" ningún cobro, entra directo)
+    const isPaidDemo = !course.isFree && !(config?.stripe || config?.paypal)
     setLoading(true)
+    if (isPaidDemo) setDemoStage("processing")
     try {
-      const res = await fetch("/api/demo-enroll", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ courseId: course.id, email, name }),
-      })
+      const [res] = await Promise.all([
+        fetch("/api/demo-enroll", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ courseId: course.id, email, name }),
+        }),
+        isPaidDemo ? wait(1500) : Promise.resolve(), // deja ver el paso "procesando" aunque la API responda al instante
+      ])
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || "Error al inscribir")
+
+      if (isPaidDemo) {
+        setDemoStage("receipt")
+        await wait(1900)
+      }
+
       setSuccess(true)
       if (data.tempPassword) {
         setTimeout(() => autoLogin(data.email, data.tempPassword), 1200)
@@ -107,6 +126,7 @@ export default function Checkout({ course }: { course: Course }) {
         setTimeout(() => router.push("/login?enrolled=true"), 1200)
       }
     } catch (e: unknown) {
+      setDemoStage("idle")
       setError(e instanceof Error ? e.message : "Error al inscribir")
       setLoading(false)
     }
@@ -149,6 +169,58 @@ export default function Checkout({ course }: { course: Course }) {
           style={{ width: 24, height: 24, borderRadius: "50%", border: "2px solid #d49341", borderTopColor: "transparent" }}
         />
       </div>
+    )
+  }
+
+  /* ── Simulación de pago: procesando ── */
+  if (demoStage === "processing") {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={spring}
+        style={{ textAlign: "center", padding: "32px 0" }}
+      >
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          style={{ width: 40, height: 40, borderRadius: "50%", border: "3px solid #d49341", borderTopColor: "transparent", margin: "0 auto 18px" }}
+        />
+        <p style={{ fontFamily: "var(--serif)", fontSize: 19, color: "var(--text)", marginBottom: 6 }}>Procesando pago simulado…</p>
+        <p style={{ color: "var(--text-muted)", fontSize: 13.5 }}>Validando datos de {course.title}</p>
+      </motion.div>
+    )
+  }
+
+  /* ── Simulación de pago: recibo ── */
+  if (demoStage === "receipt") {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={spring}
+        style={{ textAlign: "center", padding: "28px 0" }}
+      >
+        <motion.div
+          initial={{ scale: 0 }} animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 380, damping: 18 }}
+        >
+          <CheckCircle2 size={44} style={{ color: "var(--success)", margin: "0 auto 14px" }} />
+        </motion.div>
+        <p style={{ fontFamily: "var(--serif)", fontSize: 20, color: "var(--text)", marginBottom: 16 }}>Pago simulado exitoso</p>
+        <div style={{ background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.18)", borderRadius: 12, padding: "16px 18px", marginBottom: 14, textAlign: "left" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13.5, color: "var(--text-muted)", marginBottom: 6 }}>
+            <span>{course.title}</span>
+            <span style={{ fontWeight: 700, color: "var(--text)" }}>{formatPrice(course.price, course.currency)}</span>
+          </div>
+          <div style={{ borderTop: "1px dashed rgba(165,141,102,.25)", paddingTop: 8, fontSize: 11, color: "var(--text-dim)" }}>
+            Comprobante de demostración · sin cargo real
+          </div>
+        </div>
+        <p style={{ fontSize: 12, color: "var(--text-faint)", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+          <ShieldCheck size={12} /> No se realizó ningún cobro — modo demostración
+        </p>
+      </motion.div>
     )
   }
 
