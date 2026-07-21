@@ -292,6 +292,30 @@ export default function HomePage() {
                 </Link>
               </TiltCard>
             ))}
+
+            {/* Método Sholem (juego para adolescentes) → sitio externo sholemethod.org */}
+            <TiltCard className="reveal" radius={6}>
+              <a href="https://www.sholemethod.org/" target="_blank" rel="noopener noreferrer" className="pcard">
+                <div className="thumb">
+                  <Image
+                    src="/brand/hero/devora-ninos.webp"
+                    alt="Método Sholem para adolescentes"
+                    width={600}
+                    height={400}
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  />
+                  <div className="thumb-overlay">
+                    <span className="thumb-overlay-label">Conócelo ↗</span>
+                  </div>
+                </div>
+                <div className="body">
+                  <h3>Método Sholem</h3>
+                  <p>Un juego educativo para adolescentes que transforma escuelas, comunidades y familias.</p>
+                  <div className="price free">Programa insignia</div>
+                  <span className="go">Conócelo ↗</span>
+                </div>
+              </a>
+            </TiltCard>
           </div>
         </div>
       </section>
