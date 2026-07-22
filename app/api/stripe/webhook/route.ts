@@ -3,6 +3,7 @@ import { stripe } from "@/lib/stripe"
 import { db } from "@/lib/db"
 import { enrollUserInCourse } from "@/lib/enroll"
 import { sendWelcomeEmail } from "@/lib/email"
+import { createNotification } from "@/lib/notifications"
 import Stripe from "stripe"
 
 export async function POST(req: NextRequest) {
@@ -41,6 +42,43 @@ export async function POST(req: NextRequest) {
 
     if (result.tempPassword) {
       sendWelcomeEmail({ email, name, courseTitle: course.title, tempPassword: result.tempPassword }).catch(() => {})
+    }
+  }
+
+  if (event.type === "charge.refunded") {
+    const charge = event.data.object as Stripe.Charge
+    const paymentIntentId = typeof charge.payment_intent === "string" ? charge.payment_intent : charge.payment_intent?.id
+
+    if (paymentIntentId) {
+      // El charge no tiene el Checkout Session directamente — hay que buscarla por payment_intent
+      const sessions = await stripe.checkout.sessions.list({ payment_intent: paymentIntentId, limit: 1 })
+      const stripeSessionId = sessions.data[0]?.id
+
+      if (stripeSessionId) {
+        const payment = await db.payment.findFirst({
+          where: { stripeSessionId },
+          include: { user: { select: { name: true, email: true } }, course: { select: { title: true } } },
+        })
+
+        if (payment && payment.status !== "refunded") {
+          await db.payment.update({ where: { id: payment.id }, data: { status: "refunded" } })
+          await db.enrollment.updateMany({
+            where: { userId: payment.userId, courseId: payment.courseId },
+            data: { status: "refunded" },
+          })
+          createNotification({
+            type: "refund_synced",
+            message: `Reembolso sincronizado: ${payment.user.name} (${payment.user.email}) — "${payment.course.title}" (${(charge.amount_refunded / 100).toFixed(2)} ${charge.currency.toUpperCase()}). Se revocó el acceso al aula.`,
+            metadata: {
+              email: payment.user.email,
+              courseTitle: payment.course.title,
+              amount: charge.amount_refunded / 100,
+              currency: charge.currency,
+              paymentId: payment.id,
+            },
+          }).catch(() => {})
+        }
+      }
     }
   }
 

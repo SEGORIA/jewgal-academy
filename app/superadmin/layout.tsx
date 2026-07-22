@@ -11,6 +11,7 @@ import {
 } from "lucide-react"
 import { signOut } from "next-auth/react"
 import { motion, AnimatePresence } from "framer-motion"
+import NotificationBell from "@/components/admin/NotificationBell"
 
 const NAV = [
   {
@@ -194,6 +195,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           {/* Right side */}
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <NotificationBell />
             <span style={{ fontSize: 12, color: "var(--text-dim)", letterSpacing: ".02em" }}>admin@jewgalacademy.com</span>
             {/* Avatar */}
             <div style={{

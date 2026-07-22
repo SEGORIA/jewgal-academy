@@ -64,3 +64,16 @@ export async function enrollUserInCourse(input: EnrollInput): Promise<EnrollResu
 
   return { userId: user.id, isNewUser, tempPassword }
 }
+
+/**
+ * ¿El email ya tiene una inscripción activa/completada en este curso?
+ * Se usa para bloquear la recompra antes de crear la sesión de pago.
+ */
+export async function hasActiveEnrollment(email: string, courseId: string): Promise<boolean> {
+  const user = await db.user.findUnique({ where: { email: email.trim().toLowerCase() } })
+  if (!user) return false
+  const enrollment = await db.enrollment.findUnique({
+    where: { userId_courseId: { userId: user.id, courseId } },
+  })
+  return enrollment?.status === "active" || enrollment?.status === "completed"
+}

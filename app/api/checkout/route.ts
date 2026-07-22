@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import { stripe, isStripeConfigured } from "@/lib/stripe"
 import { db } from "@/lib/db"
 import { rateLimit, getClientIp } from "@/lib/security"
+import { hasActiveEnrollment } from "@/lib/enroll"
+import { createNotification } from "@/lib/notifications"
 
 export async function POST(req: NextRequest) {
   const rl = rateLimit(`checkout:${getClientIp(req)}`, 10, 60_000)
@@ -22,6 +24,19 @@ export async function POST(req: NextRequest) {
   if (!course) return NextResponse.json({ error: "Curso no encontrado" }, { status: 404 })
   if (!course.isPublished) return NextResponse.json({ error: "Curso no disponible" }, { status: 400 })
   if (course.isFree) return NextResponse.json({ free: true })
+
+  const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : ""
+  if (normalizedEmail && await hasActiveEnrollment(normalizedEmail, course.id)) {
+    createNotification({
+      type: "duplicate_purchase_blocked",
+      message: `Se bloqueó un intento de recompra: ${normalizedEmail} ya está inscrito/a en "${course.title}".`,
+      metadata: { email: normalizedEmail, courseId: course.id, courseTitle: course.title },
+    }).catch(() => {})
+    return NextResponse.json(
+      { error: "Ya estás inscrito/a en este programa. Revisá tu aula virtual — no hace falta pagar de nuevo." },
+      { status: 409 }
+    )
+  }
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
