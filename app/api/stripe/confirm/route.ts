@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
-import bcrypt from "bcryptjs"
 import { stripe, isStripeConfigured } from "@/lib/stripe"
 import { db } from "@/lib/db"
 import { enrollUserInCourse } from "@/lib/enroll"
-import { generateTempPassword, rateLimit, getClientIp } from "@/lib/security"
+import { rateLimit, getClientIp } from "@/lib/security"
 import { sendWelcomeEmail } from "@/lib/email"
 
 /**
@@ -68,17 +67,11 @@ export async function POST(req: NextRequest) {
     const user = await db.user.findUnique({ where: { email } })
     if (!user) return NextResponse.json({ error: "Usuario no encontrado" }, { status: 404 })
 
-    // Cuenta recién creada por esta compra (p. ej. por el webhook segundos antes):
-    // el comprador todavía no tiene contraseña conocida → se le asigna una temporal.
-    // Sólo aplica a cuentas de alumno con minutos de antigüedad; jamás a cuentas previas.
-    const isBrandNew = Date.now() - new Date(user.createdAt).getTime() < 2 * 60 * 60 * 1000
-    if (!tempPassword && isBrandNew && user.role === "student") {
-      tempPassword = generateTempPassword()
-      await db.user.update({
-        where: { id: user.id },
-        data: { password: await bcrypt.hash(tempPassword, 10) },
-      })
-    }
+    // NOTA: si existingPayment era true (el webhook llegó primero), tempPassword
+    // queda en null aquí — NUNCA se resetea la contraseña por edad de la cuenta.
+    // Si el webhook creó una cuenta nueva de verdad, es el propio webhook el que
+    // genera su contraseña temporal y envía el correo de bienvenida (ver
+    // app/api/stripe/webhook/route.ts) — este endpoint no necesita adivinarlo.
 
     if (tempPassword) {
       sendWelcomeEmail({ email, name, courseTitle: course.title, tempPassword }).catch(() => {})
