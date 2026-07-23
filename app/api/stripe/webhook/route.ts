@@ -43,6 +43,17 @@ export async function POST(req: NextRequest) {
     if (result.tempPassword) {
       sendWelcomeEmail({ email, name, courseTitle: course.title, tempPassword: result.tempPassword }).catch(() => {})
     }
+
+    createNotification({
+      type: "payment_received",
+      message: `Nuevo pago: ${name} (${email}) — "${course.title}" (${((session.amount_total ?? 0) / 100).toFixed(2)} ${(session.currency ?? "usd").toUpperCase()}).`,
+      metadata: {
+        email,
+        courseTitle: course.title,
+        amount: (session.amount_total ?? 0) / 100,
+        currency: session.currency ?? "usd",
+      },
+    }).catch(() => {})
   }
 
   if (event.type === "charge.refunded") {

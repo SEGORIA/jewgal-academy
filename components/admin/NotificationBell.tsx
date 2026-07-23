@@ -1,12 +1,12 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef } from "react"
-import { Bell, RefreshCcw, ShieldAlert, CheckCheck } from "lucide-react"
+import { Bell, RefreshCcw, ShieldAlert, CheckCheck, CreditCard } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 type Notification = {
   id: string
-  type: "duplicate_purchase_blocked" | "refund_synced"
+  type: "duplicate_purchase_blocked" | "refund_synced" | "payment_received"
   message: string
   isRead: boolean
   createdAt: string
@@ -15,6 +15,7 @@ type Notification = {
 const ICONS = {
   duplicate_purchase_blocked: ShieldAlert,
   refund_synced: RefreshCcw,
+  payment_received: CreditCard,
 } as const
 
 export default function NotificationBell() {
@@ -147,7 +148,10 @@ export default function NotificationBell() {
                         cursor: n.isRead ? "default" : "pointer", width: "100%",
                       }}
                     >
-                      <Icon size={15} style={{ color: n.type === "refund_synced" ? "var(--warning)" : "var(--danger)", flexShrink: 0, marginTop: 2 }} />
+                      <Icon size={15} style={{
+                        color: n.type === "refund_synced" ? "var(--warning)" : n.type === "payment_received" ? "var(--success)" : "var(--danger)",
+                        flexShrink: 0, marginTop: 2,
+                      }} />
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <p style={{ fontSize: 12.5, color: "var(--text)", lineHeight: 1.5 }}>{n.message}</p>
                         <span style={{ fontSize: 11, color: "var(--text-dim)" }}>{timeAgo(n.createdAt)}</span>

@@ -60,3 +60,31 @@ export async function sendWelcomeEmail(input: {
     console.log("[sendWelcomeEmail] enviado, id:", data?.id)
   }
 }
+
+/**
+ * Alerta por correo a la casilla de administración de la plataforma
+ * (ADMIN_EMAIL) cada vez que ocurre un evento de pago relevante: compra
+ * exitosa, recompra bloqueada o reembolso sincronizado.
+ * No-op si falta RESEND_API_KEY o ADMIN_EMAIL.
+ */
+export async function sendAdminAlert(subject: string, message: string) {
+  if (!isEmailConfigured()) return
+  const adminEmail = process.env.ADMIN_EMAIL
+  if (!adminEmail) return
+
+  const { Resend } = await import("resend")
+  const resend = new Resend(process.env.RESEND_API_KEY)
+
+  const { data, error } = await resend.emails.send({
+    from: process.env.EMAIL_FROM || process.env.RESEND_FROM || "Jewgal Academy <onboarding@resend.dev>",
+    to: adminEmail,
+    subject: `[Jewgal Academy] ${subject}`,
+    text: message,
+  })
+
+  if (error) {
+    console.error("[sendAdminAlert] Resend devolvió un error:", error)
+  } else {
+    console.log("[sendAdminAlert] enviado, id:", data?.id)
+  }
+}
