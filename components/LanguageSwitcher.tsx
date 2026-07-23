@@ -1,15 +1,24 @@
 "use client"
 
+import { Suspense } from "react"
 import { useLocale, useTranslations } from "next-intl"
 import { useSearchParams } from "next/navigation"
 import { usePathname, useRouter } from "@/i18n/navigation"
 import { routing } from "@/i18n/routing"
 
-/**
- * Selector ES/EN. Mantiene al usuario en la misma página al cambiar de
- * idioma (usePathname/useRouter de next-intl ya resuelven el prefijo).
- */
-export default function LanguageSwitcher({ variant = "dark" }: { variant?: "dark" | "light" }) {
+type Props = { variant?: "dark" | "light" }
+
+// useSearchParams() exige un límite de Suspense para no bloquear el
+// prerenderizado estático de las páginas — el wrapper de abajo lo provee.
+export default function LanguageSwitcher(props: Props) {
+  return (
+    <Suspense fallback={<div aria-hidden style={{ width: 70, height: 27 }} />}>
+      <LanguageSwitcherInner {...props} />
+    </Suspense>
+  )
+}
+
+function LanguageSwitcherInner({ variant = "dark" }: Props) {
   const locale = useLocale()
   const t = useTranslations("LanguageSwitcher")
   const pathname = usePathname()
