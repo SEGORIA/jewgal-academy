@@ -1,0 +1,49 @@
+{
+  "Navbar": {
+    "inicio": "Inicio",
+    "academia": "Academia",
+    "coaching": "Coaching 1:1",
+    "eventos": "Eventos",
+    "blog": "Blog",
+    "contacto": "Contacto",
+    "buscar": "Buscar",
+    "iniciarSesion": "Iniciar Sesión",
+    "uneteAhora": "Únete Ahora",
+    "panelAdmin": "Panel Admin",
+    "miAula": "Mi Aula",
+    "volverInicio": "Volver al inicio",
+    "abrirMenu": "Abrir menú",
+    "cerrarMenu": "Cerrar menú",
+    "verSitio": "Jewgal Academy — Inicio"
+  },
+  "LanguageSwitcher": {
+    "es": "ES",
+    "en": "EN",
+    "label": "Cambiar idioma"
+  },
+  "Footer": {
+    "academiaTitulo": "Academia",
+    "todosProgramas": "Todos los programas",
+    "certificaciones": "Certificaciones",
+    "sobreDevora": "Sobre Devora",
+    "eventosRetiros": "Eventos y Retiros",
+    "programasTitulo": "Programas",
+    "programLifeCoaching": "Life Coaching",
+    "programJewgalAdultos": "Jewgal Adultos",
+    "programCabalaCoach": "Cábala Coach",
+    "programMetodoSholem": "Método Sholem",
+    "recursosTitulo": "Recursos",
+    "bibliotecaVirtual": "Biblioteca Virtual",
+    "testimonios": "Testimonios",
+    "contacto": "Contacto",
+    "comunidadTitulo": "Únete a la comunidad",
+    "comunidadTexto": "Contenido exclusivo y novedades de Jewgal Academy.",
+    "emailPlaceholder": "Tu correo electrónico",
+    "emailLabel": "Correo electrónico",
+    "suscribirse": "Suscribirse",
+    "suscritoOk": "¡Listo! Ya formas parte de la comunidad.",
+    "suscritoError": "Revisa el email e intenta de nuevo.",
+    "privacidad": "Privacidad",
+    "terminos": "Términos"
+  }
+}

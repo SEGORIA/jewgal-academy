@@ -1,11 +1,14 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
+import NextLink from "next/link"
 import BrandLogo from "@/components/BrandLogo"
+import { useTranslations } from "next-intl"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 
 export default function Footer() {
+  const t = useTranslations("Footer")
   const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
   const [nlEmail, setNlEmail] = useState("")
   const [nlStatus, setNlStatus] = useState<"idle" | "sending" | "ok" | "error">("idle")
@@ -73,57 +76,57 @@ export default function Footer() {
 
           {/* Academia */}
           <div className="foot-col">
-            <h5>Academia</h5>
-            <Link href="/academia">Todos los programas</Link>
-            <Link href="/certificaciones">Certificaciones</Link>
-            <Link href="/conoce-a-devora">Sobre Devora</Link>
-            <Link href="/eventos">Eventos y Retiros</Link>
+            <h5>{t("academiaTitulo")}</h5>
+            <Link href="/academia">{t("todosProgramas")}</Link>
+            <Link href="/certificaciones">{t("certificaciones")}</Link>
+            <Link href="/conoce-a-devora">{t("sobreDevora")}</Link>
+            <Link href="/eventos">{t("eventosRetiros")}</Link>
           </div>
 
           {/* Programas */}
           <div className="foot-col">
-            <h5>Programas</h5>
-            <Link href="/programas/life-coaching-integrativo">Life Coaching</Link>
-            <Link href="/programas/joogal-adultos">Jewgal Adultos</Link>
-            <Link href="/programas/cabala-coach">Cábala Coach</Link>
-            <Link href="/programas/metodo-sholem">Método Sholem</Link>
+            <h5>{t("programasTitulo")}</h5>
+            <Link href="/programas/life-coaching-integrativo">{t("programLifeCoaching")}</Link>
+            <Link href="/programas/joogal-adultos">{t("programJewgalAdultos")}</Link>
+            <Link href="/programas/cabala-coach">{t("programCabalaCoach")}</Link>
+            <Link href="/programas/metodo-sholem">{t("programMetodoSholem")}</Link>
           </div>
 
           {/* Recursos */}
           <div className="foot-col">
-            <h5>Recursos</h5>
+            <h5>{t("recursosTitulo")}</h5>
             <Link href="/blog">Blog</Link>
-            <Link href="/aula">Biblioteca Virtual</Link>
-            <Link href="/#testimonios">Testimonios</Link>
-            <Link href="/contacto">Contacto</Link>
+            <NextLink href="/aula">{t("bibliotecaVirtual")}</NextLink>
+            <Link href="/#testimonios">{t("testimonios")}</Link>
+            <Link href="/contacto">{t("contacto")}</Link>
           </div>
 
           {/* Newsletter */}
           <div className="foot-col news">
-            <h5>Únete a la comunidad</h5>
-            <p>Contenido exclusivo y novedades de Jewgal Academy.</p>
+            <h5>{t("comunidadTitulo")}</h5>
+            <p>{t("comunidadTexto")}</p>
             <div className="row">
               <input
                 type="email"
-                placeholder="Tu correo electrónico"
-                aria-label="Correo electrónico"
+                placeholder={t("emailPlaceholder")}
+                aria-label={t("emailLabel")}
                 value={nlEmail}
                 onChange={(e) => { setNlEmail(e.target.value); if (nlStatus !== "idle") setNlStatus("idle") }}
                 onKeyDown={(e) => { if (e.key === "Enter") subscribe() }}
                 disabled={nlStatus === "sending"}
               />
-              <button type="button" aria-label="Suscribirse" onClick={subscribe} disabled={nlStatus === "sending"}>
+              <button type="button" aria-label={t("suscribirse")} onClick={subscribe} disabled={nlStatus === "sending"}>
                 {nlStatus === "sending" ? "…" : "→"}
               </button>
             </div>
             {nlStatus === "ok" && (
               <p role="status" style={{ color: "var(--gold-light)", fontSize: 12, marginTop: 8 }}>
-                ¡Listo! Ya formas parte de la comunidad.
+                {t("suscritoOk")}
               </p>
             )}
             {nlStatus === "error" && (
               <p role="alert" style={{ color: "#E8A1A1", fontSize: 12, marginTop: 8 }}>
-                Revisa el email e intenta de nuevo.
+                {t("suscritoError")}
               </p>
             )}
           </div>
@@ -132,8 +135,8 @@ export default function Footer() {
         <div className="foot-bottom">
           <small>© {new Date().getFullYear()} {content.footer.copyright}</small>
           <div style={{ display: "flex", gap: 20 }}>
-            <Link href="/politica-privacidad" style={{ color: "var(--on-dark-faint)", fontSize: 12, textDecoration: "none" }}>Privacidad</Link>
-            <Link href="/terminos" style={{ color: "var(--on-dark-faint)", fontSize: 12, textDecoration: "none" }}>Términos</Link>
+            <Link href="/politica-privacidad" style={{ color: "var(--on-dark-faint)", fontSize: 12, textDecoration: "none" }}>{t("privacidad")}</Link>
+            <Link href="/terminos" style={{ color: "var(--on-dark-faint)", fontSize: 12, textDecoration: "none" }}>{t("terminos")}</Link>
           </div>
         </div>
       </div>

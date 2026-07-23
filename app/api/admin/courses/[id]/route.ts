@@ -18,8 +18,11 @@ const contentSchema = z.object({
 
 const patchSchema = z.object({
   title: z.string().min(2).optional(),
+  titleEn: z.string().nullable().optional().or(z.literal("")),
   shortDesc: z.string().min(1).optional(),
+  shortDescEn: z.string().nullable().optional().or(z.literal("")),
   description: z.string().min(1).optional(),
+  descriptionEn: z.string().nullable().optional().or(z.literal("")),
   price: z.number().min(0).optional(),
   currency: z.string().min(1).optional(),
   isFree: z.boolean().optional(),
@@ -47,6 +50,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const data: Record<string, unknown> = { ...rest }
   if (data.thumbnail === "") data.thumbnail = null
   if (data.videoUrl === "") data.videoUrl = null
+  if (data.titleEn === "") data.titleEn = null
+  if (data.shortDescEn === "") data.shortDescEn = null
+  if (data.descriptionEn === "") data.descriptionEn = null
   if (content) data.content = JSON.stringify(content)
 
   const course = await db.course.update({ where: { id }, data }).catch(() => null)

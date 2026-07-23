@@ -1,27 +1,33 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Link from "next/link"
+import { Link, usePathname } from "@/i18n/navigation"
+import NextLink from "next/link"
 import BrandLogo from "@/components/BrandLogo"
+import LanguageSwitcher from "@/components/LanguageSwitcher"
 import { useSession } from "next-auth/react"
-import { usePathname } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion"
 
-const NAV_LINKS = [
-  { href: "/",             label: "Inicio" },
-  { href: "/academia",     label: "Academia" },
-  { href: "/coaching-1-1", label: "Coaching 1:1" },
-  { href: "/eventos",      label: "Eventos" },
-  { href: "/blog",         label: "Blog" },
-  { href: "/contacto",     label: "Contacto" },
-]
+// /aula y /superadmin viven fuera de app/(site)/[locale] — nunca deben
+// llevar prefijo de idioma, por eso usan next/link (no el Link de next-intl).
 
 export default function Navbar() {
+  const t = useTranslations("Navbar")
   const { data: session, status } = useSession()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen]         = useState(false)
   const [hovered, setHovered]   = useState<string | null>(null)
   const pathname                = usePathname()
+
+  const NAV_LINKS = [
+    { href: "/" as const,             label: t("inicio") },
+    { href: "/academia" as const,     label: t("academia") },
+    { href: "/coaching-1-1" as const, label: t("coaching") },
+    { href: "/eventos" as const,      label: t("eventos") },
+    { href: "/blog" as const,         label: t("blog") },
+    { href: "/contacto" as const,     label: t("contacto") },
+  ]
 
   const { scrollYProgress, scrollY } = useScroll()
   const barScaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 })
@@ -73,7 +79,7 @@ export default function Navbar() {
             whileHover={{ scale: 1.12 }}
             whileTap={{ scale: 0.92 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            aria-label="Volver al inicio"
+            aria-label={t("volverInicio")}
             className="back-to-top"
             style={{
               zIndex: 90,
@@ -92,7 +98,7 @@ export default function Navbar() {
       </AnimatePresence>
 
       <nav className={`jnav${scrolled ? " scrolled" : ""}${pathname === "/" ? " over-hero" : ""}`} id="nav" aria-label="Navegación principal">
-        <Link href="/" aria-label="Jewgal Academy — Inicio">
+        <Link href="/" aria-label={t("verSitio")}>
           <BrandLogo height={80} variant="square" priority />
         </Link>
 
@@ -125,17 +131,19 @@ export default function Navbar() {
 
         <div className="nav-actions">
           {/* Buscar */}
-          <button className="nav-search" aria-label="Buscar">
+          <button className="nav-search" aria-label={t("buscar")}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <circle cx="11" cy="11" r="7"/>
               <path d="M21 21l-4.35-4.35"/>
             </svg>
           </button>
 
+          <LanguageSwitcher />
+
           {status === "loading" ? (
             <div style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(165,141,102,.15)", animation: "pulse 1.5s ease-in-out infinite" }} />
           ) : isLoggedIn ? (
-            <Link
+            <NextLink
               href={isAdmin ? "/superadmin" : "/aula"}
               style={{
                 display: "flex", alignItems: "center", gap: 8,
@@ -153,8 +161,8 @@ export default function Navbar() {
                 ;(e.currentTarget as HTMLElement).style.borderColor = "rgba(165,141,102,.4)"
               }}
             >
-              {isAdmin ? "Panel Admin" : "Mi Aula"} →
-            </Link>
+              {isAdmin ? t("panelAdmin") : t("miAula")} →
+            </NextLink>
           ) : (
             <>
               <Link href="/login" style={{
@@ -172,17 +180,17 @@ export default function Navbar() {
                   ;(e.currentTarget as HTMLElement).style.color = "var(--on-dark)"
                 }}
               >
-                Iniciar Sesión
+                {t("iniciarSesion")}
               </Link>
               <Link href="/#programas" className="btn solid" style={{ padding: "9px 18px", fontSize: 11 }}>
-                Únete Ahora
+                {t("uneteAhora")}
               </Link>
             </>
           )}
         </div>
 
         {/* Hamburger mobile — se oculta cuando el overlay está abierto */}
-        <button onClick={() => setOpen(!open)} aria-label={open ? "Cerrar menú" : "Abrir menú"} aria-expanded={open} aria-controls="mobile-menu" className="nav-toggle"
+        <button onClick={() => setOpen(!open)} aria-label={open ? t("cerrarMenu") : t("abrirMenu")} aria-expanded={open} aria-controls="mobile-menu" className="nav-toggle"
           style={{ display: open ? "none" : undefined }}>
           {[0, 1, 2].map((i) => (
             <span key={i} style={{ display: "block", width: 24, height: 1.5, background: "var(--aqua)", transition: ".3s" }} />
@@ -234,30 +242,39 @@ export default function Navbar() {
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              style={{ marginTop: 28, display: "flex", justifyContent: "center" }}
+            >
+              <LanguageSwitcher variant="light" />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.36 }}
-              style={{ marginTop: 36, display: "flex", flexDirection: "column", gap: 12 }}
+              style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 12 }}
             >
               {isLoggedIn ? (
-                <Link href={isAdmin ? "/superadmin" : "/aula"} onClick={() => setOpen(false)}
+                <NextLink href={isAdmin ? "/superadmin" : "/aula"} onClick={() => setOpen(false)}
                   className="btn solid" style={{ textAlign: "center" }}>
-                  {isAdmin ? "Panel Admin" : "Mi Aula"} →
-                </Link>
+                  {isAdmin ? t("panelAdmin") : t("miAula")} →
+                </NextLink>
               ) : (
                 <>
                   <Link href="/login" onClick={() => setOpen(false)} style={{
                     color: "rgba(246,241,231,.75)", fontSize: 12, letterSpacing: ".2em",
                     textTransform: "uppercase", textDecoration: "none",
                   }}>
-                    Iniciar Sesión
+                    {t("iniciarSesion")}
                   </Link>
                   <Link href="/#programas" onClick={() => setOpen(false)} className="btn solid" style={{ textAlign: "center" }}>
-                    Únete Ahora
+                    {t("uneteAhora")}
                   </Link>
                 </>
               )}
             </motion.div>
 
-            <button onClick={() => setOpen(false)} aria-label="Cerrar menú" style={{
+            <button onClick={() => setOpen(false)} aria-label={t("cerrarMenu")} style={{
               position: "absolute", top: 24, right: 24,
               background: "none", border: "none", color: "#F6F1E7", fontSize: 32, cursor: "pointer",
               lineHeight: 1, padding: 4,

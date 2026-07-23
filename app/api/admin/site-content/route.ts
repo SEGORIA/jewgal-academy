@@ -7,17 +7,28 @@ import { mergeSiteContent } from "@/lib/site-content"
 
 export const dynamic = "force-dynamic"
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const session = await auth()
   if (session?.user?.role !== "admin") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 })
   }
 
+  const locale = req.nextUrl.searchParams.get("locale") === "en" ? "en" : "es"
+
+  let esContent = mergeSiteContent(null)
   try {
     const setting = await db.siteSetting.findUnique({ where: { key: "site_content" } })
-    if (setting?.value) return NextResponse.json(mergeSiteContent(JSON.parse(setting.value)))
+    if (setting?.value) esContent = mergeSiteContent(JSON.parse(setting.value))
   } catch {}
-  return NextResponse.json(mergeSiteContent(null))
+
+  if (locale === "es") return NextResponse.json(esContent)
+
+  try {
+    const enSetting = await db.siteSetting.findUnique({ where: { key: "site_content_en" } })
+    if (enSetting?.value) return NextResponse.json(mergeSiteContent(JSON.parse(enSetting.value), esContent))
+  } catch {}
+
+  return NextResponse.json(esContent)
 }
 
 const pageHeading2 = z.object({ eyebrow: z.string(), title1: z.string(), title2: z.string(), subtext: z.string() })
@@ -58,15 +69,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 })
   }
 
+  const locale = req.nextUrl.searchParams.get("locale") === "en" ? "en" : "es"
+  const key = locale === "en" ? "site_content_en" : "site_content"
+
   const parsed = schema.safeParse(await req.json().catch(() => null))
   if (!parsed.success) {
     return NextResponse.json({ error: "Datos inválidos", details: parsed.error.flatten() }, { status: 400 })
   }
 
   await db.siteSetting.upsert({
-    where: { key: "site_content" },
+    where: { key },
     update: { value: JSON.stringify(parsed.data) },
-    create: { key: "site_content", value: JSON.stringify(parsed.data) },
+    create: { key, value: JSON.stringify(parsed.data) },
   })
 
   revalidatePath("/", "page")

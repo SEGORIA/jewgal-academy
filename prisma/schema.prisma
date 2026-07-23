@@ -31,9 +31,12 @@ model User {
 model Course {
   id              String        @id @default(cuid())
   title           String
+  titleEn         String?       // override en inglés — si es null, se usa title
   slug            String        @unique
   shortDesc       String
+  shortDescEn     String?       // override en inglés — si es null, se usa shortDesc
   description     String
+  descriptionEn   String?       // override en inglés — si es null, se usa description
   price           Float
   currency        String        @default("USD")
   stripePriceId   String?

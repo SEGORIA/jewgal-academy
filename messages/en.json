@@ -1,0 +1,49 @@
+{
+  "Navbar": {
+    "inicio": "Home",
+    "academia": "Academy",
+    "coaching": "1:1 Coaching",
+    "eventos": "Events",
+    "blog": "Blog",
+    "contacto": "Contact",
+    "buscar": "Search",
+    "iniciarSesion": "Sign In",
+    "uneteAhora": "Join Now",
+    "panelAdmin": "Admin Panel",
+    "miAula": "My Classroom",
+    "volverInicio": "Back to top",
+    "abrirMenu": "Open menu",
+    "cerrarMenu": "Close menu",
+    "verSitio": "Jewgal Academy — Home"
+  },
+  "LanguageSwitcher": {
+    "es": "ES",
+    "en": "EN",
+    "label": "Change language"
+  },
+  "Footer": {
+    "academiaTitulo": "Academy",
+    "todosProgramas": "All Programs",
+    "certificaciones": "Certifications",
+    "sobreDevora": "About Devora",
+    "eventosRetiros": "Events & Retreats",
+    "programasTitulo": "Programs",
+    "programLifeCoaching": "Life Coaching",
+    "programJewgalAdultos": "Jewgal for Adults",
+    "programCabalaCoach": "Kabbalah Coach",
+    "programMetodoSholem": "Sholem Method",
+    "recursosTitulo": "Resources",
+    "bibliotecaVirtual": "Virtual Library",
+    "testimonios": "Testimonials",
+    "contacto": "Contact",
+    "comunidadTitulo": "Join the community",
+    "comunidadTexto": "Exclusive content and news from Jewgal Academy.",
+    "emailPlaceholder": "Your email address",
+    "emailLabel": "Email address",
+    "suscribirse": "Subscribe",
+    "suscritoOk": "Done! You're now part of the community.",
+    "suscritoError": "Check your email and try again.",
+    "privacidad": "Privacy",
+    "terminos": "Terms"
+  }
+}

@@ -92,22 +92,29 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
   },
 }
 
-export function mergeSiteContent(partial: Partial<SiteContent> | null | undefined): SiteContent {
-  if (!partial) return DEFAULT_SITE_CONTENT
+// `base` permite encadenar el fallback: el override en inglés (parcial, campo
+// por campo) se completa con el contenido real vigente en español —no con
+// los defaults hardcodeados— para que un texto todavía no traducido nunca
+// se vea vacío ni desactualizado.
+export function mergeSiteContent(
+  partial: Partial<SiteContent> | null | undefined,
+  base: SiteContent = DEFAULT_SITE_CONTENT
+): SiteContent {
+  if (!partial) return base
   return {
-    hero: { ...DEFAULT_SITE_CONTENT.hero, ...partial.hero },
-    stats: partial.stats?.length === DEFAULT_SITE_CONTENT.stats.length ? partial.stats : DEFAULT_SITE_CONTENT.stats,
-    fundacionStat: { ...DEFAULT_SITE_CONTENT.fundacionStat, ...partial.fundacionStat },
-    fundadora: { ...DEFAULT_SITE_CONTENT.fundadora, ...partial.fundadora },
-    contacto: { ...DEFAULT_SITE_CONTENT.contacto, ...partial.contacto },
-    footer: { ...DEFAULT_SITE_CONTENT.footer, ...partial.footer },
+    hero: { ...base.hero, ...partial.hero },
+    stats: partial.stats?.length === base.stats.length ? partial.stats : base.stats,
+    fundacionStat: { ...base.fundacionStat, ...partial.fundacionStat },
+    fundadora: { ...base.fundadora, ...partial.fundadora },
+    contacto: { ...base.contacto, ...partial.contacto },
+    footer: { ...base.footer, ...partial.footer },
     pages: {
-      academia: { ...DEFAULT_SITE_CONTENT.pages.academia, ...partial.pages?.academia },
-      certificaciones: { ...DEFAULT_SITE_CONTENT.pages.certificaciones, ...partial.pages?.certificaciones },
-      eventos: { ...DEFAULT_SITE_CONTENT.pages.eventos, ...partial.pages?.eventos },
-      blog: { ...DEFAULT_SITE_CONTENT.pages.blog, ...partial.pages?.blog },
-      contacto: { ...DEFAULT_SITE_CONTENT.pages.contacto, ...partial.pages?.contacto },
+      academia: { ...base.pages.academia, ...partial.pages?.academia },
+      certificaciones: { ...base.pages.certificaciones, ...partial.pages?.certificaciones },
+      eventos: { ...base.pages.eventos, ...partial.pages?.eventos },
+      blog: { ...base.pages.blog, ...partial.pages?.blog },
+      contacto: { ...base.pages.contacto, ...partial.pages?.contacto },
     },
-    emails: { ...DEFAULT_SITE_CONTENT.emails, ...partial.emails },
+    emails: { ...base.emails, ...partial.emails },
   }
 }

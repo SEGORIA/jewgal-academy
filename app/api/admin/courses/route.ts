@@ -31,9 +31,12 @@ export async function GET() {
 
 const createSchema = z.object({
   title: z.string().min(2),
+  titleEn: z.string().nullable().optional().or(z.literal("")),
   slug: z.string().min(2).optional(),
   shortDesc: z.string().min(1),
+  shortDescEn: z.string().nullable().optional().or(z.literal("")),
   description: z.string().min(1),
+  descriptionEn: z.string().nullable().optional().or(z.literal("")),
   price: z.number().min(0),
   currency: z.string().min(1).default("USD"),
   isFree: z.boolean().default(false),
@@ -70,9 +73,12 @@ export async function POST(req: NextRequest) {
   const course = await db.course.create({
     data: {
       title: data.title.trim(),
+      titleEn: data.titleEn?.trim() || null,
       slug,
       shortDesc: data.shortDesc.trim(),
+      shortDescEn: data.shortDescEn?.trim() || null,
       description: data.description.trim(),
+      descriptionEn: data.descriptionEn?.trim() || null,
       price: data.price,
       currency: data.currency,
       isFree: data.isFree,
