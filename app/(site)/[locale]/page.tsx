@@ -5,7 +5,7 @@ import dynamic from "next/dynamic"
 import { Link } from "@/i18n/navigation"
 import NextLink from "next/link"
 import Image from "next/image"
-import { useLocale } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { motion, useInView } from "framer-motion"
 import Navbar from "@/components/Navbar"
 import HeroCarousel from "@/components/HeroCarousel"
@@ -47,6 +47,7 @@ const PROGRAMS = [
 
 export default function HomePage() {
   const locale = useLocale()
+  const t = useTranslations("Home")
   const rutaRef   = useRef<HTMLDivElement>(null)
   const rutaInView  = useInView(rutaRef,   { once: true, margin: "-80px" })
   const statsRef  = useRef<HTMLDivElement>(null)
@@ -279,11 +280,11 @@ export default function HomePage() {
       <section className="programas pad" id="programas">
         <div className="wrap">
           <div className="prog-head reveal">
-            <h2>Programas destacados</h2>
-            <Link href="/#programas">Ver todos los programas →</Link>
+            <h2>{t("programsTitle")}</h2>
+            <Link href="/#programas">{t("viewAllPrograms")}</Link>
           </div>
           <p className="reveal" style={{ color: "var(--ink-soft)", fontSize: 14.5, marginTop: -34, marginBottom: 40, maxWidth: 580, lineHeight: 1.6 }}>
-            Modalidad <strong style={{ color: "var(--ink)" }}>presencial, online o híbrida</strong> según el programa — elige la que mejor se adapte a tu ritmo y lugar.
+            {t.rich("modality", { b: (chunks) => <strong style={{ color: "var(--ink)" }}>{chunks}</strong> })}
           </p>
           <div className="prog-grid">
             {programs.map((p) => (
@@ -298,14 +299,14 @@ export default function HomePage() {
                       style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                     />
                     <div className="thumb-overlay">
-                      <span className="thumb-overlay-label">Ver programa →</span>
+                      <span className="thumb-overlay-label">{t("viewProgram")}</span>
                     </div>
                   </div>
                   <div className="body">
                     <h3>{p.title}</h3>
                     <p>{p.desc}</p>
                     <div className={`price${p.free ? " free" : ""}`}>{p.price}</div>
-                    <span className="go">Ver programa →</span>
+                    <span className="go">{t("viewProgram")}</span>
                   </div>
                 </Link>
               </TiltCard>
@@ -323,14 +324,14 @@ export default function HomePage() {
                     style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                   />
                   <div className="thumb-overlay">
-                    <span className="thumb-overlay-label">Conócelo ↗</span>
+                    <span className="thumb-overlay-label">{t("sholemCta")}</span>
                   </div>
                 </div>
                 <div className="body">
                   <h3>Método Sholem</h3>
-                  <p>Un juego educativo para adolescentes que transforma escuelas, comunidades y familias.</p>
-                  <div className="price free">Programa insignia</div>
-                  <span className="go">Conócelo ↗</span>
+                  <p>{t("sholemDesc")}</p>
+                  <div className="price free">{t("sholemBadge")}</div>
+                  <span className="go">{t("sholemCta")}</span>
                 </div>
               </a>
             </TiltCard>
@@ -342,19 +343,19 @@ export default function HomePage() {
       <section style={{ background: "var(--navy-2)", borderTop: "1px solid var(--line-d)", borderBottom: "1px solid var(--line-d)" }}>
         <div className="wrap" style={{ padding: "clamp(44px,8vw,110px) 0" }}>
           <div className="reveal" style={{ textAlign: "center", maxWidth: 700, margin: "0 auto clamp(32px,5vw,64px)" }}>
-            <span className="eyebrow" style={{ display: "inline-block", marginBottom: 14 }}>Qué nos hace únicos</span>
+            <span className="eyebrow" style={{ display: "inline-block", marginBottom: 14 }}>{t("uniqueEyebrow")}</span>
             <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(22px,4vw,48px)", color: "var(--text)", lineHeight: 1.18, marginBottom: 16 }}>
-              Integramos tres dimensiones que <em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>rara vez conviven</em> en una misma formación
+              {t.rich("uniqueTitle", { em: (chunks) => <em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>{chunks}</em> })}
             </h2>
             <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.6vw,17px)", lineHeight: 1.7 }}>
-              La responsabilidad profesional, la profundidad del desarrollo humano y la sabiduría espiritual — unidos en un solo camino de transformación.
+              {t("uniqueSubtext")}
             </p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: "clamp(20px,2.5vw,32px)" }}>
             {[
-              { n: "01", title: "Responsabilidad profesional", desc: "Método avalado y certificación reconocida, orientado al bienestar integral.", items: ["Coaching certificado", "Regulación emocional", "Logoterapia"] },
-              { n: "02", title: "Desarrollo humano",    desc: "Herramientas para crecer y para acompañar a otros.",          items: ["Resiliencia", "Autoconocimiento", "Liderazgo consciente"] },
-              { n: "03", title: "Sabiduría espiritual", desc: "La raíz ancestral como mapa del alma y del propósito.",       items: ["Cábala", "Consciencia", "Propósito de vida"] },
+              { n: "01", title: t("pillar1Title"), desc: t("pillar1Desc"), items: t.raw("pillar1Items") as string[] },
+              { n: "02", title: t("pillar2Title"), desc: t("pillar2Desc"), items: t.raw("pillar2Items") as string[] },
+              { n: "03", title: t("pillar3Title"), desc: t("pillar3Desc"), items: t.raw("pillar3Items") as string[] },
             ].map((d) => (
               <div key={d.n} className="reveal" style={{ background: "var(--surface)", border: "1px solid var(--line-d)", borderRadius: "var(--r-lg)", padding: "clamp(28px,3vw,38px)" }}>
                 <div style={{ fontFamily: "var(--serif)", fontSize: 13, fontStyle: "italic", color: "var(--gold)", marginBottom: 14 }}>{d.n}</div>
@@ -379,19 +380,19 @@ export default function HomePage() {
         <div className="wrap">
           <div className="fund-grid" style={{ gridTemplateColumns: "1fr" }}>
             <div className="fund-copy reveal" style={{ maxWidth: 780 }}>
-              <span className="eyebrow">Conoce a la fundadora</span>
+              <span className="eyebrow">{t("founderEyebrow")}</span>
               <h2>{content.fundadora.name}</h2>
               <div className="sig">{content.fundadora.sig}</div>
               <p>{content.fundadora.p1}</p>
               <p>{content.fundadora.p2}</p>
               <div className="fund-mission-block">
                 <span className="fund-mission-icon" aria-hidden="true">✦</span>
-                <p>Jewgal Academy apoya y trabaja en alineación con la misión de la <strong>Fundación Sholem Corazón Valiente</strong>, organización sin fines de lucro registrada como <strong>non-profit organization</strong> en los Estados Unidos, fundada y dirigida por Devora como <strong>CEO y creadora</strong>. La Fundación está comprometida con inspirar, empoderar y formar líderes con corazón valiente, transformando comunidades desde los valores judíos y el amor.</p>
+                <p>{t.rich("missionText", { b: (chunks) => <strong>{chunks}</strong> })}</p>
               </div>
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                <Link href="/conoce-a-devora" className="btn">Conoce su historia →</Link>
-                <Link href="/coaching-1-1" className="btn solid">Coaching personal 1:1 →</Link>
-                <a href="https://sholemcorazonvaliente.org/" target="_blank" rel="noopener noreferrer" className="btn" style={{ borderColor: "var(--gold)", color: "var(--gold)" }}>Conocé la Fundación →</a>
+                <Link href="/conoce-a-devora" className="btn">{t("historyLink")}</Link>
+                <Link href="/coaching-1-1" className="btn solid">{t("coachingLink")}</Link>
+                <a href="https://sholemcorazonvaliente.org/" target="_blank" rel="noopener noreferrer" className="btn" style={{ borderColor: "var(--gold)", color: "var(--gold)" }}>{t("foundationLink")}</a>
               </div>
             </div>
           </div>
@@ -401,7 +402,7 @@ export default function HomePage() {
       {/* ── AVALES Y CERTIFICACIONES ── */}
       <section className="avales-section">
         <div className="wrap">
-          <p className="avales-label">Avales y certificaciones</p>
+          <p className="avales-label">{t("avalesLabel")}</p>
           <div className="avales-grid">
             {CERT_INSTITUTES.map((inst) => (
               <div key={inst.slug} className="aval-item" title={inst.fullName}>
@@ -423,7 +424,7 @@ export default function HomePage() {
             ))}
           </div>
           <p className="avales-note">
-            Certificado por institutos y organizaciones reconocidas internacionalmente.
+            {t("avalesNote")}
           </p>
         </div>
       </section>
@@ -433,8 +434,8 @@ export default function HomePage() {
         <div className="stars" />
         <div className="wrap">
           <div className="ruta-head reveal">
-            <span className="eyebrow">Ruta de aprendizaje</span>
-            <h2 className="serif">Un camino probado para tu transformación</h2>
+            <span className="eyebrow">{t("pathEyebrow")}</span>
+            <h2 className="serif">{t("pathTitle")}</h2>
           </div>
           <div ref={rutaRef} style={{ position: "relative" }}>
             <svg className="path-svg" viewBox="0 0 1000 60" preserveAspectRatio="none">
@@ -449,11 +450,11 @@ export default function HomePage() {
             </svg>
             <div className="steps">
               {[
-                { n: "01", title: "Descubre",   desc: "Conecta contigo y define tu propósito.", icon: <><circle cx="12" cy="12" r="9"/><path d="M16 8l-2 6-6 2 2-6z"/></> },
-                { n: "02", title: "Aprende",    desc: "Adquiere conocimientos y herramientas clave.", icon: <path d="M3 5h7a2 2 0 012 2v12a3 3 0 00-3-3H3zM21 5h-7a2 2 0 00-2 2v12a3 3 0 013-3h6z"/> },
-                { n: "03", title: "Integra",    desc: "Aplica en tu vida y genera nuevos hábitos.", icon: <><path d="M12 21c5-3 7-7 7-11a7 7 0 00-14 0c0 4 2 8 7 11z"/><path d="M12 3v18"/></> },
-                { n: "04", title: "Transforma", desc: "Vive tu mejor versión en coherencia.", icon: <path d="M12 12c-2-5-9-5-9 0 0 4 9 8 9 8s9-4 9-8c0-5-7-5-9 0z"/> },
-                { n: "05", title: "Lidera",     desc: "Inspira y guía a otros en su camino.", icon: <path d="M12 3l2.5 6H21l-5 4 2 7-6-4-6 4 2-7-5-4h6.5z"/> },
+                { n: "01", title: t("step1Title"), desc: t("step1Desc"), icon: <><circle cx="12" cy="12" r="9"/><path d="M16 8l-2 6-6 2 2-6z"/></> },
+                { n: "02", title: t("step2Title"), desc: t("step2Desc"), icon: <path d="M3 5h7a2 2 0 012 2v12a3 3 0 00-3-3H3zM21 5h-7a2 2 0 00-2 2v12a3 3 0 013-3h6z"/> },
+                { n: "03", title: t("step3Title"), desc: t("step3Desc"), icon: <><path d="M12 21c5-3 7-7 7-11a7 7 0 00-14 0c0 4 2 8 7 11z"/><path d="M12 3v18"/></> },
+                { n: "04", title: t("step4Title"), desc: t("step4Desc"), icon: <path d="M12 12c-2-5-9-5-9 0 0 4 9 8 9 8s9-4 9-8c0-5-7-5-9 0z"/> },
+                { n: "05", title: t("step5Title"), desc: t("step5Desc"), icon: <path d="M12 3l2.5 6H21l-5 4 2 7-6-4-6 4 2-7-5-4h6.5z"/> },
               ].map((s) => (
                 <div key={s.n} className="step reveal">
                   <div className="ring">
@@ -473,8 +474,8 @@ export default function HomePage() {
       <section className="testi pad" id="testimonios">
         <div className="wrap">
           <div className="ruta-head reveal" style={{ marginBottom: 56 }}>
-            <span className="eyebrow">Testimonios</span>
-            <h2 className="serif" style={{ color: "var(--text)", fontSize: "clamp(28px,4vw,48px)", marginTop: 10 }}>Vidas que ya se transformaron</h2>
+            <span className="eyebrow">{t("testimonialsEyebrow")}</span>
+            <h2 className="serif" style={{ color: "var(--text)", fontSize: "clamp(28px,4vw,48px)", marginTop: 10 }}>{t("testimonialsTitle")}</h2>
           </div>
           <TestimonialCarousel />
         </div>
@@ -492,14 +493,12 @@ export default function HomePage() {
         <div className="wrap">
           <div className="feat-grid">
             {[
-              { title: "Biblioteca Premium",  href: "/blog",      desc: "Artículos, meditaciones, podcasts y masterclasses exclusivas.", go: "Explorar recursos →",
+              { title: t("feat1Title"), href: "/blog" as const,      desc: t("feat1Desc"), go: t("feat1Go"),
                 icon: <><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></> },
-              { title: "Comunidad Global",    href: "/#comunidad", desc: "Conéctate con estudiantes y mentores en todos los continentes.", go: "Ir a la comunidad →",
+              { title: t("feat2Title"), href: "/#comunidad" as const, desc: t("feat2Desc"), go: t("feat2Go"),
                 icon: <><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></> },
-              { title: "Eventos y Retiros",   href: "/eventos",   desc: "Experiencias presenciales y virtuales que transforman.", go: "Ver próximos eventos →",
+              { title: t("feat3Title"), href: "/eventos" as const,   desc: t("feat3Desc"), go: t("feat3Go"),
                 icon: <><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></> },
-              { title: "Campus Virtual",      href: "/aula",      desc: "Tu espacio de aprendizaje personalizado, disponible 24/7.", go: "Ingresar al campus →",
-                icon: <><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></> },
             ].map((f) => (
               <Link key={f.title} href={f.href} style={{ display: "block", textDecoration: "none" }}>
                 <TiltCard className="reveal" radius={8} intensity={5}>
@@ -514,25 +513,41 @@ export default function HomePage() {
                 </TiltCard>
               </Link>
             ))}
+
+            {/* /aula vive fuera de app/(site)/[locale] — usa next/link, sin prefijo de idioma */}
+            <NextLink href="/aula" style={{ display: "block", textDecoration: "none" }}>
+              <TiltCard className="reveal" radius={8} intensity={5}>
+                <div className="feat">
+                  <div className="ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
+                      <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+                    </svg>
+                  </div>
+                  <h4>{t("feat4Title")}</h4>
+                  <p>{t("feat4Desc")}</p>
+                  <span className="go">{t("feat4Go")}</span>
+                </div>
+              </TiltCard>
+            </NextLink>
           </div>
 
           {/* Campus dashboard preview */}
           <div className="campus reveal">
             <div className="campus-l">
-              <span className="eyebrow">Campus virtual</span>
-              <h3>Tu espacio de aprendizaje personalizado</h3>
-              <p>Accede a tu campus, conecta con la comunidad y continúa tu transformación cada día.</p>
-              <NextLink href="/aula" className="btn solid" style={{ alignSelf: "flex-start" }}>Ir al campus →</NextLink>
+              <span className="eyebrow">{t("campusEyebrow")}</span>
+              <h3>{t("campusTitle")}</h3>
+              <p>{t("campusDesc")}</p>
+              <NextLink href="/aula" className="btn solid" style={{ alignSelf: "flex-start" }}>{t("campusCta")}</NextLink>
             </div>
             <div className="campus-r">
               <div className="dash-top">
-                <b>¡Hola!</b>
-                <span>Mis cursos</span>
+                <b>{t("campusHello")}</b>
+                <span>{t("campusMyCourses")}</span>
               </div>
               {[
-                { name: "Life Coaching Integrativo", pct: 35 },
-                { name: "Micro Curso · Cábala Coach", pct: 72 },
-                { name: "Método Sholem", pct: 20 },
+                { name: t("campusCourse1"), pct: 35 },
+                { name: t("campusCourse2"), pct: 72 },
+                { name: t("campusCourse3"), pct: 20 },
               ].map((c) => (
                 <div key={c.name} className="course">
                   <div className="ci" />
@@ -552,12 +567,12 @@ export default function HomePage() {
       <section className="join pad">
         <div className="glow" />
         <div className="wrap join-inner reveal">
-          <span className="eyebrow" style={{ display: "inline-block" }}>Únete a la comunidad</span>
-          <h2>Aprende, crece y <em>transforma vidas</em> desde el propósito.</h2>
-          <p>Una comunidad que se forma para guiar. Elige el plan que acompaña tu camino y empieza hoy.</p>
+          <span className="eyebrow" style={{ display: "inline-block" }}>{t("joinEyebrow")}</span>
+          <h2>{t.rich("joinTitle", { em: (chunks) => <em>{chunks}</em> })}</h2>
+          <p>{t("joinDesc")}</p>
           <div className="join-actions">
-            <Link href="#programas" className="btn solid">Empieza ahora →</Link>
-            <span className="price-line">desde <b>{minPrice}</b></span>
+            <Link href="#programas" className="btn solid">{t("joinCta")}</Link>
+            <span className="price-line">{t("joinFrom")} <b>{minPrice}</b></span>
           </div>
         </div>
       </section>

@@ -4,21 +4,22 @@ import { useEffect, useState } from "react"
 import { Link } from "@/i18n/navigation"
 import NextLink from "next/link"
 import BrandLogo from "@/components/BrandLogo"
-import { useTranslations } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 
 export default function Footer() {
   const t = useTranslations("Footer")
+  const locale = useLocale()
   const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
   const [nlEmail, setNlEmail] = useState("")
   const [nlStatus, setNlStatus] = useState<"idle" | "sending" | "ok" | "error">("idle")
 
   useEffect(() => {
-    fetch("/api/site-content")
+    fetch(`/api/site-content?locale=${locale}`)
       .then((r) => r.json())
       .then((d) => setContent(d))
       .catch(() => {})
-  }, [])
+  }, [locale])
 
   async function subscribe() {
     if (!nlEmail.includes("@") || nlStatus === "sending") {
