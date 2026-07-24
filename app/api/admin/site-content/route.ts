@@ -83,12 +83,10 @@ export async function POST(req: NextRequest) {
     create: { key, value: JSON.stringify(parsed.data) },
   })
 
-  revalidatePath("/", "page")
-  revalidatePath("/academia")
-  revalidatePath("/certificaciones")
-  revalidatePath("/eventos")
-  revalidatePath("/blog")
-  revalidatePath("/contacto")
+  // Las páginas públicas ahora viven bajo /[locale] y la home se renderiza
+  // estática con el contenido incrustado — revalidar todo el subárbol
+  // localizado hace que la edición se vea al instante (ES y EN).
+  revalidatePath("/[locale]", "layout")
 
   return NextResponse.json({ ok: true })
 }

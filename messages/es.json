@@ -21,6 +21,11 @@
     "en": "EN",
     "label": "Cambiar idioma"
   },
+  "WhatsApp": {
+    "label": "Consulta gratuita",
+    "aria": "Solicitar una consulta por WhatsApp",
+    "message": "Hola Devora, me gustaría solicitar una consulta. ¿Podríamos agendar una sesión exploratoria?"
+  },
   "Footer": {
     "academiaTitulo": "Academia",
     "todosProgramas": "Todos los programas",

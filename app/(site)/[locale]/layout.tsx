@@ -157,8 +157,9 @@ export default async function LocaleLayout({
             <div id="contenido">{children}</div>
             <PwaRegister />
           </Providers>
+          {/* WhatsAppFab usa useTranslations → debe ir dentro del provider */}
+          <WhatsAppFab />
         </NextIntlClientProvider>
-        <WhatsAppFab />
         <Analytics />
       </body>
     </html>

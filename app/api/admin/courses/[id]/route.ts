@@ -60,9 +60,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     return NextResponse.json({ error: "Curso no encontrado" }, { status: 404 })
   }
 
-  revalidatePath("/academia")
-  revalidatePath("/")
-  revalidatePath(`/programas/${course.slug}`)
+  revalidatePath("/[locale]", "layout")
 
   return NextResponse.json({ ok: true, course })
 }
@@ -92,8 +90,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     return NextResponse.json({ error: "Curso no encontrado" }, { status: 404 })
   }
 
-  revalidatePath("/academia")
-  revalidatePath("/")
+  revalidatePath("/[locale]", "layout")
 
   return NextResponse.json({ ok: true })
 }

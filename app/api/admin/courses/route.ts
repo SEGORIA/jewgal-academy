@@ -89,8 +89,7 @@ export async function POST(req: NextRequest) {
     },
   })
 
-  revalidatePath("/academia")
-  revalidatePath("/")
+  revalidatePath("/[locale]", "layout")
 
   return NextResponse.json({ ok: true, course })
 }

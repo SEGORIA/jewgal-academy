@@ -122,8 +122,10 @@ export default async function RootLayout({
             <div id="contenido">{children}</div>
             <PwaRegister />
           </Providers>
+          {/* WhatsAppFab usa useTranslations → debe ir dentro del provider
+              (aunque se oculta en /aula y /superadmin, se renderiza en SSR) */}
+          <WhatsAppFab />
         </NextIntlClientProvider>
-        <WhatsAppFab />
         <Analytics />
       </body>
     </html>
