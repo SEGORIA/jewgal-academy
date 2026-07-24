@@ -5,14 +5,14 @@ import { Link } from "@/i18n/navigation"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
-import { useLocale } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 
-function buildContactInfo(content: SiteContent) {
+function buildContactInfo(content: SiteContent, labels: { email: string; phone: string; location: string }) {
   return [
     {
       n: "01",
-      label: "Correo electrónico",
+      label: labels.email,
       value: content.contacto.email,
       href: `mailto:${content.contacto.email}`,
       icon: (
@@ -24,7 +24,7 @@ function buildContactInfo(content: SiteContent) {
     },
     {
       n: "02",
-      label: "Teléfono / WhatsApp",
+      label: labels.phone,
       value: content.contacto.phone,
       href: `tel:${content.contacto.phone.replace(/[^\d+]/g, "")}`,
       icon: (
@@ -35,7 +35,7 @@ function buildContactInfo(content: SiteContent) {
     },
     {
       n: "03",
-      label: "Ubicación",
+      label: labels.location,
       value: content.contacto.city,
       href: null,
       icon: (
@@ -52,6 +52,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function ContactoPage() {
   const locale = useLocale()
+  const t = useTranslations("Contacto")
   const [form, setForm] = useState({ nombre: "", email: "", asunto: "", mensaje: "" })
   const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
 
@@ -62,15 +63,15 @@ export default function ContactoPage() {
       .catch(() => {})
   }, [locale])
 
-  const contactInfo = buildContactInfo(content)
+  const contactInfo = buildContactInfo(content, { email: t("infoEmail"), phone: t("infoPhone"), location: t("infoLocation") })
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle")
   const [errorMsg, setErrorMsg] = useState("")
 
   const errors = {
-    nombre: form.nombre.trim().length < 2 ? "Ingresá tu nombre" : "",
-    email: !EMAIL_RE.test(form.email) ? "Ingresá un email válido" : "",
-    mensaje: form.mensaje.trim().length < 10 ? "Escribí un mensaje (mínimo 10 caracteres)" : "",
+    nombre: form.nombre.trim().length < 2 ? t("errName") : "",
+    email: !EMAIL_RE.test(form.email) ? t("errEmail") : "",
+    mensaje: form.mensaje.trim().length < 10 ? t("errMessage") : "",
   }
   const isValid = !errors.nombre && !errors.email && !errors.mensaje
 
@@ -94,12 +95,12 @@ export default function ContactoPage() {
       })
       if (!res.ok) {
         const d = await res.json().catch(() => ({}))
-        throw new Error(d.error || "No se pudo enviar el mensaje")
+        throw new Error(d.error || t("errSend"))
       }
       setStatus("sent")
     } catch (err) {
       setStatus("error")
-      setErrorMsg(err instanceof Error ? err.message : "No se pudo enviar el mensaje")
+      setErrorMsg(err instanceof Error ? err.message : t("errSend"))
     }
   }
 
@@ -170,24 +171,22 @@ export default function ContactoPage() {
 
             {/* Columna izquierda: copy */}
             <div className="reveal">
-              <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Formulario</span>
+              <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>{t("formEyebrow")}</span>
               <h2 style={{
                 fontFamily: "var(--serif)", fontWeight: 500,
                 fontSize: "clamp(28px,3.4vw,44px)", color: "var(--text)",
                 lineHeight: 1.15, marginBottom: 24,
               }}>
-                Cuéntame qué buscas
+                {t("formTitle")}
               </h2>
               <p style={{ color: "var(--on-dark)", fontSize: 15, lineHeight: 1.75, marginBottom: 32 }}>
-                Respondo personalmente cada mensaje. Puedes escribirme sobre cualquier programa,
-                agendar una sesión de coaching personal 1:1 conmigo, pedir orientación gratuita
-                para elegir un programa, o cualquier duda que tengas.
+                {t("formIntro")}
               </p>
 
               {/* Redes sociales */}
               <div style={{ borderTop: "1px solid var(--line-d)", paddingTop: 28 }}>
                 <div style={{ fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 16 }}>
-                  Sígueme
+                  {t("followMe")}
                 </div>
                 <div style={{ display: "flex", gap: 14 }}>
                   {[
@@ -223,59 +222,59 @@ export default function ContactoPage() {
               }}>
                 <div style={{ fontFamily: "var(--serif)", fontSize: 48, color: "var(--gold-light)", marginBottom: 16 }}>✦</div>
                 <h3 style={{ fontFamily: "var(--serif)", fontSize: 28, color: "var(--text)", marginBottom: 12 }}>
-                  ¡Mensaje enviado!
+                  {t("sentTitle")}
                 </h3>
                 <p style={{ color: "var(--on-dark)", fontSize: 15, marginBottom: 28 }}>
-                  Gracias por escribirme. Te responderé a la brevedad.
+                  {t("sentText")}
                 </p>
                 <button
                   onClick={() => { setForm({ nombre: "", email: "", asunto: "", mensaje: "" }); setStatus("idle") }}
                   className="btn"
                 >
-                  Enviar otro mensaje
+                  {t("sentAgain")}
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="reveal" noValidate style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                 {/* Nombre */}
                 <div>
-                  <label style={labelStyle} htmlFor="c-nombre">Nombre completo *</label>
+                  <label style={labelStyle} htmlFor="c-nombre">{t("labelName")}</label>
                   <input id="c-nombre" name="nombre" value={form.nombre} onChange={handleChange} onBlur={handleBlur}
-                    placeholder="Tu nombre" className="field" style={inputStyle}
+                    placeholder={t("phName")} className="field" style={inputStyle}
                     aria-invalid={!!(touched.nombre && errors.nombre)} />
                   {touched.nombre && errors.nombre && <FieldError>{errors.nombre}</FieldError>}
                 </div>
 
                 {/* Email */}
                 <div>
-                  <label style={labelStyle} htmlFor="c-email">Correo electrónico *</label>
+                  <label style={labelStyle} htmlFor="c-email">{t("labelEmail")}</label>
                   <input id="c-email" name="email" type="email" value={form.email} onChange={handleChange} onBlur={handleBlur}
-                    placeholder="tu@correo.com" className="field" style={inputStyle}
+                    placeholder={t("phEmail")} className="field" style={inputStyle}
                     aria-invalid={!!(touched.email && errors.email)} />
                   {touched.email && errors.email && <FieldError>{errors.email}</FieldError>}
                 </div>
 
                 {/* Asunto */}
                 <div>
-                  <label style={labelStyle} htmlFor="c-asunto">¿Sobre qué quieres hablar?</label>
+                  <label style={labelStyle} htmlFor="c-asunto">{t("labelSubject")}</label>
                   <select id="c-asunto" name="asunto" value={form.asunto} onChange={handleChange} className="field" style={inputStyle}>
-                    <option value="">Selecciona un tema…</option>
+                    <option value="">{t("optDefault")}</option>
                     <option value="life-coaching">Life Coaching Integrativo</option>
                     <option value="joogal-adultos">Instructor Jewgal Adultos</option>
                     <option value="joogalkids">Instructor Jewgalkids</option>
                     <option value="cabala">Cábala Coach</option>
                     <option value="metodo-sholem">Método Sholem</option>
-                    <option value="coaching-1-1">Coaching personal 1:1 con Devora</option>
-                    <option value="sesion-exploratoria">Orientación gratuita para elegir programa</option>
-                    <option value="otro">Otro</option>
+                    <option value="coaching-1-1">{t("optCoaching")}</option>
+                    <option value="sesion-exploratoria">{t("optGuidance")}</option>
+                    <option value="otro">{t("optOther")}</option>
                   </select>
                 </div>
 
                 {/* Mensaje */}
                 <div>
-                  <label style={labelStyle} htmlFor="c-mensaje">Tu mensaje *</label>
+                  <label style={labelStyle} htmlFor="c-mensaje">{t("labelMessage")}</label>
                   <textarea id="c-mensaje" name="mensaje" value={form.mensaje} onChange={handleChange} onBlur={handleBlur}
-                    placeholder="Cuéntame con qué te puedo ayudar…"
+                    placeholder={t("phMessage")}
                     rows={5} className="field" style={{ ...inputStyle, resize: "vertical" }}
                     aria-invalid={!!(touched.mensaje && errors.mensaje)} />
                   {touched.mensaje && errors.mensaje && <FieldError>{errors.mensaje}</FieldError>}
@@ -293,7 +292,7 @@ export default function ContactoPage() {
                   disabled={status === "sending"}
                   style={{ marginTop: 4, opacity: status === "sending" ? 0.7 : 1 }}
                 >
-                  {status === "sending" ? "Enviando…" : "Enviar mensaje →"}
+                  {status === "sending" ? t("sending") : t("send")}
                 </button>
               </form>
             )}
@@ -305,12 +304,12 @@ export default function ContactoPage() {
       <section className="join pad">
         <div className="glow" />
         <div className="wrap join-inner reveal">
-          <span className="eyebrow" style={{ display: "inline-block" }}>Programas</span>
-          <h2>¿Ya sabes qué programa <em>es para ti</em>?</h2>
-          <p>Explora las formaciones disponibles y encuentra el camino que resuena con tu propósito.</p>
+          <span className="eyebrow" style={{ display: "inline-block" }}>{t("ctaEyebrow")}</span>
+          <h2>{t("ctaTitle1")} <em>{t("ctaTitle2")}</em>?</h2>
+          <p>{t("ctaSubtext")}</p>
           <div className="join-actions">
-            <Link href="/#programas" className="btn solid">Ver todos los programas →</Link>
-            <Link href="/conoce-a-devora" className="btn">Conocer a Devora</Link>
+            <Link href="/#programas" className="btn solid">{t("ctaAll")}</Link>
+            <Link href="/conoce-a-devora" className="btn">{t("ctaDevora")}</Link>
           </div>
         </div>
       </section>

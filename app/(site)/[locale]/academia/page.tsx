@@ -7,84 +7,68 @@ import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
 import { TiltCard } from "@/components/motion/TiltCard"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { useLocale } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 import { formatPrice } from "@/lib/utils"
 
 type CourseInfo = { slug: string; title?: string; shortDesc?: string; price: number; currency: string; isFree: boolean }
 
+// Copy visual/comercial de cada programa. Los textos traducibles (tag,
+// duración, nivel, bullets) se resuelven en el componente vía next-intl
+// usando estas claves; título y descripción vienen de la DB.
 const PROGRAMS = [
   {
-    slug: "life-coaching-integrativo",
-    title: "Life Coaching Integrativo",
-    tag: "Formación profesional",
+    slug: "life-coaching-integrativo", title: "Life Coaching Integrativo",
+    tagKey: "tag_life", durKey: "dur_life", lvlKey: "lvl_all", bulletsKey: "bullets_life",
     desc: "Formación integral que une logoterapia, mindfulness y herramientas de coaching para acompañar procesos de transformación profunda.",
     price: "$1.500", free: false,
-    duration: "6 meses", level: "Todos los niveles",
-    grad: "linear-gradient(135deg,#3A2410 0%,#5C3A1E 100%)",
-    accent: "#A58D66", icon: "⟡",
-    bullets: ["Certificado internacional", "Clases en vivo + grabaciones", "Supervisión individual"],
+    grad: "linear-gradient(135deg,#3A2410 0%,#5C3A1E 100%)", accent: "#A58D66", icon: "⟡",
     certs: ["idc", "cel", "fgu"],
   },
   {
-    slug: "joogal-adultos",
-    title: "Instructor Jewgal · Adultos",
-    tag: "Certificación oficial",
+    slug: "joogal-adultos", title: "Instructor Jewgal · Adultos",
+    tagKey: "tag_adultos", durKey: "dur_3m", lvlKey: "lvl_none", bulletsKey: "bullets_adultos",
     desc: "Certifícate como instructor del Método Jewgal y desarrolla tu práctica como guía de bienestar y movimiento consciente.",
     price: "Gratis", free: true,
-    duration: "3 meses", level: "Sin requisitos",
-    grad: "linear-gradient(135deg,#3A2818 0%,#5C4026 100%)",
-    accent: "#C49F72", icon: "✦",
-    bullets: ["Certificado oficial Jewgal", "Manual completo incluido", "Mentoring grupal mensual"],
+    grad: "linear-gradient(135deg,#3A2818 0%,#5C4026 100%)", accent: "#C49F72", icon: "✦",
     certs: ["idc", "cel", "fgu"],
   },
   {
-    slug: "joogalkids",
-    title: "Instructor Jewgalkids",
-    tag: "Certificación infantil",
+    slug: "joogalkids", title: "Instructor Jewgalkids",
+    tagKey: "tag_kids", durKey: "dur_3m", lvlKey: "lvl_none", bulletsKey: "bullets_kids",
     desc: "Formación especializada para guiar el desarrollo integral de niños a través del movimiento, la creatividad y el juego consciente.",
     price: "$360", free: false,
-    duration: "3 meses", level: "Sin requisitos",
-    grad: "linear-gradient(135deg,#4A2418 0%,#6B3826 100%)",
-    accent: "#A76D61", icon: "★",
-    bullets: ["Certificado oficial Jewgalkids", "Recursos lúdicos descargables", "Mentoring mensual"],
+    grad: "linear-gradient(135deg,#4A2418 0%,#6B3826 100%)", accent: "#A76D61", icon: "★",
     certs: ["idc", "cel", "fgu"],
   },
   {
-    slug: "metodo-sholem",
-    title: "Método Sholem",
-    tag: "Liderazgo adolescente",
+    slug: "metodo-sholem", title: "Método Sholem",
+    tagKey: "tag_sholem", durKey: "dur_3m", lvlKey: "lvl_teens", bulletsKey: "bullets_sholem",
     desc: "Formación de instructores para acompañar a adolescentes en el desarrollo de su identidad, liderazgo y valores con propósito.",
     price: "$360", free: false,
-    duration: "3 meses", level: "Exp. con adolescentes",
-    grad: "linear-gradient(135deg,#42200F 0%,#653322 100%)",
-    accent: "#A76D61", icon: "◈",
-    bullets: ["Certificado de instructor", "Manual Método Sholem", "Supervisión grupal"],
+    grad: "linear-gradient(135deg,#42200F 0%,#653322 100%)", accent: "#A76D61", icon: "◈",
     certs: ["idc", "cel", "fgu"],
   },
   {
-    slug: "cabala-coach",
-    title: "Micro Curso · Cábala Coach",
-    tag: "Sabiduría ancestral",
+    slug: "cabala-coach", title: "Micro Curso · Cábala Coach",
+    tagKey: "tag_cabala", durKey: "dur_cabala", lvlKey: "lvl_all", bulletsKey: "bullets_cabala",
     desc: "Integra la sabiduría milenaria de la Cabalá como herramienta práctica de autoconocimiento, coaching y transformación personal.",
     price: "$360", free: false,
-    duration: "4 semanas", level: "Todos los niveles",
-    grad: "linear-gradient(135deg,#332508 0%,#4F3A12 100%)",
-    accent: "#CBB78B", icon: "❂",
-    bullets: ["Acceso de por vida", "Videos HD + guías PDF", "Comunidad privada"],
+    grad: "linear-gradient(135deg,#332508 0%,#4F3A12 100%)", accent: "#CBB78B", icon: "❂",
     certs: ["idc", "cel", "fgu"],
   },
 ]
 
 const PILLARS = [
-  { n: "01", title: "Coaching Integrativo", desc: "Unimos las mejores herramientas del coaching moderno con enfoques psicológicos y espirituales." },
-  { n: "02", title: "Sabiduría de la Cabalá", desc: "Incorporamos principios ancestrales que aportan profundidad y sentido a cada proceso de transformación." },
-  { n: "03", title: "Movimiento Consciente", desc: "El cuerpo como herramienta de cambio. El método Jewgal integra movimiento, respiración y presencia." },
-  { n: "04", title: "Comunidad Global", desc: "Aprendizaje entre pares, mentoring en vivo y acceso a una red de coaches e instructores activos." },
+  { n: "01", titleKey: "pillar1Title", descKey: "pillar1Desc" },
+  { n: "02", titleKey: "pillar2Title", descKey: "pillar2Desc" },
+  { n: "03", titleKey: "pillar3Title", descKey: "pillar3Desc" },
+  { n: "04", titleKey: "pillar4Title", descKey: "pillar4Desc" },
 ]
 
 export default function AcademiaPage() {
   const locale = useLocale()
+  const t = useTranslations("Academia")
   const [isMobile, setIsMobile] = useState(false)
   const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
   useEffect(() => {
@@ -111,16 +95,20 @@ export default function AcademiaPage() {
       .catch(() => {})
   }, [locale])
 
-  // Precio real de la DB cuando existe; si no, el valor por defecto del array
+  // Precio real de la DB cuando existe; si no, el valor por defecto del array.
+  // tag/duración/nivel/bullets se traducen vía next-intl con sus claves.
   const programs = PROGRAMS.map((p) => {
     const c = dbCourses[p.slug]
-    if (!c) return p
     return {
       ...p,
-      title: c.title || p.title,
-      desc: c.shortDesc || p.desc,
-      price: c.isFree ? (locale === "en" ? "Free" : "Gratis") : formatPrice(c.price, c.currency),
-      free: c.isFree,
+      tag: t(p.tagKey),
+      duration: t(p.durKey),
+      level: t(p.lvlKey),
+      bullets: t.raw(p.bulletsKey) as string[],
+      title: c?.title || p.title,
+      desc: c?.shortDesc || p.desc,
+      price: c ? (c.isFree ? (locale === "en" ? "Free" : "Gratis") : formatPrice(c.price, c.currency)) : p.price,
+      free: c ? c.isFree : p.free,
     }
   })
 
@@ -153,8 +141,8 @@ export default function AcademiaPage() {
             {content.pages.academia.subtext}
           </p>
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
-            <Link href="#programas" className="btn solid">Ver programas →</Link>
-            <Link href="/conoce-a-devora" className="btn">Conocer a Devora</Link>
+            <Link href="#programas" className="btn solid">{t("heroCta1")}</Link>
+            <Link href="/conoce-a-devora" className="btn">{t("heroCta2")}</Link>
           </div>
         </div>
       </section>
@@ -179,8 +167,8 @@ export default function AcademiaPage() {
                 whileHover={{ background: "rgba(165,141,102,.04)" }}
               >
                 <span style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: 13, color: "var(--gold)", display: "block", marginBottom: 16 }}>{p.n}</span>
-                <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 22, color: "var(--text)", marginBottom: 10 }}>{p.title}</h3>
-                <p style={{ color: "var(--on-dark)", fontSize: 14, lineHeight: 1.65 }}>{p.desc}</p>
+                <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 22, color: "var(--text)", marginBottom: 10 }}>{t(p.titleKey)}</h3>
+                <p style={{ color: "var(--on-dark)", fontSize: 14, lineHeight: 1.65 }}>{t(p.descKey)}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -192,13 +180,13 @@ export default function AcademiaPage() {
         <div className="wrap" style={{ padding: isMobile ? "52px 20px" : "100px 36px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 60, flexWrap: "wrap", gap: 16 }}>
             <div className="reveal">
-              <span className="eyebrow" style={{ display: "block", marginBottom: 12 }}>Nuestros programas</span>
+              <span className="eyebrow" style={{ display: "block", marginBottom: 12 }}>{t("programsEyebrow")}</span>
               <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(28px,3.6vw,46px)", color: "var(--text)", lineHeight: 1.1 }}>
-                Formaciones y certificaciones
+                {t("programsTitle")}
               </h2>
             </div>
             <Link href="/certificaciones" className="reveal" style={{ color: "var(--gold)", fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", textDecoration: "none" }}>
-              Ver certificaciones →
+              {t("viewCertifications")}
             </Link>
           </div>
 
@@ -250,13 +238,13 @@ export default function AcademiaPage() {
               display: "flex", flexDirection: "column", justifyContent: "flex-end",
             }}>
               <span style={{ fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--gold-light)", marginBottom: 14, display: "block" }}>
-                Programa educativo insignia
+                {t("sholemEyebrow")}
               </span>
               <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(30px,4vw,46px)", color: "#F6EEE8", lineHeight: 1.05, marginBottom: 18 }}>
-                Método Sholem
+                {t("sholemTitle")}
               </h3>
               <p style={{ color: "rgba(246,238,232,.86)", fontSize: "clamp(14px,1.6vw,16px)", lineHeight: 1.65, maxWidth: 440, marginBottom: 26 }}>
-                Un juego educativo único que convierte el liderazgo, el coaching y la identidad en una experiencia transformadora — ya está cambiando escuelas, comunidades y familias.
+                {t("sholemDesc")}
               </p>
               <span style={{
                 display: "inline-flex", alignItems: "center", gap: 10, alignSelf: "flex-start",
@@ -265,7 +253,7 @@ export default function AcademiaPage() {
                 padding: "13px 28px", borderRadius: 30,
                 boxShadow: "0 10px 30px -8px rgba(167,109,97,.6)",
               }}>
-                Conócelo <span aria-hidden style={{ fontSize: 15 }}>↗</span>
+                {t("sholemCta")} <span aria-hidden style={{ fontSize: 15 }}>↗</span>
               </span>
             </div>
           </motion.a>
@@ -327,7 +315,7 @@ export default function AcademiaPage() {
                                 background: `${p.accent}18`, color: p.accent,
                                 padding: "5px 12px", borderRadius: 14, border: `1px solid ${p.accent}35`,
                                 whiteSpace: "nowrap",
-                              }}>Gratuito</span>
+                              }}>{t("free")}</span>
                             )}
                           </div>
                           <span style={{ fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: p.accent, display: "block", marginBottom: 12 }}>{p.tag}</span>
@@ -342,7 +330,7 @@ export default function AcademiaPage() {
                             <span style={{ fontSize: 10, border: "1px solid rgba(165,141,102,.2)", borderRadius: 16, padding: "4px 12px", color: "var(--on-dark)" }}>◈ {p.level}</span>
                           </div>
                           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-                            <span style={{ fontSize: 9, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--on-dark-faint)", flexShrink: 0 }}>Certificado por</span>
+                            <span style={{ fontSize: 9, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--on-dark-faint)", flexShrink: 0 }}>{t("certifiedBy")}</span>
                             <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                               {p.certs.map((slug) => (
                                 <span key={slug} style={{ background: "#f7f3ec", borderRadius: 4, padding: "4px 8px", display: "flex", alignItems: "center" }}>
@@ -366,7 +354,7 @@ export default function AcademiaPage() {
                               color: p.accent, border: `1px solid ${p.accent}50`,
                               borderRadius: 3, padding: "8px 16px", flexShrink: 0,
                             }}>
-                              Ver programa →
+                              {t("viewProgram")}
                             </span>
                           </div>
                         </div>
@@ -398,15 +386,15 @@ export default function AcademiaPage() {
       <section className="join pad">
         <div className="glow" />
         <div className="wrap join-inner reveal">
-          <span className="eyebrow" style={{ display: "inline-block" }}>¿Por dónde empezar?</span>
-          <h2>Habla con nosotros y encontremos<br/><em>el camino ideal para ti.</em></h2>
-          <p>Una sesión exploratoria gratuita para orientarte entre todos los programas disponibles.</p>
+          <span className="eyebrow" style={{ display: "inline-block" }}>{t("ctaEyebrow")}</span>
+          <h2>{t("ctaTitle1")}<br/><em>{t("ctaTitle2")}</em></h2>
+          <p>{t("ctaSubtext")}</p>
           <div className="join-actions">
-            <Link href="/contacto" className="btn solid">Agendar sesión gratuita →</Link>
-            <Link href="/certificaciones" className="btn">Ver certificaciones</Link>
+            <Link href="/contacto" className="btn solid">{t("ctaBook")}</Link>
+            <Link href="/certificaciones" className="btn">{t("ctaCerts")}</Link>
           </div>
           <p style={{ marginTop: 20, fontSize: 13.5 }}>
-            ¿Buscas coaching personal, no un programa? <Link href="/coaching-1-1" style={{ color: "var(--gold-light)", textDecoration: "underline" }}>Conoce las sesiones 1:1 con Devora →</Link>
+            {t("ctaCoachingQ")} <Link href="/coaching-1-1" style={{ color: "var(--gold-light)", textDecoration: "underline" }}>{t("ctaCoachingLink")}</Link>
           </p>
         </div>
       </section>
