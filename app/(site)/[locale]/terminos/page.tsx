@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Condiciones generales de uso de los servicios educativos de Jewgal Academy.",
 }
 
-const SECTIONS = [
+const SECTIONS_ES = [
   {
     title: "1. Aceptación de los términos",
     content: `Al registrarte en Jewgal Academy o al acceder a cualquiera de nuestros servicios, aceptás estos Términos de Uso en su totalidad. Si no estás de acuerdo con alguna parte, te pedimos que no utilices nuestra plataforma.
@@ -76,7 +76,103 @@ En ningún caso Jewgal Academy será responsable por daños indirectos, pérdida
   },
 ]
 
-export default function TerminosPage() {
+const SECTIONS_EN = [
+  {
+    title: "1. Acceptance of terms",
+    content: `By registering with Jewgal Academy or accessing any of our services, you accept these Terms of Use in their entirety. If you do not agree with any part, we ask that you not use our platform.
+
+Jewgal Academy is operated by Sholem Corazón Valiente Inc., a non-profit organization based in Miami, Florida, USA.`,
+  },
+  {
+    title: "2. Description of the service",
+    content: `Jewgal Academy offers online and in-person training programs in the areas of Integrative Life Coaching, applied Kabbalah, the Jewgal Method, and leadership. The services include:
+
+• Access to the Virtual Classroom with materials, videos, and training resources.
+• Participation in live classes, retreats, and in-person events.
+• Certifications issued by Jewgal Academy based on the programs completed.
+• Access to a community of students and graduates.`,
+  },
+  {
+    title: "3. Registration and account",
+    content: `To access the Virtual Classroom you must create an account with truthful and up-to-date information. You are responsible for keeping your password confidential and for all activities carried out from your account.
+
+Jewgal Academy reserves the right to suspend or delete accounts that breach these terms or that use the service abusively.`,
+  },
+  {
+    title: "4. Payments and refunds",
+    content: `Program prices are listed in US dollars (USD) at the time of enrollment. Payments are processed through Stripe, a secure PCI-DSS certified platform.
+
+Refund policy: you may request a full refund within 7 days of your enrollment, provided you have not accessed more than 20% of the program content. After that period, payments are non-refundable.
+
+To request a refund, write to us at hola@jewgalacademy.com with the subject "Refund request".`,
+  },
+  {
+    title: "5. Intellectual property",
+    content: `All Jewgal Academy content — including videos, texts, study materials, methodologies, brand, logos, and designs — is the exclusive property of Sholem Corazón Valiente Inc. or its licensors.
+
+You have the right to access the materials for your personal and educational use. You may not:
+
+• Reproduce, distribute, or sell the content without written authorization.
+• Share your access credentials with third parties.
+• Record or rebroadcast live classes without express permission.`,
+  },
+  {
+    title: "6. Code of conduct",
+    content: `Jewgal Academy is a space for personal and collective growth. We expect all participants to maintain respectful, honest, and empathetic treatment toward other students, instructors, and the team.
+
+The use of offensive language, the sharing of inappropriate content, and any conduct that negatively affects the community experience are not permitted. Non-compliance may result in suspension of access without a refund.`,
+  },
+  {
+    title: "7. Certifications",
+    content: `Certifications issued by Jewgal Academy attest to the successful completion of a program and the fulfillment of the established academic requirements (minimum attendance, assessments, and practical work).
+
+Jewgal Academy does not guarantee specific results in terms of income, employment, or professional performance derived from obtaining a certification.`,
+  },
+  {
+    title: "8. Limitation of liability",
+    content: `Jewgal Academy provides its services "as is" and makes reasonable efforts to maintain the platform's availability. However, we do not guarantee uninterrupted or error-free operation.
+
+In no event shall Jewgal Academy be liable for indirect damages, data loss, or economic harm arising from the use or inability to use the platform, beyond what applicable law establishes.`,
+  },
+  {
+    title: "9. Modifications",
+    content: `We reserve the right to modify these terms at any time. Changes will be notified by email to registered users at least 15 days in advance. Continued use of the service after that date implies acceptance of the new terms.`,
+  },
+  {
+    title: "10. Governing law",
+    content: `These terms are governed by the laws of the State of Florida, USA. Any dispute that cannot be resolved amicably will be submitted to the jurisdiction of the courts of Miami-Dade County, Florida.`,
+  },
+]
+
+const COPY = {
+  es: {
+    legal: "Legal",
+    title1: "Términos",
+    title2: "de Uso",
+    updated: "Última actualización: 29 de junio de 2026",
+    intro: "Estos Términos de Uso regulan la relación entre Jewgal Academy y sus alumnos, visitantes y usuarios. Por favor leelos con atención antes de utilizar nuestros servicios.",
+    questions: "¿Tenés preguntas sobre estos términos?",
+    privacy: "Política de privacidad →",
+    home: "Volver al inicio",
+    sections: SECTIONS_ES,
+  },
+  en: {
+    legal: "Legal",
+    title1: "Terms",
+    title2: "of Use",
+    updated: "Last updated: June 29, 2026",
+    intro: "These Terms of Use govern the relationship between Jewgal Academy and its students, visitors, and users. Please read them carefully before using our services.",
+    questions: "Have questions about these terms?",
+    privacy: "Privacy policy →",
+    home: "Back to home",
+    sections: SECTIONS_EN,
+  },
+} as const
+
+export default async function TerminosPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  const c = COPY[locale as keyof typeof COPY] ?? COPY.es
+
   return (
     <>
       <Navbar />
@@ -89,13 +185,13 @@ export default function TerminosPage() {
       }}>
         <div className="wrap">
           <span style={{ fontSize: 10, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 18 }}>
-            Legal
+            {c.legal}
           </span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(32px,5vw,60px)", color: "var(--text)", lineHeight: 1.05, letterSpacing: "-.01em", marginBottom: 16 }}>
-            Términos<br /><em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>de Uso</em>
+            {c.title1}<br /><em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>{c.title2}</em>
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: 14, lineHeight: 1.7 }}>
-            Última actualización: 29 de junio de 2026
+            {c.updated}
           </p>
         </div>
       </section>
@@ -105,10 +201,10 @@ export default function TerminosPage() {
         <div className="wrap" style={{ padding: "72px 36px", maxWidth: 760 }}>
 
           <p style={{ color: "var(--on-dark)", fontSize: 16, lineHeight: 1.8, marginBottom: 52 }}>
-            Estos Términos de Uso regulan la relación entre Jewgal Academy y sus alumnos, visitantes y usuarios. Por favor leelos con atención antes de utilizar nuestros servicios.
+            {c.intro}
           </p>
 
-          {SECTIONS.map((s) => (
+          {c.sections.map((s) => (
             <div key={s.title} style={{ marginBottom: 44, paddingBottom: 44, borderBottom: "1px solid var(--line-d)" }}>
               <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(18px,2vw,24px)", color: "var(--text)", marginBottom: 16, lineHeight: 1.2 }}>
                 {s.title}
@@ -124,7 +220,7 @@ export default function TerminosPage() {
           {/* Contacto */}
           <div style={{ background: "var(--navy-2)", border: "1px solid var(--line-d)", borderRadius: 10, padding: "28px 32px", marginTop: 8 }}>
             <p style={{ color: "var(--on-dark)", fontSize: 14, lineHeight: 1.7, marginBottom: 16 }}>
-              ¿Tenés preguntas sobre estos términos?
+              {c.questions}
             </p>
             <a href="mailto:hola@jewgalacademy.com" style={{ color: "var(--gold)", fontSize: 14, textDecoration: "none" }}>
               hola@jewgalacademy.com
@@ -133,10 +229,10 @@ export default function TerminosPage() {
 
           <div style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid var(--line-d)", display: "flex", gap: 20, flexWrap: "wrap" }}>
             <Link href="/politica-privacidad" style={{ fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--on-dark)", textDecoration: "none" }}>
-              Política de privacidad →
+              {c.privacy}
             </Link>
             <Link href="/" style={{ fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--on-dark)", textDecoration: "none" }}>
-              Volver al inicio
+              {c.home}
             </Link>
           </div>
         </div>

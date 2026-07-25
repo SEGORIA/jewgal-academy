@@ -6,12 +6,14 @@ import { signIn, getSession } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Link } from "@/i18n/navigation"
 import BrandLogo from "@/components/BrandLogo"
+import { useTranslations } from "next-intl"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
 
 const spring = { type: "spring" as const, stiffness: 280, damping: 22 }
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function LoginForm() {
+  const t = useTranslations("Login")
   const router = useRouter()
   const params = useSearchParams()
   const redirect = params.get("redirect") || "/aula"
@@ -34,7 +36,7 @@ export default function LoginForm() {
     const res = await signIn("credentials", { email, password, redirect: false })
     setLoading(false)
     if (res?.error) {
-      setError("Email o contraseña incorrectos.")
+      setError(t("error"))
     } else {
       const session = await getSession()
       const destination = session?.user?.role === "admin"
@@ -155,13 +157,13 @@ export default function LoginForm() {
               >✦</motion.div>
               <motion.h2 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}
                 style={{ fontFamily: "var(--serif)", fontSize: 28, color: "var(--text)", marginBottom: 10, fontWeight: 500 }}>
-                ¡Te damos la bienvenida!
+                {t("welcome")}
               </motion.h2>
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.38 }}
                 style={{ color: "var(--text-muted)", fontSize: 15 }}>
                 {dest.startsWith("/superadmin")
-                  ? "Entrando al panel de administración…"
-                  : "Entrando a tu aula virtual…"}
+                  ? t("enteringAdmin")
+                  : t("enteringAula")}
               </motion.p>
               <motion.div
                 initial={{ width: 0 }} animate={{ width: "100%" }}
@@ -192,7 +194,7 @@ export default function LoginForm() {
                 className="eyebrow"
                 style={{ display: "inline-block", marginBottom: 14 }}
               >
-                Aula virtual
+                {t("eyebrow")}
               </motion.span>
 
               {/* Título */}
@@ -202,7 +204,7 @@ export default function LoginForm() {
                 transition={{ delay: 0.22 }}
                 style={{ fontFamily: "var(--serif)", fontSize: 36, fontWeight: 500, color: "var(--text)", lineHeight: 1.05, marginBottom: 6 }}
               >
-                Iniciar sesión
+                {t("title")}
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0 }}
@@ -210,7 +212,7 @@ export default function LoginForm() {
                 transition={{ delay: 0.3 }}
                 style={{ color: "var(--text-muted)", fontSize: 15, marginBottom: 32 }}
               >
-                Accedé a tu espacio de aprendizaje
+                {t("subtitle")}
               </motion.p>
 
               {/* Error con shake */}
@@ -233,7 +235,7 @@ export default function LoginForm() {
                 {/* Email */}
                 <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.36 }}>
                   <label style={{ display: "block", fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 9 }}>
-                    Email
+                    {t("email")}
                   </label>
                   <input
                     type="email" value={email} onChange={(e) => setEmail(e.target.value)}
@@ -245,7 +247,7 @@ export default function LoginForm() {
                 {/* Contraseña */}
                 <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.44 }}>
                   <label style={{ display: "block", fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 9 }}>
-                    Contraseña
+                    {t("password")}
                   </label>
                   <div style={{ position: "relative" }}>
                     <input
@@ -255,7 +257,7 @@ export default function LoginForm() {
                     />
                     <motion.button
                       type="button" onClick={() => setShowPw(!showPw)}
-                      aria-label={showPw ? "Ocultar contraseña" : "Mostrar contraseña"}
+                      aria-label={showPw ? t("hidePassword") : t("showPassword")}
                       whileTap={{ scale: 0.82 }}
                       style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)", display: "flex", alignItems: "center", padding: 4 }}
                     >
@@ -298,7 +300,7 @@ export default function LoginForm() {
                         <Loader2 size={16} />
                       </motion.div>
                     )}
-                    {loading ? "Entrando…" : "Entrar al aula →"}
+                    {loading ? t("loading") : t("submit")}
                   </motion.button>
                 </motion.div>
               </form>
@@ -326,13 +328,13 @@ export default function LoginForm() {
           style={{ textAlign: "center", marginTop: 24 }}
         >
           <p style={{ fontSize: 14, color: "var(--text-muted)", marginBottom: 10 }}>
-            ¿No tenés cuenta?{" "}
+            {t("noAccount")}{" "}
             <Link href="/#programas" style={{ color: "var(--gold)", fontWeight: 600, textDecoration: "none" }}>
-              Inscribite en un programa
+              {t("enroll")}
             </Link>
           </p>
           <Link href="/" style={{ fontSize: 12, color: "var(--text-dim)", textDecoration: "none", letterSpacing: ".08em" }}>
-            ← Volver al sitio
+            {t("backSite")}
           </Link>
         </motion.div>
       </motion.div>

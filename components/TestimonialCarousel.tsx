@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { useTranslations } from "next-intl"
 
 const TESTIMONIALS = [
   {
@@ -28,6 +29,7 @@ const variants = {
 }
 
 export default function TestimonialCarousel() {
+  const t = useTranslations("Testimonials")
   const [idx, setIdx]       = useState(0)
   const [dir, setDir]       = useState(1)
   const [paused, setPaused] = useState(false)
@@ -116,7 +118,7 @@ export default function TestimonialCarousel() {
           <motion.button
             key={i}
             onClick={() => go(i)}
-            aria-label={`Testimonio ${i + 1}`}
+            aria-label={`${t("testimonial")} ${i + 1}`}
             animate={{ width: i === idx ? 26 : 6, background: i === idx ? "#C49F72" : "rgba(165,141,102,.25)" }}
             transition={{ duration: 0.3 }}
             style={{ height: 6, borderRadius: 3, border: "none", cursor: "pointer", padding: 0 }}
@@ -126,8 +128,8 @@ export default function TestimonialCarousel() {
 
       {/* Botones prev / next */}
       {([
-        { label: "Anterior", delta: -1, side: "left"  as const, char: "‹" },
-        { label: "Siguiente", delta:  1, side: "right" as const, char: "›" },
+        { label: t("previous"), delta: -1, side: "left"  as const, char: "‹" },
+        { label: t("next"), delta:  1, side: "right" as const, char: "›" },
       ] as const).map(({ label, delta, side, char }) => (
         <motion.button
           key={side}

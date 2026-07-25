@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
+import { useTranslations } from "next-intl"
 import { ShieldCheck, Search } from "lucide-react"
 
 export default function VerificarPage() {
+  const t = useTranslations("Verificar")
   const router = useRouter()
   const [numero, setNumero] = useState("")
 
@@ -32,10 +34,10 @@ export default function VerificarPage() {
           </div>
           <span className="eyebrow" style={{ display: "block", marginBottom: 16 }}>Jewgal Academy</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(30px,4vw,44px)", color: "var(--text)", marginBottom: 16 }}>
-            Verificar un certificado
+            {t("title")}
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: 15.5, lineHeight: 1.7, marginBottom: 36 }}>
-            Ingresá el número de certificado (por ejemplo <em style={{ fontStyle: "italic", color: "var(--gold-light)" }}>JA-2026-0001</em>) para confirmar su autenticidad.
+            {t.rich("intro", { em: (c) => <em style={{ fontStyle: "italic", color: "var(--gold-light)" }}>{c}</em> })}
           </p>
           <form onSubmit={handleSubmit} style={{ display: "flex", gap: 10, maxWidth: 420, margin: "0 auto" }}>
             <input
@@ -49,7 +51,7 @@ export default function VerificarPage() {
               }}
             />
             <button type="submit" className="btn solid" style={{ display: "flex", alignItems: "center", gap: 8, whiteSpace: "nowrap" }}>
-              <Search size={15} /> Verificar
+              <Search size={15} /> {t("verify")}
             </button>
           </form>
         </div>

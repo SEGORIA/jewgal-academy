@@ -2,13 +2,15 @@ import { Link } from "@/i18n/navigation"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
+import { getTranslations } from "next-intl/server"
 import { db } from "@/lib/db"
 import { ShieldCheck, ShieldX } from "lucide-react"
 
 export const dynamic = "force-dynamic"
 
-export default async function VerificarNumeroPage({ params }: { params: Promise<{ numero: string }> }) {
-  const { numero } = await params
+export default async function VerificarNumeroPage({ params }: { params: Promise<{ locale: string; numero: string }> }) {
+  const { locale, numero } = await params
+  const t = await getTranslations("Verificar")
 
   const enrollment = await db.enrollment.findUnique({
     where: { certificateNumber: decodeURIComponent(numero) },
@@ -52,38 +54,38 @@ export default async function VerificarNumeroPage({ params }: { params: Promise<
             {valid && enrollment ? (
               <>
                 <span style={{ fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--success)", display: "block", marginBottom: 12 }}>
-                  Certificado verificado
+                  {t("verifiedLabel")}
                 </span>
                 <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(24px,3vw,32px)", color: "var(--text)", marginBottom: 20 }}>
                   {enrollment.user.name}
                 </h1>
                 <p style={{ color: "var(--on-dark)", fontSize: 15, lineHeight: 1.7, marginBottom: 8 }}>
-                  Completó exitosamente el programa
+                  {t("completedProgram")}
                 </p>
                 <p style={{ fontFamily: "var(--serif)", fontSize: 20, color: "var(--gold-light)", marginBottom: 20 }}>
                   {enrollment.course.title}
                 </p>
                 <p style={{ color: "var(--on-dark-faint)", fontSize: 13 }}>
-                  {new Date(enrollment.completedAt!).toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" })}
-                  {" · "}N° {enrollment.certificateNumber}
+                  {new Date(enrollment.completedAt!).toLocaleDateString(locale === "en" ? "en-US" : "es-AR", { day: "numeric", month: "long", year: "numeric" })}
+                  {" · "}{t("certNumber")} {enrollment.certificateNumber}
                 </p>
               </>
             ) : (
               <>
                 <span style={{ fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--danger)", display: "block", marginBottom: 12 }}>
-                  No encontrado
+                  {t("notFoundLabel")}
                 </span>
                 <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(22px,2.8vw,28px)", color: "var(--text)", marginBottom: 16 }}>
-                  Este número de certificado no es válido
+                  {t("invalidTitle")}
                 </h1>
                 <p style={{ color: "var(--on-dark)", fontSize: 14.5, lineHeight: 1.7 }}>
-                  Revisá que el número esté escrito correctamente, o contactanos si creés que se trata de un error.
+                  {t("invalidText")}
                 </p>
               </>
             )}
 
             <Link href="/verificar" className="btn" style={{ display: "inline-block", marginTop: 28 }}>
-              Verificar otro certificado
+              {t("verifyAnother")}
             </Link>
           </div>
         </div>

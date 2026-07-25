@@ -5,11 +5,13 @@ import { Link } from "@/i18n/navigation"
 import { useRouter } from "next/navigation"
 import { signIn } from "next-auth/react"
 import { motion } from "framer-motion"
+import { useTranslations } from "next-intl"
 import { CheckCircle2, Loader2, AlertTriangle } from "lucide-react"
 
 type Estado = "verificando" | "ok" | "existente" | "error"
 
 export default function CompraExitosaPage() {
+  const t = useTranslations("CompraExitosa")
   const router = useRouter()
   const [estado, setEstado] = useState<Estado>("verificando")
   const [curso, setCurso] = useState("")
@@ -61,10 +63,10 @@ export default function CompraExitosaPage() {
           <>
             <Loader2 size={44} style={{ color: "var(--gold)", margin: "0 auto 20px", animation: "spin 1s linear infinite" }} />
             <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 26, color: "var(--text)", marginBottom: 10 }}>
-              Confirmando tu pago…
+              {t("verifyingTitle")}
             </h1>
             <p style={{ color: "var(--text-muted)", fontSize: 14, lineHeight: 1.6 }}>
-              Un momento, estamos verificando la compra con Stripe.
+              {t("verifyingText")}
             </p>
           </>
         )}
@@ -73,11 +75,11 @@ export default function CompraExitosaPage() {
           <>
             <CheckCircle2 size={44} style={{ color: "var(--success)", margin: "0 auto 20px" }} />
             <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 26, color: "var(--text)", marginBottom: 10 }}>
-              ¡Pago confirmado!
+              {t("okTitle")}
             </h1>
             <p style={{ color: "var(--text-muted)", fontSize: 14, lineHeight: 1.6 }}>
-              {curso ? <>Ya estás inscripto en <strong style={{ color: "var(--text)" }}>{curso}</strong>.</> : "Tu inscripción está lista."}
-              <br />Entrando al aula…
+              {curso ? t.rich("okEnrolled", { b: (c) => <strong style={{ color: "var(--text)" }}>{c}</strong>, curso }) : t("okReady")}
+              <br />{t("okEntering")}
             </p>
           </>
         )}
@@ -86,11 +88,11 @@ export default function CompraExitosaPage() {
           <>
             <CheckCircle2 size={44} style={{ color: "var(--success)", margin: "0 auto 20px" }} />
             <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 26, color: "var(--text)", marginBottom: 10 }}>
-              ¡Pago confirmado!
+              {t("okTitle")}
             </h1>
             <p style={{ color: "var(--text-muted)", fontSize: 14, lineHeight: 1.6 }}>
-              {curso ? <>Se agregó <strong style={{ color: "var(--text)" }}>{curso}</strong> a tu cuenta.</> : "Tu inscripción está lista."}
-              <br />Inicia sesión con tu contraseña de siempre…
+              {curso ? t.rich("existingAdded", { b: (c) => <strong style={{ color: "var(--text)" }}>{c}</strong>, curso }) : t("okReady")}
+              <br />{t("existingLogin")}
             </p>
           </>
         )}
@@ -99,15 +101,14 @@ export default function CompraExitosaPage() {
           <>
             <AlertTriangle size={44} style={{ color: "var(--warning)", margin: "0 auto 20px" }} />
             <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 26, color: "var(--text)", marginBottom: 10 }}>
-              No pudimos confirmar el pago
+              {t("errorTitle")}
             </h1>
             <p style={{ color: "var(--text-muted)", fontSize: 14, lineHeight: 1.6, marginBottom: 24 }}>
-              Si el cobro se realizó, tu inscripción se procesará automáticamente en unos minutos.
-              Si no puedes entrar al aula, escríbenos y lo resolvemos.
+              {t("errorText")}
             </p>
             <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-              <Link href="/login" className="btn solid">Ir al login</Link>
-              <Link href="/contacto" className="btn">Contacto</Link>
+              <Link href="/login" className="btn solid">{t("errorLogin")}</Link>
+              <Link href="/contacto" className="btn">{t("errorContact")}</Link>
             </div>
           </>
         )}

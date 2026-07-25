@@ -2,60 +2,30 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { useTranslations } from "next-intl"
 
-const COUNTRIES = [
-  {
-    id: "argentina",
-    label: "Argentina",
-    flag: "🇦🇷",
-    top: "83%", left: "28%",
-    years: "1984 – 2005",
-    tagline: "Los orígenes del método",
-    desc: "En Buenos Aires nació el método Jewgal y comenzaron los primeros procesos de Life Coaching. Formó las primeras comunidades de bienestar y sentó las bases de su filosofía integrativa que hoy llega a todo el mundo.",
-    accent: "#A58D66",
-    stat: "20+",
-    statLabel: "años de práctica",
-  },
-  {
-    id: "israel",
-    label: "Israel",
-    flag: "🇮🇱",
-    top: "34%", left: "57%",
-    years: "Formación continua",
-    tagline: "La sabiduría de la Cábala",
-    desc: "En Jerusalén y Tel Aviv profundizó sus estudios de Cábala aplicada y pensamiento judío, integrando esta sabiduría milenaria como herramienta de coaching y transformación personal consciente.",
-    accent: "#A76D61",
-    stat: "∞",
-    statLabel: "sabiduría ancestral",
-  },
-  {
-    id: "colombia",
-    label: "Colombia",
-    flag: "🇨🇴",
-    top: "53%", left: "25%",
-    years: "2005 – 2015",
-    tagline: "Expansión latinoamericana",
-    desc: "Desde Bogotá y Medellín formó a cientos de instructores Jewgal y Life Coaches certificados. Colombia se convirtió en el corazón de su red latinoamericana de bienestar y transformación.",
-    accent: "#846145",
-    stat: "200+",
-    statLabel: "instructores formados",
-  },
-  {
-    id: "eeuu",
-    label: "EE.UU.",
-    flag: "🇺🇸",
-    top: "32%", left: "19%",
-    years: "2015 – presente",
-    tagline: "Miami · Sede internacional",
-    desc: "Desde Miami lidera programas en línea con alcance global, fundó la organización 501c3 Sholem Corazón Valiente y creó Jewgal Academy para acompañar la transformación de estudiantes en todo el mundo.",
-    accent: "#C49F72",
-    stat: "4",
-    statLabel: "continentes alcanzados",
-  },
+// Datos visuales fijos (posición, color, símbolo). El texto (label, años,
+// tagline, descripción, etiqueta del stat) se traduce vía next-intl por prefijo.
+const COUNTRY_META = [
+  { id: "argentina", key: "ar", flag: "🇦🇷", top: "83%", left: "28%", accent: "#A58D66", stat: "20+" },
+  { id: "israel",    key: "il", flag: "🇮🇱", top: "34%", left: "57%", accent: "#A76D61", stat: "∞" },
+  { id: "colombia",  key: "co", flag: "🇨🇴", top: "53%", left: "25%", accent: "#846145", stat: "200+" },
+  { id: "eeuu",      key: "us", flag: "🇺🇸", top: "32%", left: "19%", accent: "#C49F72", stat: "4" },
 ]
 
 export default function ComunidadMap() {
-  const [active, setActive] = useState(COUNTRIES[3]) // EE.UU. default
+  const t = useTranslations("Comunidad")
+  const COUNTRIES = COUNTRY_META.map((m) => ({
+    ...m,
+    label: t(`${m.key}_label`),
+    years: t(`${m.key}_years`),
+    tagline: t(`${m.key}_tagline`),
+    desc: t(`${m.key}_desc`),
+    statLabel: t(`${m.key}_statLabel`),
+  }))
+  const [activeId, setActiveId] = useState("eeuu")
+  const active = COUNTRIES.find((c) => c.id === activeId) ?? COUNTRIES[3]
+  const setActive = (c: { id: string }) => setActiveId(c.id)
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -201,7 +171,7 @@ export default function ComunidadMap() {
           textTransform: "uppercase", color: "rgba(165,141,102,.35)",
           pointerEvents: "none",
         }}>
-          Seleccioná un país
+          {t("selectCountry")}
         </p>
       </div>
 
@@ -221,7 +191,7 @@ export default function ComunidadMap() {
             fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase",
             color: "var(--text-faint)",
           }}>
-            Años transformando vidas en 4 países
+            {t("statLabel")}
           </span>
         </div>
 
@@ -230,7 +200,7 @@ export default function ComunidadMap() {
           fontSize: isMobile ? 22 : 30, color: "var(--text)", lineHeight: 1.25,
           marginBottom: 16,
         }}>
-          Una trayectoria que trasciende fronteras
+          {t("title")}
         </h3>
 
         {/* Contenido por país con animación */}
