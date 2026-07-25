@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
 import CountdownTimer from "@/components/CountdownTimer"
-import { useLocale } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 import { DEFAULT_EVENTOS, fechaDisplay, type EventosData } from "@/lib/eventos"
 
@@ -20,6 +20,7 @@ const EV_STYLES = [
 
 export default function EventosPage() {
   const locale = useLocale()
+  const t = useTranslations("Eventos")
   const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
   const [eventos, setEventos] = useState<EventosData>(DEFAULT_EVENTOS)
 
@@ -73,11 +74,11 @@ export default function EventosPage() {
       {/* ── EVENTOS ── */}
       <section style={{ background: "var(--navy)" }}>
         <div className="wrap ev-wrap">
-          <span className="eyebrow sec-eyebrow reveal" style={{ marginBottom: 52 }}>2026 · Calendario de eventos</span>
+          <span className="eyebrow sec-eyebrow reveal" style={{ marginBottom: 52 }}>{t("calendarEyebrow")}</span>
 
           {EVENTS.length === 0 && (
             <p style={{ color: "var(--on-dark)", fontSize: 15, padding: "20px 0" }}>
-              Estamos preparando nuevos eventos. Suscríbete abajo para enterarte antes que nadie.
+              {t("empty")}
             </p>
           )}
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
@@ -111,14 +112,14 @@ export default function EventosPage() {
                   <div className="ev-cta">
                     <div>
                       <div style={{ fontSize: 10, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 4 }}>
-                        {ev.spots} plazas
+                        {ev.spots} {t("spots")}
                       </div>
                       <div style={{ fontFamily: "var(--serif)", fontSize: 28, color: ev.price === "Gratis" ? "#C49F72" : ev.accent, marginBottom: 16 }}>
                         {ev.price}
                       </div>
                     </div>
                     <Link href="/contacto" className="btn solid" style={{ fontSize: 11, padding: "10px 20px", flexShrink: 0 }}>
-                      Reservar lugar →
+                      {t("reserve")}
                     </Link>
                   </div>
                 </div>
@@ -131,7 +132,7 @@ export default function EventosPage() {
       {/* ── EVENTOS PASADOS ── */}
       <section style={{ background: "var(--navy-2)", borderTop: "1px solid var(--line-d)" }}>
         <div className="wrap" style={{ padding: "80px 36px" }}>
-          <span className="eyebrow reveal" style={{ display: "block", marginBottom: 36 }}>Eventos anteriores</span>
+          <span className="eyebrow reveal" style={{ display: "block", marginBottom: 36 }}>{t("pastEyebrow")}</span>
           <div style={{ display: "flex", flexDirection: "column" }}>
             {PAST.map((p, i) => (
               <div key={p.title} className="reveal" style={{
@@ -154,12 +155,12 @@ export default function EventosPage() {
       <section className="join pad">
         <div className="glow" />
         <div className="wrap join-inner reveal">
-          <span className="eyebrow" style={{ display: "inline-block" }}>No te pierdas nada</span>
-          <h2>Suscríbete y entérate<br/><em>antes que nadie.</em></h2>
-          <p>Recibe la agenda de eventos, retiros y masterclasses gratuitas directamente en tu correo.</p>
+          <span className="eyebrow" style={{ display: "inline-block" }}>{t("nlEyebrow")}</span>
+          <h2>{t("nlTitle1")}<br/><em>{t("nlTitle2")}</em></h2>
+          <p>{t("nlSubtext")}</p>
           <div className="join-actions">
-            <Link href="/contacto" className="btn solid">Suscribirme →</Link>
-            <Link href="/academia" className="btn">Ver programas</Link>
+            <Link href="/contacto" className="btn solid">{t("nlCta")}</Link>
+            <Link href="/academia" className="btn">{t("nlPrograms")}</Link>
           </div>
         </div>
       </section>

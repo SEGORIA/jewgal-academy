@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation"
+import { getTranslations } from "next-intl/server"
 import { Link } from "@/i18n/navigation"
 import { db } from "@/lib/db"
 import Navbar from "@/components/Navbar"
@@ -24,6 +25,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
   const course = await db.course.findUnique({ where: { slug } })
   if (!course) notFound()
 
+  const t = await getTranslations("Programa")
   const isEn = locale === "en"
   const title = (isEn && course.titleEn) || course.title
   const shortDesc = (isEn && course.shortDescEn) || course.shortDesc
@@ -90,7 +92,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M19 12H5M12 5l-7 7 7 7"/>
             </svg>
-            Todos los programas
+            {t("breadcrumb")}
           </Link>
 
           <div className="prog-hero-grid">
@@ -122,7 +124,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
               </div>
               {!course.isFree && (
                 <div style={{ fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--on-dark-faint)", marginTop: 6 }}>
-                  Pago único · Acceso completo
+                  {t("oneTime")}
                 </div>
               )}
             </div>
@@ -150,7 +152,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
 
           {/* Certificado por */}
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 10, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--on-dark-faint)" }}>Certificado por</span>
+            <span style={{ fontSize: 10, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--on-dark-faint)" }}>{t("certifiedBy")}</span>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {meta.certs.map((certSlug) => (
                 <span key={certSlug} style={{ background: "#f7f3ec", borderRadius: 5, padding: "5px 10px", display: "flex", alignItems: "center" }}>
@@ -177,7 +179,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
                   fontSize: "clamp(22px,2.8vw,34px)", color: "var(--text)",
                   marginBottom: 20,
                 }}>
-                  Sobre el programa
+                  {t("aboutTitle")}
                 </h2>
                 <p style={{ color: "var(--on-dark)", fontSize: 15.5, lineHeight: 1.8, whiteSpace: "pre-line" }}>
                   {description}
@@ -212,7 +214,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
                   fontSize: "clamp(22px,2.8vw,34px)", color: "var(--text)",
                   marginBottom: 28,
                 }}>
-                  Contenido del programa
+                  {t("contentTitle")}
                 </h2>
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   {content.modules.map((mod, i) => (
@@ -260,7 +262,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
                   fontSize: "clamp(22px,2.8vw,34px)", color: "var(--text)",
                   marginBottom: 24,
                 }}>
-                  Qué incluye
+                  {t("includesTitle")}
                 </h2>
                 <div className="prog-includes-grid">
                   {content.includes.map((item) => (
@@ -283,7 +285,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
                   fontSize: "clamp(22px,2.8vw,34px)", color: "var(--text)",
                   marginBottom: 24,
                 }}>
-                  ¿Para quién es este programa?
+                  {t("forWhomTitle")}
                 </h2>
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   {content.forWhom.map((fw) => (
@@ -310,7 +312,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
                 borderRadius: 8, padding: 28,
               }}>
                 <div style={{ fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: meta.accent, marginBottom: 12 }}>
-                  Al finalizar
+                  {t("outcomeLabel")}
                 </div>
                 <p style={{ fontFamily: "var(--serif)", fontSize: 18, color: "var(--text)", lineHeight: 1.6 }}>
                   {content.outcome}
@@ -327,10 +329,10 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
                   display: "flex", flexDirection: "column", gap: 8,
                 }}>
                   <div style={{ fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: meta.accent }}>
-                    ¿Eres adolescente o familia?
+                    {t("sholemQ")}
                   </div>
                   <p style={{ fontSize: 14.5, color: "var(--on-dark)", lineHeight: 1.65 }}>
-                    Esta formación certifica instructores. Si buscas la experiencia del Método Sholem para adolescentes, visita el sitio dedicado.
+                    {t("sholemText")}
                   </p>
                   <a href="https://www.sholemethod.com" target="_blank" rel="noopener noreferrer" style={{ color: meta.accent, fontSize: 14.5, fontWeight: 600 }}>
                     www.sholemethod.com →
@@ -354,7 +356,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
                   borderBottom: "1px solid rgba(165,141,102,.18)",
                 }}>
                   <div style={{ fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: meta.accent, marginBottom: 8 }}>
-                    Inscripción
+                    {t("enrollLabel")}
                   </div>
                   <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
                     <span style={{ fontFamily: "var(--serif)", fontSize: 28, color: "var(--text)" }}>
@@ -366,7 +368,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
                   </div>
                   {!course.isFree && (
                     <p style={{ fontSize: 12, color: "var(--on-dark-faint)", marginTop: 4 }}>
-                      Pago único · Acceso completo al curso
+                      {t("oneTimeFull")}
                     </p>
                   )}
                 </div>
@@ -394,12 +396,12 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
       <section className="join pad">
         <div className="glow" />
         <div className="wrap join-inner reveal">
-          <span className="eyebrow" style={{ display: "inline-block" }}>Explora más</span>
-          <h2>Descubre otros <em>programas</em> de Jewgal Academy</h2>
-          <p>Cada formación está diseñada para acompañarte en un aspecto diferente de tu transformación.</p>
+          <span className="eyebrow" style={{ display: "inline-block" }}>{t("ctaEyebrow")}</span>
+          <h2>{t("ctaTitle1")} <em>{t("ctaTitle2")}</em> {t("ctaTitle3")}</h2>
+          <p>{t("ctaSubtext")}</p>
           <div className="join-actions">
-            <Link href="/#programas" className="btn solid">Ver todos los programas →</Link>
-            <Link href="/contacto" className="btn">Hablar con Devora</Link>
+            <Link href="/#programas" className="btn solid">{t("ctaAll")}</Link>
+            <Link href="/contacto" className="btn">{t("ctaTalk")}</Link>
           </div>
         </div>
       </section>

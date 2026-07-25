@@ -8,7 +8,7 @@ import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
 import { accentForCategory, estimateReadTime } from "@/lib/blog"
 import { Loader2 } from "lucide-react"
-import { useLocale } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 
 type Post = {
@@ -20,6 +20,7 @@ const spring = { type: "spring" as const, stiffness: 280, damping: 26 }
 
 export default function BlogPage() {
   const locale = useLocale()
+  const t = useTranslations("Blog")
   const [posts, setPosts]           = useState<Post[]>([])
   const [loading, setLoading]       = useState(true)
   const [openPost, setOpenPost]     = useState<Post | null>(null)
@@ -47,7 +48,7 @@ export default function BlogPage() {
 
   const filtered = activeCategory === "Todo" ? posts : posts.filter((p) => p.category === activeCategory)
 
-  const dateOf = (p: Post) => new Date(p.publishedAt ?? p.createdAt).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" })
+  const dateOf = (p: Post) => new Date(p.publishedAt ?? p.createdAt).toLocaleDateString(locale === "en" ? "en-US" : "es-ES", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" })
 
   return (
     <>
@@ -106,7 +107,7 @@ export default function BlogPage() {
                 transition: "background .25s, color .25s, border-color .25s",
               }}
             >
-              {cat}
+              {cat === "Todo" ? t("all") : cat}
             </motion.button>
           ))}
         </div>
@@ -118,12 +119,12 @@ export default function BlogPage() {
 
           {loading ? (
             <div style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--on-dark-faint)", padding: "60px 0" }}>
-              <Loader2 size={18} style={{ animation: "spin 1s linear infinite" }} /> Cargando artículos…
+              <Loader2 size={18} style={{ animation: "spin 1s linear infinite" }} /> {t("loading")}
             </div>
           ) : filtered.length === 0 ? (
             <div style={{ padding: "60px 0", textAlign: "center" }}>
               <p style={{ color: "var(--on-dark-faint)", fontSize: 15 }}>
-                {posts.length === 0 ? "Todavía no hay artículos publicados." : "No hay artículos en esta categoría."}
+                {posts.length === 0 ? t("emptyNone") : t("emptyCategory")}
               </p>
             </div>
           ) : (
@@ -161,7 +162,7 @@ export default function BlogPage() {
                     <div style={{ padding: "18px 28px 24px", marginTop: 8, borderTop: "1px solid var(--line-d)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <span style={{ fontSize: 12, color: "var(--on-dark-faint)" }}>{dateOf(post)}</span>
                       <motion.span whileHover={{ x: 4 }} style={{ fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: accentForCategory(post.category), display: "inline-block" }}>
-                        Leer →
+                        {t("read")}
                       </motion.span>
                     </div>
                   </motion.div>
@@ -176,12 +177,12 @@ export default function BlogPage() {
       <section className="join pad">
         <div className="glow" />
         <div className="wrap join-inner reveal">
-          <span className="eyebrow" style={{ display: "inline-block" }}>Contenido exclusivo</span>
-          <h2>Ideas que transforman,<br/>cada semana en tu correo.</h2>
-          <p>Artículos nuevos cada semana sobre coaching, bienestar, Cabalá y liderazgo consciente.</p>
+          <span className="eyebrow" style={{ display: "inline-block" }}>{t("ctaEyebrow")}</span>
+          <h2>{t("ctaTitle1")}<br/>{t("ctaTitle2")}</h2>
+          <p>{t("ctaSubtext")}</p>
           <div className="join-actions">
-            <Link href="/contacto" className="btn solid">Suscribirme gratis →</Link>
-            <Link href="/academia" className="btn">Ver programas</Link>
+            <Link href="/contacto" className="btn solid">{t("ctaSubscribe")}</Link>
+            <Link href="/academia" className="btn">{t("ctaPrograms")}</Link>
           </div>
         </div>
       </section>
@@ -253,10 +254,10 @@ export default function BlogPage() {
 
                   <div style={{ marginTop: 44, paddingTop: 28, borderTop: "1px solid var(--line-d)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
                     <p style={{ fontSize: 13, color: "var(--on-dark-faint)" }}>
-                      Por <span style={{ color: "var(--gold)" }}>Devora Benchimol</span> · Jewgal Academy
+                      {t("by")} <span style={{ color: "var(--gold)" }}>Devora Benchimol</span> · Jewgal Academy
                     </p>
                     <Link href="/academia" className="btn solid" style={{ fontSize: 12, padding: "10px 22px" }} onClick={() => setOpenPost(null)}>
-                      Ver programas →
+                      {t("modalPrograms")}
                     </Link>
                   </div>
                 </div>

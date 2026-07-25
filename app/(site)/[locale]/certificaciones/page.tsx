@@ -7,92 +7,38 @@ import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
 import { TiltCard } from "@/components/motion/TiltCard"
 import { motion } from "framer-motion"
-import { useLocale } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 
-const CERTS = [
-  {
-    n: "01",
-    title: "Coach Integrativo Certificado",
-    program: "Life Coaching Integrativo",
-    slug: "life-coaching-integrativo",
-    entity: "Jewgal Academy · Internacional",
-    accent: "#A58D66",
-    grad: "linear-gradient(135deg,#3A2410,#5C3A1E)",
-    icon: "⟡",
-    duration: "6 meses",
-    type: "Formación completa",
-    desc: "Acredita tu dominio de las herramientas del coaching integrativo, logoterapia y bienestar emocional para acompañar procesos de transformación personal y profesional.",
-    req: ["Asistencia del 80% a clases en vivo", "Entrega de casos prácticos supervisados", "Evaluación teórica final", "Presentación de proyecto de práctica"],
-  },
-  {
-    n: "02",
-    title: "Instructor Jewgal Adultos",
-    program: "Instructor Jewgal · Adultos",
-    slug: "joogal-adultos",
-    entity: "Método Jewgal · Certificación Oficial",
-    accent: "#C49F72",
-    grad: "linear-gradient(135deg,#3A2818,#5C4026)",
-    icon: "✦",
-    duration: "3 meses",
-    type: "Certificación Oficial",
-    desc: "Habilitación oficial para dictar clases, talleres y retiros del Método Jewgal para adultos. Reconocida dentro de la comunidad internacional de instructores Jewgal.",
-    req: ["Asistencia completa al programa", "Práctica docente evaluada", "Examen teórico y práctico", "Presentación de clase final"],
-  },
-  {
-    n: "03",
-    title: "Instructor Jewgalkids",
-    program: "Instructor Jewgalkids",
-    slug: "joogalkids",
-    entity: "Método Jewgal · Certificación Infantil",
-    accent: "#A76D61",
-    grad: "linear-gradient(135deg,#4A2418,#6B3826)",
-    icon: "★",
-    duration: "3 meses",
-    type: "Certificación Oficial",
-    desc: "Habilitación para guiar sesiones de movimiento consciente y desarrollo integral en niños de 3 a 12 años, con pedagogía lúdica certificada.",
-    req: ["Asistencia completa al programa", "Módulo de pedagogía infantil aprobado", "Clase práctica evaluada", "Portfolio pedagógico entregado"],
-  },
-  {
-    n: "04",
-    title: "Instructor Método Sholem",
-    program: "Método Sholem",
-    slug: "metodo-sholem",
-    entity: "Fundación Sholem · Certificación",
-    accent: "#A76D61",
-    grad: "linear-gradient(135deg,#42200F,#653322)",
-    icon: "◈",
-    duration: "3 meses",
-    type: "Certificación de Instructorado",
-    desc: "Habilitación para facilitar el Método Sholem en comunidades juveniles, organizaciones y colegios. Formación en liderazgo con valores y cohesión grupal.",
-    req: ["Asistencia mínima del 85%", "Taller de facilitación grupal aprobado", "Proyecto comunitario presentado", "Evaluación de competencias"],
-  },
-  {
-    n: "05",
-    title: "Cábala Coach",
-    program: "Micro Curso · Cábala Coach",
-    slug: "cabala-coach",
-    entity: "Jewgal Academy · Micro Certificación",
-    accent: "#CBB78B",
-    grad: "linear-gradient(135deg,#332508,#4F3A12)",
-    icon: "❂",
-    duration: "4 semanas",
-    type: "Micro Certificación",
-    desc: "Acredita el manejo de herramientas cabalísticas aplicadas al coaching y el autoconocimiento. Ideal como complemento a otras formaciones de bienestar.",
-    req: ["Completar todos los módulos", "Ejercicios prácticos entregados", "Cuestionario final aprobado"],
-  },
-]
-
-const STEPS = [
-  { n: "01", title: "Elige tu programa", desc: "Explora los programas y elige el que mejor se adapta a tus metas profesionales." },
-  { n: "02", title: "Cursa y practica", desc: "Asiste a las clases, realiza las prácticas supervisadas y entrega tus proyectos." },
-  { n: "03", title: "Evaluación final", desc: "Aprueba la evaluación teórica y la presentación práctica con el equipo académico." },
-  { n: "04", title: "Recibe tu certificado", desc: "Obtén tu certificado digital y únete a la red de profesionales certificados." },
+// Datos visuales fijos de cada certificación; los textos se traducen vía
+// next-intl con las claves c1..c5.
+const CERT_META = [
+  { key: "c1", slug: "life-coaching-integrativo", accent: "#A58D66", grad: "linear-gradient(135deg,#3A2410,#5C3A1E)", icon: "⟡" },
+  { key: "c2", slug: "joogal-adultos",            accent: "#C49F72", grad: "linear-gradient(135deg,#3A2818,#5C4026)", icon: "✦" },
+  { key: "c3", slug: "joogalkids",                accent: "#A76D61", grad: "linear-gradient(135deg,#4A2418,#6B3826)", icon: "★" },
+  { key: "c4", slug: "metodo-sholem",             accent: "#A76D61", grad: "linear-gradient(135deg,#42200F,#653322)", icon: "◈" },
+  { key: "c5", slug: "cabala-coach",              accent: "#CBB78B", grad: "linear-gradient(135deg,#332508,#4F3A12)", icon: "❂" },
 ]
 
 export default function CertificacionesPage() {
   const locale = useLocale()
+  const t = useTranslations("Certificaciones")
   const [isMobile, setIsMobile] = useState(false)
+
+  const CERTS = CERT_META.map((m, i) => ({
+    n: String(i + 1).padStart(2, "0"),
+    slug: m.slug, accent: m.accent, grad: m.grad, icon: m.icon,
+    title: t(`${m.key}Title`), entity: t(`${m.key}Entity`),
+    type: t(`${m.key}Type`), duration: t(`${m.key}Dur`),
+    desc: t(`${m.key}Desc`), req: t.raw(`${m.key}Req`) as string[],
+  }))
+
+  const STEPS = [
+    { n: "01", title: t("step1Title"), desc: t("step1Desc") },
+    { n: "02", title: t("step2Title"), desc: t("step2Desc") },
+    { n: "03", title: t("step3Title"), desc: t("step3Desc") },
+    { n: "04", title: t("step4Title"), desc: t("step4Desc") },
+  ]
   const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
 
   useEffect(() => {
@@ -136,7 +82,7 @@ export default function CertificacionesPage() {
       {/* ── PROCESO ── */}
       <section style={{ background: "var(--navy-2)", borderBottom: "1px solid var(--line-d)" }}>
         <div className="wrap" style={{ padding: isMobile ? "48px 20px" : "80px 36px", textAlign: "center" }}>
-          <span className="eyebrow sec-eyebrow reveal">Cómo obtener tu certificación</span>
+          <span className="eyebrow sec-eyebrow reveal">{t("processEyebrow")}</span>
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-40px" }}
             variants={{ visible: { transition: { staggerChildren: 0.14 } } }}
@@ -168,7 +114,7 @@ export default function CertificacionesPage() {
       {/* ── GRID DE CERTIFICACIONES ── */}
       <section style={{ background: "var(--navy)" }}>
         <div className="wrap" style={{ padding: isMobile ? "52px 20px" : "100px 36px" }}>
-          <span className="eyebrow sec-eyebrow reveal">Certificaciones disponibles</span>
+          <span className="eyebrow sec-eyebrow reveal">{t("availableEyebrow")}</span>
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }}
             variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
@@ -193,9 +139,9 @@ export default function CertificacionesPage() {
                     <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 22, color: "var(--text)", lineHeight: 1.15 }}>{c.title}</h3>
                   </div>
                   <div style={{ marginTop: 24 }}>
-                    <div style={{ fontSize: 10, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--on-dark-faint)", marginBottom: 4 }}>Entidad</div>
+                    <div style={{ fontSize: 10, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--on-dark-faint)", marginBottom: 4 }}>{t("labelEntity")}</div>
                     <div style={{ fontSize: 13, color: c.accent }}>{c.entity}</div>
-                    <div style={{ fontSize: 10, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--on-dark-faint)", marginTop: 12, marginBottom: 4 }}>Duración</div>
+                    <div style={{ fontSize: 10, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--on-dark-faint)", marginTop: 12, marginBottom: 4 }}>{t("labelDuration")}</div>
                     <div style={{ fontSize: 13, color: "var(--on-dark)" }}>{c.duration}</div>
                   </div>
                 </div>
@@ -203,10 +149,10 @@ export default function CertificacionesPage() {
                 {/* Panel derecho */}
                 <div style={{ background: "var(--navy-2)", padding: isMobile ? "24px 24px" : "36px 40px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                   <div>
-                    <div style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 6 }}>Descripción</div>
+                    <div style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 6 }}>{t("labelDescription")}</div>
                     <p style={{ color: "var(--on-dark)", fontSize: 14.5, lineHeight: 1.7, marginBottom: 24 }}>{c.desc}</p>
 
-                    <div style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 12 }}>Requisitos</div>
+                    <div style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 12 }}>{t("labelRequirements")}</div>
                     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                       {c.req.map((r) => (
                         <div key={r} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13.5, color: "var(--on-dark)" }}>
@@ -218,7 +164,7 @@ export default function CertificacionesPage() {
                   </div>
                   <div style={{ marginTop: 28 }}>
                     <Link href={`/programas/${c.slug}`} className="btn" style={{ borderColor: c.accent, color: c.accent, fontSize: 11 }}>
-                      Ver programa completo →
+                      {t("viewFullProgram")}
                     </Link>
                   </div>
                 </div>
@@ -234,12 +180,12 @@ export default function CertificacionesPage() {
       <section className="join pad">
         <div className="glow" />
         <div className="wrap join-inner reveal">
-          <span className="eyebrow" style={{ display: "inline-block" }}>Empieza hoy</span>
-          <h2>Elige tu certificación y<br/><em>transforma tu carrera.</em></h2>
-          <p>Cada programa te entrega las herramientas, el respaldo académico y la comunidad para ejercer con confianza.</p>
+          <span className="eyebrow" style={{ display: "inline-block" }}>{t("ctaEyebrow")}</span>
+          <h2>{t("ctaTitle1")}<br/><em>{t("ctaTitle2")}</em></h2>
+          <p>{t("ctaSubtext")}</p>
           <div className="join-actions">
-            <Link href="/academia" className="btn solid">Explorar programas →</Link>
-            <Link href="/contacto" className="btn">Hablar con Devora</Link>
+            <Link href="/academia" className="btn solid">{t("ctaExplore")}</Link>
+            <Link href="/contacto" className="btn">{t("ctaTalk")}</Link>
           </div>
         </div>
       </section>

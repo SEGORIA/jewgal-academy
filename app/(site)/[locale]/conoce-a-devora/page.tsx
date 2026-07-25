@@ -5,23 +5,29 @@ import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
 import { motion } from "framer-motion"
-
-const credentials = [
-  { n: "01", category: "Coaching",            items: ["Master Coach Internacional", "Formación de Coaches Integrativa", "Life Coaching Transformador"] },
-  { n: "02", category: "Mindfulness & Desarrollo", items: ["Logoterapia y Propósito", "Tratamiento del Trauma", "Mindfulness aplicado", "Desarrollo integral"] },
-  { n: "03", category: "Bienestar Holístico",  items: ["Mindfulness Certificada", "Flores de Bach", "Técnica del Tapping", "Masaje Terapéutico"] },
-  { n: "04", category: "Tradición & Movimiento", items: ["Cabalá Aplicada", "Expresión Corporal", "Danza Terapéutica", "Educación Judía"] },
-]
-
-const timeline = [
-  { code: "AR", place: "Argentina",     period: "Inicio · Formación", event: "Comienzos en Buenos Aires. Primeros pasos en desarrollo humano, bienestar y acompañamiento integral." },
-  { code: "IL", place: "Israel",        period: "Espiritualidad",     event: "Inmersión en la Cabalá y la espiritualidad judía aplicada al desarrollo personal." },
-  { code: "GT", place: "Guatemala",     period: "Comunidad",          event: "Acompañamiento de procesos de transformación y formación de líderes en Centroamérica." },
-  { code: "CO", place: "Colombia",      period: "Expansión",          event: "Expansión del método Jewgal y formación de coaches en Latinoamérica." },
-  { code: "US", place: "Miami, EE.UU.", period: "2015 – Presente",    event: "Miami · Sede internacional. Desde Miami lidera programas en línea con alcance global, fundó la organización 501c3 Sholem Corazón Valiente y creó Jewgal Academy para transformar vidas." },
-]
+import { useTranslations } from "next-intl"
 
 export default function ConoceADevorPage() {
+  const t = useTranslations("Devora")
+
+  const credentials = [
+    { n: "01", category: t("cred1Cat"), items: t.raw("cred1Items") as string[] },
+    { n: "02", category: t("cred2Cat"), items: t.raw("cred2Items") as string[] },
+    { n: "03", category: t("cred3Cat"), items: t.raw("cred3Items") as string[] },
+    { n: "04", category: t("cred4Cat"), items: t.raw("cred4Items") as string[] },
+  ]
+
+  const timeline = [
+    { code: "AR", place: t("tray1Place"), period: t("tray1Period"), event: t("tray1Event") },
+    { code: "IL", place: t("tray2Place"), period: t("tray2Period"), event: t("tray2Event") },
+    { code: "GT", place: t("tray3Place"), period: t("tray3Period"), event: t("tray3Event") },
+    { code: "CO", place: t("tray4Place"), period: t("tray4Period"), event: t("tray4Event") },
+    { code: "US", place: t("tray5Place"), period: t("tray5Period"), event: t("tray5Event") },
+  ]
+
+  const bold = { b: (chunks: React.ReactNode) => <strong style={{ color: "var(--text)" }}>{chunks}</strong> }
+  const italic = { i: (chunks: React.ReactNode) => <em>{chunks}</em> }
+
   return (
     <>
       <style>{`
@@ -105,25 +111,25 @@ export default function ConoceADevorPage() {
           <div className="devora-hero-photo">
             <div style={{ position: "absolute", inset: 0, backgroundImage: "url('/brand/devora-hero.webp')", backgroundSize: "cover", backgroundPosition: "50% 22%" }} />
             <div style={{ position: "absolute", left: 20, bottom: 20, fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(238,244,244,.9)", background: "rgba(44,31,20,.70)", backdropFilter: "blur(4px)", padding: "8px 13px", border: "1px solid var(--line-d)", borderRadius: 4 }}>
-              Master Coach Internacional · Miami
+              {t("photoBadge")}
             </div>
           </div>
 
           {/* Texto */}
           <div>
-            <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Conoce a la fundadora</span>
+            <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>{t("heroEyebrow")}</span>
             <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(38px,5vw,70px)", lineHeight: 1.02, color: "var(--text)", letterSpacing: "-.01em", marginBottom: 28 }}>
               Devora<br /><em style={{ color: "var(--gold-light)", fontStyle: "normal" }}>Benchimol</em>
             </h1>
             <div style={{ fontFamily: "var(--script)", fontStyle: "italic", fontSize: "clamp(20px,2.5vw,28px)", color: "#FFFFFF", marginBottom: 24, lineHeight: 1.2 }}>
-              Master Coach · Educadora · Fundadora
+              {t("heroSig")}
             </div>
             <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.5vw,16px)", maxWidth: 440, marginBottom: 16, lineHeight: 1.7 }}>
-              Más de 40 años facilitando procesos de transformación que integran mente, cuerpo y alma, con trayectoria internacional en Argentina, Israel, Guatemala, Colombia y Estados Unidos.
+              {t("heroSubtext")}
             </p>
             <div style={{ display: "flex", gap: 12, marginTop: 32, flexWrap: "wrap" }}>
-              <Link href="/#programas" className="btn solid">Ver programas →</Link>
-              <Link href="/contacto" className="btn">Escribirme</Link>
+              <Link href="/#programas" className="btn solid">{t("heroCta1")}</Link>
+              <Link href="/contacto" className="btn">{t("heroCta2")}</Link>
             </div>
           </div>
         </div>
@@ -138,10 +144,10 @@ export default function ConoceADevorPage() {
             style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "clamp(24px,4vw,48px)", alignItems: "start" }}
           >
             {[
-              { num: "40+", label: "Años transformando vidas en 5 países" },
-              { num: "5",   label: "Programas y certificaciones activos" },
-              { num: "5",   label: "Países: Argentina · Israel · Guatemala · Colombia · EE.UU." },
-              { num: "Non-Profit", label: "Fundación Sholem Corazón Valiente, EE.UU." },
+              { num: "40+", label: t("stat1") },
+              { num: "5",   label: t("stat2") },
+              { num: "5",   label: t("stat3") },
+              { num: "Non-Profit", label: t("stat4") },
             ].map((s) => (
               <motion.div key={s.num}
                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.16,1,0.3,1] } } }}
@@ -157,30 +163,28 @@ export default function ConoceADevorPage() {
       {/* ── EN SUS PALABRAS (bio) ── */}
       <section className="tone-dark" style={{ background: "linear-gradient(to bottom, #1A0806 0%, #2A1210 40%, #2A1210 60%, #1A0806 100%)" }}>
         <div className="wrap devora-section-pad" style={{ maxWidth: 860 }}>
-          <span className="eyebrow reveal" style={{ display: "block", marginBottom: 28 }}>En sus palabras</span>
+          <span className="eyebrow reveal" style={{ display: "block", marginBottom: 28 }}>{t("bioEyebrow")}</span>
           <div className="reveal" style={{ display: "flex", flexDirection: "column", gap: 20, fontSize: "clamp(15px,1.6vw,17px)", lineHeight: 1.8, color: "var(--on-dark)" }}>
-            <p>Soy <strong style={{ color: "var(--text)" }}>Devora Benchimol</strong>. Master Coach Internacional, educadora, Rabbanit y fundadora de Jewgal Academy.</p>
-            <p>Durante más de 40 años he acompañado personas en Argentina, Israel, Guatemala, Colombia y Estados Unidos a atravesar sus procesos más profundos — los que se viven en el cuerpo, los que duelen en el alma, y los que transforman la vida para siempre.</p>
-            <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(19px,2.2vw,24px)", color: "#A76D61", lineHeight: 1.45 }}>Mi camino no nació de un aula. Nació del encuentro real con el ser humano.</p>
-            <p>De esa trayectoria surgió una forma de trabajar que integra lo que la mayoría separa: la mente y el cuerpo, la técnica y la intuición, el conocimiento académico y la sabiduría ancestral.</p>
-            <p>Soy creadora de <strong style={{ color: "var(--text)" }}>Jewgalkids</strong>, un programa de Mindfulness in Motion basado en el Alef Bet, diseñado para que los niños aprendan a conectar con su mundo interior a través del movimiento, el juego y la sabiduría de las letras hebreas. Y de <strong style={{ color: "var(--text)" }}>Jewgal</strong>, su versión para adultos — una metodología propia que lleva ese mismo principio de consciencia en movimiento a quienes guían, educan y lideran.</p>
-            <p style={{ marginTop: 4 }}>En cada retiro traigo conmigo todo eso:</p>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 14, paddingLeft: 0 }}>
-              {[
-                ["La profundidad de la ", "Logoterapia", " para encontrar sentido donde parece no haberlo."],
-                ["La presencia del ", "Mindfulness", " y el trabajo con el trauma para sanar desde adentro."],
-                ["La sabiduría de la ", "Cabalá", " como mapa del alma y herramienta de transformación real."],
-                ["El lenguaje del ", "cuerpo", " a través de la Expresión Corporal, la Danza y el Masaje Terapéutico."],
-                ["La delicadeza de las ", "Flores de Bach y el Tapping", " para liberar lo que las palabras no alcanzan."],
-                ["Y la mirada de la ", "educación consciente", " para que cada proceso sea también un aprendizaje que se integra y se sostiene."],
-              ].map(([pre, strong, post]) => (
-                <li key={strong} style={{ display: "flex", gap: 12, alignItems: "baseline" }}>
-                  <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#A76D61", flexShrink: 0, transform: "translateY(-2px)" }} />
-                  <span>{pre}<strong style={{ color: "var(--text)" }}>{strong}</strong>{post}</span>
-                </li>
-              ))}
-            </ul>
-            <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(20px,2.4vw,26px)", color: "var(--text)", lineHeight: 1.4, marginTop: 8 }}>No vengo a darte respuestas.<br />Vengo a acompañarte a encontrar las tuyas.</p>
+            {(() => {
+              const strong = (chunks: React.ReactNode) => <strong style={{ color: "var(--text)" }}>{chunks}</strong>
+              return <>
+                <p>{t.rich("bioP1", { b: strong })}</p>
+                <p>{t.rich("bioP2", { b: strong })}</p>
+                <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(19px,2.2vw,24px)", color: "#A76D61", lineHeight: 1.45 }}>{t("bioQuote1")}</p>
+                <p>{t.rich("bioP3", { b: strong })}</p>
+                <p>{t.rich("bioP4", { b: strong })}</p>
+                <p style={{ marginTop: 4 }}>{t("bioListIntro")}</p>
+                <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 14, paddingLeft: 0 }}>
+                  {(["bioItem1", "bioItem2", "bioItem3", "bioItem4", "bioItem5", "bioItem6"] as const).map((key) => (
+                    <li key={key} style={{ display: "flex", gap: 12, alignItems: "baseline" }}>
+                      <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#A76D61", flexShrink: 0, transform: "translateY(-2px)" }} />
+                      <span>{t.rich(key, { b: strong })}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(20px,2.4vw,26px)", color: "var(--text)", lineHeight: 1.4, marginTop: 8 }}>{t("bioQuote2Line1")}<br />{t("bioQuote2Line2")}</p>
+              </>
+            })()}
           </div>
         </div>
       </section>
@@ -192,14 +196,14 @@ export default function ConoceADevorPage() {
       }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 30% 40%, rgba(196,140,120,.22) 0%, transparent 65%)", pointerEvents: "none" }} />
         <div className="wrap devora-section-pad" style={{ maxWidth: 720, position: "relative", zIndex: 1, textAlign: "center" }}>
-          <span className="eyebrow reveal" style={{ display: "block", marginBottom: 20, color: "#F0D5C8" }}>Coaching personal</span>
+          <span className="eyebrow reveal" style={{ display: "block", marginBottom: 20, color: "#F0D5C8" }}>{t("coachEyebrow")}</span>
           <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(28px,3.8vw,48px)", color: "#F6EEE8", letterSpacing: ".01em", lineHeight: 1.15, marginBottom: 20 }}>
-            Sesiones 1:1 con Devora
+            {t("coachTitle")}
           </h2>
           <p className="reveal" style={{ color: "rgba(246,238,232,.85)", fontSize: "clamp(15px,1.6vw,17px)", lineHeight: 1.75, marginBottom: 32, maxWidth: 560, marginLeft: "auto", marginRight: "auto" }}>
-            Un espacio de acompañamiento individual — vos y Devora, trabajando tu proceso particular. No es un curso ni una certificación: es tiempo dedicado enteramente a tu transformación.
+            {t("coachSubtext")}
           </p>
-          <Link href="/coaching-1-1" className="btn solid">Conocer las sesiones 1:1 →</Link>
+          <Link href="/coaching-1-1" className="btn solid">{t("coachCta")}</Link>
         </div>
       </section>
 
@@ -214,15 +218,15 @@ export default function ConoceADevorPage() {
 
           {/* Header centrado */}
           <div style={{ textAlign: "center", marginBottom: 44 }}>
-            <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16, color: "#A76D61" }}>Documental</span>
+            <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16, color: "#A76D61" }}>{t("docEyebrow")}</span>
             <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.5vw,48px)", color: "var(--text)", letterSpacing: ".01em", lineHeight: 1.15, marginBottom: 14 }}>
-              Una historia de <em style={{ color: "#A76D61", fontStyle: "normal" }}>resiliencia</em> y propósito
+              {t("docTitlePre")}<em style={{ color: "#A76D61", fontStyle: "normal" }}>{t("docTitleEm")}</em>{t("docTitlePost")}
             </h2>
             <p className="reveal" style={{ fontSize: 15, color: "rgba(246,238,232,.75)", maxWidth: 560, margin: "0 auto", lineHeight: 1.6, marginBottom: 14 }}>
-              Conocé el documental <em>Sholem Soul Goal</em> — una historia real sobre identidad, pertenencia y el valor de ser auténtico.
+              {t.rich("docSubtext", { i: (chunks) => <em>{chunks}</em> })}
             </p>
             <p className="reveal" style={{ fontSize: 13, letterSpacing: ".08em", color: "rgba(246,238,232,.55)" }}>
-              Dirigido por <span style={{ color: "#A76D61" }}>Devora Benchimol</span>
+              {t("docDirected")} <span style={{ color: "#A76D61" }}>Devora Benchimol</span>
             </p>
           </div>
 
@@ -263,7 +267,7 @@ export default function ConoceADevorPage() {
             color: "#A76D61", opacity: 0.9,
             marginTop: 32, lineHeight: 1.4,
           }}>
-            "Más de 40 años acompañando procesos de transformación real."
+            {t("docQuote")}
           </p>
         </div>
       </section>
@@ -275,10 +279,9 @@ export default function ConoceADevorPage() {
       }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 50%, rgba(196,140,120,.22) 0%, transparent 70%)", pointerEvents: "none" }} />
         <div className="wrap devora-section-pad" style={{ position: "relative", zIndex: 1 }}>
-          <span className="eyebrow reveal" style={{ display: "block", marginBottom: 24, color: "#F0D5C8" }}>Mi misión</span>
+          <span className="eyebrow reveal" style={{ display: "block", marginBottom: 24, color: "#F0D5C8" }}>{t("missionEyebrow")}</span>
           <p className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(20px,3vw,40px)", color: "#F6EEE8", lineHeight: 1.35, maxWidth: 820, letterSpacing: ".01em" }}>
-            "Facilitar procesos de transformación que integren mente, cuerpo y alma,
-            ayudando a cada persona a alcanzar su máximo potencial y liderazgo personal."
+            {t("missionQuote")}
           </p>
         </div>
       </section>
@@ -286,9 +289,9 @@ export default function ConoceADevorPage() {
       {/* ── CREDENCIALES ── */}
       <section className="tone-dark" style={{ background: "linear-gradient(to bottom, #1A0806 0%, #2A1210 35%, #3A1810 50%, #2A1210 65%, #1A0806 100%)" }}>
         <div className="wrap devora-section-pad">
-          <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16 }}>Formación</span>
+          <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16 }}>{t("credEyebrow")}</span>
           <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.5vw,48px)", color: "var(--text)", letterSpacing: ".01em", marginBottom: "clamp(32px,5vw,56px)" }}>
-            Credenciales &amp; Especialidades
+            {t("credTitle")}
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: "clamp(24px,3vw,32px)" }}>
             {credentials.map((g) => (
@@ -315,9 +318,9 @@ export default function ConoceADevorPage() {
       <section className="tone-dark" style={{ background: "linear-gradient(to bottom, #1A0806 0%, #2A1210 40%, #3A1510 55%, #2A1210 75%, #1A0806 100%)", position: "relative" }}>
         <div style={{ position: "absolute", inset: 0, opacity: .35, backgroundImage: "radial-gradient(1px 1px at 20% 30%,#A76D61,transparent),radial-gradient(1px 1px at 70% 60%,#C49F72,transparent),radial-gradient(1px 1px at 50% 80%,#A76D61,transparent)" }} />
         <div className="wrap devora-section-pad" style={{ position: "relative", zIndex: 2 }}>
-          <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16 }}>Trayectoria</span>
+          <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16 }}>{t("trayEyebrow")}</span>
           <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.5vw,48px)", color: "var(--text)", letterSpacing: ".01em", marginBottom: "clamp(32px,5vw,56px)" }}>
-            Un camino que trasciende fronteras
+            {t("trayTitle")}
           </h2>
 
           <motion.div
@@ -347,23 +350,23 @@ export default function ConoceADevorPage() {
         <div className="wrap devora-section-pad">
           <div className="devora-fund-grid">
             <div className="reveal">
-              <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>Impacto Social</span>
+              <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>{t("fundEyebrow")}</span>
               <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.2vw,46px)", color: "var(--text)", lineHeight: 1.1, marginBottom: 20 }}>
-                Fundación Sholem<br /><em style={{ color: "var(--gold-light)", fontStyle: "normal" }}>Corazón Valiente</em>
+                {t("fundTitle1")}<br /><em style={{ color: "var(--gold-light)", fontStyle: "normal" }}>{t("fundTitle2")}</em>
               </h2>
               <div style={{ display: "inline-block", border: "1px solid var(--line-d)", borderRadius: 4, padding: "8px 16px", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--gold)", marginTop: 8 }}>
-                Non-Profit Organization · Miami, Florida
+                {t("fundBadge")}
               </div>
             </div>
             <div className="reveal">
               <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.5vw,16px)", lineHeight: 1.75, marginBottom: 18 }}>
-                Fundada por <strong style={{ color: "var(--text)" }}>Devora Benchimol</strong>, CEO y creadora. Organización sin fines de lucro comprometida con inspirar, empoderar y formar líderes con corazón valiente, comprometidos con transformar el mundo desde los valores judíos y el amor.
+                {t.rich("fundP1", { b: (chunks) => <strong style={{ color: "var(--text)" }}>{chunks}</strong> })}
               </p>
               <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.5vw,16px)", lineHeight: 1.75, marginBottom: 28 }}>
-                A través de programas educativos, retiros y formaciones, acompañamos a personas de todas las edades a descubrir su propósito y construir comunidades más compasivas y conscientes.
+                {t("fundP2")}
               </p>
               <a href="https://sholemcorazonvaliente.org/" target="_blank" rel="noopener noreferrer" className="btn solid">
-                Conocé la Fundación →
+                {t("fundCta")}
               </a>
             </div>
           </div>
@@ -374,12 +377,12 @@ export default function ConoceADevorPage() {
       <section className="join pad">
         <div className="glow" />
         <div className="wrap join-inner reveal">
-          <span className="eyebrow" style={{ display: "inline-block" }}>Empieza hoy</span>
-          <h2>¿Comenzamos tu <em>transformación</em>?</h2>
-          <p>Elige el programa que mejor se adapta a tu camino y comienza esta semana.</p>
+          <span className="eyebrow" style={{ display: "inline-block" }}>{t("ctaEyebrow")}</span>
+          <h2>{t("ctaTitlePre")}<em>{t("ctaTitleEm")}</em>{t("ctaTitlePost")}</h2>
+          <p>{t("ctaSubtext")}</p>
           <div className="join-actions">
-            <Link href="/#programas" className="btn solid">Explorar programas →</Link>
-            <Link href="/contacto" className="btn">Hablar con Devora</Link>
+            <Link href="/#programas" className="btn solid">{t("ctaExplore")}</Link>
+            <Link href="/contacto" className="btn">{t("ctaTalk")}</Link>
           </div>
         </div>
       </section>
