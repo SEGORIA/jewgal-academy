@@ -1,6 +1,7 @@
 import { cache } from "react"
 import { db } from "./db"
 import { mergeSiteContent, type SiteContent } from "./site-content"
+import { DEFAULT_EVENTOS, type EventosData } from "./eventos"
 
 export type PublicCourse = {
   slug: string
@@ -65,3 +66,15 @@ export const getCoursesForLocale = cache(
     }
   }
 )
+
+/** Eventos (próximos y pasados) tal como los guarda la admin en SiteSetting. */
+export const getEventos = cache(async (): Promise<EventosData> => {
+  try {
+    const setting = await db.siteSetting.findUnique({ where: { key: "eventos" } })
+    if (setting?.value) {
+      const parsed = JSON.parse(setting.value)
+      if (Array.isArray(parsed?.upcoming) && Array.isArray(parsed?.past)) return parsed
+    }
+  } catch {}
+  return DEFAULT_EVENTOS
+})
