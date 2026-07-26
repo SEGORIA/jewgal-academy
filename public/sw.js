@@ -1,4 +1,4 @@
-const CACHE = "jewgal-v2"
+const CACHE = "jewgal-v3"
 const STATIC = [
   "/manifest.json",
   "/icons/icon-192.png",

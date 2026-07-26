@@ -57,6 +57,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Error al guardar" }, { status: 500 })
   }
 
-  revalidatePath("/eventos", "page")
+  // La página pública vive en app/(site)/[locale]/eventos — revalidar todo
+  // el subárbol localizado (ES y EN) en vez del path viejo pre-i18n.
+  revalidatePath("/[locale]", "layout")
   return NextResponse.json({ ok: true })
 }

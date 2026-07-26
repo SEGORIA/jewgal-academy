@@ -30,9 +30,13 @@ export async function POST(req: NextRequest) {
     create: { key: "theme", value: parsed.data.theme },
   })
 
-  // Refrescar el tema cacheado y regenerar el layout para toda la plataforma
+  // Refrescar el tema cacheado y regenerar los layouts de toda la plataforma.
+  // El sitio público vive bajo /[locale] y el aula/superadmin en su propio
+  // route group sin prefijo común — hay que revalidar ambos árboles.
   revalidateTag(THEME_TAG, "max")
-  revalidatePath("/", "layout")
+  revalidatePath("/[locale]", "layout")
+  revalidatePath("/aula", "layout")
+  revalidatePath("/superadmin", "layout")
 
   return NextResponse.json({ ok: true, theme: parsed.data.theme })
 }

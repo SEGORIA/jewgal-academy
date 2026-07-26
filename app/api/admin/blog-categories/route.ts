@@ -50,6 +50,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "No se pudo guardar." }, { status: 500 })
   }
 
-  revalidatePath("/blog")
+  revalidatePath("/[locale]", "layout")
   return NextResponse.json({ ok: true, categories: unique })
 }

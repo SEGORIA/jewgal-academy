@@ -58,6 +58,6 @@ export async function POST(req: NextRequest) {
     },
   })
 
-  revalidatePath("/blog")
+  revalidatePath("/[locale]", "layout")
   return NextResponse.json({ ok: true, post })
 }

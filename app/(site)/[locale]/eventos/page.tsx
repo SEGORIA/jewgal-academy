@@ -29,7 +29,10 @@ export default function EventosPage() {
       .then((r) => r.json())
       .then((d) => setContent(d))
       .catch(() => {})
-    fetch("/api/eventos", { cache: "no-store" })
+    // Cache-busting explícito además de `no-store`: algunos proxies/CDN
+    // intermedios ignoran Cache-Control y cachean por URL — el timestamp
+    // hace que cada carga pida una URL distinta, imposible de servir vieja.
+    fetch(`/api/eventos?_=${Date.now()}`, { cache: "no-store" })
       .then((r) => r.json())
       .then((d: EventosData) => {
         if (d && Array.isArray(d.upcoming) && Array.isArray(d.past)) setEventos(d)
