@@ -2,12 +2,13 @@ import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { SITE_URL } from "@/lib/site-url"
 
 export const dynamic = "force-dynamic"
 
 export const DEFAULT_GENERAL = {
   name: "Jewgal Academy",
-  url: "https://jewgal-academy.vercel.app",
+  url: SITE_URL,
   email: "Hola@devorabenchimol.com",
   phone: "+1 (786) 483-5893",
   metaDescription: "Programas de Life Coaching Integrativo, Cabalá y bienestar para transformación consciente.",

@@ -9,8 +9,7 @@ import PwaRegister from "@/components/PwaRegister"
 import { getTheme } from "@/lib/theme"
 import { Analytics } from "@vercel/analytics/next"
 import esMessages from "../../messages/es.json"
-
-const SITE_URL = "https://jewgal-academy.vercel.app"
+import { SITE_URL } from "@/lib/site-url"
 
 const orgJsonLd = {
   "@context": "https://schema.org",

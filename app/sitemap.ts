@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next"
-
-const SITE = "https://jewgal-academy.vercel.app"
+import { SITE_URL as SITE } from "@/lib/site-url"
 
 const ROUTES = ["", "/academia", "/certificaciones", "/conoce-a-devora", "/eventos", "/blog", "/contacto"]
 const PROGRAMS = ["life-coaching-integrativo", "joogal-adultos", "joogalkids", "metodo-sholem", "cabala-coach"]

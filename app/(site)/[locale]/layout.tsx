@@ -11,8 +11,7 @@ import PwaRegister from "@/components/PwaRegister"
 import { getTheme } from "@/lib/theme"
 import { Analytics } from "@vercel/analytics/next"
 import { routing } from "@/i18n/routing"
-
-const SITE_URL = "https://jewgal-academy.vercel.app"
+import { SITE_URL } from "@/lib/site-url"
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-serif",

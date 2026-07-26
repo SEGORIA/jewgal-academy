@@ -8,6 +8,7 @@ import Checkout from "@/components/Checkout"
 import RevealInit from "@/components/RevealInit"
 import { formatPrice } from "@/lib/utils"
 import { getProgramContent, getYouTubeEmbedUrl } from "@/lib/program-content"
+import { SITE_URL } from "@/lib/site-url"
 
 /* ── Identidad visual por slug (no editable desde el admin) ── */
 const META: Record<string, { grad: string; accent: string; icon: string; certs: string[] }> = {
@@ -44,7 +45,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
     provider: {
       "@type": "EducationalOrganization",
       name: "Jewgal Academy",
-      sameAs: "https://jewgal-academy.vercel.app",
+      sameAs: SITE_URL,
     },
     ...(course.isFree
       ? {}
