@@ -445,7 +445,7 @@ export default function CursosAdminPage() {
         </button>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: selected || showCourseForm ? "300px 1fr" : "1fr", gap: 20, alignItems: "start" }}>
+      <div className="admin-split-grid" style={{ display: "grid", gridTemplateColumns: selected || showCourseForm ? "300px 1fr" : "1fr", gap: 20, alignItems: "start" }}>
 
         {/* Lista */}
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -463,7 +463,7 @@ export default function CursosAdminPage() {
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
                   <div style={{ width: 10, height: 10, borderRadius: "50%", background: accent, flexShrink: 0 }} />
-                  <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)", flex: 1 }}>{p.title}</span>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.title}</span>
                   <button onClick={(e) => { e.stopPropagation(); togglePublish(p) }} title={p.isPublished ? "Despublicar" : "Publicar"}
                     style={{ background: "none", border: "none", cursor: "pointer", color: p.isPublished ? "var(--success)" : "var(--text-dim)", padding: 2 }}>
                     {p.isPublished ? <Eye size={16} /> : <EyeOff size={16} />}
@@ -558,7 +558,7 @@ export default function CursosAdminPage() {
                 </div>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                 <div>
                   <label style={labelStyle}>Precio (USD)</label>
                   <input type="number" min={0} disabled={courseForm.isFree} value={courseForm.price} onChange={(e) => setCourseForm((f) => ({ ...f, price: e.target.value }))} style={{ ...inputStyle, opacity: courseForm.isFree ? 0.5 : 1 }} />
@@ -570,7 +570,7 @@ export default function CursosAdminPage() {
                   </label>
                 </div>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                 <div>
                   <label style={labelStyle}>Horas totales</label>
                   <input type="number" min={0} value={courseForm.totalHours} onChange={(e) => setCourseForm((f) => ({ ...f, totalHours: e.target.value }))} placeholder="Ej: 40" style={inputStyle} />
@@ -669,7 +669,7 @@ export default function CursosAdminPage() {
                 </div>
 
                 {/* Chips: eyebrow / duración / modalidad / nivel */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28 }}>
+                <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28 }}>
                   <div>
                     <label style={labelStyle}>Etiqueta (eyebrow)</label>
                     <input value={progContent.eyebrow} onChange={(e) => setProgContent((c) => ({ ...c, eyebrow: e.target.value }))} placeholder="Ej: Certificación Infantil" style={inputStyle} />
@@ -757,12 +757,12 @@ export default function CursosAdminPage() {
                         {editingMatId ? "Editar material" : "Nuevo material"}
                       </span>
                     </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+                    <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
                       <div><label style={labelStyle}>Título</label><input value={matForm.title} onChange={(e) => setMatForm((f) => ({ ...f, title: e.target.value }))} placeholder="Guía módulo 1" style={inputStyle} /></div>
                       <div>
                         <label style={labelStyle}>Módulo</label>
                         <select value={matForm.moduleNumber} onChange={(e) => setMatForm((f) => ({ ...f, moduleNumber: e.target.value }))} style={{ ...inputStyle, cursor: "pointer" }}>
-                          {[1, 2, 3, 4, 5, 6].map((n) => <option key={n} value={n}>Módulo {n}</option>)}
+                          {[1, 2, 3, 4, 5, 6, 7].map((n) => <option key={n} value={n}>Módulo {n}</option>)}
                         </select>
                       </div>
                     </div>
@@ -770,7 +770,7 @@ export default function CursosAdminPage() {
                       <label style={labelStyle}>Descripción (opcional)</label>
                       <input value={matForm.description} onChange={(e) => setMatForm((f) => ({ ...f, description: e.target.value }))} placeholder="Breve descripción" style={inputStyle} />
                     </div>
-                    <div style={{ display: "grid", gridTemplateColumns: matForm.type === "lesson" ? "1fr" : "140px 1fr", gap: 12, marginBottom: 12 }}>
+                    <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: matForm.type === "lesson" ? "1fr" : "140px 1fr", gap: 12, marginBottom: 12 }}>
                       <div>
                         <label style={labelStyle}>Tipo</label>
                         <select value={matForm.type} onChange={(e) => setMatForm((f) => ({ ...f, type: e.target.value as typeof f.type }))} style={{ ...inputStyle, cursor: "pointer" }}>
@@ -791,7 +791,7 @@ export default function CursosAdminPage() {
                       <p style={{ fontSize: 11.5, color: "var(--text-dim)", marginBottom: 20 }}>Sin carga de archivos aún — pegá un link (Drive, YouTube, Vimeo, etc.).</p>
                     )}
 
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 12 }}>
+                    <div className="admin-form-grid-3" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 12 }}>
                       <div>
                         <label style={labelStyle}>Interacción</label>
                         <select value={matForm.interactionKind} onChange={(e) => setMatForm((f) => ({ ...f, interactionKind: e.target.value as typeof f.interactionKind }))} style={{ ...inputStyle, cursor: "pointer" }}>
@@ -812,7 +812,7 @@ export default function CursosAdminPage() {
                       </div>
                     </div>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 }}>
+                    <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 }}>
                       <div>
                         <label style={labelStyle}>Grupo en el sidebar (opcional)</label>
                         <input value={matForm.groupLabel} onChange={(e) => setMatForm((f) => ({ ...f, groupLabel: e.target.value }))} placeholder='Ej. "Material de estudio"' style={inputStyle} />
@@ -853,7 +853,7 @@ export default function CursosAdminPage() {
                 ) : (
                   <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                     {materials.map((m, mi) => (
-                      <div key={m.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", background: "var(--surface-2)", borderRadius: 9, opacity: m.isVisible ? 1 : 0.5 }}>
+                      <div key={m.id} style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12, padding: "12px 14px", background: "var(--surface-2)", borderRadius: 9, opacity: m.isVisible ? 1 : 0.5 }}>
                         <div style={{ display: "flex", flexDirection: "column", gap: 1, flexShrink: 0 }}>
                           <button onClick={() => moveMaterial(mi, -1)} disabled={mi === 0} title="Subir" style={{ width: 20, height: 16, display: "flex", alignItems: "center", justifyContent: "center", background: "none", border: "none", cursor: mi === 0 ? "default" : "pointer", color: "var(--text-faint)", opacity: mi === 0 ? 0.3 : 1 }}>
                             <ChevronUp size={13} />
@@ -864,8 +864,8 @@ export default function CursosAdminPage() {
                         </div>
                         {m.type === "document" ? <Download size={16} style={{ color: "var(--gold)", flexShrink: 0 }} /> : m.type === "lesson" ? <BookOpen size={16} style={{ color: "var(--gold)", flexShrink: 0 }} /> : <ExternalLink size={16} style={{ color: "var(--teal)", flexShrink: 0 }} />}
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>{m.title}</p>
-                          <p style={{ fontSize: 11.5, color: "var(--text-dim)" }}>Módulo {m.moduleNumber}{m.groupLabel ? ` · ${m.groupLabel}` : ""} · {m.type}</p>
+                          <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{m.title}</p>
+                          <p style={{ fontSize: 11.5, color: "var(--text-dim)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>Módulo {m.moduleNumber}{m.groupLabel ? ` · ${m.groupLabel}` : ""} · {m.type}</p>
                         </div>
                         <button onClick={() => window.open(`/superadmin/cursos/preview/${m.id}`, "_blank", "noopener,noreferrer")} title="Vista previa del alumno" style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)" }}>
                           <ExternalLink size={14} />
@@ -897,11 +897,11 @@ export default function CursosAdminPage() {
                 </div>
                 {showAddSes && (
                   <div style={{ background: "var(--surface)", border: "1px solid rgba(165,141,102,.18)", borderRadius: 12, padding: "20px 18px", marginBottom: 16 }}>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+                    <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
                       <div><label style={labelStyle}>Título</label><input value={sesForm.title} onChange={(e) => setSesForm((f) => ({ ...f, title: e.target.value }))} placeholder="Módulo 1 – Intro" style={inputStyle} /></div>
                       <div><label style={labelStyle}>Link Zoom</label><input value={sesForm.joinUrl} onChange={(e) => setSesForm((f) => ({ ...f, joinUrl: e.target.value }))} placeholder="https://zoom.us/j/..." style={inputStyle} /></div>
                     </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 12 }}>
+                    <div className="admin-form-grid-3" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 12 }}>
                       <div><label style={labelStyle}>Fecha</label><input type="date" value={sesForm.date} onChange={(e) => setSesForm((f) => ({ ...f, date: e.target.value }))} style={inputStyle} /></div>
                       <div><label style={labelStyle}>Hora</label><input type="time" value={sesForm.time} onChange={(e) => setSesForm((f) => ({ ...f, time: e.target.value }))} style={inputStyle} /></div>
                       <div><label style={labelStyle}>Duración (min)</label><input type="number" min={15} value={sesForm.durationMin} onChange={(e) => setSesForm((f) => ({ ...f, durationMin: e.target.value }))} style={inputStyle} /></div>

@@ -199,7 +199,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           {/* Right side */}
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <NotificationBell />
-            <span style={{ fontSize: 12, color: "var(--text-dim)", letterSpacing: ".02em" }}>admin@jewgalacademy.com</span>
+            <span className="admin-topbar-email" style={{ fontSize: 12, color: "var(--text-dim)", letterSpacing: ".02em" }}>admin@jewgalacademy.com</span>
             {/* Avatar */}
             <div style={{
               width: 34, height: 34, borderRadius: "50%",

@@ -1039,6 +1039,22 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
   .mob-menu-btn { display: flex !important; }
   /* El contenido ocupa todo el ancho cuando el sidebar está oculto */
   .aula-main { margin-left: 0 !important; }
+  /* Topbar: el breadcrumb completo + email + avatar no entran en 375px de
+     ancho — se ocultaba contenido en vez de hacer scroll. El email es
+     redundante (ya se ve en Mi perfil) así que se oculta acá. */
+  .admin-topbar-email { display: none !important; }
+  /* Programas: la grilla de 300px (lista) + 1fr (panel del curso
+     seleccionado) rompe cualquier pantalla angosta — se apilan en una
+     sola columna en vez de superponerse/cortarse. */
+  /* min-width:0 rompe el min-content sizing de CSS grid — sin esto, un
+     hijo con contenido "no wrappeable" (ej. una fila flex de badges) sigue
+     estirando la pista aunque el grid ya sea de 1 sola columna. */
+  .admin-split-grid { grid-template-columns: 1fr !important; min-width: 0; }
+  .admin-split-grid > * { min-width: 0; }
+  /* Formularios del admin (material, sesión, programa): pares/tríos de
+     campos lado a lado quedan ilegibles en 375px — se apilan. */
+  .admin-form-grid-2, .admin-form-grid-3 { grid-template-columns: 1fr !important; min-width: 0; }
+  .admin-form-grid-2 > *, .admin-form-grid-3 > * { min-width: 0; }
 }
 
 /* Ajustes de padding en contenido de aula en móvil */
