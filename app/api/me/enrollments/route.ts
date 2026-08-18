@@ -19,7 +19,12 @@ export async function GET(req: Request) {
   const rows = await db.enrollment.findMany({
     where,
     include: {
-      course: { select: { id: true, title: true, slug: true, isFree: true, totalHours: true, durationWeeks: true } },
+      course: {
+        select: {
+          id: true, title: true, slug: true, isFree: true, totalHours: true, durationWeeks: true,
+          accreditations: { select: { logoUrl: true }, orderBy: { order: "asc" } },
+        },
+      },
       attendances: { select: { status: true } },
     },
     orderBy: { enrolledAt: "desc" },

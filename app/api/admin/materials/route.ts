@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache"
 import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { contentBlockSchema, quizQuestionSchema, materialTypeSchema } from "@/lib/materials-content"
 
 export async function GET(req: NextRequest) {
   const session = await auth()
@@ -27,13 +28,20 @@ const createSchema = z.object({
   courseId: z.string().min(1),
   title: z.string().min(2),
   description: z.string().nullable().optional(),
-  type: z.enum(["document", "video", "link"]),
+  type: materialTypeSchema,
   fileUrl: z.string().url().nullable().optional().or(z.literal("")),
   videoUrl: z.string().url().nullable().optional().or(z.literal("")),
   linkUrl: z.string().url().nullable().optional().or(z.literal("")),
   moduleNumber: z.number().int().min(1).default(1),
   order: z.number().int().min(0).default(0),
   isVisible: z.boolean().default(true),
+  interactionKind: z.enum(["reflection", "quiz"]).nullable().optional(),
+  toolHref: z.string().nullable().optional(),
+  estimatedMinutes: z.number().int().min(0).max(600).nullable().optional(),
+  coverImageUrl: z.string().url().nullable().optional().or(z.literal("")),
+  groupLabel: z.string().max(200).nullable().optional(),
+  content: z.array(contentBlockSchema).max(100).nullable().optional(),
+  quizData: z.array(quizQuestionSchema).max(50).nullable().optional(),
 })
 
 export async function POST(req: NextRequest) {
@@ -65,6 +73,13 @@ export async function POST(req: NextRequest) {
       moduleNumber: data.moduleNumber,
       order: data.order,
       isVisible: data.isVisible,
+      interactionKind: data.interactionKind ?? null,
+      toolHref: data.toolHref ?? null,
+      estimatedMinutes: data.estimatedMinutes ?? null,
+      coverImageUrl: data.coverImageUrl || null,
+      groupLabel: data.groupLabel ?? null,
+      content: data.content ? JSON.stringify(data.content) : null,
+      quizData: data.quizData ? JSON.stringify(data.quizData) : null,
     },
   })
 

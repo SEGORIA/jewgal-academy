@@ -61,7 +61,8 @@
     "invalidTitle": "Este número de certificado no es válido",
     "invalidText": "Revisá que el número esté escrito correctamente, o contactanos si creés que se trata de un error.",
     "verifyAnother": "Verificar otro certificado",
-    "certNumber": "N°"
+    "certNumber": "N°",
+    "downloadCertificate": "Descargar certificado"
   },
   "Login": {
     "eyebrow": "Aula virtual",
@@ -198,7 +199,7 @@
     "c2Title": "Instructor Jewgal Adultos", "c2Entity": "Método Jewgal · Certificación Oficial", "c2Type": "Certificación Oficial", "c2Dur": "3 meses",
     "c2Desc": "Habilitación oficial para dictar clases, talleres y retiros del Método Jewgal para adultos. Reconocida dentro de la comunidad internacional de instructores Jewgal.",
     "c2Req": ["Asistencia completa al programa", "Práctica docente evaluada", "Examen teórico y práctico", "Presentación de clase final"],
-    "c3Title": "Instructor Jewgalkids", "c3Entity": "Método Jewgal · Certificación Infantil", "c3Type": "Certificación Oficial", "c3Dur": "3 meses",
+    "c3Title": "Instructor Joogalkids", "c3Entity": "Método Jewgal · Certificación Infantil", "c3Type": "Certificación Oficial", "c3Dur": "3 meses",
     "c3Desc": "Habilitación para guiar sesiones de movimiento consciente y desarrollo integral en niños de 3 a 12 años, con pedagogía lúdica certificada.",
     "c3Req": ["Asistencia completa al programa", "Módulo de pedagogía infantil aprobado", "Clase práctica evaluada", "Portfolio pedagógico entregado"],
     "c4Title": "Instructor Método Sholem", "c4Entity": "Fundación Sholem · Certificación", "c4Type": "Certificación de Instructorado", "c4Dur": "3 meses",
@@ -224,7 +225,7 @@
     "bioP2": "Durante más de 40 años he acompañado personas en Argentina, Israel, Guatemala, Colombia y Estados Unidos a atravesar sus procesos más profundos — los que se viven en el cuerpo, los que duelen en el alma, y los que transforman la vida para siempre.",
     "bioQuote1": "Mi camino no nació de un aula. Nació del encuentro real con el ser humano.",
     "bioP3": "De esa trayectoria surgió una forma de trabajar que integra lo que la mayoría separa: la mente y el cuerpo, la técnica y la intuición, el conocimiento académico y la sabiduría ancestral.",
-    "bioP4": "Soy creadora de <b>Jewgalkids</b>, un programa de Mindfulness in Motion basado en el Alef Bet, diseñado para que los niños aprendan a conectar con su mundo interior a través del movimiento, el juego y la sabiduría de las letras hebreas. Y de <b>Jewgal</b>, su versión para adultos — una metodología propia que lleva ese mismo principio de consciencia en movimiento a quienes guían, educan y lideran.",
+    "bioP4": "Soy creadora de <b>Joogalkids</b>, un programa de Mindfulness in Motion basado en el Alef Bet, diseñado para que los niños aprendan a conectar con su mundo interior a través del movimiento, el juego y la sabiduría de las letras hebreas. Y de <b>Jewgal</b>, su versión para adultos — una metodología propia que lleva ese mismo principio de consciencia en movimiento a quienes guían, educan y lideran.",
     "bioListIntro": "En cada retiro traigo conmigo todo eso:",
     "bioItem1": "La profundidad de la <b>Logoterapia</b> para encontrar sentido donde parece no haberlo.",
     "bioItem2": "La presencia del <b>Mindfulness</b> y el trabajo con el trauma para sanar desde adentro.",
@@ -295,7 +296,7 @@
     "bioP2": "Durante más de 40 años he acompañado personas en Argentina, Israel, Guatemala, Colombia y Estados Unidos a atravesar sus procesos más profundos — los que se viven en el cuerpo, los que duelen en el alma, y los que transforman la vida para siempre.",
     "bioQuote1": "Mi camino no nació de un aula. Nació del encuentro real con el ser humano.",
     "bioP3": "De esa trayectoria surgió una forma de trabajar que integra lo que la mayoría separa: la mente y el cuerpo, la técnica y la intuición, el conocimiento académico y la sabiduría ancestral.",
-    "bioP4": "Soy creadora de <b>Jewgalkids</b>, un programa de Mindfulness in Motion basado en el Alef Bet, diseñado para que los niños aprendan a conectar con su mundo interior a través del movimiento, el juego y la sabiduría de las letras hebreas. Y de <b>Jewgal</b>, su versión para adultos — una metodología propia que lleva ese mismo principio de consciencia en movimiento a quienes guían, educan y lideran.",
+    "bioP4": "Soy creadora de <b>Joogalkids</b>, un programa de Mindfulness in Motion basado en el Alef Bet, diseñado para que los niños aprendan a conectar con su mundo interior a través del movimiento, el juego y la sabiduría de las letras hebreas. Y de <b>Jewgal</b>, su versión para adultos — una metodología propia que lleva ese mismo principio de consciencia en movimiento a quienes guían, educan y lideran.",
     "bioListIntro": "En cada retiro traigo conmigo todo eso:",
     "bioItem1": "La profundidad de la <b>Logoterapia</b> para encontrar sentido donde parece no haberlo.",
     "bioItem2": "La presencia del <b>Mindfulness</b> y el trabajo con el trauma para sanar desde adentro.",
@@ -468,7 +469,7 @@
     "lvl_teens": "Exp. con adolescentes",
     "bullets_life": ["Certificado internacional", "Clases en vivo + grabaciones", "Supervisión individual"],
     "bullets_adultos": ["Certificado oficial Jewgal", "Manual completo incluido", "Mentoring grupal mensual"],
-    "bullets_kids": ["Certificado oficial Jewgalkids", "Recursos lúdicos descargables", "Mentoring mensual"],
+    "bullets_kids": ["Certificado oficial Joogalkids", "Recursos lúdicos descargables", "Mentoring mensual"],
     "bullets_sholem": ["Certificado de instructor", "Manual Método Sholem", "Supervisión grupal"],
     "bullets_cabala": ["Acceso de por vida", "Videos HD + guías PDF", "Comunidad privada"]
   },

@@ -59,6 +59,6 @@ export async function POST(req: NextRequest) {
 
   // La página pública vive en app/(site)/[locale]/eventos — revalidar todo
   // el subárbol localizado (ES y EN) en vez del path viejo pre-i18n.
-  revalidatePath("/[locale]", "layout")
+  revalidatePath("/(site)/[locale]", "layout")
   return NextResponse.json({ ok: true })
 }

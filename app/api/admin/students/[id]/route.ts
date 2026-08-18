@@ -1,6 +1,30 @@
 import { NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
+
+const patchSchema = z.object({ status: z.enum(["active", "banned"]) })
+
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const session = await auth()
+  if (session?.user?.role !== "admin") {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+  }
+  const { id } = await params
+
+  const student = await db.user.findUnique({ where: { id } })
+  if (!student || student.role !== "student") {
+    return NextResponse.json({ error: "Alumno no encontrado" }, { status: 404 })
+  }
+
+  const parsed = patchSchema.safeParse(await req.json().catch(() => null))
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Datos inválidos" }, { status: 400 })
+  }
+
+  const updated = await db.user.update({ where: { id }, data: { status: parsed.data.status } })
+  return NextResponse.json({ ok: true, student: updated })
+}
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth()

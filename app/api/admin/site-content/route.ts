@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
   // Las páginas públicas ahora viven bajo /[locale] y la home se renderiza
   // estática con el contenido incrustado — revalidar todo el subárbol
   // localizado hace que la edición se vea al instante (ES y EN).
-  revalidatePath("/[locale]", "layout")
+  revalidatePath("/(site)/[locale]", "layout")
 
   return NextResponse.json({ ok: true })
 }

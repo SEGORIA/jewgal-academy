@@ -34,9 +34,9 @@ export async function POST(req: NextRequest) {
   // El sitio público vive bajo /[locale] y el aula/superadmin en su propio
   // route group sin prefijo común — hay que revalidar ambos árboles.
   revalidateTag(THEME_TAG, "max")
-  revalidatePath("/[locale]", "layout")
-  revalidatePath("/aula", "layout")
-  revalidatePath("/superadmin", "layout")
+  revalidatePath("/(site)/[locale]", "layout")
+  revalidatePath("/(app)/aula", "layout")
+  revalidatePath("/(app)/superadmin", "layout")
 
   return NextResponse.json({ ok: true, theme: parsed.data.theme })
 }

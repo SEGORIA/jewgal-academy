@@ -34,7 +34,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   const post = await db.post.update({ where: { id }, data })
 
-  revalidatePath("/[locale]", "layout")
+  revalidatePath("/(site)/[locale]", "layout")
   return NextResponse.json({ ok: true, post })
 }
 
@@ -50,6 +50,6 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     return NextResponse.json({ error: "Entrada no encontrada" }, { status: 404 })
   }
 
-  revalidatePath("/[locale]", "layout")
+  revalidatePath("/(site)/[locale]", "layout")
   return NextResponse.json({ ok: true })
 }

@@ -30,4 +30,22 @@ export function buildUploadSignature(folder: string) {
   }
 }
 
+// Subida server-side de un buffer ya generado (ej. un PDF armado en memoria)
+// vía data-URI base64 — sin firma de navegador, sin manejo de streams.
+// Cloudinary trata los PDF como resource_type "image" (permite thumbnails
+// de la primera página a futuro sin cambios acá).
+export async function uploadBufferToCloudinary(
+  buffer: Buffer,
+  opts: { folder: string; publicId: string; mimeType: string; resourceType?: "image" | "raw" | "video" }
+): Promise<string> {
+  const dataUri = `data:${opts.mimeType};base64,${buffer.toString("base64")}`
+  const result = await cloudinary.uploader.upload(dataUri, {
+    folder: opts.folder,
+    public_id: opts.publicId,
+    resource_type: opts.resourceType ?? "image",
+    overwrite: true,
+  })
+  return result.secure_url
+}
+
 export { cloudinary }

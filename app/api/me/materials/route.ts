@@ -22,9 +22,38 @@ export async function GET() {
   const materials = await db.material.findMany({
     where: { courseId: { in: courseIds }, isVisible: true },
     orderBy: [{ moduleNumber: "asc" }, { order: "asc" }],
+    select: {
+      id: true,
+      courseId: true,
+      title: true,
+      description: true,
+      type: true,
+      fileUrl: true,
+      videoUrl: true,
+      linkUrl: true,
+      moduleNumber: true,
+      order: true,
+      isVisible: true,
+      interactionKind: true,
+      toolHref: true,
+      estimatedMinutes: true,
+      coverImageUrl: true,
+      groupLabel: true,
+      createdAt: true,
+    },
   })
 
+  const progress = await db.materialProgress.findMany({
+    where: { userId: session.user.id, materialId: { in: materials.map((m) => m.id) } },
+    select: { materialId: true, completedAt: true, quizScore: true, quizTotal: true },
+  })
+  const progressByMaterial = Object.fromEntries(progress.map((p) => [p.materialId, p]))
+
   return NextResponse.json({
-    materials: materials.map((m) => ({ ...m, courseTitle: titleByCourse[m.courseId] ?? "" })),
+    materials: materials.map((m) => ({
+      ...m,
+      courseTitle: titleByCourse[m.courseId] ?? "",
+      progress: progressByMaterial[m.id] ?? null,
+    })),
   })
 }

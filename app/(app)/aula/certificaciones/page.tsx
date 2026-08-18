@@ -3,23 +3,19 @@
 import { useEffect, useState, useRef } from "react"
 import { useSession } from "next-auth/react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Award, Download, X, ExternalLink, Loader2 } from "lucide-react"
+import { Award, Download, X, ExternalLink, Loader2, FileDown } from "lucide-react"
 import Link from "next/link"
+import { PROGRAM_META, DEFAULT_PROGRAM_META } from "@/lib/program-meta"
+import { DEFAULT_CERTIFICATE_DESIGN, resolveProgramAccent, type CertificateDesign } from "@/lib/certificate-design"
+import CertificatePreview from "@/components/certificates/CertificatePreview"
 
 type Enrollment = {
   id: string
   completedAt: string
   certificateNumber: string
+  certificateUrl: string | null
   enrolledAt: string
-  course: { id: string; title: string; slug: string; isFree: boolean }
-}
-
-const PROGRAM_META: Record<string, { icon: string; accent: string; desc: string }> = {
-  "life-coaching-integrativo": { icon: "⟡", accent: "#A58D66", desc: "Life Coaching Integrativo" },
-  "joogal-adultos":            { icon: "✦", accent: "#C49F72", desc: "Instructor Jewgal · Adultos" },
-  "joogalkids":                { icon: "★", accent: "#A76D61", desc: "Instructor Jewgalkids" },
-  "metodo-sholem":             { icon: "◈", accent: "#A76D61", desc: "Método Sholem" },
-  "cabala-coach":              { icon: "❂", accent: "#CBB78B", desc: "Cábala Coach" },
+  course: { id: string; title: string; slug: string; isFree: boolean; accreditations: { logoUrl: string | null }[] }
 }
 
 const card: React.CSSProperties = {
@@ -33,6 +29,7 @@ export default function CertificacionesPage() {
   const [certs,   setCerts]   = useState<Enrollment[]>([])
   const [loading, setLoading] = useState(true)
   const [active,  setActive]  = useState<Enrollment | null>(null)
+  const [design,  setDesign]  = useState<CertificateDesign>(DEFAULT_CERTIFICATE_DESIGN)
   const certRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -43,12 +40,18 @@ export default function CertificacionesPage() {
       .finally(() => setLoading(false))
   }, [])
 
+  useEffect(() => {
+    fetch("/api/certificate-design")
+      .then((r) => r.json())
+      .then((d) => setDesign(d))
+      .catch(() => {})
+  }, [])
+
   function printCert() {
     window.print()
   }
 
   const name      = session?.user?.name ?? "Estudiante"
-  const activeMeta = active ? (PROGRAM_META[active.course.slug] ?? { icon: "✦", accent: "#A58D66", desc: active.course.title }) : null
 
   return (
     <>
@@ -115,7 +118,7 @@ export default function CertificacionesPage() {
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px,1fr))", gap: 18 }}>
             {certs.map((c, i) => {
-              const meta = PROGRAM_META[c.course.slug] ?? { icon: "✦", accent: "#A58D66", desc: c.course.title }
+              const meta = PROGRAM_META[c.course.slug] ?? { ...DEFAULT_PROGRAM_META, desc: c.course.title }
               return (
                 <motion.div
                   key={c.id}
@@ -171,7 +174,7 @@ export default function CertificacionesPage() {
 
       {/* ── MODAL CERTIFICADO ── */}
       <AnimatePresence>
-        {active && activeMeta && (
+        {active && (
           <motion.div
             key="cert-modal"
             initial={{ opacity: 0 }}
@@ -182,10 +185,17 @@ export default function CertificacionesPage() {
           >
             {/* Controles */}
             <div style={{ display: "flex", gap: 12, marginBottom: 24 }} onClick={(e) => e.stopPropagation()}>
-              <button onClick={printCert}
-                style={{ display: "flex", alignItems: "center", gap: 7, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.35)", color: "var(--gold)", borderRadius: 9, padding: "10px 20px", fontSize: 13, cursor: "pointer" }}>
-                <Download size={15} /> Imprimir / Descargar
-              </button>
+              {active.certificateUrl ? (
+                <a href={active.certificateUrl} target="_blank" rel="noopener noreferrer"
+                  style={{ display: "flex", alignItems: "center", gap: 7, background: "var(--gold)", border: "1px solid var(--gold)", color: "#2C1F14", borderRadius: 9, padding: "10px 20px", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+                  <FileDown size={15} /> Descargar PDF
+                </a>
+              ) : (
+                <button onClick={printCert}
+                  style={{ display: "flex", alignItems: "center", gap: 7, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.35)", color: "var(--gold)", borderRadius: 9, padding: "10px 20px", fontSize: 13, cursor: "pointer" }}>
+                  <Download size={15} /> Imprimir / Descargar
+                </button>
+              )}
               <Link href={`/verificar/${active.certificateNumber}`} target="_blank"
                 style={{ display: "flex", alignItems: "center", gap: 7, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.35)", color: "var(--gold)", borderRadius: 9, padding: "10px 20px", fontSize: 13, textDecoration: "none" }}>
                 <ExternalLink size={15} /> Verificar en línea
@@ -205,105 +215,17 @@ export default function CertificacionesPage() {
               exit={{ scale: 0.95, y: 10 }}
               transition={{ type: "spring", stiffness: 260, damping: 24 }}
               onClick={(e) => e.stopPropagation()}
-              style={{
-                width: "min(780px, 100%)",
-                background: "linear-gradient(145deg, #0b2234, var(--bg))",
-                border: `1px solid ${activeMeta.accent}55`,
-                borderRadius: 20,
-                padding: "60px 70px",
-                position: "relative",
-                overflow: "hidden",
-                boxShadow: `0 40px 120px rgba(0,0,0,.6), 0 0 0 1px ${activeMeta.accent}22 inset`,
-              }}
+              style={{ width: "min(780px, 100%)" }}
             >
-              {/* Decoración de esquinas */}
-              {([
-                [18, 18, "top-left",     "M2 2 L14 2 L14 5 L5 5 L5 14 L2 14 Z"],
-                [18, 18, "top-right",    "M30 2 L18 2 L18 5 L27 5 L27 14 L30 14 Z"],
-                [18, 18, "bottom-right", "M30 30 L18 30 L18 27 L27 27 L27 18 L30 18 Z"],
-                [18, 18, "bottom-left",  "M2 30 L14 30 L14 27 L5 27 L5 18 L2 18 Z"],
-              ] as const).map(([v, h, corner, d]) => {
-                const s: React.CSSProperties = { position: "absolute", opacity: 0.45,
-                  ...(corner.includes("top")    ? { top:    v } : { bottom: v }),
-                  ...(corner.includes("left")   ? { left:   h } : { right:  h }),
-                }
-                return (
-                  <svg key={corner} width="32" height="32" viewBox="0 0 32 32" style={s}>
-                    <path d={d} fill={activeMeta.accent} />
-                  </svg>
-                )
-              })}
-
-              {/* Fondo decorativo */}
-              <div style={{ position: "absolute", inset: 0, backgroundImage: `radial-gradient(circle at 20% 80%, ${activeMeta.accent}06 0%, transparent 55%), radial-gradient(circle at 80% 20%, rgba(75,126,140,.05) 0%, transparent 55%)`, pointerEvents: "none" }} />
-
-              {/* Línea superior dorada */}
-              <div style={{ height: 1, background: `linear-gradient(90deg, transparent, ${activeMeta.accent}80, transparent)`, marginBottom: 40 }} />
-
-              {/* Header */}
-              <div style={{ textAlign: "center", marginBottom: 36 }}>
-                <p style={{ fontSize: 10, letterSpacing: ".45em", textTransform: "uppercase", color: activeMeta.accent, marginBottom: 4, opacity: .85 }}>
-                  ✦ &nbsp; Jewgal Academy &nbsp; ✦
-                </p>
-                <h1 style={{ fontFamily: "var(--serif)", fontSize: 28, fontWeight: 400, color: "var(--text)", letterSpacing: ".04em" }}>
-                  Certificado de Finalización
-                </h1>
-              </div>
-
-              {/* Ornamento central */}
-              <div style={{ textAlign: "center", color: `${activeMeta.accent}50`, fontSize: 18, letterSpacing: 12, marginBottom: 36 }}>
-                ─── ✦ ───
-              </div>
-
-              {/* Otorgado a */}
-              <p style={{ textAlign: "center", fontSize: 11, letterSpacing: ".28em", textTransform: "uppercase", color: "rgba(224,233,234,.38)", marginBottom: 16 }}>
-                Otorgado con honor a
-              </p>
-
-              {/* Nombre del alumno */}
-              <h2 style={{ fontFamily: "var(--serif)", fontSize: 44, fontWeight: 400, color: activeMeta.accent === "#A58D66" ? "#CBB78B" : activeMeta.accent, textAlign: "center", marginBottom: 24, letterSpacing: ".02em", lineHeight: 1.1 }}>
-                {name}
-              </h2>
-
-              <p style={{ textAlign: "center", fontSize: 14, color: "var(--text-faint)", marginBottom: 14, lineHeight: 1.7 }}>
-                por completar exitosamente el programa de formación
-              </p>
-
-              {/* Nombre del programa */}
-              <h3 style={{ fontFamily: "var(--serif)", fontSize: 26, fontWeight: 400, color: "var(--text)", textAlign: "center", marginBottom: 10 }}>
-                {active.course.title}
-              </h3>
-
-              {/* Descripción del programa */}
-              <p style={{ textAlign: "center", fontSize: 13, color: "var(--text-dim)", marginBottom: 50 }}>
-                en la plataforma Jewgal Academy · por Devora Benchimol
-              </p>
-
-              {/* Línea media dorada */}
-              <div style={{ height: 1, background: `linear-gradient(90deg, transparent, ${activeMeta.accent}40, transparent)`, marginBottom: 36 }} />
-
-              {/* Footer del certificado */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-                <div>
-                  <div style={{ width: 180, height: 1, background: `${activeMeta.accent}60`, marginBottom: 10 }} />
-                  <p style={{ fontSize: 14, color: "var(--text)", fontWeight: 600, marginBottom: 3 }}>Devora Benchimol</p>
-                  <p style={{ fontSize: 11, color: "rgba(165,141,102,.55)", letterSpacing: ".16em", textTransform: "uppercase" }}>
-                    Fundadora · Master Coach Internacional
-                  </p>
-                </div>
-                <div style={{ textAlign: "right" }}>
-                  <p style={{ fontSize: 11, color: "var(--text-dim)", marginBottom: 4, letterSpacing: ".1em", textTransform: "uppercase" }}>Fecha de emisión</p>
-                  <p style={{ fontSize: 13, color: "var(--text-muted)" }}>
-                    {new Date(active.completedAt).toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" })}
-                  </p>
-                  <p style={{ fontSize: 10, color: `${activeMeta.accent}70`, marginTop: 10, letterSpacing: ".12em" }}>
-                    N° {active.certificateNumber}
-                  </p>
-                </div>
-              </div>
-
-              {/* Línea inferior */}
-              <div style={{ height: 1, background: `linear-gradient(90deg, transparent, ${activeMeta.accent}80, transparent)`, marginTop: 40 }} />
+              <CertificatePreview
+                studentName={name}
+                courseTitle={active.course.title}
+                certificateNumber={active.certificateNumber}
+                completedAt={active.completedAt}
+                accent={resolveProgramAccent(design, active.course.slug)}
+                design={design}
+                accreditationLogos={active.course.accreditations.map((a) => a.logoUrl).filter((u): u is string => !!u)}
+              />
             </motion.div>
           </motion.div>
         )}

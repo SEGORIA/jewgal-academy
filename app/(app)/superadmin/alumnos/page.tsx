@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
-import { Search, UserPlus, Mail, MoreHorizontal, X, Eye, Trash2, Loader2, Award, CheckCircle2 } from "lucide-react"
+import { Search, UserPlus, Mail, MoreHorizontal, X, Eye, Trash2, Loader2, Award, CheckCircle2, FileDown, Ban, ShieldCheck } from "lucide-react"
 
 type Enrollment = {
   id: string
@@ -10,6 +10,7 @@ type Enrollment = {
   hoursCompleted: number
   completedAt: string | null
   certificateNumber: string | null
+  certificateUrl: string | null
   attendance: { attended: number; held: number; rate: number | null }
   course: { title: string; slug: string; totalHours: number | null }
 }
@@ -18,6 +19,7 @@ type Student = {
   id: string
   name: string
   email: string
+  status: string
   createdAt: string
   enrollments: Enrollment[]
   payments: { amount: number; status: string; paidAt: string | null }[]
@@ -59,6 +61,7 @@ export default function AlumnosPage() {
   const [courses, setCourses] = useState<CourseOption[]>([])
   const [deleting, setDeleting] = useState(false)
   const [deleteError, setDeleteError] = useState("")
+  const [banning, setBanning] = useState(false)
 
   async function saveMetrics(enrollmentId: string) {
     const v = edit[enrollmentId]
@@ -128,6 +131,23 @@ export default function AlumnosPage() {
       load()
     } finally {
       setDeleting(false)
+    }
+  }
+
+  async function toggleBan(student: Student) {
+    const nextStatus = student.status === "banned" ? "active" : "banned"
+    setBanning(true)
+    try {
+      const res = await fetch(`/api/admin/students/${student.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: nextStatus }),
+      })
+      if (!res.ok) return
+      setStudents((prev) => prev.map((s) => (s.id === student.id ? { ...s, status: nextStatus } : s)))
+      setModal((m) => (m?.type === "detail" && m.student.id === student.id ? { type: "detail", student: { ...m.student, status: nextStatus } } : m))
+    } finally {
+      setBanning(false)
     }
   }
 
@@ -403,10 +423,21 @@ export default function AlumnosPage() {
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: 10 }}>
                               <p style={{ fontSize: 13, color: "var(--text)", fontWeight: 600 }}>{en.course.title}</p>
                               {done ? (
-                                <span style={{ fontSize: 10, color: "var(--success)", whiteSpace: "nowrap" }}>
-                                  <CheckCircle2 size={10} style={{ display: "inline", marginRight: 4 }} />
-                                  N° {en.certificateNumber}
-                                </span>
+                                <div style={{ textAlign: "right" as const }}>
+                                  <span style={{ fontSize: 10, color: "var(--success)", whiteSpace: "nowrap", display: "block" }}>
+                                    <CheckCircle2 size={10} style={{ display: "inline", marginRight: 4 }} />
+                                    N° {en.certificateNumber}
+                                  </span>
+                                  <span style={{ fontSize: 9.5, color: "var(--text-dim)", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: 5, justifyContent: "flex-end", marginTop: 2 }}>
+                                    {en.completedAt && new Date(en.completedAt).toLocaleDateString("es-AR", { day: "numeric", month: "short", year: "numeric" })}
+                                    {en.certificateUrl && (
+                                      <a href={en.certificateUrl} target="_blank" rel="noopener noreferrer"
+                                        style={{ display: "inline-flex", alignItems: "center", gap: 3, color: "var(--gold)", textDecoration: "none", fontWeight: 600 }}>
+                                        <FileDown size={10} /> Ver PDF
+                                      </a>
+                                    )}
+                                  </span>
+                                </div>
                               ) : (
                                 <span style={{ fontSize: 10, color: "var(--text-dim)", whiteSpace: "nowrap" }}>En curso</span>
                               )}
@@ -464,6 +495,28 @@ export default function AlumnosPage() {
                     </div>
                   </div>
                 )}
+
+                <div style={{ display: "flex", gap: 8, marginTop: 4, marginBottom: 16 }}>
+                  <span style={{ fontSize: 13, color: "var(--text-faint)", flex: 1, display: "flex", alignItems: "center" }}>
+                    Foro de comunidad
+                  </span>
+                  <button
+                    onClick={() => toggleBan(modal.student)}
+                    disabled={banning}
+                    style={{
+                      display: "flex", alignItems: "center", gap: 6, borderRadius: 8, padding: "7px 13px",
+                      fontSize: 12, fontWeight: 600, cursor: banning ? "not-allowed" : "pointer",
+                      border: modal.student.status === "banned" ? "1px solid rgba(34,197,94,.3)" : "1px solid rgba(239,68,68,.3)",
+                      background: modal.student.status === "banned" ? "rgba(34,197,94,.1)" : "rgba(239,68,68,.08)",
+                      color: modal.student.status === "banned" ? "var(--success)" : "var(--danger)",
+                    }}
+                  >
+                    {modal.student.status === "banned"
+                      ? <><ShieldCheck size={13} /> Reactivar</>
+                      : <><Ban size={13} /> Banear del foro</>
+                    }
+                  </button>
+                </div>
 
                 <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
                   <a href={`mailto:${modal.student.email}`} style={{ flex: 1, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.25)", borderRadius: 10, padding: "11px 0", fontSize: 13, color: "var(--gold)", cursor: "pointer", textDecoration: "none", textAlign: "center" as const }}>

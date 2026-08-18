@@ -1,8 +1,20 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Users, FileText, Eye, EyeOff, Plus, X, Video, Trash2, Pencil, Loader2, ExternalLink, Download, PlayCircle, ListChecks, ChevronUp, ChevronDown, Save, AlertCircle, GripVertical, Languages } from "lucide-react"
+import { useSearchParams } from "next/navigation"
+import { Users, FileText, Eye, EyeOff, Plus, X, Video, Trash2, Pencil, Loader2, ExternalLink, Download, PlayCircle, ListChecks, ChevronUp, ChevronDown, Save, AlertCircle, GripVertical, Languages, BookOpen, Layers, Upload } from "lucide-react"
 import { getProgramContent, getYouTubeEmbedUrl, EMPTY_PROGRAM_CONTENT, type ProgramContent } from "@/lib/program-content"
+import StringListEditor from "@/components/admin/StringListEditor"
+import ContentBlockEditor from "@/components/admin/materials/ContentBlockEditor"
+import QuizEditor from "@/components/admin/materials/QuizEditor"
+import { parseContent, parseQuizData, type ContentBlock, type QuizQuestion } from "@/lib/materials-content"
+
+const TOOL_HREF_OPTIONS = [
+  { value: "", label: "Ninguna" },
+  { value: "/aula/jewgalkids?tab=respiracion", label: "Joogalkids · Respiración" },
+  { value: "/aula/jewgalkids?tab=posturas", label: "Joogalkids · Posturas" },
+  { value: "/aula/jewgalkids?tab=valores", label: "Joogalkids · Valores" },
+]
 
 type Course = {
   id: string; title: string; titleEn: string | null; slug: string
@@ -14,10 +26,14 @@ type Course = {
   _count: { enrollments: number; materials: number; liveSessions: number }
 }
 type Material = {
-  id: string; title: string; description: string | null; type: "document" | "video" | "link"
+  id: string; title: string; description: string | null; type: "document" | "video" | "link" | "lesson"
   fileUrl: string | null; videoUrl: string | null; linkUrl: string | null
-  moduleNumber: number; isVisible: boolean
+  moduleNumber: number; order: number; isVisible: boolean
+  interactionKind: string | null; toolHref: string | null; estimatedMinutes: number | null
+  coverImageUrl: string | null; groupLabel: string | null
+  content: string | null; quizData: string | null
 }
+type CourseModule = { id: string; number: number; title: string; description: string | null; isVisible: boolean }
 type LiveSession = {
   id: string; title: string; scheduledAt: string; durationMin: number
   joinUrl: string | null; recordingUrl: string | null; isCompleted: boolean
@@ -40,10 +56,20 @@ const ACCENTS = ["#A58D66", "#A76D61", "#C49F72", "#CBB78B", "#8FBF9F"]
 const accentFor = (i: number) => ACCENTS[i % ACCENTS.length]
 
 const emptyCourseForm = { title: "", titleEn: "", shortDesc: "", shortDescEn: "", description: "", descriptionEn: "", price: "0", isFree: false, totalHours: "", durationWeeks: "", thumbnail: "" }
-const emptyMatForm = { title: "", description: "", type: "document" as "document" | "video" | "link", url: "", moduleNumber: "1" }
+const emptyMatForm = {
+  title: "", description: "", type: "document" as "document" | "video" | "link" | "lesson", url: "", moduleNumber: "1",
+  interactionKind: "" as "" | "reflection" | "quiz",
+  toolHref: "",
+  estimatedMinutes: "",
+  coverImageUrl: "",
+  groupLabel: "",
+  content: [] as ContentBlock[],
+  quizData: [] as QuizQuestion[],
+}
 const emptySesForm = { title: "", joinUrl: "", date: "", time: "", durationMin: "90" }
 
 export default function CursosAdminPage() {
+  const searchParams = useSearchParams()
   const [courses, setCourses] = useState<Course[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -59,6 +85,7 @@ export default function CursosAdminPage() {
   const [materials, setMaterials] = useState<Material[]>([])
   const [loadingMat, setLoadingMat] = useState(false)
   const [showAddMat, setShowAddMat] = useState(false)
+  const [editingMatId, setEditingMatId] = useState<string | null>(null)
   const [matForm, setMatForm] = useState(emptyMatForm)
   const [savingMat, setSavingMat] = useState(false)
 
@@ -89,6 +116,27 @@ export default function CursosAdminPage() {
     setLoadingStudents(true)
     fetch("/api/admin/students").then((r) => r.json()).then((d) => setStudents(d.students || [])).finally(() => setLoadingStudents(false))
   }, [loadCourses])
+
+  // Deep-link desde la vista previa del alumno: ?course=<id> selecciona el
+  // curso y abre la pestaña de materiales; ?editMaterial=<id> además abre
+  // el panel de edición de ese material apenas se cargan sus materiales.
+  const courseParam = searchParams.get("course")
+  const editMaterialParam = searchParams.get("editMaterial")
+  useEffect(() => {
+    if (!courseParam || courses.length === 0) return
+    if (courses.some((c) => c.id === courseParam)) {
+      setSelectedId(courseParam)
+      setTab("materiales")
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseParam, courses])
+
+  useEffect(() => {
+    if (!editMaterialParam || materials.length === 0) return
+    const target = materials.find((m) => m.id === editMaterialParam)
+    if (target) openEditMaterial(target)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editMaterialParam, materials])
 
   const loadMaterials = useCallback((courseId: string) => {
     setLoadingMat(true)
@@ -240,24 +288,63 @@ export default function CursosAdminPage() {
     }
   }
 
+  function openNewMaterial() {
+    setMatForm(emptyMatForm)
+    setEditingMatId(null)
+    setShowAddMat(true)
+  }
+
+  function openEditMaterial(m: Material) {
+    const url = m.type === "document" ? m.fileUrl : m.type === "video" ? m.videoUrl : m.type === "link" ? m.linkUrl : ""
+    setMatForm({
+      title: m.title,
+      description: m.description || "",
+      type: m.type,
+      url: url || "",
+      moduleNumber: String(m.moduleNumber),
+      interactionKind: (m.interactionKind as "" | "reflection" | "quiz") || "",
+      toolHref: m.toolHref || "",
+      estimatedMinutes: m.estimatedMinutes != null ? String(m.estimatedMinutes) : "",
+      coverImageUrl: m.coverImageUrl || "",
+      groupLabel: m.groupLabel || "",
+      content: parseContent(m.content),
+      quizData: parseQuizData(m.quizData),
+    })
+    setEditingMatId(m.id)
+    setShowAddMat(true)
+  }
+
+  // Los materiales "lesson" viven en bloques de contenido, no en un
+  // adjunto único — no exigimos URL para ese tipo (los demás sí, como
+  // siempre).
   async function saveMaterial() {
-    if (!selected || !matForm.title.trim() || !matForm.url.trim()) return
+    if (!selected || !matForm.title.trim() || (matForm.type !== "lesson" && !matForm.url.trim())) return
     setSavingMat(true)
-    const urlField = matForm.type === "document" ? "fileUrl" : matForm.type === "video" ? "videoUrl" : "linkUrl"
     try {
-      await fetch("/api/admin/materials", {
-        method: "POST",
+      const payload: Record<string, unknown> = {
+        title: matForm.title.trim(),
+        description: matForm.description.trim() || null,
+        type: matForm.type,
+        moduleNumber: Number(matForm.moduleNumber) || 1,
+        interactionKind: matForm.interactionKind || null,
+        toolHref: matForm.toolHref || null,
+        estimatedMinutes: matForm.estimatedMinutes.trim() ? Number(matForm.estimatedMinutes) : null,
+        coverImageUrl: matForm.coverImageUrl.trim() || null,
+        groupLabel: matForm.groupLabel.trim() || null,
+        content: matForm.content.length ? matForm.content : null,
+        quizData: matForm.quizData.length ? matForm.quizData : null,
+      }
+      if (matForm.type !== "lesson") {
+        const urlField = matForm.type === "document" ? "fileUrl" : matForm.type === "video" ? "videoUrl" : "linkUrl"
+        payload[urlField] = matForm.url.trim()
+      }
+      await fetch(editingMatId ? `/api/admin/materials/${editingMatId}` : "/api/admin/materials", {
+        method: editingMatId ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          courseId: selected.id,
-          title: matForm.title.trim(),
-          description: matForm.description.trim() || null,
-          type: matForm.type,
-          [urlField]: matForm.url.trim(),
-          moduleNumber: Number(matForm.moduleNumber) || 1,
-        }),
+        body: JSON.stringify(editingMatId ? payload : { ...payload, courseId: selected.id }),
       })
       setShowAddMat(false)
+      setEditingMatId(null)
       setMatForm(emptyMatForm)
       loadMaterials(selected.id)
       loadCourses()
@@ -281,6 +368,32 @@ export default function CursosAdminPage() {
     await fetch(`/api/admin/materials/${m.id}`, { method: "DELETE" })
     loadMaterials(selected.id)
     loadCourses()
+  }
+
+  // Reordena dentro de la lista tal como se ve en pantalla (moduleNumber
+  // asc, order asc) — intercambia el "order" de los dos vecinos, sin tocar
+  // moduleNumber, para poder reorganizar el sidebar del alumno a mano.
+  async function moveMaterial(index: number, dir: -1 | 1) {
+    if (!selected) return
+    const target = index + dir
+    if (target < 0 || target >= materials.length) return
+    const a = materials[index]
+    const b = materials[target]
+    const reordered = [...materials]
+    reordered[index] = b
+    reordered[target] = a
+    setMaterials(reordered)
+    await Promise.all([
+      fetch(`/api/admin/materials/${a.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ order: b.order }) }),
+      fetch(`/api/admin/materials/${b.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ order: a.order }) }),
+    ])
+    loadMaterials(selected.id)
+  }
+
+  function openPreview() {
+    if (!selected || materials.length === 0) return
+    const sorted = [...materials].sort((x, y) => x.moduleNumber - y.moduleNumber || x.order - y.order)
+    window.open(`/superadmin/cursos/preview/${sorted[0].id}`, "_blank", "noopener,noreferrer")
   }
 
   async function saveSession() {
@@ -615,14 +728,35 @@ export default function CursosAdminPage() {
             {/* MATERIALES */}
             {tab === "materiales" && (
               <div>
+                <CourseModulesManager courseId={selected.id} />
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
                   <p style={{ fontSize: 13, color: "var(--text-faint)" }}>{materials.length} material{materials.length === 1 ? "" : "es"} subido{materials.length === 1 ? "" : "s"}</p>
-                  <button onClick={() => setShowAddMat(!showAddMat)} style={btnPrimary("var(--gold)")}>
-                    <Plus size={14} /> Agregar material
-                  </button>
+                  <div style={{ display: "flex", gap: 10 }}>
+                    <button
+                      onClick={openPreview}
+                      disabled={materials.length === 0}
+                      title={materials.length === 0 ? "Agregá un material primero" : "Ver el curso como lo ve el alumno"}
+                      style={{
+                        display: "flex", alignItems: "center", gap: 7, background: "var(--surface-2)",
+                        border: "1px solid rgba(165,141,102,.3)", color: "var(--gold)", borderRadius: 8,
+                        padding: "9px 16px", fontSize: 12, fontWeight: 700,
+                        cursor: materials.length === 0 ? "default" : "pointer", opacity: materials.length === 0 ? 0.5 : 1,
+                      }}
+                    >
+                      <ExternalLink size={14} /> Vista previa del alumno
+                    </button>
+                    <button onClick={() => (showAddMat ? setShowAddMat(false) : openNewMaterial())} style={btnPrimary("var(--gold)")}>
+                      <Plus size={14} /> Agregar material
+                    </button>
+                  </div>
                 </div>
                 {showAddMat && (
                   <div style={{ background: "var(--surface)", border: "1px solid rgba(165,141,102,.18)", borderRadius: 12, padding: "20px 18px", marginBottom: 16 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>
+                        {editingMatId ? "Editar material" : "Nuevo material"}
+                      </span>
+                    </div>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
                       <div><label style={labelStyle}>Título</label><input value={matForm.title} onChange={(e) => setMatForm((f) => ({ ...f, title: e.target.value }))} placeholder="Guía módulo 1" style={inputStyle} /></div>
                       <div>
@@ -636,23 +770,73 @@ export default function CursosAdminPage() {
                       <label style={labelStyle}>Descripción (opcional)</label>
                       <input value={matForm.description} onChange={(e) => setMatForm((f) => ({ ...f, description: e.target.value }))} placeholder="Breve descripción" style={inputStyle} />
                     </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "140px 1fr", gap: 12, marginBottom: 12 }}>
+                    <div style={{ display: "grid", gridTemplateColumns: matForm.type === "lesson" ? "1fr" : "140px 1fr", gap: 12, marginBottom: 12 }}>
                       <div>
                         <label style={labelStyle}>Tipo</label>
                         <select value={matForm.type} onChange={(e) => setMatForm((f) => ({ ...f, type: e.target.value as typeof f.type }))} style={{ ...inputStyle, cursor: "pointer" }}>
                           <option value="document">PDF / Documento</option>
                           <option value="link">Enlace externo</option>
                           <option value="video">Video</option>
+                          <option value="lesson">Lección (bloques de contenido)</option>
+                        </select>
+                      </div>
+                      {matForm.type !== "lesson" && (
+                        <div>
+                          <label style={labelStyle}>URL {matForm.type === "document" ? "del archivo" : matForm.type === "video" ? "del video" : "del enlace"}</label>
+                          <input value={matForm.url} onChange={(e) => setMatForm((f) => ({ ...f, url: e.target.value }))} placeholder="https://…" style={inputStyle} />
+                        </div>
+                      )}
+                    </div>
+                    {matForm.type !== "lesson" && (
+                      <p style={{ fontSize: 11.5, color: "var(--text-dim)", marginBottom: 20 }}>Sin carga de archivos aún — pegá un link (Drive, YouTube, Vimeo, etc.).</p>
+                    )}
+
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 12 }}>
+                      <div>
+                        <label style={labelStyle}>Interacción</label>
+                        <select value={matForm.interactionKind} onChange={(e) => setMatForm((f) => ({ ...f, interactionKind: e.target.value as typeof f.interactionKind }))} style={{ ...inputStyle, cursor: "pointer" }}>
+                          <option value="">Ninguna</option>
+                          <option value="reflection">Reflexión</option>
+                          <option value="quiz">Quiz</option>
                         </select>
                       </div>
                       <div>
-                        <label style={labelStyle}>URL {matForm.type === "document" ? "del archivo" : matForm.type === "video" ? "del video" : "del enlace"}</label>
-                        <input value={matForm.url} onChange={(e) => setMatForm((f) => ({ ...f, url: e.target.value }))} placeholder="https://…" style={inputStyle} />
+                        <label style={labelStyle}>Herramienta interactiva</label>
+                        <select value={matForm.toolHref} onChange={(e) => setMatForm((f) => ({ ...f, toolHref: e.target.value }))} style={{ ...inputStyle, cursor: "pointer" }}>
+                          {TOOL_HREF_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        </select>
+                      </div>
+                      <div>
+                        <label style={labelStyle}>Minutos estimados</label>
+                        <input type="number" min={0} value={matForm.estimatedMinutes} onChange={(e) => setMatForm((f) => ({ ...f, estimatedMinutes: e.target.value }))} placeholder="Ej: 5" style={inputStyle} />
                       </div>
                     </div>
-                    <p style={{ fontSize: 11.5, color: "var(--text-dim)", marginBottom: 12 }}>Sin carga de archivos aún — pegá un link (Drive, YouTube, Vimeo, etc.).</p>
+
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 }}>
+                      <div>
+                        <label style={labelStyle}>Grupo en el sidebar (opcional)</label>
+                        <input value={matForm.groupLabel} onChange={(e) => setMatForm((f) => ({ ...f, groupLabel: e.target.value }))} placeholder='Ej. "Material de estudio"' style={inputStyle} />
+                      </div>
+                      <div>
+                        <label style={labelStyle}>Portada custom (opcional — ej. tapa de un workbook)</label>
+                        <MaterialCoverUpload value={matForm.coverImageUrl} onChange={(url) => setMatForm((f) => ({ ...f, coverImageUrl: url }))} />
+                      </div>
+                    </div>
+
+                    <div style={{ marginBottom: 20 }}>
+                      <label style={labelStyle}>Contenido de la lección</label>
+                      <ContentBlockEditor blocks={matForm.content} onChange={(content) => setMatForm((f) => ({ ...f, content }))} />
+                    </div>
+
+                    {matForm.interactionKind === "quiz" && (
+                      <div style={{ marginBottom: 20 }}>
+                        <label style={labelStyle}>Preguntas del quiz</label>
+                        <QuizEditor questions={matForm.quizData} onChange={(quizData) => setMatForm((f) => ({ ...f, quizData }))} />
+                      </div>
+                    )}
+
                     <div style={{ display: "flex", gap: 10 }}>
-                      <button onClick={() => setShowAddMat(false)} style={{ ...btnGhost, flex: 1 }}>Cancelar</button>
+                      <button onClick={() => { setShowAddMat(false); setEditingMatId(null) }} style={{ ...btnGhost, flex: 1 }}>Cancelar</button>
                       <button onClick={saveMaterial} disabled={savingMat} style={{ ...btnPrimary("var(--gold)"), flex: 2, justifyContent: "center", opacity: savingMat ? 0.6 : 1 }}>
                         {savingMat ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : null} Guardar
                       </button>
@@ -668,15 +852,29 @@ export default function CursosAdminPage() {
                   </div>
                 ) : (
                   <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                    {materials.map((m) => (
+                    {materials.map((m, mi) => (
                       <div key={m.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", background: "var(--surface-2)", borderRadius: 9, opacity: m.isVisible ? 1 : 0.5 }}>
-                        {m.type === "document" ? <Download size={16} style={{ color: "var(--gold)", flexShrink: 0 }} /> : <ExternalLink size={16} style={{ color: "var(--teal)", flexShrink: 0 }} />}
+                        <div style={{ display: "flex", flexDirection: "column", gap: 1, flexShrink: 0 }}>
+                          <button onClick={() => moveMaterial(mi, -1)} disabled={mi === 0} title="Subir" style={{ width: 20, height: 16, display: "flex", alignItems: "center", justifyContent: "center", background: "none", border: "none", cursor: mi === 0 ? "default" : "pointer", color: "var(--text-faint)", opacity: mi === 0 ? 0.3 : 1 }}>
+                            <ChevronUp size={13} />
+                          </button>
+                          <button onClick={() => moveMaterial(mi, 1)} disabled={mi === materials.length - 1} title="Bajar" style={{ width: 20, height: 16, display: "flex", alignItems: "center", justifyContent: "center", background: "none", border: "none", cursor: mi === materials.length - 1 ? "default" : "pointer", color: "var(--text-faint)", opacity: mi === materials.length - 1 ? 0.3 : 1 }}>
+                            <ChevronDown size={13} />
+                          </button>
+                        </div>
+                        {m.type === "document" ? <Download size={16} style={{ color: "var(--gold)", flexShrink: 0 }} /> : m.type === "lesson" ? <BookOpen size={16} style={{ color: "var(--gold)", flexShrink: 0 }} /> : <ExternalLink size={16} style={{ color: "var(--teal)", flexShrink: 0 }} />}
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>{m.title}</p>
-                          <p style={{ fontSize: 11.5, color: "var(--text-dim)" }}>Módulo {m.moduleNumber} · {m.type}</p>
+                          <p style={{ fontSize: 11.5, color: "var(--text-dim)" }}>Módulo {m.moduleNumber}{m.groupLabel ? ` · ${m.groupLabel}` : ""} · {m.type}</p>
                         </div>
+                        <button onClick={() => window.open(`/superadmin/cursos/preview/${m.id}`, "_blank", "noopener,noreferrer")} title="Vista previa del alumno" style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)" }}>
+                          <ExternalLink size={14} />
+                        </button>
                         <button onClick={() => toggleMatVisible(m)} title={m.isVisible ? "Ocultar" : "Mostrar"} style={{ background: "none", border: "none", cursor: "pointer", color: m.isVisible ? "var(--success)" : "var(--text-dim)" }}>
                           {m.isVisible ? <Eye size={15} /> : <EyeOff size={15} />}
+                        </button>
+                        <button onClick={() => openEditMaterial(m)} title="Editar" style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)" }}>
+                          <Pencil size={14} />
                         </button>
                         <button onClick={() => deleteMaterial(m)} style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(239,68,68,.5)" }}>
                           <Trash2 size={14} />
@@ -779,53 +977,175 @@ export default function CursosAdminPage() {
   )
 }
 
-/* ── Editor de lista de textos (Qué incluye / Para quién) ── */
-function StringListEditor({ items, onChange, placeholder }: { items: string[]; onChange: (items: string[]) => void; placeholder?: string }) {
-  const [draft, setDraft] = useState("")
 
-  function update(i: number, value: string) {
-    onChange(items.map((it, idx) => (idx === i ? value : it)))
-  }
-  function remove(i: number) {
-    onChange(items.filter((_, idx) => idx !== i))
-  }
-  function move(i: number, dir: -1 | 1) {
-    const j = i + dir
-    if (j < 0 || j >= items.length) return
-    const next = [...items]
-    ;[next[i], next[j]] = [next[j], next[i]]
-    onChange(next)
-  }
-  function add() {
-    const v = draft.trim()
-    if (!v) return
-    onChange([...items, v])
-    setDraft("")
+/* ── Subida de portada de material (workbook, etc.) — mismo patrón firmado
+   ya usado para diapositivas/logos, folder propio. ── */
+function MaterialCoverUpload({ value, onChange }: { value: string; onChange: (url: string) => void }) {
+  const [uploading, setUploading] = useState(false)
+  const [error, setError] = useState("")
+
+  async function upload(file: File) {
+    setUploading(true)
+    setError("")
+    try {
+      const sigRes = await fetch("/api/admin/cloudinary-signature", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ folder: "jewgal-materiales-portadas" }),
+      })
+      if (!sigRes.ok) {
+        const d = await sigRes.json()
+        setError(d.error ?? "Cloudinary no está configurado")
+        return
+      }
+      const { timestamp, signature, apiKey, cloudName, folder } = await sigRes.json()
+      const formData = new FormData()
+      formData.append("file", file)
+      formData.append("timestamp", String(timestamp))
+      formData.append("signature", signature)
+      formData.append("api_key", apiKey)
+      formData.append("folder", folder)
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, { method: "POST", body: formData })
+      if (!res.ok) throw new Error("Error al subir")
+      const data = await res.json()
+      onChange(data.secure_url)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al subir el archivo")
+    } finally {
+      setUploading(false)
+    }
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 4 }}>
-      {items.map((item, i) => (
-        <div key={i} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <GripVertical size={13} style={{ color: "var(--text-faint)", flexShrink: 0 }} />
-          <input value={item} onChange={(e) => update(i, e.target.value)} style={{ ...inputStyle, flex: 1 }} />
-          <button onClick={() => move(i, -1)} disabled={i === 0} title="Subir" style={{ width: 28, height: 28, borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface-2)", cursor: i === 0 ? "default" : "pointer", color: "var(--text-muted)", opacity: i === 0 ? 0.3 : 1, flexShrink: 0 }}><ChevronUp size={13} /></button>
-          <button onClick={() => move(i, 1)} disabled={i === items.length - 1} title="Bajar" style={{ width: 28, height: 28, borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface-2)", cursor: i === items.length - 1 ? "default" : "pointer", color: "var(--text-muted)", opacity: i === items.length - 1 ? 0.3 : 1, flexShrink: 0 }}><ChevronDown size={13} /></button>
-          <button onClick={() => remove(i)} title="Eliminar" style={{ width: 28, height: 28, borderRadius: 7, border: "1px solid rgba(239,68,68,.25)", background: "rgba(239,68,68,.06)", cursor: "pointer", color: "var(--danger)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}><Trash2 size={12} /></button>
-        </div>
-      ))}
-      <div style={{ display: "flex", gap: 6, marginTop: 2 }}>
-        <input
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); add() } }}
-          placeholder={placeholder || "Agregar…"}
-          style={{ ...inputStyle, flex: 1 }}
-        />
-        <button onClick={add} style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold)", borderRadius: 8, padding: "0 14px", fontSize: 12, fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>
-          <Plus size={13} /> Agregar
-        </button>
+    <div>
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        {value && <img src={value} alt="" style={{ width: 40, height: 52, objectFit: "cover", borderRadius: 5, border: "1px solid var(--border)" }} />}
+        <label style={{
+          flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
+          border: "1px dashed var(--border)", borderRadius: 8, padding: "9px",
+          fontSize: 12, color: "var(--text-muted)", cursor: uploading ? "wait" : "pointer",
+        }}>
+          {uploading ? <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} /> : <Upload size={13} />}
+          {uploading ? "Subiendo…" : value ? "Cambiar portada" : "Subir portada"}
+          <input type="file" accept="image/*" disabled={uploading} onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(f); e.target.value = "" }} style={{ display: "none" }} />
+        </label>
+        {value && (
+          <button onClick={() => onChange("")} title="Quitar" style={{ width: 28, height: 28, borderRadius: 7, border: "1px solid rgba(239,68,68,.25)", background: "rgba(239,68,68,.06)", cursor: "pointer", color: "var(--danger)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <X size={13} />
+          </button>
+        )}
       </div>
+      {error && <p style={{ fontSize: 11, color: "var(--danger)", marginTop: 6 }}>{error}</p>}
+    </div>
+  )
+}
+
+/* ── Gestión de módulos con nombre propio (CourseModule) — distinto del
+   ModulesEditor de más abajo, que edita los "módulos" de la página pública
+   de marketing (Course.content.modules). Este persiste contra su propia
+   API y es lo que le da nombre a Material.moduleNumber en el sidebar de
+   la lección; un curso sin filas acá sigue mostrando "Módulo N" genérico. ── */
+function CourseModulesManager({ courseId }: { courseId: string }) {
+  const [open, setOpen] = useState(false)
+  const [modules, setModules] = useState<CourseModule[]>([])
+  const [loading, setLoading] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [form, setForm] = useState({ number: "1", title: "", description: "" })
+  const [editingId, setEditingId] = useState<string | null>(null)
+
+  const load = useCallback(() => {
+    setLoading(true)
+    fetch(`/api/admin/course-modules?courseId=${courseId}`)
+      .then((r) => r.json())
+      .then((d) => setModules(d.courseModules || []))
+      .finally(() => setLoading(false))
+  }, [courseId])
+
+  useEffect(() => {
+    if (open) load()
+  }, [open, load])
+
+  function openEdit(m: CourseModule) {
+    setForm({ number: String(m.number), title: m.title, description: m.description || "" })
+    setEditingId(m.id)
+  }
+
+  async function save() {
+    if (!form.title.trim()) return
+    setSaving(true)
+    try {
+      if (editingId) {
+        await fetch(`/api/admin/course-modules/${editingId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title: form.title.trim(), description: form.description.trim() || null }),
+        })
+      } else {
+        await fetch("/api/admin/course-modules", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ courseId, number: Number(form.number) || 1, title: form.title.trim(), description: form.description.trim() || null }),
+        })
+      }
+      setEditingId(null)
+      setForm({ number: "1", title: "", description: "" })
+      load()
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function remove(m: CourseModule) {
+    if (!confirm(`¿Eliminar el nombre del módulo ${m.number} ("${m.title}")? Los materiales que ya tenía asignado ese número siguen ahí, solo pierden el nombre.`)) return
+    await fetch(`/api/admin/course-modules/${m.id}`, { method: "DELETE" })
+    load()
+  }
+
+  return (
+    <div style={{ background: "var(--surface)", border: "1px solid rgba(165,141,102,.14)", borderRadius: 12, padding: "14px 16px", marginBottom: 16 }}>
+      <button onClick={() => setOpen(!open)} style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+        <Layers size={15} style={{ color: "var(--gold)" }} />
+        <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>Módulos con nombre</span>
+        <span style={{ fontSize: 11.5, color: "var(--text-faint)" }}>(opcional — le da título a "Módulo N" en el sidebar del alumno)</span>
+        <div style={{ flex: 1 }} />
+        {open ? <ChevronUp size={14} style={{ color: "var(--text-faint)" }} /> : <ChevronDown size={14} style={{ color: "var(--text-faint)" }} />}
+      </button>
+      {open && (
+        <div style={{ marginTop: 14 }}>
+          {loading ? (
+            <p style={{ fontSize: 12.5, color: "var(--text-faint)" }}>Cargando…</p>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 12 }}>
+              {modules.length === 0 && <p style={{ fontSize: 12.5, color: "var(--text-dim)" }}>Ningún módulo tiene nombre todavía.</p>}
+              {modules.map((m) => (
+                <div key={m.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", background: "var(--surface-2)", borderRadius: 8 }}>
+                  <span style={{ fontFamily: "var(--serif)", fontSize: 12, fontStyle: "italic", color: "var(--gold)", width: 20, flexShrink: 0 }}>{m.number}</span>
+                  <span style={{ fontSize: 12.5, color: "var(--text)", flex: 1 }}>{m.title}</span>
+                  <button onClick={() => openEdit(m)} title="Editar" style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)" }}><Pencil size={13} /></button>
+                  <button onClick={() => remove(m)} title="Eliminar" style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(239,68,68,.5)" }}><Trash2 size={13} /></button>
+                </div>
+              ))}
+            </div>
+          )}
+          <div style={{ display: "flex", gap: 8, alignItems: "flex-end" }}>
+            <div style={{ width: 70 }}>
+              <label style={labelStyle}>N°</label>
+              <input type="number" min={1} disabled={!!editingId} value={form.number} onChange={(e) => setForm((f) => ({ ...f, number: e.target.value }))} style={{ ...inputStyle, opacity: editingId ? 0.5 : 1 }} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <label style={labelStyle}>Título</label>
+              <input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} placeholder="Introducción al Life Coaching" style={inputStyle} />
+            </div>
+            <button onClick={save} disabled={saving || !form.title.trim()} style={{ ...btnPrimary("var(--gold)"), opacity: saving || !form.title.trim() ? 0.6 : 1 }}>
+              {saving ? <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} /> : <Plus size={13} />}
+              {editingId ? "Guardar" : "Agregar"}
+            </button>
+            {editingId && (
+              <button onClick={() => { setEditingId(null); setForm({ number: "1", title: "", description: "" }) }} style={{ ...btnGhost, padding: "9px 14px" }}>Cancelar</button>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

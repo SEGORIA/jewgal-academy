@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { nextCertificateNumber, attachCertificatePdf } from "@/lib/certificates"
+
+export const maxDuration = 30
 
 export async function POST(req: Request) {
   const session = await auth()
@@ -22,19 +25,27 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Ya fue marcada como completada" }, { status: 409 })
   }
 
-  // Generar número de certificado único: JA-AÑO-NNNN
-  const completedCount = await db.enrollment.count({ where: { completedAt: { not: null } } })
-  const year = new Date().getFullYear()
-  const certNum = `JA-${year}-${String(completedCount + 1).padStart(4, "0")}`
+  const { updated, certNum } = await db.$transaction(async (tx) => {
+    const certNum = await nextCertificateNumber(tx)
+    const updated = await tx.enrollment.update({
+      where: { id: enrollmentId },
+      data: {
+        completedAt:       new Date(),
+        certificateNumber: certNum,
+        status:            "completed",
+      },
+      include: { course: { select: { title: true, slug: true } }, user: { select: { name: true } } },
+    })
+    return { updated, certNum }
+  })
 
-  const updated = await db.enrollment.update({
-    where: { id: enrollmentId },
-    data: {
-      completedAt:       new Date(),
-      certificateNumber: certNum,
-      status:            "completed",
-    },
-    include: { course: { select: { title: true } }, user: { select: { name: true } } },
+  await attachCertificatePdf(db, {
+    enrollmentId:      updated.id,
+    studentName:       updated.user.name ?? "Estudiante",
+    courseTitle:       updated.course.title,
+    courseSlug:        updated.course.slug,
+    certificateNumber: certNum,
+    completedAt:       updated.completedAt!,
   })
 
   return NextResponse.json({ enrollment: updated, certificateNumber: certNum })

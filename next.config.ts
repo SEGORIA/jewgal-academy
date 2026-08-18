@@ -18,7 +18,7 @@ const csp = [
   "img-src 'self' data: blob: https:",
   "media-src 'self' https://res.cloudinary.com",
   "connect-src 'self' https://api.stripe.com https://www.paypal.com https://api.cloudinary.com",
-  "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.paypal.com https://www.youtube-nocookie.com https://www.youtube.com",
+  "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.paypal.com https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -36,6 +36,14 @@ const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
 ]
 
+// Los archivos de public/ se sirven vía CDN y NO se copian al bundle de las
+// funciones serverless por defecto (@vercel/nft no rastrea rutas armadas en
+// runtime con process.cwd()). Las rutas que generan el PDF del certificado
+// leen la fuente Cormorant Garamond y la marca de agua con fs, así que hay
+// que declararlas acá explícitamente o el PDF sale sin fuente/marca de agua
+// en producción aunque funcione perfecto en local.
+const certificateAssets = ["public/fonts/**/*", "public/brand/arbol-sefirot.png", "public/brand/certs/**/*"]
+
 const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
@@ -43,6 +51,11 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
     formats: ["image/avif", "image/webp"],
+  },
+  outputFileTracingIncludes: {
+    "/api/admin/enrollments/complete": certificateAssets,
+    "/api/me/materials/\\[id\\]/complete": certificateAssets,
+    "/api/me/materials/\\[id\\]/quiz": certificateAssets,
   },
   async headers() {
     return [

@@ -35,11 +35,11 @@ async function main() {
       durationWeeks: 24,
     },
     {
-      title: "Instructor Certificado Jewgalkids",
+      title: "Instructor Certificado Joogalkids",
       slug: "joogalkids",
-      shortDesc: "Formación para guías de desarrollo infantil con el método Jewgal.",
+      shortDesc: "Formación para guías de desarrollo infantil con el método Joogal.",
       description:
-        "Certificación especializada para trabajar con niños a través del método Jewgal, combinando movimiento, juego y desarrollo emocional.",
+        "Certificación especializada para trabajar con niños a través del método Joogal, combinando movimiento, juego y desarrollo emocional.",
       price: 360,
       isFree: false,
       isPublished: true,
@@ -189,7 +189,7 @@ Cuando practicamos Jewgal, activamos el sistema nervioso parasimpático, reducim
 
 Para instructores y educadores, el Método Jewgal ofrece una herramienta poderosa para acompañar grupos. Ya sea en colegios, empresas, comunidades o retiros, las clases Jewgal crean estados de apertura y conexión que facilitan el aprendizaje y la transformación.
 
-Si te interesa certificarte como instructor del Método Jewgal Adultos o Jewgalkids, te invitamos a explorar nuestras formaciones. Están diseñadas para ser accesibles incluso si no tienes experiencia previa en yoga o danza.`,
+Si te interesa certificarte como instructor del Método Jewgal Adultos o Joogalkids, te invitamos a explorar nuestras formaciones. Están diseñadas para ser accesibles incluso si no tienes experiencia previa en yoga o danza.`,
       publishedAt: new Date("2026-05-28"),
     },
     {

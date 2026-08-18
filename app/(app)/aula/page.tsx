@@ -19,7 +19,7 @@ const ACH_ICONS: Record<AchievementIcon, LucideIcon> = {
 
 const quickLinks = [
   { href: "/aula/clases",      icon: Video,       label: "Próxima clase en vivo", sub: "Ver calendario y acceso Zoom",  accent: "#A76D61", glow: "rgba(75,126,140,.18)" },
-  { href: "/aula/materiales",  icon: BookOpen,    label: "Materiales del curso",  sub: "PDFs, guías y ejercicios",      accent: "#A58D66", glow: "rgba(165,141,102,.18)" },
+  { href: "/aula/programa",    icon: BookOpen,    label: "Continuar el programa", sub: "Seguí las lecciones paso a paso", accent: "#A58D66", glow: "rgba(165,141,102,.18)" },
   { href: "/aula/grabaciones", icon: PlayCircle,  label: "Grabaciones",           sub: "Revisá las clases pasadas",     accent: "#C49F72", glow: "rgba(196,159,114,.14)" },
 ]
 
@@ -88,7 +88,7 @@ export default function AulaDashboard() {
       window.history.replaceState({}, "", "/aula")
       setTimeout(() => setShowWelcome(false), 6000)
     }
-    fetch("/api/me/enrollments")
+    fetch("/api/me/enrollments?status=all")
       .then((r) => r.json())
       .then((data) => setEnrollments(data.enrollments ?? []))
       .catch(() => setEnrollments([]))
@@ -211,7 +211,7 @@ export default function AulaDashboard() {
           </h2>
           {!loading && (
             <span style={{ fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(165,141,102,.6)" }}>
-              {enrollments.length} {enrollments.length === 1 ? "activo" : "activos"}
+              {enrollments.length} {enrollments.length === 1 ? "programa" : "programas"}
             </span>
           )}
         </div>
@@ -229,7 +229,7 @@ export default function AulaDashboard() {
           <div style={{ textAlign: "center", padding: "32px 0" }}>
             <div style={{ fontSize: 32, color: "rgba(165,141,102,.3)", marginBottom: 14 }}>✦</div>
             <p style={{ color: "var(--text-dim)", fontSize: 14, marginBottom: 16 }}>
-              Aún no tienes ningún programa activo.
+              Aún no tienes ningún programa.
             </p>
             <Link
               href="/#programas"
@@ -330,7 +330,7 @@ export default function AulaDashboard() {
                         {en.attendance.rate !== null && <Stat label="Asistencia" value={`${en.attendance.rate}%`} />}
                         {en.course.durationWeeks && <Stat label="Duración" value={`${en.course.durationWeeks} sem`} />}
                         <Link
-                          href={isCertified ? "/aula/certificaciones" : "/aula/materiales"}
+                          href={isCertified ? "/aula/certificaciones" : "/aula/programa"}
                           style={{ marginLeft: "auto", fontSize: 11.5, letterSpacing: ".08em", textTransform: "uppercase", color: meta.accent, textDecoration: "none", whiteSpace: "nowrap" }}
                           onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.7")}
                           onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}

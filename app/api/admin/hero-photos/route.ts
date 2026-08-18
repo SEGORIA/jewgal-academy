@@ -47,6 +47,6 @@ export async function POST(req: NextRequest) {
     create: { key: "hero_photos", value: JSON.stringify(sorted) },
   })
 
-  revalidatePath("/[locale]", "layout")
+  revalidatePath("/(site)/[locale]", "layout")
   return NextResponse.json({ ok: true })
 }

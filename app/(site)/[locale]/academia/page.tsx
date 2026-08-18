@@ -11,7 +11,8 @@ import { useLocale, useTranslations } from "next-intl"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 import { formatPrice } from "@/lib/utils"
 
-type CourseInfo = { slug: string; title?: string; shortDesc?: string; price: number; currency: string; isFree: boolean }
+type Accreditation = { code: string; name: string; logoUrl: string | null }
+type CourseInfo = { slug: string; title?: string; shortDesc?: string; price: number; currency: string; isFree: boolean; accreditations?: Accreditation[] }
 
 // Copy visual/comercial de cada programa. Los textos traducibles (tag,
 // duración, nivel, bullets) se resuelven en el componente vía next-intl
@@ -23,7 +24,6 @@ const PROGRAMS = [
     desc: "Formación integral que une logoterapia, mindfulness y herramientas de coaching para acompañar procesos de transformación profunda.",
     price: "$1.500", free: false,
     grad: "linear-gradient(135deg,#3A2410 0%,#5C3A1E 100%)", accent: "#A58D66", icon: "⟡",
-    certs: ["idc", "cel", "fgu"],
   },
   {
     slug: "joogal-adultos", title: "Instructor Jewgal · Adultos",
@@ -31,15 +31,13 @@ const PROGRAMS = [
     desc: "Certifícate como instructor del Método Jewgal y desarrolla tu práctica como guía de bienestar y movimiento consciente.",
     price: "Gratis", free: true,
     grad: "linear-gradient(135deg,#3A2818 0%,#5C4026 100%)", accent: "#C49F72", icon: "✦",
-    certs: ["idc", "cel", "fgu"],
   },
   {
-    slug: "joogalkids", title: "Instructor Jewgalkids",
+    slug: "joogalkids", title: "Instructor Joogalkids",
     tagKey: "tag_kids", durKey: "dur_3m", lvlKey: "lvl_none", bulletsKey: "bullets_kids",
     desc: "Formación especializada para guiar el desarrollo integral de niños a través del movimiento, la creatividad y el juego consciente.",
     price: "$360", free: false,
     grad: "linear-gradient(135deg,#4A2418 0%,#6B3826 100%)", accent: "#A76D61", icon: "★",
-    certs: ["idc", "cel", "fgu"],
   },
   {
     slug: "metodo-sholem", title: "Método Sholem",
@@ -47,7 +45,6 @@ const PROGRAMS = [
     desc: "Formación de instructores para acompañar a adolescentes en el desarrollo de su identidad, liderazgo y valores con propósito.",
     price: "$360", free: false,
     grad: "linear-gradient(135deg,#42200F 0%,#653322 100%)", accent: "#A76D61", icon: "◈",
-    certs: ["idc", "cel", "fgu"],
   },
   {
     slug: "cabala-coach", title: "Micro Curso · Cábala Coach",
@@ -55,7 +52,6 @@ const PROGRAMS = [
     desc: "Integra la sabiduría milenaria de la Cabalá como herramienta práctica de autoconocimiento, coaching y transformación personal.",
     price: "$360", free: false,
     grad: "linear-gradient(135deg,#332508 0%,#4F3A12 100%)", accent: "#CBB78B", icon: "❂",
-    certs: ["idc", "cel", "fgu"],
   },
 ]
 
@@ -109,6 +105,7 @@ export default function AcademiaPage() {
       desc: c?.shortDesc || p.desc,
       price: c ? (c.isFree ? (locale === "en" ? "Free" : "Gratis") : formatPrice(c.price, c.currency)) : p.price,
       free: c ? c.isFree : p.free,
+      accreditations: c?.accreditations ?? [],
     }
   })
 
@@ -329,16 +326,18 @@ export default function AcademiaPage() {
                             <span style={{ fontSize: 10, border: "1px solid rgba(165,141,102,.2)", borderRadius: 16, padding: "4px 12px", color: "var(--on-dark)" }}>⏱ {p.duration}</span>
                             <span style={{ fontSize: 10, border: "1px solid rgba(165,141,102,.2)", borderRadius: 16, padding: "4px 12px", color: "var(--on-dark)" }}>◈ {p.level}</span>
                           </div>
-                          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-                            <span style={{ fontSize: 9, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--on-dark-faint)", flexShrink: 0 }}>{t("certifiedBy")}</span>
-                            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                              {p.certs.map((slug) => (
-                                <span key={slug} style={{ background: "#f7f3ec", borderRadius: 4, padding: "4px 8px", display: "flex", alignItems: "center" }}>
-                                  <img src={`/brand/certs/${slug}.webp`} alt={slug.toUpperCase()} style={{ height: 14, width: "auto", objectFit: "contain", display: "block" }} loading="lazy" />
-                                </span>
-                              ))}
+                          {p.accreditations.length > 0 && (
+                            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
+                              <span style={{ fontSize: 9, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--on-dark-faint)", flexShrink: 0 }}>{t("certifiedBy")}</span>
+                              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                                {p.accreditations.filter((a) => a.logoUrl).map((a) => (
+                                  <span key={a.code} style={{ background: "#f7f3ec", borderRadius: 4, padding: "4px 8px", display: "flex", alignItems: "center" }}>
+                                    <img src={a.logoUrl!} alt={a.name} title={a.name} style={{ height: 14, width: "auto", objectFit: "contain", display: "block" }} loading="lazy" />
+                                  </span>
+                                ))}
+                              </div>
                             </div>
-                          </div>
+                          )}
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
                             <div style={{
                               fontFamily: p.free ? "var(--sans)" : "var(--serif)",

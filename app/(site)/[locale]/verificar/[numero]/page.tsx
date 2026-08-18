@@ -4,7 +4,7 @@ import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
 import { getTranslations } from "next-intl/server"
 import { db } from "@/lib/db"
-import { ShieldCheck, ShieldX } from "lucide-react"
+import { ShieldCheck, ShieldX, FileDown } from "lucide-react"
 
 export const dynamic = "force-dynamic"
 
@@ -17,6 +17,7 @@ export default async function VerificarNumeroPage({ params }: { params: Promise<
     select: {
       certificateNumber: true,
       completedAt: true,
+      certificateUrl: true,
       user: { select: { name: true } },
       course: { select: { title: true } },
     },
@@ -69,6 +70,21 @@ export default async function VerificarNumeroPage({ params }: { params: Promise<
                   {new Date(enrollment.completedAt!).toLocaleDateString(locale === "en" ? "en-US" : "es-AR", { day: "numeric", month: "long", year: "numeric" })}
                   {" · "}{t("certNumber")} {enrollment.certificateNumber}
                 </p>
+                {enrollment.certificateUrl && (
+                  <a
+                    href={enrollment.certificateUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 8,
+                      marginTop: 24, padding: "11px 22px", borderRadius: 10,
+                      background: "var(--gold)", color: "#2C1F14",
+                      fontSize: 13, fontWeight: 700, textDecoration: "none",
+                    }}
+                  >
+                    <FileDown size={15} /> {t("downloadCertificate")}
+                  </a>
+                )}
               </>
             ) : (
               <>

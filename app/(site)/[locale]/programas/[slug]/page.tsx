@@ -11,19 +11,22 @@ import { getProgramContent, getYouTubeEmbedUrl } from "@/lib/program-content"
 import { SITE_URL } from "@/lib/site-url"
 
 /* ── Identidad visual por slug (no editable desde el admin) ── */
-const META: Record<string, { grad: string; accent: string; icon: string; certs: string[] }> = {
-  "life-coaching-integrativo": { grad: "linear-gradient(135deg,#3A2410 0%,#5C3A1E 100%)", accent: "#A58D66", icon: "⟡", certs: ["idc", "cel", "fgu"] },
-  "joogal-adultos":            { grad: "linear-gradient(135deg,#3A2818 0%,#5C4026 100%)", accent: "#C49F72", icon: "✦", certs: ["idc", "cel", "fgu"] },
-  "joogalkids":                { grad: "linear-gradient(135deg,#4A2418 0%,#6B3826 100%)", accent: "#A76D61", icon: "★", certs: ["idc", "cel", "fgu"] },
-  "metodo-sholem":              { grad: "linear-gradient(135deg,#42200F 0%,#653322 100%)", accent: "#A76D61", icon: "◈", certs: ["idc", "cel", "fgu"] },
-  "cabala-coach":               { grad: "linear-gradient(135deg,#332508 0%,#4F3A12 100%)", accent: "#CBB78B", icon: "❂", certs: ["idc", "cel", "fgu"] },
+const META: Record<string, { grad: string; accent: string; icon: string }> = {
+  "life-coaching-integrativo": { grad: "linear-gradient(135deg,#3A2410 0%,#5C3A1E 100%)", accent: "#A58D66", icon: "⟡" },
+  "joogal-adultos":            { grad: "linear-gradient(135deg,#3A2818 0%,#5C4026 100%)", accent: "#C49F72", icon: "✦" },
+  "joogalkids":                { grad: "linear-gradient(135deg,#4A2418 0%,#6B3826 100%)", accent: "#A76D61", icon: "★" },
+  "metodo-sholem":              { grad: "linear-gradient(135deg,#42200F 0%,#653322 100%)", accent: "#A76D61", icon: "◈" },
+  "cabala-coach":               { grad: "linear-gradient(135deg,#332508 0%,#4F3A12 100%)", accent: "#CBB78B", icon: "❂" },
 }
 
 const DEFAULT_META = META["life-coaching-integrativo"]
 
 export default async function ProgramaPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params
-  const course = await db.course.findUnique({ where: { slug } })
+  const course = await db.course.findUnique({
+    where: { slug },
+    include: { accreditations: { orderBy: { order: "asc" } } },
+  })
   if (!course) notFound()
 
   const t = await getTranslations("Programa")
@@ -151,17 +154,19 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
             ))}
           </div>
 
-          {/* Certificado por */}
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 10, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--on-dark-faint)" }}>{t("certifiedBy")}</span>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {meta.certs.map((certSlug) => (
-                <span key={certSlug} style={{ background: "#f7f3ec", borderRadius: 5, padding: "5px 10px", display: "flex", alignItems: "center" }}>
-                  <img src={`/brand/certs/${certSlug}.webp`} alt={certSlug.toUpperCase()} style={{ height: 16, width: "auto", objectFit: "contain", display: "block" }} loading="lazy" />
-                </span>
-              ))}
+          {/* Certificado por — avales reales asignados a este programa desde superadmin */}
+          {course.accreditations.length > 0 && (
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
+              <span style={{ fontSize: 10, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--on-dark-faint)" }}>{t("certifiedBy")}</span>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {course.accreditations.filter((a) => a.logoUrl).map((a) => (
+                  <span key={a.id} style={{ background: "#f7f3ec", borderRadius: 5, padding: "5px 10px", display: "flex", alignItems: "center" }}>
+                    <img src={a.logoUrl!} alt={a.name} title={a.name} style={{ height: 16, width: "auto", objectFit: "contain", display: "block" }} loading="lazy" />
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 

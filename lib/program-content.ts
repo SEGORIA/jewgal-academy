@@ -95,7 +95,7 @@ export const DEFAULT_PROGRAM_CONTENT: Record<string, ProgramContent> = {
     includes: [
       "Acceso al aula virtual 24/7",
       "Clases en vivo por Zoom",
-      "Manual Jewgalkids oficial",
+      "Manual Joogalkids oficial",
       "Grabaciones de cada clase",
       "Certificado oficial de instructor",
       "Comunidad de instructores",
@@ -114,7 +114,7 @@ export const DEFAULT_PROGRAM_CONTENT: Record<string, ProgramContent> = {
       "Instructores que quieren trabajar con niños",
       "Madres y padres interesados en el desarrollo consciente",
     ],
-    outcome: "Serás instructor certificado del Método Jewgalkids, capaz de crear experiencias de movimiento significativas para niños de 3 a 12 años.",
+    outcome: "Serás instructor certificado del Método Joogalkids, capaz de crear experiencias de movimiento significativas para niños de 3 a 12 años.",
   },
   "metodo-sholem": {
     eyebrow: "Liderazgo Adolescente",
@@ -227,4 +227,34 @@ export function getYouTubeId(url: string | null | undefined): string | null {
 export function getYouTubeEmbedUrl(url: string | null | undefined): string | null {
   const id = getYouTubeId(url)
   return id ? `https://www.youtube-nocookie.com/embed/${id}` : null
+}
+
+/**
+ * Extrae el ID (y el hash privado, si lo trae) de un link de Vimeo, tanto
+ * de la página normal (vimeo.com/123/hash) como del embed directo
+ * (player.vimeo.com/video/123?h=hash). Devuelve null si no es válido.
+ */
+export function getVimeoId(url: string | null | undefined): { id: string; hash: string | null } | null {
+  if (!url) return null
+  try {
+    const u = new URL(url.trim())
+    const host = u.hostname.replace(/^www\./, "")
+    if (host === "vimeo.com") {
+      const m = u.pathname.match(/^\/(\d+)(?:\/([a-zA-Z0-9]+))?\/?$/)
+      return m ? { id: m[1], hash: m[2] ?? null } : null
+    }
+    if (host === "player.vimeo.com") {
+      const m = u.pathname.match(/^\/video\/(\d+)\/?$/)
+      return m ? { id: m[1], hash: u.searchParams.get("h") } : null
+    }
+    return null
+  } catch {
+    return null
+  }
+}
+
+export function getVimeoEmbedUrl(url: string | null | undefined): string | null {
+  const p = getVimeoId(url)
+  if (!p) return null
+  return p.hash ? `https://player.vimeo.com/video/${p.id}?h=${p.hash}` : `https://player.vimeo.com/video/${p.id}`
 }

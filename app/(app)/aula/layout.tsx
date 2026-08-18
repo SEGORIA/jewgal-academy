@@ -3,22 +3,32 @@
 import { useState } from "react"
 import Link from "next/link"
 import BrandLogo from "@/components/BrandLogo"
+import NotificationBell from "@/components/aula/NotificationBell"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, Video, BookOpen, PlayCircle, Menu, X, LogOut, UserCircle, Award, CreditCard, Sparkles, ExternalLink, MessageCircle, Headphones } from "lucide-react"
+import { LayoutDashboard, Video, BookOpen, PlayCircle, Menu, X, LogOut, UserCircle, Award, CreditCard, Sparkles, ExternalLink, MessageCircle, Headphones, GraduationCap, Users2 } from "lucide-react"
 import { signOut, useSession } from "next-auth/react"
 import { motion, AnimatePresence } from "framer-motion"
 
 const navItems = [
   { href: "/aula",                  icon: LayoutDashboard, label: "Mi panel",        group: "aprende" },
+  { href: "/aula/programa",         icon: GraduationCap,   label: "Programa",        group: "aprende" },
   { href: "/aula/clases",           icon: Video,           label: "Clases en vivo",  group: "aprende" },
   { href: "/aula/materiales",       icon: BookOpen,        label: "Materiales",      group: "aprende" },
   { href: "/aula/grabaciones",      icon: PlayCircle,      label: "Grabaciones",     group: "aprende" },
+  { href: "/aula/comunidad",        icon: Users2,          label: "Comunidad",       group: "aprende" },
   { href: "/aula/asistente",        icon: MessageCircle,   label: "Asistente IA",    group: "aprende" },
   { href: "/aula/recursos",         icon: Headphones,      label: "Recursos",        group: "aprende" },
   { href: "/aula/certificaciones",  icon: Award,           label: "Certificaciones", group: "cuenta"  },
   { href: "/aula/pagos",            icon: CreditCard,      label: "Mis pagos",       group: "cuenta"  },
   { href: "/aula/perfil",           icon: UserCircle,      label: "Mi perfil",       group: "cuenta"  },
 ]
+
+// "/aula" solo matchea exacto (si no, siempre estaría "activo"); el resto
+// también matchea sus sub-rutas (ej. /aula/programa/[materialId]).
+function isNavActive(pathname: string, href: string) {
+  if (href === "/aula") return pathname === "/aula"
+  return pathname === href || pathname.startsWith(href + "/")
+}
 
 export default function AulaLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -27,7 +37,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
   const profilePhoto = session?.user?.image ?? null
   const profileName  = session?.user?.name ?? ""
 
-  const currentLabel = navItems.find((n) => n.href === pathname)?.label ?? "Aula"
+  const currentLabel = navItems.find((n) => isNavActive(pathname, n.href))?.label ?? "Aula"
 
   return (
     <div style={{ display: "flex", height: "100vh", background: "var(--bg)", overflow: "hidden" }}>
@@ -63,7 +73,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
         {/* Nav */}
         <nav style={{ flex: 1, padding: "18px 12px", overflowY: "auto", display: "flex", flexDirection: "column", gap: 3 }}>
           {navItems.map(({ href, icon: Icon, label, group }, i) => {
-            const active = pathname === href
+            const active = isNavActive(pathname, href)
             const prevGroup = i > 0 ? navItems[i - 1].group : group
             const showDivider = group !== prevGroup && i > 0
             return (
@@ -185,26 +195,30 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
 
-          {/* Avatar → link a perfil */}
-          <Link href="/aula/perfil" style={{ textDecoration: "none" }}>
-            <motion.div
-              whileHover={{ scale: 1.08 }}
-              title="Mi perfil"
-              style={{
-                width: 34, height: 34, borderRadius: "50%",
-                background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 13, fontWeight: 700, color: "white", cursor: "pointer",
-                boxShadow: "0 0 0 2px rgba(196,159,114,.3), 0 4px 12px rgba(167,109,97,.3)",
-                overflow: "hidden", flexShrink: 0,
-              }}
-            >
-              {profilePhoto
-                ? <img src={profilePhoto} alt="Perfil" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                : (profileName || "E").charAt(0).toUpperCase()
-              }
-            </motion.div>
-          </Link>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <NotificationBell />
+
+            {/* Avatar → link a perfil */}
+            <Link href="/aula/perfil" style={{ textDecoration: "none" }}>
+              <motion.div
+                whileHover={{ scale: 1.08 }}
+                title="Mi perfil"
+                style={{
+                  width: 34, height: 34, borderRadius: "50%",
+                  background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 13, fontWeight: 700, color: "white", cursor: "pointer",
+                  boxShadow: "0 0 0 2px rgba(196,159,114,.3), 0 4px 12px rgba(167,109,97,.3)",
+                  overflow: "hidden", flexShrink: 0,
+                }}
+              >
+                {profilePhoto
+                  ? <img src={profilePhoto} alt="Perfil" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  : (profileName || "E").charAt(0).toUpperCase()
+                }
+              </motion.div>
+            </Link>
+          </div>
         </header>
 
         {/* Content */}
