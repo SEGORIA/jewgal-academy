@@ -178,6 +178,21 @@ export default function LessonBody({
       {material.interactionKind !== "quiz" && !material.coverImageUrl && (
         <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 26 }}>
           {material.content.map((block, i) => <ContentBlockView key={i} block={block} />)}
+          {material.fileUrl && (
+            <a
+              href={material.fileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none",
+                background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+                borderRadius: 30, padding: "10px 22px", color: "#fff", fontSize: 13, fontWeight: 600,
+                width: "fit-content",
+              }}
+            >
+              Descargar archivo →
+            </a>
+          )}
         </div>
       )}
 
