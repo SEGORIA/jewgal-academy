@@ -17,26 +17,27 @@ const CREAM = { r: 246, g: 241, b: 231, alpha: 1 }
 mkdirSync(out, { recursive: true })
 
 const trimmed = await sharp(src).trim().toBuffer()
-const trimmedMeta = await sharp(trimmed).metadata()
 
-// La J recortada es más alta que ancha (560×701) — encajada entera con
-// "contain" dentro de un cuadrado deja barras color crema visibles a los
-// costados. El usuario pidió específicamente cero barras, así que acá se
-// usa "cover": llena el cuadrado por completo, recortando el sobrante de
-// arriba/abajo del gancho y la cola. Solo aplica a favicon/icon-192/
-// icon-512 — los íconos con padding (maskable/apple-touch) ya reservan ese
-// margen a propósito por la máscara de cada plataforma y no tienen el
-// problema de las barras.
-// "cover" con gravedad "top" en vez de centrada: la J recortada es más alta
-// que ancha, así que "cover" tiene que recortar arriba/abajo para llenar el
-// cuadrado sin barras. Con gravedad centrada eso recorta el gancho de
-// arriba Y la cola de abajo por igual, dejando un ícono irreconocible (solo
-// el trazo vertical + la chispa). Con gravedad "top" se conserva el gancho
-// completo (el rasgo que hace reconocible la J) y solo se recorta la punta
-// de la cola de abajo — se probaron ambas y se comparó visualmente.
+// La marca completa es "J" + chispa + una "g" chica entrelazada (560×701,
+// más alta que ancha). A favicon/app-icon size esa "g" y la chispa se
+// vuelven ruido ilegible, y como el conjunto no es cuadrado, cualquier
+// "cover" recorta una de las dos puntas (el gancho de arriba o la cola de
+// abajo de la J) dejando un ícono irreconocible — eso es lo que se veía
+// roto en la pestaña del navegador. La solución no es un mejor recorte:
+// es usar solo la J (el trazo reconocible del monograma) para los tamaños
+// chicos, con "contain" en vez de "cover" — así nunca se amputa el glifo,
+// solo se lo escala. 325px de ancho midieron el borde real del gancho de
+// la J en el archivo fuente (logo-icono.png) sin tocar la chispa/"g" de al
+// lado — si el logo fuente cambia, hay que volver a medir este valor.
+const jOnly = await sharp(trimmed).extract({ left: 0, top: 0, width: 325, height: 701 }).toBuffer()
+
 const icons = [
-  { name: "icon-192.png",         size: 192, padding: 0,    source: trimmed, fit: "cover",   position: "top" },
-  { name: "icon-512.png",         size: 512, padding: 0,    source: trimmed, fit: "cover",   position: "top" },
+  // Sin padding entre paréntesis: iconos chicos/sin máscara — deben leerse
+  // solos de lejos, así que usan solo la J con "contain" (nunca se recorta).
+  { name: "icon-192.png",         size: 192, padding: 0.06, source: jOnly,   fit: "contain" },
+  { name: "icon-512.png",         size: 512, padding: 0.06, source: jOnly,   fit: "contain" },
+  // Estos ya reservan margen por la máscara de cada plataforma — ahí la
+  // marca completa (J + chispa + g) entra bien y no hace falta recortarla.
   { name: "icon-maskable-192.png",size: 192, padding: 0.1,  source: trimmed, fit: "contain" },
   { name: "icon-maskable-512.png",size: 512, padding: 0.1,  source: trimmed, fit: "contain" },
   { name: "apple-touch-icon.png", size: 180, padding: 0.05, source: trimmed, fit: "contain" },
@@ -58,12 +59,23 @@ for (const { name, size, padding, source, fit, position } of icons) {
   console.log(`✓ ${name} (${size}x${size})`)
 }
 
-// favicon.ico: multi-resolución (16/32/48), mismo cover+top que icon-192/512.
+// favicon.ico: multi-resolución (16/32/48), misma J sola con "contain" —
+// a 16px un "cover" recortado era directamente irreconocible.
 const faviconSizes = [16, 32, 48]
+const faviconPadding = 0.08
 const faviconPngs = await Promise.all(
-  faviconSizes.map((size) =>
-    sharp(trimmed).resize(size, size, { fit: "cover", position: "top", background: CREAM }).png().toBuffer()
-  )
+  faviconSizes.map((size) => {
+    const inner = Math.round(size * (1 - faviconPadding * 2))
+    return sharp(jOnly)
+      .resize(inner, inner, { fit: "contain", background: CREAM })
+      .extend({
+        top: Math.floor((size - inner) / 2), bottom: Math.ceil((size - inner) / 2),
+        left: Math.floor((size - inner) / 2), right: Math.ceil((size - inner) / 2),
+        background: CREAM,
+      })
+      .png()
+      .toBuffer()
+  })
 )
 const icoBuffer = await pngToIco(faviconPngs)
 writeFileSync(join(root, "app", "favicon.ico"), icoBuffer)

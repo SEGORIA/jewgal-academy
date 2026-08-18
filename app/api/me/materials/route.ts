@@ -49,10 +49,17 @@ export async function GET() {
   })
   const progressByMaterial = Object.fromEntries(progress.map((p) => [p.materialId, p]))
 
+  const courseModules = await db.courseModule.findMany({
+    where: { courseId: { in: courseIds } },
+    select: { courseId: true, number: true, title: true },
+  })
+  const moduleTitleByKey = Object.fromEntries(courseModules.map((cm) => [`${cm.courseId}:${cm.number}`, cm.title]))
+
   return NextResponse.json({
     materials: materials.map((m) => ({
       ...m,
       courseTitle: titleByCourse[m.courseId] ?? "",
+      moduleTitle: moduleTitleByKey[`${m.courseId}:${m.moduleNumber}`] ?? null,
       progress: progressByMaterial[m.id] ?? null,
     })),
   })

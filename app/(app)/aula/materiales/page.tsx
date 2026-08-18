@@ -12,7 +12,7 @@ type Material = {
   id: string; title: string; description: string | null
   type: "document" | "video" | "link" | "lesson"
   fileUrl: string | null; videoUrl: string | null; linkUrl: string | null
-  moduleNumber: number; courseId: string; courseTitle: string
+  moduleNumber: number; courseId: string; courseTitle: string; moduleTitle: string | null
   interactionKind: string | null; toolHref: string | null
   progress: { completedAt: string | null; quizScore: number | null; quizTotal: number | null } | null
 }
@@ -23,7 +23,8 @@ const card: React.CSSProperties = {
   borderRadius: 14,
 }
 
-function moduleLabel(mod: number) {
+function moduleLabel(mod: number, title: string | null) {
+  if (title) return title
   return mod === 0 ? "Introducción" : `Módulo ${mod}`
 }
 
@@ -150,7 +151,7 @@ export default function MaterialesPage() {
                         <BookOpen size={15} style={{ color: "var(--gold)" }} />
                       </div>
                       <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)" }}>
-                        {moduleLabel(mod)}
+                        {moduleLabel(mod, items[0]?.moduleTitle ?? null)}
                       </h3>
                       <span style={{ fontSize: 12, color: "var(--text-dim)" }}>{doneCount}/{items.length}</span>
                       <div style={{ flex: 1, height: 1, background: "var(--surface-2)" }} />
