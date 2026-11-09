@@ -27,6 +27,7 @@ const patchSchema = z.object({
   currency: z.string().min(1).optional(),
   isFree: z.boolean().optional(),
   isPublished: z.boolean().optional(),
+  sequentialUnlock: z.boolean().optional(),
   totalHours: z.number().min(0).nullable().optional(),
   durationWeeks: z.number().int().min(0).nullable().optional(),
   thumbnail: z.string().url().nullable().optional().or(z.literal("")),

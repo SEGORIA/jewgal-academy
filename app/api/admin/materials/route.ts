@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache"
 import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
-import { contentBlockSchema, quizQuestionSchema, materialTypeSchema } from "@/lib/materials-content"
+import { materialFieldsSchema, toMaterialCreateData, nextOrderInModule, placeByRole } from "@/lib/materials-schema"
 
 export async function GET(req: NextRequest) {
   const session = await auth()
@@ -18,30 +18,16 @@ export async function GET(req: NextRequest) {
 
   const materials = await db.material.findMany({
     where: { courseId },
-    orderBy: [{ moduleNumber: "asc" }, { order: "asc" }],
+    orderBy: [{ moduleNumber: "asc" }, { order: "asc" }, { createdAt: "asc" }],
   })
 
   return NextResponse.json({ materials })
 }
 
-const createSchema = z.object({
+const createSchema = materialFieldsSchema.extend({
   courseId: z.string().min(1),
-  title: z.string().min(2),
-  description: z.string().nullable().optional(),
-  type: materialTypeSchema,
-  fileUrl: z.string().url().nullable().optional().or(z.literal("")),
-  videoUrl: z.string().url().nullable().optional().or(z.literal("")),
-  linkUrl: z.string().url().nullable().optional().or(z.literal("")),
-  moduleNumber: z.number().int().min(1).default(1),
-  order: z.number().int().min(0).default(0),
-  isVisible: z.boolean().default(true),
-  interactionKind: z.enum(["reflection", "quiz"]).nullable().optional(),
-  toolHref: z.string().nullable().optional(),
-  estimatedMinutes: z.number().int().min(0).max(600).nullable().optional(),
-  coverImageUrl: z.string().url().nullable().optional().or(z.literal("")),
-  groupLabel: z.string().max(200).nullable().optional(),
-  content: z.array(contentBlockSchema).max(100).nullable().optional(),
-  quizData: z.array(quizQuestionSchema).max(50).nullable().optional(),
+  // Si no viene, el servidor lo manda al final de su módulo.
+  order: z.number().int().min(0).optional(),
 })
 
 export async function POST(req: NextRequest) {
@@ -61,27 +47,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Curso no encontrado" }, { status: 404 })
   }
 
-  const material = await db.material.create({
-    data: {
-      courseId: data.courseId,
-      title: data.title.trim(),
-      description: data.description || null,
-      type: data.type,
-      fileUrl: data.fileUrl || null,
-      videoUrl: data.videoUrl || null,
-      linkUrl: data.linkUrl || null,
-      moduleNumber: data.moduleNumber,
-      order: data.order,
-      isVisible: data.isVisible,
-      interactionKind: data.interactionKind ?? null,
-      toolHref: data.toolHref ?? null,
-      estimatedMinutes: data.estimatedMinutes ?? null,
-      coverImageUrl: data.coverImageUrl || null,
-      groupLabel: data.groupLabel ?? null,
-      content: data.content ? JSON.stringify(data.content) : null,
-      quizData: data.quizData ? JSON.stringify(data.quizData) : null,
-    },
-  })
+  const order = data.order ?? (await nextOrderInModule(data.courseId, data.moduleNumber))
+  const created = await db.material.create({ data: toMaterialCreateData(data.courseId, data, order) })
+  // Sin posición explícita: entra en el lugar que le corresponde por su rol
+  // (Presentación → Workbook → Unidades → Examen → Autoevaluación).
+  if (data.order === undefined) await placeByRole(data.courseId, data.moduleNumber, created.id)
+  const material = (await db.material.findUnique({ where: { id: created.id } })) ?? created
 
   revalidatePath("/aula/materiales")
 

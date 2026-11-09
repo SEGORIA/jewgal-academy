@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   FileText, Download, ExternalLink, BookOpen, Loader2, FolderOpen,
-  ChevronDown, CheckCircle2, HelpCircle, PenLine, Sparkles, GraduationCap, ArrowRight,
+  ChevronDown, CheckCircle2, HelpCircle, PenLine, Sparkles, GraduationCap, ArrowRight, Lock,
 } from "lucide-react"
 
 type Material = {
@@ -15,6 +15,7 @@ type Material = {
   moduleNumber: number; courseId: string; courseTitle: string; moduleTitle: string | null
   interactionKind: string | null; toolHref: string | null
   progress: { completedAt: string | null; quizScore: number | null; quizTotal: number | null } | null
+  locked?: boolean
 }
 
 const card: React.CSSProperties = {
@@ -75,7 +76,8 @@ export default function MaterialesPage() {
   // vez de intentar abrir un link vacío.
   function openMaterial(m: Material) {
     const href = m.fileUrl || m.videoUrl || m.linkUrl
-    if (!href) {
+    // Bloqueado (desbloqueo progresivo): no abrir el archivo directo; el reproductor explica qué falta.
+    if (m.locked || !href) {
       router.push(`/aula/programa/${m.id}`)
       return
     }
@@ -204,7 +206,9 @@ export default function MaterialesPage() {
                                       </p>
                                     )}
                                   </div>
-                                  {completed ? (
+                                  {material.locked ? (
+                                    <Lock size={16} style={{ color: "var(--text-faint)", flexShrink: 0 }} />
+                                  ) : completed ? (
                                     <CheckCircle2 size={18} style={{ color: "#4a9d6f", flexShrink: 0 }} />
                                   ) : (
                                     <span style={{ color: "var(--gold)", flexShrink: 0 }}>

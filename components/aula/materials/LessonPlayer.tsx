@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   Loader2, ChevronLeft, ChevronRight, ChevronDown, CheckCircle2, PartyPopper,
-  Download, ExternalLink, Search, Award, Clock, Pencil,
+  Download, ExternalLink, Search, Award, Clock, Pencil, Lock, Unlock,
 } from "lucide-react"
 import LessonBody, { type LessonMaterial, type LessonProgress } from "@/components/aula/materials/LessonBody"
+import PdfViewer from "@/components/aula/materials/PdfViewer"
+import { computeLockedIds, firstPending } from "@/lib/sequential-unlock"
 
 export type CurriculumMaterial = {
   id: string; title: string
@@ -17,10 +19,11 @@ export type CurriculumMaterial = {
   interactionKind: string | null; toolHref: string | null
   estimatedMinutes: number | null
   progress: { completedAt: string | null; quizScore: number | null; quizTotal: number | null } | null
+  locked?: boolean
 }
 export type CourseModuleInfo = { id: string; number: number; title: string; description: string | null; isVisible: boolean }
 export type Curriculum = {
-  course: { title: string; slug: string } | null
+  course: { title: string; slug: string; sequentialUnlock?: boolean } | null
   modules: CourseModuleInfo[]
   materials: CurriculumMaterial[]
 }
@@ -44,9 +47,13 @@ function buildRows(materials: CurriculumMaterial[]): SidebarRow[] {
   return rows
 }
 
+// "Módulo 1 · Introducción al Coaching" — el número siempre a la vista.
 function moduleLabel(mod: number, named?: CourseModuleInfo) {
-  if (named) return named.title
+  if (named) return mod > 0 ? `Módulo ${mod} · ${named.title}` : named.title
   return mod === 0 ? "Introducción" : `Módulo ${mod}`
+}
+function moduleTitle(mod: number, named?: CourseModuleInfo) {
+  return named?.title ?? (mod === 0 ? "Introducción" : `Módulo ${mod}`)
 }
 
 function isPdf(m: CurriculumMaterial | null) {
@@ -85,11 +92,13 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set())
   const [fileSaving, setFileSaving] = useState(false)
   const [certBanner, setCertBanner] = useState<string | null>(null)
+  const [unlockMsg, setUnlockMsg] = useState<{ id: string; title: string } | null>(null)
 
   useEffect(() => {
     if (!materialId) return
     setLoading(true)
     setNotFound(false)
+    setUnlockMsg(null)
     fetch(`${apiBase}/${materialId}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((d: { material: LessonMaterial; progress: LessonProgress | null; curriculum: Curriculum } | null) => {
@@ -103,6 +112,13 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
   }, [materialId, apiBase])
 
   function applyProgress(id: string, newProgress: { completedAt: string | null; quizScore?: number | null; quizTotal?: number | null }) {
+    // Si el programa desbloquea de a poco, avisar qué se acaba de habilitar.
+    if (curriculum?.course?.sequentialUnlock && !readOnly && newProgress.completedAt) {
+      const before = computeLockedIds(curriculum.materials)
+      const after = computeLockedIds(curriculum.materials.map((m) => (m.id === id ? { ...m, progress: { ...(m.progress ?? { quizScore: null, quizTotal: null }), completedAt: newProgress.completedAt } } : m)))
+      const opened = curriculum.materials.find((m) => before.has(m.id) && !after.has(m.id))
+      if (opened) setUnlockMsg({ id: opened.id, title: opened.title })
+    }
     setCurriculum((prev) =>
       prev
         ? {
@@ -178,11 +194,18 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
   }
 
   const list = curriculum.materials
+  // Desbloqueo progresivo (solo para el alumno; en la vista previa del admin todo está abierto).
+  const progressive = !!curriculum.course?.sequentialUnlock
+  const lockedSet = progressive && !readOnly ? computeLockedIds(list) : new Set<string>()
+  const pendingItem = firstPending(list)
   const currentIndex = list.findIndex((m) => m.id === materialId)
   const currentItem = currentIndex >= 0 ? list[currentIndex] : null
   const prevItem = currentIndex > 0 ? list[currentIndex - 1] : null
   const nextItem = currentIndex >= 0 && currentIndex < list.length - 1 ? list[currentIndex + 1] : null
   const currentModuleNumber = currentItem?.moduleNumber ?? 0
+  const currentLocked = lockedSet.has(materialId)
+  const nextLocked = !!nextItem && lockedSet.has(nextItem.id)
+  const moduleNumbers = [...new Set(list.map((m) => m.moduleNumber))].sort((a, b) => a - b)
   const namedModule = curriculum.modules.find((cm) => cm.number === currentModuleNumber)
   const moduleItems = list.filter((m) => m.moduleNumber === currentModuleNumber)
   const moduleCompleted = moduleItems.filter((m) => m.progress?.completedAt).length
@@ -223,8 +246,13 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
       <div style={{ display: "flex", gap: 28, alignItems: "flex-start" }}>
         <aside style={{ width: 270, flexShrink: 0, position: "sticky", top: 20, maxHeight: "calc(100vh - 100px)", overflowY: "auto" }}>
           <div style={{ marginBottom: 16 }}>
+            {currentModuleNumber > 0 && (
+              <p style={{ fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 4 }}>
+                Módulo {currentModuleNumber}{moduleNumbers.length > 1 ? ` de ${moduleNumbers.filter((n) => n > 0).length}` : ""}
+              </p>
+            )}
             <p style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 16, color: "var(--text)", marginBottom: 4 }}>
-              {moduleLabel(currentModuleNumber, namedModule)}
+              {moduleTitle(currentModuleNumber, namedModule)}
             </p>
             {namedModule?.description && (
               <p style={{ fontSize: 12, color: "var(--text-dim)", lineHeight: 1.5, marginBottom: 8 }}>{namedModule.description}</p>
@@ -255,7 +283,7 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
           </div>
 
           {rows.map((row, ri) => {
-            if (row.kind === "item") return <MaterialRow key={row.material.id} m={row.material} active={row.material.id === materialId} readOnly={readOnly} onClick={() => router.push(`${basePath}/${row.material.id}`)} />
+            if (row.kind === "item") return <MaterialRow key={row.material.id} m={row.material} active={row.material.id === materialId} readOnly={readOnly} locked={lockedSet.has(row.material.id)} lockHint={pendingItem?.title} onClick={() => router.push(`${basePath}/${row.material.id}`)} />
             const isOpen = !collapsedGroups.has(row.label)
             return (
               <div key={`${row.label}-${ri}`} style={{ marginBottom: 8 }}>
@@ -272,13 +300,45 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
                 <AnimatePresence initial={false}>
                   {isOpen && (
                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.18 }} style={{ overflow: "hidden" }}>
-                      {row.items.map((m) => <MaterialRow key={m.id} m={m} active={m.id === materialId} readOnly={readOnly} onClick={() => router.push(`${basePath}/${m.id}`)} />)}
+                      {row.items.map((m) => <MaterialRow key={m.id} m={m} active={m.id === materialId} readOnly={readOnly} locked={lockedSet.has(m.id)} lockHint={pendingItem?.title} onClick={() => router.push(`${basePath}/${m.id}`)} />)}
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
             )
           })}
+
+          {moduleNumbers.filter((n) => n > 0).length > 1 && (
+            <div style={{ marginTop: 22, paddingTop: 16, borderTop: "1px solid rgba(165,141,102,.18)" }}>
+              <p style={{ fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--text-faint)", marginBottom: 8 }}>Módulos del programa</p>
+              {moduleNumbers.filter((n) => n > 0).map((n) => {
+                const items = list.filter((m) => m.moduleNumber === n)
+                const done = items.filter((m) => m.progress?.completedAt).length
+                const named = curriculum.modules.find((cm) => cm.number === n)
+                const modLocked = !readOnly && items.length > 0 && items.every((m) => lockedSet.has(m.id))
+                const target = items.find((m) => !lockedSet.has(m.id) && !m.progress?.completedAt) ?? items.find((m) => !lockedSet.has(m.id)) ?? items[0]
+                const active = n === currentModuleNumber
+                return (
+                  <button
+                    key={n}
+                    disabled={modLocked || !target}
+                    onClick={() => target && router.push(`${basePath}/${target.id}`)}
+                    title={modLocked ? "Se desbloquea al completar el módulo anterior" : undefined}
+                    style={{
+                      display: "flex", alignItems: "center", gap: 8, width: "100%", textAlign: "left", padding: "7px 8px", borderRadius: 8, marginBottom: 2, border: "none",
+                      background: active ? "rgba(165,141,102,.1)" : "transparent", cursor: modLocked ? "not-allowed" : "pointer", opacity: modLocked ? 0.55 : 1,
+                    }}
+                  >
+                    {modLocked ? <Lock size={12} style={{ color: "var(--text-faint)", flexShrink: 0 }} /> : done === items.length && items.length > 0 ? <CheckCircle2 size={12} style={{ color: "#4a9d6f", flexShrink: 0 }} /> : <span style={{ width: 12, height: 12, borderRadius: "50%", border: "1px solid rgba(165,141,102,.4)", flexShrink: 0 }} />}
+                    <span style={{ fontSize: 12, color: active ? "var(--gold)" : "var(--text-muted)", fontWeight: active ? 600 : 400, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      {n}. {named?.title ?? `Módulo ${n}`}
+                    </span>
+                    {!readOnly && <span style={{ fontSize: 10.5, color: "var(--text-faint)" }}>{done}/{items.length}</span>}
+                  </button>
+                )
+              })}
+            </div>
+          )}
         </aside>
 
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -304,6 +364,23 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
                 </p>
               </div>
             </motion.div>
+          )}
+
+          {unlockMsg && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
+              style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, background: "rgba(74,157,111,.1)", border: "1px solid rgba(74,157,111,.3)", borderRadius: 12, padding: "12px 16px" }}
+            >
+              <Unlock size={18} style={{ color: "#4a9d6f", flexShrink: 0 }} />
+              <p style={{ flex: 1, fontSize: 13.5, color: "var(--text)" }}>¡Muy bien! Se desbloqueó <strong>{unlockMsg.title}</strong>.</p>
+              <button onClick={() => router.push(`${basePath}/${unlockMsg.id}`)} style={{ padding: "7px 16px", borderRadius: 30, border: "none", background: "#4a9d6f", color: "#fff", fontSize: 12.5, fontWeight: 600, cursor: "pointer" }}>Ir ahora →</button>
+            </motion.div>
+          )}
+
+          {readOnly && progressive && (
+            <p style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "var(--text-dim)", marginBottom: 16 }}>
+              <Lock size={13} style={{ color: "var(--gold)" }} /> Desbloqueo progresivo activado: el alumno accede a cada unidad al completar la anterior. Acá ves todo abierto.
+            </p>
           )}
 
           <div style={{ marginBottom: 22, display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 16 }}>
@@ -339,22 +416,43 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
             background: "var(--surface)", border: "1px solid rgba(165,141,102,.14)", borderRadius: 16,
             padding: "32px 34px", marginBottom: 24,
           }}>
-            {isFileKind ? (
-              <div style={{ textAlign: "center", padding: "20px 0" }}>
-                <p style={{ color: "var(--text-muted)", fontSize: 14, marginBottom: 22 }}>
-                  {currentItem?.type === "link"
-                    ? "Este contenido es un enlace a otra sección del aula."
-                    : "Este contenido es un archivo descargable."}
+            {currentLocked ? (
+              <div style={{ textAlign: "center", padding: "36px 12px" }}>
+                <div style={{ width: 60, height: 60, borderRadius: "50%", background: "rgba(165,141,102,.14)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px" }}>
+                  <Lock size={26} style={{ color: "var(--gold)" }} />
+                </div>
+                <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 22, color: "var(--text)", marginBottom: 8 }}>Esto se desbloquea de a poco</h2>
+                <p style={{ color: "var(--text-muted)", fontSize: 14, lineHeight: 1.6, maxWidth: 420, margin: "0 auto 22px" }}>
+                  {pendingItem ? <>Completá <strong>{pendingItem.title}</strong> para habilitar este contenido.</> : "Completá el contenido anterior para habilitar este."}
                 </p>
-                <a
-                  href={currentItem?.fileUrl || currentItem?.linkUrl || currentItem?.videoUrl || "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ ...ctaStyle, marginBottom: 18 }}
-                >
-                  {currentItem?.type === "link" ? <ExternalLink size={15} /> : <Download size={15} />}
-                  {currentItem?.type === "link" ? "Abrir" : "Descargar archivo"}
-                </a>
+                {pendingItem && (
+                  <button onClick={() => router.push(`${basePath}/${pendingItem.id}`)} style={ctaStyle}>Ir a lo que sigue →</button>
+                )}
+              </div>
+            ) : isFileKind ? (
+              <div style={{ textAlign: "center", padding: "20px 0" }}>
+                {isPdf(currentItem) && currentItem?.fileUrl ? (
+                  <div style={{ textAlign: "left", marginBottom: 18 }}>
+                    <PdfViewer url={currentItem.fileUrl} title={currentItem.title} />
+                  </div>
+                ) : (
+                  <>
+                    <p style={{ color: "var(--text-muted)", fontSize: 14, marginBottom: 22 }}>
+                      {currentItem?.type === "link"
+                        ? "Este contenido es un enlace a otra sección del aula."
+                        : "Este contenido es un archivo descargable."}
+                    </p>
+                    <a
+                      href={currentItem?.fileUrl || currentItem?.linkUrl || currentItem?.videoUrl || "#"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ ...ctaStyle, marginBottom: 18 }}
+                    >
+                      {currentItem?.type === "link" ? <ExternalLink size={15} /> : <Download size={15} />}
+                      {currentItem?.type === "link" ? "Abrir" : "Descargar archivo"}
+                    </a>
+                  </>
+                )}
                 {!readOnly && (
                   <div>
                     {isFileCompleted ? (
@@ -403,7 +501,11 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
               </button>
             ) : <div />}
 
-            {nextItem ? (
+            {nextItem && nextLocked ? (
+              <span title="Se desbloquea al completar esta unidad" style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 18px", borderRadius: 10, border: "1px dashed rgba(165,141,102,.35)", color: "var(--text-faint)", fontSize: 12.5 }}>
+                <Lock size={14} /> {currentLocked ? "Bloqueado" : "Completá esta unidad para desbloquear la siguiente"}
+              </span>
+            ) : nextItem ? (
               <button
                 onClick={() => router.push(`${basePath}/${nextItem.id}`)}
                 style={{
@@ -426,19 +528,23 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
   )
 }
 
-function MaterialRow({ m, active, onClick, readOnly }: { m: CurriculumMaterial; active: boolean; onClick: () => void; readOnly?: boolean }) {
+function MaterialRow({ m, active, onClick, readOnly, locked, lockHint }: { m: CurriculumMaterial; active: boolean; onClick: () => void; readOnly?: boolean; locked?: boolean; lockHint?: string }) {
   const completed = !!m.progress?.completedAt
   return (
     <button
       onClick={onClick}
+      title={locked ? `Se desbloquea al completar «${lockHint ?? "lo anterior"}»` : undefined}
       style={{
         display: "flex", alignItems: "center", gap: 8, width: "100%", textAlign: "left",
-        padding: "8px 10px", borderRadius: 8, marginBottom: 2, border: "none", cursor: "pointer",
+        padding: "8px 10px", borderRadius: 8, marginBottom: 2, border: "none", cursor: locked ? "not-allowed" : "pointer",
         background: active ? "rgba(165,141,102,.14)" : "transparent",
         borderLeft: active ? "2px solid var(--gold)" : "2px solid transparent",
+        opacity: locked ? 0.5 : 1,
       }}
     >
-      {!readOnly && (completed ? (
+      {!readOnly && (locked ? (
+        <Lock size={12} style={{ color: "var(--text-faint)", flexShrink: 0 }} />
+      ) : completed ? (
         <CheckCircle2 size={13} style={{ color: "#4a9d6f", flexShrink: 0 }} />
       ) : (
         <div style={{ width: 13, height: 13, borderRadius: "50%", border: "1px solid rgba(165,141,102,.3)", flexShrink: 0 }} />

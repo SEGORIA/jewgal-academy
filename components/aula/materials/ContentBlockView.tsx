@@ -1,5 +1,6 @@
 "use client"
 
+import { mediaSrc } from "@/lib/media-url"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronLeft, ChevronRight, Play, Video, BookOpen, Quote, Link2 } from "lucide-react"
@@ -23,7 +24,7 @@ function SlidesBlockView({ images, captions }: { images: string[]; captions?: st
         <AnimatePresence initial={false} custom={direction}>
           <motion.img
             key={index}
-            src={images[index]}
+            src={mediaSrc(images[index])}
             alt={captions?.[index] ?? `Diapositiva ${index + 1}`}
             custom={direction}
             initial={{ opacity: 0, x: direction >= 0 ? 50 : -50 }}
@@ -108,7 +109,7 @@ function EmbedVideoBlock({ embedUrl, posterUrl, caption }: { embedUrl: string; p
             aria-label="Reproducir video"
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none", padding: 0, cursor: "pointer", background: "none" }}
           >
-            <img src={posterUrl} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+            <img src={mediaSrc(posterUrl)} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
             <PlayOverlay />
           </button>
         )}
@@ -127,7 +128,7 @@ type VideoGridItem = {
 }
 
 function resolveGridEmbed(item: VideoGridItem): { kind: "video"; src: string } | { kind: "iframe"; src: string } | null {
-  if (item.provider === "cloudinary") return { kind: "video", src: item.url }
+  if (item.provider === "cloudinary") return { kind: "video", src: mediaSrc(item.url) }
   const embedUrl = item.provider === "youtube" ? getYouTubeEmbedUrl(item.url) : getVimeoEmbedUrl(item.url)
   return embedUrl ? { kind: "iframe", src: embedUrl } : null
 }
@@ -141,7 +142,7 @@ function VideoGridCard({ item }: { item: VideoGridItem }) {
       <div style={{ position: "relative", paddingTop: "56.25%", background: "var(--bg-3)" }}>
         {open && resolved ? (
           resolved.kind === "video" ? (
-            <video controls autoPlay poster={item.posterUrl} src={resolved.src} style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
+            <video controls autoPlay poster={mediaSrc(item.posterUrl)} src={resolved.src} style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
           ) : (
             <iframe
               src={resolved.src}
@@ -157,7 +158,7 @@ function VideoGridCard({ item }: { item: VideoGridItem }) {
             aria-label={`Reproducir ${item.title}`}
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none", padding: 0, cursor: resolved ? "pointer" : "default", background: "none" }}
           >
-            {item.posterUrl && <img src={item.posterUrl} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />}
+            {item.posterUrl && <img src={mediaSrc(item.posterUrl)} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />}
             {resolved && <PlayOverlay />}
           </button>
         )}
@@ -232,7 +233,7 @@ export default function ContentBlockView({ block }: { block: ContentBlock }) {
   if (block.type === "video-cloudinary") {
     return (
       <div>
-        <video controls poster={block.posterUrl} src={block.url} style={{ width: "100%", borderRadius: 10, display: "block", background: "var(--bg-3)" }} />
+        <video controls poster={mediaSrc(block.posterUrl)} src={mediaSrc(block.url)} style={{ width: "100%", borderRadius: 10, display: "block", background: "var(--bg-3)" }} />
         {block.caption && <p style={{ fontSize: 12, color: "var(--text-faint)", marginTop: 6 }}>{block.caption}</p>}
       </div>
     )

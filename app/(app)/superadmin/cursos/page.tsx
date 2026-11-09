@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { useSearchParams } from "next/navigation"
 import { Users, FileText, Eye, EyeOff, Plus, X, Video, Trash2, Pencil, Loader2, ExternalLink, Download, PlayCircle, ListChecks, ChevronUp, ChevronDown, Save, AlertCircle, GripVertical, Languages, BookOpen, Layers, Upload } from "lucide-react"
 import { getProgramContent, getYouTubeEmbedUrl, EMPTY_PROGRAM_CONTENT, type ProgramContent } from "@/lib/program-content"
@@ -8,6 +8,10 @@ import StringListEditor from "@/components/admin/StringListEditor"
 import ContentBlockEditor from "@/components/admin/materials/ContentBlockEditor"
 import QuizEditor from "@/components/admin/materials/QuizEditor"
 import { parseContent, parseQuizData, type ContentBlock, type QuizQuestion } from "@/lib/materials-content"
+import MaterialsManager from "@/components/admin/materials/MaterialsManager"
+import { TEMPLATES, TEMPLATE_ICONS, templateDefaults, templateOf, type TemplateId } from "@/components/admin/materials/templates"
+import type { AdminMaterial, AdminCourseModule } from "@/components/admin/materials/types"
+import { uploadToCloudinary } from "@/lib/cloudinary-upload"
 
 const TOOL_HREF_OPTIONS = [
   { value: "", label: "Ninguna" },
@@ -20,20 +24,13 @@ type Course = {
   id: string; title: string; titleEn: string | null; slug: string
   shortDesc: string; shortDescEn: string | null
   description: string; descriptionEn: string | null
-  price: number; currency: string; isFree: boolean; isPublished: boolean
+  price: number; currency: string; isFree: boolean; isPublished: boolean; sequentialUnlock?: boolean
   totalHours: number | null; durationWeeks: number | null; thumbnail: string | null
   videoUrl: string | null; content: string | null
   _count: { enrollments: number; materials: number; liveSessions: number }
 }
-type Material = {
-  id: string; title: string; description: string | null; type: "document" | "video" | "link" | "lesson"
-  fileUrl: string | null; videoUrl: string | null; linkUrl: string | null
-  moduleNumber: number; order: number; isVisible: boolean
-  interactionKind: string | null; toolHref: string | null; estimatedMinutes: number | null
-  coverImageUrl: string | null; groupLabel: string | null
-  content: string | null; quizData: string | null
-}
-type CourseModule = { id: string; number: number; title: string; description: string | null; isVisible: boolean }
+type Material = AdminMaterial
+type CourseModule = AdminCourseModule
 type LiveSession = {
   id: string; title: string; scheduledAt: string; durationMin: number
   joinUrl: string | null; recordingUrl: string | null; isCompleted: boolean
@@ -88,6 +85,13 @@ export default function CursosAdminPage() {
   const [editingMatId, setEditingMatId] = useState<string | null>(null)
   const [matForm, setMatForm] = useState(emptyMatForm)
   const [savingMat, setSavingMat] = useState(false)
+  const [matError, setMatError] = useState("")
+  const [matTemplate, setMatTemplate] = useState<TemplateId>("unit")
+  const [matVisible, setMatVisible] = useState(true)
+  const [showAdvanced, setShowAdvanced] = useState(false)
+  const autoTitleRef = useRef("")
+  const [courseModules, setCourseModules] = useState<CourseModule[]>([])
+  const matFormRef = useRef<HTMLDivElement>(null)
 
   const [sessions, setSessions] = useState<LiveSession[]>([])
   const [loadingSes, setLoadingSes] = useState(false)
@@ -105,6 +109,26 @@ export default function CursosAdminPage() {
   const [contentError, setContentError] = useState("")
 
   const selected = courses.find((c) => c.id === selectedId) || null
+
+  // Opciones del selector de módulo: los que ya existen (con nombre o con
+  // materiales) + uno nuevo al final — ya no hay un tope fijo de módulos.
+  const moduleOptions = (() => {
+    const nums = new Set<number>([1, ...courseModules.map((m) => m.number), ...materials.map((m) => m.moduleNumber)])
+    const current = Number(matForm.moduleNumber)
+    if (current) nums.add(current)
+    const list = [...nums].sort((a, b) => a - b).map((n) => ({ number: n, title: courseModules.find((m) => m.number === n)?.title ?? null, isNew: false }))
+    list.push({ number: Math.max(...nums) + 1, title: null, isNew: true })
+    return list
+  })()
+
+  // El formulario es un panel lateral: mientras está abierto no se desplaza la página de atrás.
+  useEffect(() => {
+    if (!showAddMat) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    matFormRef.current?.scrollTo({ top: 0 })
+    return () => { document.body.style.overflow = prev }
+  }, [showAddMat, editingMatId])
 
   const loadCourses = useCallback(() => {
     setLoading(true)
@@ -140,7 +164,12 @@ export default function CursosAdminPage() {
 
   const loadMaterials = useCallback((courseId: string) => {
     setLoadingMat(true)
-    fetch(`/api/admin/materials?courseId=${courseId}`).then((r) => r.json()).then((d) => setMaterials(d.materials || [])).finally(() => setLoadingMat(false))
+    Promise.all([
+      fetch(`/api/admin/materials?courseId=${courseId}`).then((r) => r.json()),
+      fetch(`/api/admin/course-modules?courseId=${courseId}`).then((r) => r.json()),
+    ])
+      .then(([m, c]) => { setMaterials(m.materials || []); setCourseModules(c.courseModules || []) })
+      .finally(() => setLoadingMat(false))
   }, [])
 
   const loadSessions = useCallback((courseId: string) => {
@@ -288,10 +317,40 @@ export default function CursosAdminPage() {
     }
   }
 
-  function openNewMaterial() {
-    setMatForm(emptyMatForm)
+  // "Agregar" desde un módulo: ya llega con el módulo y el tipo elegidos, y el
+  // formulario arranca con los valores que corresponden a ese tipo.
+  function openNewMaterial(moduleNumber?: number, template: TemplateId = "unit") {
+    const mod = moduleNumber ?? materials[materials.length - 1]?.moduleNumber ?? 1
+    const d = templateDefaults(template, mod, unitCountIn(mod))
+    autoTitleRef.current = d.title
+    setMatForm({ ...emptyMatForm, ...d, moduleNumber: String(mod) })
+    setMatTemplate(template)
+    setMatVisible(true)
+    setShowAdvanced(false)
     setEditingMatId(null)
+    setMatError("")
     setShowAddMat(true)
+  }
+
+  function unitCountIn(mod: number) {
+    return materials.filter((m) => m.moduleNumber === mod && /^Unidad\s+\d+/i.test(m.title)).length
+  }
+
+  // Cambiar el tipo mientras se crea: aplica los valores del tipo y conserva lo que ya se escribió.
+  function applyTemplate(id: TemplateId) {
+    const mod = Number(matForm.moduleNumber) || 1
+    const d = templateDefaults(id, mod, unitCountIn(mod))
+    const keepTitle = matForm.title.trim() && matForm.title !== autoTitleRef.current
+    autoTitleRef.current = d.title
+    setMatForm((f) => ({ ...f, ...d, title: keepTitle ? f.title : d.title, moduleNumber: f.moduleNumber, description: f.description, url: f.url }))
+    setMatTemplate(id)
+    setMatError("")
+  }
+
+  function closeMatForm() {
+    setShowAddMat(false)
+    setEditingMatId(null)
+    setMatError("")
   }
 
   function openEditMaterial(m: Material) {
@@ -310,7 +369,11 @@ export default function CursosAdminPage() {
       content: parseContent(m.content),
       quizData: parseQuizData(m.quizData),
     })
+    setMatTemplate(templateOf({ type: m.type, interactionKind: m.interactionKind, content: parseContent(m.content) }))
+    setMatVisible(m.isVisible)
+    setShowAdvanced(false)
     setEditingMatId(m.id)
+    setMatError("")
     setShowAddMat(true)
   }
 
@@ -318,7 +381,10 @@ export default function CursosAdminPage() {
   // adjunto único — no exigimos URL para ese tipo (los demás sí, como
   // siempre).
   async function saveMaterial() {
-    if (!selected || !matForm.title.trim() || (matForm.type !== "lesson" && !matForm.url.trim())) return
+    if (!selected || !matForm.title.trim()) return
+    if (matForm.type !== "lesson" && !matForm.url.trim()) { setMatError("Falta el archivo: pegá un link o subí el archivo."); return }
+    if (matForm.interactionKind === "quiz" && matForm.quizData.length === 0) { setMatError("Agregá al menos una pregunta al examen."); return }
+    if (matForm.content.some((b) => b.type === "slides" && b.images.length === 0)) { setMatError("La presentación necesita al menos una imagen. Subí las diapositivas o quitá ese bloque."); return }
     setSavingMat(true)
     try {
       const payload: Record<string, unknown> = {
@@ -333,16 +399,23 @@ export default function CursosAdminPage() {
         groupLabel: matForm.groupLabel.trim() || null,
         content: matForm.content.length ? matForm.content : null,
         quizData: matForm.quizData.length ? matForm.quizData : null,
+        isVisible: matVisible,
       }
       if (matForm.type !== "lesson") {
         const urlField = matForm.type === "document" ? "fileUrl" : matForm.type === "video" ? "videoUrl" : "linkUrl"
         payload[urlField] = matForm.url.trim()
       }
-      await fetch(editingMatId ? `/api/admin/materials/${editingMatId}` : "/api/admin/materials", {
+      const res = await fetch(editingMatId ? `/api/admin/materials/${editingMatId}` : "/api/admin/materials", {
         method: editingMatId ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editingMatId ? payload : { ...payload, courseId: selected.id }),
       })
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}))
+        setMatError(d.error ? `${d.error}. Revisá los campos (los links deben empezar con https://).` : "No se pudo guardar. Probá de nuevo.")
+        return
+      }
+      setMatError("")
       setShowAddMat(false)
       setEditingMatId(null)
       setMatForm(emptyMatForm)
@@ -351,49 +424,6 @@ export default function CursosAdminPage() {
     } finally {
       setSavingMat(false)
     }
-  }
-
-  async function toggleMatVisible(m: Material) {
-    if (!selected) return
-    await fetch(`/api/admin/materials/${m.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ isVisible: !m.isVisible }),
-    })
-    loadMaterials(selected.id)
-  }
-
-  async function deleteMaterial(m: Material) {
-    if (!selected || !confirm(`¿Eliminar "${m.title}"?`)) return
-    await fetch(`/api/admin/materials/${m.id}`, { method: "DELETE" })
-    loadMaterials(selected.id)
-    loadCourses()
-  }
-
-  // Reordena dentro de la lista tal como se ve en pantalla (moduleNumber
-  // asc, order asc) — intercambia el "order" de los dos vecinos, sin tocar
-  // moduleNumber, para poder reorganizar el sidebar del alumno a mano.
-  async function moveMaterial(index: number, dir: -1 | 1) {
-    if (!selected) return
-    const target = index + dir
-    if (target < 0 || target >= materials.length) return
-    const a = materials[index]
-    const b = materials[target]
-    const reordered = [...materials]
-    reordered[index] = b
-    reordered[target] = a
-    setMaterials(reordered)
-    await Promise.all([
-      fetch(`/api/admin/materials/${a.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ order: b.order }) }),
-      fetch(`/api/admin/materials/${b.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ order: a.order }) }),
-    ])
-    loadMaterials(selected.id)
-  }
-
-  function openPreview() {
-    if (!selected || materials.length === 0) return
-    const sorted = [...materials].sort((x, y) => x.moduleNumber - y.moduleNumber || x.order - y.order)
-    window.open(`/superadmin/cursos/preview/${sorted[0].id}`, "_blank", "noopener,noreferrer")
   }
 
   async function saveSession() {
@@ -728,161 +758,196 @@ export default function CursosAdminPage() {
             {/* MATERIALES */}
             {tab === "materiales" && (
               <div>
-                <CourseModulesManager courseId={selected.id} />
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-                  <p style={{ fontSize: 13, color: "var(--text-faint)" }}>{materials.length} material{materials.length === 1 ? "" : "es"} subido{materials.length === 1 ? "" : "s"}</p>
-                  <div style={{ display: "flex", gap: 10 }}>
-                    <button
-                      onClick={openPreview}
-                      disabled={materials.length === 0}
-                      title={materials.length === 0 ? "Agregá un material primero" : "Ver el curso como lo ve el alumno"}
-                      style={{
-                        display: "flex", alignItems: "center", gap: 7, background: "var(--surface-2)",
-                        border: "1px solid rgba(165,141,102,.3)", color: "var(--gold)", borderRadius: 8,
-                        padding: "9px 16px", fontSize: 12, fontWeight: 700,
-                        cursor: materials.length === 0 ? "default" : "pointer", opacity: materials.length === 0 ? 0.5 : 1,
-                      }}
-                    >
-                      <ExternalLink size={14} /> Vista previa del alumno
-                    </button>
-                    <button onClick={() => (showAddMat ? setShowAddMat(false) : openNewMaterial())} style={btnPrimary("var(--gold)")}>
-                      <Plus size={14} /> Agregar material
-                    </button>
-                  </div>
-                </div>
                 {showAddMat && (
-                  <div style={{ background: "var(--surface)", border: "1px solid rgba(165,141,102,.18)", borderRadius: 12, padding: "20px 18px", marginBottom: 16 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-                      <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>
-                        {editingMatId ? "Editar material" : "Nuevo material"}
-                      </span>
-                    </div>
-                    <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-                      <div><label style={labelStyle}>Título</label><input value={matForm.title} onChange={(e) => setMatForm((f) => ({ ...f, title: e.target.value }))} placeholder="Guía módulo 1" style={inputStyle} /></div>
-                      <div>
-                        <label style={labelStyle}>Módulo</label>
-                        <select value={matForm.moduleNumber} onChange={(e) => setMatForm((f) => ({ ...f, moduleNumber: e.target.value }))} style={{ ...inputStyle, cursor: "pointer" }}>
-                          {[1, 2, 3, 4, 5, 6, 7].map((n) => <option key={n} value={n}>Módulo {n}</option>)}
-                        </select>
-                      </div>
-                    </div>
-                    <div style={{ marginBottom: 12 }}>
-                      <label style={labelStyle}>Descripción (opcional)</label>
-                      <input value={matForm.description} onChange={(e) => setMatForm((f) => ({ ...f, description: e.target.value }))} placeholder="Breve descripción" style={inputStyle} />
-                    </div>
-                    <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: matForm.type === "lesson" ? "1fr" : "140px 1fr", gap: 12, marginBottom: 12 }}>
-                      <div>
-                        <label style={labelStyle}>Tipo</label>
-                        <select value={matForm.type} onChange={(e) => setMatForm((f) => ({ ...f, type: e.target.value as typeof f.type }))} style={{ ...inputStyle, cursor: "pointer" }}>
-                          <option value="document">PDF / Documento</option>
-                          <option value="link">Enlace externo</option>
-                          <option value="video">Video</option>
-                          <option value="lesson">Lección (bloques de contenido)</option>
-                        </select>
-                      </div>
-                      {matForm.type !== "lesson" && (
-                        <div>
-                          <label style={labelStyle}>URL {matForm.type === "document" ? "del archivo" : matForm.type === "video" ? "del video" : "del enlace"}</label>
-                          <input value={matForm.url} onChange={(e) => setMatForm((f) => ({ ...f, url: e.target.value }))} placeholder="https://…" style={inputStyle} />
+                  <>
+                    <div onClick={closeMatForm} style={{ position: "fixed", inset: 0, background: "rgba(44,31,20,.45)", zIndex: 60 }} />
+                    <aside
+                      ref={matFormRef}
+                      style={{ position: "fixed", top: 0, right: 0, bottom: 0, width: "min(800px, 100vw)", background: "var(--bg)", zIndex: 61, overflowY: "auto", boxShadow: "-18px 0 44px rgba(44,31,20,.28)", borderLeft: "1px solid rgba(165,141,102,.25)" }}
+                    >
+                      <div style={{ padding: "22px 26px 8px" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
+                          <div>
+                            <p style={{ fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 4 }}>
+                              {editingMatId ? "Editar" : "Nuevo"} · Módulo {matForm.moduleNumber}
+                            </p>
+                            <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 24, color: "var(--text)" }}>
+                              {editingMatId ? (matForm.title || "Material") : "¿Qué querés agregar?"}
+                            </h2>
+                          </div>
+                          <button onClick={closeMatForm} title="Cerrar" style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-dim)", padding: 4 }}><X size={20} /></button>
                         </div>
-                      )}
-                    </div>
-                    {matForm.type !== "lesson" && (
-                      <p style={{ fontSize: 11.5, color: "var(--text-dim)", marginBottom: 20 }}>Sin carga de archivos aún — pegá un link (Drive, YouTube, Vimeo, etc.).</p>
-                    )}
 
-                    <div className="admin-form-grid-3" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 12 }}>
-                      <div>
-                        <label style={labelStyle}>Interacción</label>
-                        <select value={matForm.interactionKind} onChange={(e) => setMatForm((f) => ({ ...f, interactionKind: e.target.value as typeof f.interactionKind }))} style={{ ...inputStyle, cursor: "pointer" }}>
-                          <option value="">Ninguna</option>
-                          <option value="reflection">Reflexión</option>
-                          <option value="quiz">Quiz</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label style={labelStyle}>Herramienta interactiva</label>
-                        <select value={matForm.toolHref} onChange={(e) => setMatForm((f) => ({ ...f, toolHref: e.target.value }))} style={{ ...inputStyle, cursor: "pointer" }}>
-                          {TOOL_HREF_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-                        </select>
-                      </div>
-                      <div>
-                        <label style={labelStyle}>Minutos estimados</label>
-                        <input type="number" min={0} value={matForm.estimatedMinutes} onChange={(e) => setMatForm((f) => ({ ...f, estimatedMinutes: e.target.value }))} placeholder="Ej: 5" style={inputStyle} />
-                      </div>
-                    </div>
+                        {/* 1 · Qué se agrega */}
+                        {!editingMatId && (
+                          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(168px, 1fr))", gap: 10, marginBottom: 22 }}>
+                            {TEMPLATES.map((t) => {
+                              const Icon = TEMPLATE_ICONS[t.id]
+                              const on = matTemplate === t.id
+                              return (
+                                <button key={t.id} onClick={() => applyTemplate(t.id)}
+                                  style={{ textAlign: "left", display: "flex", flexDirection: "column", gap: 6, padding: "12px 14px", borderRadius: 12, cursor: "pointer", background: on ? "rgba(165,141,102,.18)" : "var(--surface)", border: `1.5px solid ${on ? "var(--gold)" : "rgba(165,141,102,.2)"}`, transition: "all .15s" }}>
+                                  <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 700, color: on ? "var(--gold)" : "var(--text)" }}><Icon size={16} /> {t.label}</span>
+                                  <span style={{ fontSize: 11.5, color: "var(--text-dim)", lineHeight: 1.4 }}>{t.hint}</span>
+                                </button>
+                              )
+                            })}
+                          </div>
+                        )}
 
-                    <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 }}>
-                      <div>
-                        <label style={labelStyle}>Grupo en el sidebar (opcional)</label>
-                        <input value={matForm.groupLabel} onChange={(e) => setMatForm((f) => ({ ...f, groupLabel: e.target.value }))} placeholder='Ej. "Material de estudio"' style={inputStyle} />
-                      </div>
-                      <div>
-                        <label style={labelStyle}>Portada custom (opcional — ej. tapa de un workbook)</label>
-                        <MaterialCoverUpload value={matForm.coverImageUrl} onChange={(url) => setMatForm((f) => ({ ...f, coverImageUrl: url }))} />
-                      </div>
-                    </div>
+                        {/* 2 · Datos básicos */}
+                        <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 220px", gap: 12, marginBottom: 16 }}>
+                          <div><label style={labelStyle}>Título</label><input autoFocus value={matForm.title} onChange={(e) => setMatForm((f) => ({ ...f, title: e.target.value }))} placeholder="Ej. Unidad 1: Historia del coaching" style={inputStyle} /></div>
+                          <div>
+                            <label style={labelStyle}>Módulo</label>
+                            <select value={matForm.moduleNumber} onChange={(e) => setMatForm((f) => ({ ...f, moduleNumber: e.target.value }))} style={{ ...inputStyle, cursor: "pointer" }}>
+                              {moduleOptions.map((o) => <option key={o.number} value={o.number}>Módulo {o.number}{o.title ? ` — ${o.title}` : o.isNew ? " (nuevo)" : ""}</option>)}
+                            </select>
+                          </div>
+                        </div>
 
-                    <div style={{ marginBottom: 20 }}>
-                      <label style={labelStyle}>Contenido de la lección</label>
-                      <ContentBlockEditor blocks={matForm.content} onChange={(content) => setMatForm((f) => ({ ...f, content }))} />
-                    </div>
+                        {/* 3 · El contenido, según el tipo */}
+                        {matForm.type === "document" && (
+                          <div style={{ marginBottom: 16 }}>
+                            <label style={labelStyle}>Archivo</label>
+                            <input value={matForm.url} onChange={(e) => setMatForm((f) => ({ ...f, url: e.target.value }))} placeholder="Pegá un link https://… o subí el archivo →" style={inputStyle} />
+                            <MaterialFileUpload accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.zip,image/*" onDone={(url) => setMatForm((f) => ({ ...f, url }))} />
+                            <p style={{ fontSize: 11.5, color: "var(--text-dim)", marginTop: 8 }}>Los PDF se leen dentro de la lección; el resto se descarga.</p>
+                          </div>
+                        )}
+                        {matForm.type === "link" && (
+                          <div style={{ marginBottom: 16 }}>
+                            <label style={labelStyle}>Enlace</label>
+                            <input value={matForm.url} onChange={(e) => setMatForm((f) => ({ ...f, url: e.target.value }))} placeholder="https://…" style={inputStyle} />
+                          </div>
+                        )}
+                        {matForm.type === "video" && (
+                          <div style={{ marginBottom: 16 }}>
+                            <label style={labelStyle}>Video</label>
+                            <input value={matForm.url} onChange={(e) => setMatForm((f) => ({ ...f, url: e.target.value }))} placeholder="https://… (link del video)" style={inputStyle} />
+                            <MaterialFileUpload accept="video/*" onDone={(url) => setMatForm((f) => ({ ...f, url }))} />
+                          </div>
+                        )}
 
-                    {matForm.interactionKind === "quiz" && (
-                      <div style={{ marginBottom: 20 }}>
-                        <label style={labelStyle}>Preguntas del quiz</label>
-                        <QuizEditor questions={matForm.quizData} onChange={(quizData) => setMatForm((f) => ({ ...f, quizData }))} />
+                        {matForm.type === "lesson" && matForm.interactionKind !== "quiz" && (
+                          <div style={{ marginBottom: 16 }}>
+                            <label style={labelStyle}>
+                              {matTemplate === "presentation" ? "Diapositivas" : matTemplate === "reflection" ? "Consigna y preguntas que verá el alumno" : matTemplate === "video" ? "Video" : "Contenido de la lección"}
+                            </label>
+                            {matTemplate === "reflection" && (
+                              <p style={{ fontSize: 12, color: "var(--text-dim)", marginBottom: 10 }}>Escribí la consigna o las preguntas. Debajo, el alumno tendrá una caja para responder y guardar su reflexión.</p>
+                            )}
+                            {matTemplate === "presentation" && (
+                              <p style={{ fontSize: 12, color: "var(--text-dim)", marginBottom: 10 }}>Subí las diapositivas como imágenes (podés elegir varias a la vez; se ordenan por nombre).</p>
+                            )}
+                            <ContentBlockEditor blocks={matForm.content} onChange={(content) => setMatForm((f) => ({ ...f, content }))} />
+                          </div>
+                        )}
+
+                        {matForm.interactionKind === "quiz" && (
+                          <div style={{ marginBottom: 16 }}>
+                            <label style={labelStyle}>Preguntas del examen</label>
+                            <p style={{ fontSize: 12, color: "var(--text-dim)", marginBottom: 10 }}>Se corrige solo: el alumno ve su puntaje y puede reintentar.</p>
+                            <QuizEditor questions={matForm.quizData} onChange={(quizData) => setMatForm((f) => ({ ...f, quizData }))} />
+                          </div>
+                        )}
+
+                        {/* 4 · Visibilidad */}
+                        <label style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", borderRadius: 10, background: matVisible ? "rgba(74,157,111,.08)" : "rgba(192,86,79,.08)", border: `1px solid ${matVisible ? "rgba(74,157,111,.3)" : "rgba(192,86,79,.3)"}`, cursor: "pointer", marginBottom: 14 }}>
+                          <input type="checkbox" checked={matVisible} onChange={(e) => setMatVisible(e.target.checked)} style={{ accentColor: "var(--gold)", width: 16, height: 16 }} />
+                          <span style={{ fontSize: 13, color: "var(--text)" }}>
+                            <strong>{matVisible ? "Visible para el alumno" : "Oculto (borrador)"}</strong>
+                            <span style={{ color: "var(--text-dim)" }}> — {matVisible ? "los alumnos inscriptos lo ven apenas guardes" : "solo lo ves vos; lo mostrás cuando esté listo"}</span>
+                          </span>
+                        </label>
+
+                        {/* 5 · Opciones avanzadas */}
+                        <button onClick={() => setShowAdvanced((v) => !v)} style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", fontSize: 12.5, fontWeight: 600, padding: "4px 0", marginBottom: showAdvanced ? 12 : 0 }}>
+                          {showAdvanced ? <ChevronUp size={14} /> : <ChevronDown size={14} />} Opciones avanzadas
+                          <span style={{ fontWeight: 400, color: "var(--text-faint)" }}>(descripción, minutos, grupo, portada, tipo)</span>
+                        </button>
+                        {showAdvanced && (
+                          <div style={{ display: "flex", flexDirection: "column", gap: 12, padding: "14px 16px", border: "1px solid rgba(165,141,102,.16)", borderRadius: 12, marginBottom: 8 }}>
+                            <div><label style={labelStyle}>Descripción (opcional)</label><input value={matForm.description} onChange={(e) => setMatForm((f) => ({ ...f, description: e.target.value }))} placeholder="Una línea que resume el contenido" style={inputStyle} /></div>
+                            <div className="admin-form-grid-3" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+                              <div><label style={labelStyle}>Minutos estimados</label><input type="number" min={0} value={matForm.estimatedMinutes} onChange={(e) => setMatForm((f) => ({ ...f, estimatedMinutes: e.target.value }))} placeholder="Ej: 30" style={inputStyle} /></div>
+                              <div><label style={labelStyle}>Grupo en el menú</label><input value={matForm.groupLabel} onChange={(e) => setMatForm((f) => ({ ...f, groupLabel: e.target.value }))} placeholder='Ej. "Unidades"' style={inputStyle} /></div>
+                              <div>
+                                <label style={labelStyle}>Herramienta interactiva</label>
+                                <select value={matForm.toolHref} onChange={(e) => setMatForm((f) => ({ ...f, toolHref: e.target.value }))} style={{ ...inputStyle, cursor: "pointer" }}>
+                                  {TOOL_HREF_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                                </select>
+                              </div>
+                            </div>
+                            <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                              <div>
+                                <label style={labelStyle}>Tipo técnico</label>
+                                <select value={matForm.type} onChange={(e) => setMatForm((f) => ({ ...f, type: e.target.value as typeof f.type }))} style={{ ...inputStyle, cursor: "pointer" }}>
+                                  <option value="lesson">Lección (bloques de contenido)</option>
+                                  <option value="document">PDF / Documento</option>
+                                  <option value="link">Enlace externo</option>
+                                  <option value="video">Video</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label style={labelStyle}>Interacción</label>
+                                <select value={matForm.interactionKind} onChange={(e) => setMatForm((f) => ({ ...f, interactionKind: e.target.value as typeof f.interactionKind }))} style={{ ...inputStyle, cursor: "pointer" }}>
+                                  <option value="">Ninguna</option>
+                                  <option value="reflection">Reflexión (caja para responder)</option>
+                                  <option value="quiz">Examen (preguntas)</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div>
+                              <label style={labelStyle}>Portada (opcional — ej. tapa de un workbook)</label>
+                              <MaterialCoverUpload value={matForm.coverImageUrl} onChange={(url) => setMatForm((f) => ({ ...f, coverImageUrl: url }))} />
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    )}
 
-                    <div style={{ display: "flex", gap: 10 }}>
-                      <button onClick={() => { setShowAddMat(false); setEditingMatId(null) }} style={{ ...btnGhost, flex: 1 }}>Cancelar</button>
-                      <button onClick={saveMaterial} disabled={savingMat} style={{ ...btnPrimary("var(--gold)"), flex: 2, justifyContent: "center", opacity: savingMat ? 0.6 : 1 }}>
-                        {savingMat ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : null} Guardar
-                      </button>
-                    </div>
-                  </div>
-                )}
-                {loadingMat ? (
-                  <p style={{ color: "var(--text-faint)", fontSize: 13, padding: "20px 0" }}>Cargando…</p>
-                ) : materials.length === 0 ? (
-                  <div style={{ padding: "40px 0", textAlign: "center" }}>
-                    <FileText size={26} style={{ color: "rgba(165,141,102,.2)", margin: "0 auto 12px", display: "block" }} />
-                    <p style={{ color: "var(--text-dim)", fontSize: 14 }}>No hay materiales aún</p>
-                  </div>
-                ) : (
-                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                    {materials.map((m, mi) => (
-                      <div key={m.id} style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12, padding: "12px 14px", background: "var(--surface-2)", borderRadius: 9, opacity: m.isVisible ? 1 : 0.5 }}>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 1, flexShrink: 0 }}>
-                          <button onClick={() => moveMaterial(mi, -1)} disabled={mi === 0} title="Subir" style={{ width: 20, height: 16, display: "flex", alignItems: "center", justifyContent: "center", background: "none", border: "none", cursor: mi === 0 ? "default" : "pointer", color: "var(--text-faint)", opacity: mi === 0 ? 0.3 : 1 }}>
-                            <ChevronUp size={13} />
+                      {/* Barra de guardado siempre a la vista */}
+                      <div style={{ position: "sticky", bottom: 0, padding: "14px 26px 18px", background: "var(--bg)", borderTop: "1px solid rgba(165,141,102,.2)", marginTop: 14 }}>
+                        {matError && (
+                          <div style={{ background: "rgba(220,38,38,.1)", border: "1px solid rgba(220,38,38,.3)", borderRadius: 8, padding: "10px 14px", marginBottom: 10, color: "#f87171", fontSize: 13 }}>{matError}</div>
+                        )}
+                        <div style={{ display: "flex", gap: 10 }}>
+                          <button onClick={closeMatForm} style={{ ...btnGhost, flex: 1 }}>Cancelar</button>
+                          <button onClick={saveMaterial} disabled={savingMat || !matForm.title.trim()} style={{ ...btnPrimary("var(--gold)"), flex: 2, justifyContent: "center", opacity: savingMat || !matForm.title.trim() ? 0.55 : 1 }}>
+                            {savingMat ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : null} {editingMatId ? "Guardar cambios" : matVisible ? "Guardar y publicar" : "Guardar borrador"}
                           </button>
-                          <button onClick={() => moveMaterial(mi, 1)} disabled={mi === materials.length - 1} title="Bajar" style={{ width: 20, height: 16, display: "flex", alignItems: "center", justifyContent: "center", background: "none", border: "none", cursor: mi === materials.length - 1 ? "default" : "pointer", color: "var(--text-faint)", opacity: mi === materials.length - 1 ? 0.3 : 1 }}>
-                            <ChevronDown size={13} />
-                          </button>
                         </div>
-                        {m.type === "document" ? <Download size={16} style={{ color: "var(--gold)", flexShrink: 0 }} /> : m.type === "lesson" ? <BookOpen size={16} style={{ color: "var(--gold)", flexShrink: 0 }} /> : <ExternalLink size={16} style={{ color: "var(--teal)", flexShrink: 0 }} />}
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{m.title}</p>
-                          <p style={{ fontSize: 11.5, color: "var(--text-dim)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>Módulo {m.moduleNumber}{m.groupLabel ? ` · ${m.groupLabel}` : ""} · {m.type}</p>
-                        </div>
-                        <button onClick={() => window.open(`/superadmin/cursos/preview/${m.id}`, "_blank", "noopener,noreferrer")} title="Vista previa del alumno" style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)" }}>
-                          <ExternalLink size={14} />
-                        </button>
-                        <button onClick={() => toggleMatVisible(m)} title={m.isVisible ? "Ocultar" : "Mostrar"} style={{ background: "none", border: "none", cursor: "pointer", color: m.isVisible ? "var(--success)" : "var(--text-dim)" }}>
-                          {m.isVisible ? <Eye size={15} /> : <EyeOff size={15} />}
-                        </button>
-                        <button onClick={() => openEditMaterial(m)} title="Editar" style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)" }}>
-                          <Pencil size={14} />
-                        </button>
-                        <button onClick={() => deleteMaterial(m)} style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(239,68,68,.5)" }}>
-                          <Trash2 size={14} />
-                        </button>
                       </div>
-                    ))}
-                  </div>
+                    </aside>
+                  </>
                 )}
+                <label style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", marginBottom: 16, borderRadius: 12, cursor: "pointer", background: selected.sequentialUnlock ? "rgba(165,141,102,.12)" : "var(--surface)", border: `1px solid ${selected.sequentialUnlock ? "rgba(165,141,102,.4)" : "rgba(165,141,102,.16)"}` }}>
+                  <input
+                    type="checkbox"
+                    checked={!!selected.sequentialUnlock}
+                    onChange={async (e) => {
+                      const res = await fetch(`/api/admin/courses/${selected.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ sequentialUnlock: e.target.checked }) })
+                      if (!res.ok) alert("No se pudo cambiar el desbloqueo progresivo")
+                      loadCourses()
+                    }}
+                    style={{ accentColor: "var(--gold)", width: 17, height: 17, flexShrink: 0 }}
+                  />
+                  <span style={{ fontSize: 13, color: "var(--text)" }}>
+                    <strong>Desbloqueo progresivo</strong>
+                    <span style={{ color: "var(--text-dim)" }}> — {selected.sequentialUnlock ? "el alumno accede a cada material al completar el anterior (los que siguen se ven con candado)" : "desactivado: el alumno puede abrir cualquier material en cualquier orden"}</span>
+                  </span>
+                </label>
+                <MaterialsManager
+                  courseId={selected.id}
+                  courseTitle={selected.title}
+                  materials={materials}
+                  modules={courseModules}
+                  loading={loadingMat}
+                  setMaterials={setMaterials}
+                  onReload={() => { loadMaterials(selected.id); loadCourses() }}
+                  onEdit={openEditMaterial}
+                  onAdd={openNewMaterial}
+                />
               </div>
             )}
 
@@ -978,6 +1043,41 @@ export default function CursosAdminPage() {
 }
 
 
+/* ── Subida del archivo principal de un material (PDF, documento, video):
+   evita tener que subirlo a Drive/Cloudinary a mano y pegar el link. ── */
+function MaterialFileUpload({ accept, onDone }: { accept: string; onDone: (url: string) => void }) {
+  const [uploading, setUploading] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [error, setError] = useState("")
+
+  async function upload(file: File) {
+    setUploading(true)
+    setProgress(0)
+    setError("")
+    try {
+      onDone(await uploadToCloudinary(file, "jewgal-materiales", setProgress))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al subir el archivo")
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  return (
+    <div style={{ marginTop: 8 }}>
+      <label style={{
+        display: "inline-flex", alignItems: "center", gap: 7, border: "1px dashed var(--border)", borderRadius: 8, padding: "8px 14px",
+        fontSize: 12, color: "var(--text-muted)", cursor: uploading ? "wait" : "pointer",
+      }}>
+        {uploading ? <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} /> : <Upload size={13} />}
+        {uploading ? `Subiendo… ${progress}%` : "Subir archivo desde mi computadora"}
+        <input type="file" accept={accept} disabled={uploading} onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(f); e.target.value = "" }} style={{ display: "none" }} />
+      </label>
+      {error && <p style={{ fontSize: 11, color: "var(--danger)", marginTop: 6 }}>{error}</p>}
+    </div>
+  )
+}
+
 /* ── Subida de portada de material (workbook, etc.) — mismo patrón firmado
    ya usado para diapositivas/logos, folder propio. ── */
 function MaterialCoverUpload({ value, onChange }: { value: string; onChange: (url: string) => void }) {
@@ -1036,116 +1136,6 @@ function MaterialCoverUpload({ value, onChange }: { value: string; onChange: (ur
         )}
       </div>
       {error && <p style={{ fontSize: 11, color: "var(--danger)", marginTop: 6 }}>{error}</p>}
-    </div>
-  )
-}
-
-/* ── Gestión de módulos con nombre propio (CourseModule) — distinto del
-   ModulesEditor de más abajo, que edita los "módulos" de la página pública
-   de marketing (Course.content.modules). Este persiste contra su propia
-   API y es lo que le da nombre a Material.moduleNumber en el sidebar de
-   la lección; un curso sin filas acá sigue mostrando "Módulo N" genérico. ── */
-function CourseModulesManager({ courseId }: { courseId: string }) {
-  const [open, setOpen] = useState(false)
-  const [modules, setModules] = useState<CourseModule[]>([])
-  const [loading, setLoading] = useState(false)
-  const [saving, setSaving] = useState(false)
-  const [form, setForm] = useState({ number: "1", title: "", description: "" })
-  const [editingId, setEditingId] = useState<string | null>(null)
-
-  const load = useCallback(() => {
-    setLoading(true)
-    fetch(`/api/admin/course-modules?courseId=${courseId}`)
-      .then((r) => r.json())
-      .then((d) => setModules(d.courseModules || []))
-      .finally(() => setLoading(false))
-  }, [courseId])
-
-  useEffect(() => {
-    if (open) load()
-  }, [open, load])
-
-  function openEdit(m: CourseModule) {
-    setForm({ number: String(m.number), title: m.title, description: m.description || "" })
-    setEditingId(m.id)
-  }
-
-  async function save() {
-    if (!form.title.trim()) return
-    setSaving(true)
-    try {
-      if (editingId) {
-        await fetch(`/api/admin/course-modules/${editingId}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title: form.title.trim(), description: form.description.trim() || null }),
-        })
-      } else {
-        await fetch("/api/admin/course-modules", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ courseId, number: Number(form.number) || 1, title: form.title.trim(), description: form.description.trim() || null }),
-        })
-      }
-      setEditingId(null)
-      setForm({ number: "1", title: "", description: "" })
-      load()
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  async function remove(m: CourseModule) {
-    if (!confirm(`¿Eliminar el nombre del módulo ${m.number} ("${m.title}")? Los materiales que ya tenía asignado ese número siguen ahí, solo pierden el nombre.`)) return
-    await fetch(`/api/admin/course-modules/${m.id}`, { method: "DELETE" })
-    load()
-  }
-
-  return (
-    <div style={{ background: "var(--surface)", border: "1px solid rgba(165,141,102,.14)", borderRadius: 12, padding: "14px 16px", marginBottom: 16 }}>
-      <button onClick={() => setOpen(!open)} style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-        <Layers size={15} style={{ color: "var(--gold)" }} />
-        <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>Módulos con nombre</span>
-        <span style={{ fontSize: 11.5, color: "var(--text-faint)" }}>(opcional — le da título a "Módulo N" en el sidebar del alumno)</span>
-        <div style={{ flex: 1 }} />
-        {open ? <ChevronUp size={14} style={{ color: "var(--text-faint)" }} /> : <ChevronDown size={14} style={{ color: "var(--text-faint)" }} />}
-      </button>
-      {open && (
-        <div style={{ marginTop: 14 }}>
-          {loading ? (
-            <p style={{ fontSize: 12.5, color: "var(--text-faint)" }}>Cargando…</p>
-          ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 12 }}>
-              {modules.length === 0 && <p style={{ fontSize: 12.5, color: "var(--text-dim)" }}>Ningún módulo tiene nombre todavía.</p>}
-              {modules.map((m) => (
-                <div key={m.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", background: "var(--surface-2)", borderRadius: 8 }}>
-                  <span style={{ fontFamily: "var(--serif)", fontSize: 12, fontStyle: "italic", color: "var(--gold)", width: 20, flexShrink: 0 }}>{m.number}</span>
-                  <span style={{ fontSize: 12.5, color: "var(--text)", flex: 1 }}>{m.title}</span>
-                  <button onClick={() => openEdit(m)} title="Editar" style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)" }}><Pencil size={13} /></button>
-                  <button onClick={() => remove(m)} title="Eliminar" style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(239,68,68,.5)" }}><Trash2 size={13} /></button>
-                </div>
-              ))}
-            </div>
-          )}
-          <div style={{ display: "flex", gap: 8, alignItems: "flex-end" }}>
-            <div style={{ width: 70 }}>
-              <label style={labelStyle}>N°</label>
-              <input type="number" min={1} disabled={!!editingId} value={form.number} onChange={(e) => setForm((f) => ({ ...f, number: e.target.value }))} style={{ ...inputStyle, opacity: editingId ? 0.5 : 1 }} />
-            </div>
-            <div style={{ flex: 1 }}>
-              <label style={labelStyle}>Título</label>
-              <input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} placeholder="Introducción al Life Coaching" style={inputStyle} />
-            </div>
-            <button onClick={save} disabled={saving || !form.title.trim()} style={{ ...btnPrimary("var(--gold)"), opacity: saving || !form.title.trim() ? 0.6 : 1 }}>
-              {saving ? <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} /> : <Plus size={13} />}
-              {editingId ? "Guardar" : "Agregar"}
-            </button>
-            {editingId && (
-              <button onClick={() => { setEditingId(null); setForm({ number: "1", title: "", description: "" }) }} style={{ ...btnGhost, padding: "9px 14px" }}>Cancelar</button>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   )
 }

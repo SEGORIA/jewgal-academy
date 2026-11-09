@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { parseContent, parseQuizData } from "@/lib/materials-content"
+import { computeLockedIds, firstPending } from "@/lib/sequential-unlock"
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth()
@@ -42,10 +43,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   // vuelve visible (dos programas mostrando el mismo "Módulo 1"). Devolver
   // el currículum acá evita cambiar la URL del reproductor.
   const [course, courseMaterials, courseModules] = await Promise.all([
-    db.course.findUnique({ where: { id: material.courseId }, select: { title: true, slug: true } }),
+    db.course.findUnique({ where: { id: material.courseId }, select: { title: true, slug: true, sequentialUnlock: true } }),
     db.material.findMany({
       where: { courseId: material.courseId, isVisible: true },
-      orderBy: [{ moduleNumber: "asc" }, { order: "asc" }],
+      orderBy: [{ moduleNumber: "asc" }, { order: "asc" }, { createdAt: "asc" }],
       select: {
         id: true, title: true, type: true, fileUrl: true, videoUrl: true, linkUrl: true,
         moduleNumber: true, order: true, groupLabel: true, interactionKind: true, toolHref: true, estimatedMinutes: true,
@@ -59,7 +60,16 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   })
   const progressByMaterial = Object.fromEntries(courseProgress.map((p) => [p.materialId, p]))
 
+  // Desbloqueo progresivo: si el programa lo tiene activado, el contenido de un
+  // material bloqueado NO se envía (no alcanza con conocer la URL).
+  const withProgress = courseMaterials.map((m) => ({ ...m, progress: progressByMaterial[m.id] ?? null }))
+  const lockedIds = course?.sequentialUnlock ? computeLockedIds(withProgress) : new Set<string>()
+  const isLocked = lockedIds.has(material.id)
+  const pending = isLocked ? firstPending(withProgress) : null
+
   return NextResponse.json({
+    locked: isLocked,
+    unlockHint: pending ? { id: pending.id, title: pending.title } : null,
     material: {
       id: material.id,
       title: material.title,
@@ -67,10 +77,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       moduleNumber: material.moduleNumber,
       interactionKind: material.interactionKind,
       toolHref: material.toolHref,
-      fileUrl: material.fileUrl,
-      coverImageUrl: material.coverImageUrl,
-      content: parseContent(material.content),
-      quiz,
+      fileUrl: isLocked ? null : material.fileUrl,
+      coverImageUrl: isLocked ? null : material.coverImageUrl,
+      content: isLocked ? [] : parseContent(material.content),
+      quiz: isLocked ? null : quiz,
     },
     progress: progress
       ? { completedAt: progress.completedAt, response: progress.response, quizScore: progress.quizScore, quizTotal: progress.quizTotal }
@@ -78,7 +88,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     curriculum: {
       course,
       modules: courseModules,
-      materials: courseMaterials.map((m) => ({ ...m, progress: progressByMaterial[m.id] ?? null })),
+      materials: withProgress.map((m) => ({ ...m, locked: lockedIds.has(m.id) })),
     },
   })
 }

@@ -6,6 +6,8 @@ import type { ContentBlock } from "@/lib/materials-content"
 import { getYouTubeEmbedUrl, getVimeoEmbedUrl } from "@/lib/program-content"
 import StringListEditor from "@/components/admin/StringListEditor"
 import LinkListEditor from "@/components/admin/LinkListEditor"
+import { uploadToCloudinary } from "@/lib/cloudinary-upload"
+import QuickAdd, { LivePreview } from "./QuickAdd"
 
 const inputStyle: React.CSSProperties = { background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 14px", fontSize: 13, color: "var(--text)", outline: "none", fontFamily: "inherit", width: "100%" }
 
@@ -39,51 +41,6 @@ function emptyBlock(type: ContentBlock["type"]): ContentBlock {
 
 function smallBtn(disabled: boolean): React.CSSProperties {
   return { width: 26, height: 26, borderRadius: 6, border: "1px solid var(--border)", background: "var(--surface-2)", cursor: disabled ? "default" : "pointer", color: "var(--text-muted)", opacity: disabled ? 0.3 : 1, display: "flex", alignItems: "center", justifyContent: "center" }
-}
-
-// Sube un archivo al mismo endpoint firmado que ya usaban las diapositivas
-// (auto/upload detecta el tipo solo — sirve igual para imagen o video).
-// A diferencia del helper original, reporta progreso: para un video de
-// varios MB no tener feedback deja al admin sin saber si sigue subiendo.
-function uploadToCloudinary(file: File, folder: string, onProgress: (pct: number) => void): Promise<string> {
-  return new Promise((resolve, reject) => {
-    (async () => {
-      try {
-        const sigRes = await fetch("/api/admin/cloudinary-signature", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ folder }),
-        })
-        if (!sigRes.ok) {
-          const d = await sigRes.json()
-          reject(new Error(d.error ?? "Cloudinary no está configurado"))
-          return
-        }
-        const { timestamp, signature, apiKey, cloudName, folder: signedFolder } = await sigRes.json()
-
-        const formData = new FormData()
-        formData.append("file", file)
-        formData.append("timestamp", String(timestamp))
-        formData.append("signature", signature)
-        formData.append("api_key", apiKey)
-        formData.append("folder", signedFolder)
-
-        const xhr = new XMLHttpRequest()
-        xhr.upload.onprogress = (e) => {
-          if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100))
-        }
-        xhr.onload = () => {
-          if (xhr.status >= 200 && xhr.status < 300) resolve(JSON.parse(xhr.responseText).secure_url)
-          else reject(new Error(`Error al subir: ${xhr.status}`))
-        }
-        xhr.onerror = () => reject(new Error("Error de red al subir"))
-        xhr.open("POST", `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`)
-        xhr.send(formData)
-      } catch (err) {
-        reject(err instanceof Error ? err : new Error("Error al subir el archivo"))
-      }
-    })()
-  })
 }
 
 // Botón chico de subida reutilizado por video/poster en varios bloques —
@@ -171,22 +128,33 @@ export default function ContentBlockEditor({ blocks, onChange }: { blocks: Conte
     finishUpload()
   }
 
-  async function uploadSlideImage(blockIndex: number, file: File) {
+  // Sube varias diapositivas de una vez (en orden de nombre: slide-2 antes que slide-10)
+  // y las agrega juntas; si una falla, conserva las que ya subieron.
+  const [slideCount, setSlideCount] = useState<{ done: number; total: number } | null>(null)
+  async function uploadSlideImages(blockIndex: number, files: File[]) {
+    const sorted = [...files].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
     startUpload(`slide:${blockIndex}`)
-    try {
-      const url = await uploadToCloudinary(file, "jewgal-lecciones-slides", setUploadProgress)
-      const block = blocks[blockIndex]
-      if (block.type === "slides") {
-        update(blockIndex, { ...block, images: [...block.images, url] })
+    const urls: string[] = []
+    let failure = ""
+    for (let k = 0; k < sorted.length; k++) {
+      setSlideCount({ done: k, total: sorted.length })
+      try {
+        urls.push(await uploadToCloudinary(sorted[k], "jewgal-lecciones-slides", setUploadProgress))
+      } catch (err) {
+        failure = err instanceof Error ? err.message : "Error al subir el archivo"
+        break
       }
-      finishUpload()
-    } catch (err) {
-      failUpload(err instanceof Error ? err.message : "Error al subir el archivo")
     }
+    setSlideCount(null)
+    const block = blocks[blockIndex]
+    if (urls.length && block.type === "slides") update(blockIndex, { ...block, images: [...block.images, ...urls] })
+    if (failure) failUpload(`${failure}${urls.length ? ` (se agregaron ${urls.length} de ${sorted.length})` : ""}`)
+    else finishUpload()
   }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <QuickAdd blocks={blocks} onChange={onChange} />
       {blocks.map((block, i) => (
         <div key={i} style={{ border: "1px solid rgba(165,141,102,.16)", borderRadius: 10, padding: "14px 16px", background: "var(--surface)" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
@@ -301,12 +269,13 @@ export default function ContentBlockEditor({ blocks, onChange }: { blocks: Conte
                 fontSize: 12.5, color: "var(--text-muted)", cursor: uploading === `slide:${i}` ? "wait" : "pointer",
               }}>
                 {uploading === `slide:${i}` ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : <Upload size={14} />}
-                {uploading === `slide:${i}` ? `Subiendo… ${uploadProgress}%` : "Agregar imagen"}
+                {uploading === `slide:${i}` ? `Subiendo${slideCount ? ` ${slideCount.done + 1} de ${slideCount.total}` : ""}… ${uploadProgress}%` : "Agregar imágenes (podés elegir varias)"}
                 <input
                   type="file"
                   accept="image/*"
+                  multiple
                   disabled={uploading !== null}
-                  onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadSlideImage(i, f); e.target.value = "" }}
+                  onChange={(e) => { const fs = Array.from(e.target.files ?? []); if (fs.length) uploadSlideImages(i, fs); e.target.value = "" }}
                   style={{ display: "none" }}
                 />
               </label>
@@ -510,6 +479,8 @@ export default function ContentBlockEditor({ blocks, onChange }: { blocks: Conte
           </button>
         ))}
       </div>
+
+      <LivePreview blocks={blocks} />
     </div>
   )
 }

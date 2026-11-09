@@ -27,10 +27,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     : null
 
   const [course, courseMaterials, courseModules] = await Promise.all([
-    db.course.findUnique({ where: { id: material.courseId }, select: { title: true, slug: true } }),
+    db.course.findUnique({ where: { id: material.courseId }, select: { title: true, slug: true, sequentialUnlock: true } }),
     db.material.findMany({
       where: { courseId: material.courseId },
-      orderBy: [{ moduleNumber: "asc" }, { order: "asc" }],
+      orderBy: [{ moduleNumber: "asc" }, { order: "asc" }, { createdAt: "asc" }],
       select: {
         id: true, title: true, type: true, fileUrl: true, videoUrl: true, linkUrl: true,
         moduleNumber: true, order: true, groupLabel: true, interactionKind: true, toolHref: true, estimatedMinutes: true,

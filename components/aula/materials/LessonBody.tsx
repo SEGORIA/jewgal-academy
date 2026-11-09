@@ -1,10 +1,12 @@
 "use client"
 
+import { mediaSrc } from "@/lib/media-url"
 import { useEffect, useState } from "react"
 import dynamic from "next/dynamic"
 import { Sparkles, CheckCircle2, BookOpen } from "lucide-react"
 import type { ContentBlock } from "@/lib/materials-content"
 import ContentBlockView from "./ContentBlockView"
+import PdfViewer, { isPdfUrl } from "./PdfViewer"
 import QuizView, { type QuizQuestionView, type QuizResult } from "./QuizView"
 
 const BreathingPacer = dynamic(() => import("@/components/aula/jewgalkids/BreathingPacer"))
@@ -143,7 +145,7 @@ export default function LessonBody({
           borderRadius: 14, border: "1px solid rgba(165,141,102,.2)", background: "var(--surface)",
         }}>
           <img
-            src={material.coverImageUrl}
+            src={mediaSrc(material.coverImageUrl)}
             alt=""
             style={{ width: 110, height: 142, objectFit: "cover", borderRadius: 8, flexShrink: 0, border: "1px solid rgba(165,141,102,.18)" }}
           />
@@ -178,7 +180,8 @@ export default function LessonBody({
       {material.interactionKind !== "quiz" && !material.coverImageUrl && (
         <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 26 }}>
           {material.content.map((block, i) => <ContentBlockView key={i} block={block} />)}
-          {material.fileUrl && (
+          {material.fileUrl && isPdfUrl(material.fileUrl) && <PdfViewer url={material.fileUrl} title={material.title} />}
+          {material.fileUrl && !isPdfUrl(material.fileUrl) && (
             <a
               href={material.fileUrl}
               target="_blank"

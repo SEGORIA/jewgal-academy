@@ -4,6 +4,7 @@ import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { contentBlockSchema, quizQuestionSchema, materialTypeSchema } from "@/lib/materials-content"
+import { nextOrderInModule, placeByRole } from "@/lib/materials-schema"
 
 const patchSchema = z.object({
   title: z.string().min(2).optional(),
@@ -44,10 +45,23 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if ("content" in data) data.content = data.content ? JSON.stringify(data.content) : null
   if ("quizData" in data) data.quizData = data.quizData ? JSON.stringify(data.quizData) : null
 
+  // Cambiar de módulo sin indicar posición: va al final del módulo destino
+  // (si no, conservaría su order viejo y se mezclaría con las unidades de ahí).
+  let movedToModule = false
+  if (typeof data.moduleNumber === "number" && data.order === undefined) {
+    const current = await db.material.findUnique({ where: { id }, select: { courseId: true, moduleNumber: true } })
+    if (current && current.moduleNumber !== data.moduleNumber) {
+      data.order = await nextOrderInModule(current.courseId, data.moduleNumber)
+      movedToModule = true
+    }
+  }
+
   const material = await db.material.update({ where: { id }, data }).catch(() => null)
   if (!material) {
     return NextResponse.json({ error: "Material no encontrado" }, { status: 404 })
   }
+  // En el módulo nuevo entra en el lugar que le corresponde por su rol.
+  if (movedToModule) await placeByRole(material.courseId, material.moduleNumber, material.id)
 
   revalidatePath("/aula/materiales")
   return NextResponse.json({ ok: true, material })

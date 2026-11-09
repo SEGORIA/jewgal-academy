@@ -18,7 +18,7 @@ const csp = [
   "img-src 'self' data: blob: https:",
   "media-src 'self' https://res.cloudinary.com",
   "connect-src 'self' https://api.stripe.com https://www.paypal.com https://api.cloudinary.com",
-  "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.paypal.com https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com",
+  "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.paypal.com https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com https://res.cloudinary.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -64,6 +64,11 @@ const nextConfig: NextConfig = {
         headers: securityHeaders,
       },
     ]
+  },
+  // Imágenes de la cuenta de Cloudinary del sitio servidas desde nuestro propio
+  // dominio (ver lib/media-url.ts). Solo esta cuenta, no un proxy abierto.
+  async rewrites() {
+    return [{ source: "/api/cdn/:path*", destination: "https://res.cloudinary.com/dotnmrvkz/:path*" }]
   },
 }
 

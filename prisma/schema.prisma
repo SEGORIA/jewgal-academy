@@ -54,6 +54,8 @@ model Course {
   durationWeeks      Int? // duración estimada en semanas
   videoUrl           String? // link de YouTube mostrado en la página del programa
   content            String? // JSON: eyebrow/duración/modalidad/nivel/módulos/incluye/para quién/resultado
+  // Desbloqueo progresivo: el alumno accede a cada material al completar el anterior.
+  sequentialUnlock   Boolean             @default(false)
   enrollments        Enrollment[]
   materials          Material[]
   liveSessions       LiveSession[]

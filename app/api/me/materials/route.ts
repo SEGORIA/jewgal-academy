@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { computeLockedIds } from "@/lib/sequential-unlock"
 
 export async function GET() {
   const session = await auth()
@@ -10,7 +11,7 @@ export async function GET() {
 
   const enrollments = await db.enrollment.findMany({
     where: { userId: session.user.id, status: { in: ["active", "completed"] } },
-    select: { courseId: true, course: { select: { title: true } } },
+    select: { courseId: true, course: { select: { title: true, sequentialUnlock: true } } },
   })
   const courseIds = enrollments.map((e) => e.courseId)
   const titleByCourse = Object.fromEntries(enrollments.map((e) => [e.courseId, e.course.title]))
@@ -21,7 +22,7 @@ export async function GET() {
 
   const materials = await db.material.findMany({
     where: { courseId: { in: courseIds }, isVisible: true },
-    orderBy: [{ moduleNumber: "asc" }, { order: "asc" }],
+    orderBy: [{ moduleNumber: "asc" }, { order: "asc" }, { createdAt: "asc" }],
     select: {
       id: true,
       courseId: true,
@@ -55,9 +56,18 @@ export async function GET() {
   })
   const moduleTitleByKey = Object.fromEntries(courseModules.map((cm) => [`${cm.courseId}:${cm.number}`, cm.title]))
 
+  // Desbloqueo progresivo: marcar qué materiales siguen bloqueados en los programas que lo usan.
+  const lockedIds = new Set<string>()
+  for (const e of enrollments) {
+    if (!e.course.sequentialUnlock) continue
+    const ofCourse = materials.filter((m) => m.courseId === e.courseId).map((m) => ({ id: m.id, progress: progressByMaterial[m.id] ?? null }))
+    computeLockedIds(ofCourse).forEach((id) => lockedIds.add(id))
+  }
+
   return NextResponse.json({
     materials: materials.map((m) => ({
       ...m,
+      locked: lockedIds.has(m.id),
       courseTitle: titleByCourse[m.courseId] ?? "",
       moduleTitle: moduleTitleByKey[`${m.courseId}:${m.moduleNumber}`] ?? null,
       progress: progressByMaterial[m.id] ?? null,
