@@ -1178,6 +1178,11 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
 [data-theme="light"] .jnav.over-hero:not(.scrolled) .lang-switch { border-color: rgba(246,241,231,.35) !important; }
 [data-theme="light"] .jnav.over-hero:not(.scrolled) .lang-btn:not([aria-pressed="true"]) { color: rgba(246,241,231,.85) !important; }
 
+/* Mapa de la comunidad: el "escenario" conserva la proporción 500×320 del dibujo y se centra en la caja,
+   de modo que los puntos de los países (posicionados en %) siempre caen sobre su silueta, en cualquier ancho de pantalla. */
+.cmap-box { display: flex; align-items: center; justify-content: center; padding: 8px 8px 30px; }
+.cmap-stage { position: relative; flex: none; width: 100%; aspect-ratio: 500 / 320; } /* altura = proporción del dibujo; si la caja es más alta, flex lo centra */
+
 /* Botones de solo ícono dentro del aula y del panel (editar, eliminar, publicar…): zona táctil de 32px
    aunque el ícono sea de 14–18px (antes 18–20px, muy difíciles de tocar en celular y tablet). */
 .aula-main main button:has(> svg:only-child) {

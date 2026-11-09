@@ -6,11 +6,22 @@ import { useTranslations } from "next-intl"
 
 // Datos visuales fijos (posición, color, símbolo). El texto (label, años,
 // tagline, descripción, etiqueta del stat) se traduce vía next-intl por prefijo.
+// Las posiciones (x, y) están en el MISMO sistema de coordenadas que las siluetas (viewBox 0 0 500 320),
+// así cada punto queda siempre sobre su país sin importar el tamaño de pantalla. Antes se usaban
+// porcentajes de la caja mientras la silueta se escalaba centrada, y los puntos se desfasaban del dibujo.
+const VB_W = 500
+const VB_H = 320
+const at = (x: number, y: number) => ({ left: `${((x / VB_W) * 100).toFixed(2)}%`, top: `${((y / VB_H) * 100).toFixed(2)}%` })
+
 const COUNTRY_META = [
-  { id: "argentina", key: "ar", flag: "🇦🇷", top: "83%", left: "28%", accent: "#A58D66", stat: "20+" },
-  { id: "israel",    key: "il", flag: "🇮🇱", top: "34%", left: "57%", accent: "#A76D61", stat: "∞" },
-  { id: "colombia",  key: "co", flag: "🇨🇴", top: "53%", left: "25%", accent: "#846145", stat: "200+" },
-  { id: "eeuu",      key: "us", flag: "🇺🇸", top: "32%", left: "19%", accent: "#C49F72", stat: "4" },
+  // Argentina: cono sur de América del Sur (centro de la mitad inferior de la silueta)
+  { id: "argentina", key: "ar", flag: "🇦🇷", ...at(112, 268), accent: "#A58D66", stat: "20+" },
+  // Israel: sobre la silueta de Oriente Medio
+  { id: "israel",    key: "il", flag: "🇮🇱", ...at(291, 112), accent: "#A76D61", stat: "∞" },
+  // Colombia: esquina noroeste de América del Sur
+  { id: "colombia",  key: "co", flag: "🇨🇴", ...at(108, 212), accent: "#846145", stat: "200+" },
+  // EE.UU.: parte sur-central de América del Norte
+  { id: "eeuu",      key: "us", flag: "🇺🇸", ...at(96, 108), accent: "#C49F72", stat: "4" },
 ]
 
 export default function ComunidadMap() {
@@ -44,7 +55,7 @@ export default function ComunidadMap() {
     }}>
 
       {/* ── MAPA IZQUIERDA ── */}
-      <div style={{
+      <div className="cmap-box" style={{
         position: "relative",
         borderRadius: 18,
         border: "1px solid rgba(165,141,102,.18)",
@@ -63,6 +74,8 @@ export default function ComunidadMap() {
           <rect width="100%" height="100%" fill="url(#dots)" />
         </svg>
 
+        {/* Escenario con la proporción exacta del dibujo (500×320): siluetas, líneas y puntos comparten sistema de coordenadas */}
+        <div className="cmap-stage">
         {/* Siluetas de continentes simplificadas */}
         <svg viewBox="0 0 500 320" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: .12 }} aria-hidden>
           {/* América del Norte */}
@@ -163,6 +176,7 @@ export default function ComunidadMap() {
             </button>
           )
         })}
+        </div>
 
         {/* Hint inicial */}
         <p style={{
