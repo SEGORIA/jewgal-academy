@@ -219,7 +219,7 @@ export default function EventosAdminPage() {
           marginTop: 14, display: "flex", alignItems: "center", gap: 8,
           padding: "10px 18px", borderRadius: 10, cursor: "pointer",
           background: "transparent", border: "1px dashed rgba(165,141,102,.4)",
-          color: "var(--gold)", fontSize: 13, fontWeight: 600,
+          color: "var(--gold-ink)", fontSize: 13, fontWeight: 600,
         }}
       >
         <Plus size={15} /> Agregar evento
@@ -260,7 +260,7 @@ export default function EventosAdminPage() {
           marginTop: 14, display: "flex", alignItems: "center", gap: 8,
           padding: "10px 18px", borderRadius: 10, cursor: "pointer",
           background: "transparent", border: "1px dashed rgba(165,141,102,.4)",
-          color: "var(--gold)", fontSize: 13, fontWeight: 600,
+          color: "var(--gold-ink)", fontSize: 13, fontWeight: 600,
         }}
       >
         <Plus size={15} /> Agregar evento pasado

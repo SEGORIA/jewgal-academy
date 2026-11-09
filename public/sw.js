@@ -1,4 +1,4 @@
-const CACHE = "jewgal-v5"
+const CACHE = "jewgal-v6" // v6: nuevo favicon/iconos (los cache-first de /icons/ se renuevan al activar)
 const STATIC = [
   "/manifest.json",
   "/icons/icon-192.png",

@@ -466,7 +466,7 @@ export default function CursosAdminPage() {
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32, flexWrap: "wrap", gap: 16 }}>
         <div>
-          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>Admin</span>
+          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 8 }}>Admin</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Programas</h1>
           <p style={{ color: "var(--text-faint)", fontSize: 14 }}>Gestioná contenido, sesiones y alumnos de cada programa.</p>
         </div>
@@ -556,14 +556,14 @@ export default function CursosAdminPage() {
               {/* Versión en inglés — opcional, cae al texto en español si queda vacía */}
               <div style={{ border: "1px solid rgba(165,141,102,.18)", borderRadius: 12, padding: 14, background: "var(--surface-2)" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                  <span style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", fontWeight: 700, display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold-ink)", fontWeight: 700, display: "flex", alignItems: "center", gap: 6 }}>
                     <Languages size={13} /> Versión en inglés
                   </span>
                   <button
                     type="button"
                     onClick={translateCourseToEnglish}
                     disabled={translatingCourse}
-                    style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "1px solid rgba(165,141,102,.35)", borderRadius: 7, padding: "6px 12px", fontSize: 11.5, color: "var(--gold)", cursor: translatingCourse ? "default" : "pointer" }}
+                    style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "1px solid rgba(165,141,102,.35)", borderRadius: 7, padding: "6px 12px", fontSize: 11.5, color: "var(--gold-ink)", cursor: translatingCourse ? "default" : "pointer" }}
                   >
                     {translatingCourse ? <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} /> : <Languages size={13} />}
                     {translatingCourse ? "Traduciendo…" : "Traducir con IA"}
@@ -632,7 +632,7 @@ export default function CursosAdminPage() {
           <div style={{ ...card, padding: "28px 26px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 22, paddingBottom: 20, borderBottom: "1px solid var(--surface-2)" }}>
               <div>
-                <span style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 4 }}>Gestión de programa</span>
+                <span style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 4 }}>Gestión de programa</span>
                 <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 22, color: "var(--text)" }}>{selected.title}</h2>
               </div>
               <button onClick={() => setSelectedId(null)} style={{ background: "none", border: "none", color: "var(--text-dim)", cursor: "pointer" }}>
@@ -653,7 +653,7 @@ export default function CursosAdminPage() {
                   padding: "9px 10px", borderRadius: 8, border: "none", cursor: "pointer",
                   fontSize: 13, fontWeight: tab === key ? 600 : 400,
                   background: tab === key ? "rgba(165,141,102,.15)" : "transparent",
-                  color: tab === key ? "var(--gold)" : "var(--text-faint)",
+                  color: tab === key ? "var(--gold-ink)" : "var(--text-faint)",
                   transition: "all .18s",
                 }}>
                   <Icon size={14} /> {label}
@@ -768,7 +768,7 @@ export default function CursosAdminPage() {
                       <div style={{ padding: "22px 26px 8px" }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
                           <div>
-                            <p style={{ fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 4 }}>
+                            <p style={{ fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 4 }}>
                               {editingMatId ? "Editar" : "Nuevo"} · Módulo {matForm.moduleNumber}
                             </p>
                             <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 24, color: "var(--text)" }}>
@@ -787,7 +787,7 @@ export default function CursosAdminPage() {
                               return (
                                 <button key={t.id} onClick={() => applyTemplate(t.id)}
                                   style={{ textAlign: "left", display: "flex", flexDirection: "column", gap: 6, padding: "12px 14px", borderRadius: 12, cursor: "pointer", background: on ? "rgba(165,141,102,.18)" : "var(--surface)", border: `1.5px solid ${on ? "var(--gold)" : "rgba(165,141,102,.2)"}`, transition: "all .15s" }}>
-                                  <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 700, color: on ? "var(--gold)" : "var(--text)" }}><Icon size={16} /> {t.label}</span>
+                                  <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 700, color: on ? "var(--gold-ink)" : "var(--text)" }}><Icon size={16} /> {t.label}</span>
                                   <span style={{ fontSize: 11.5, color: "var(--text-dim)", lineHeight: 1.4 }}>{t.hint}</span>
                                 </button>
                               )
@@ -1167,7 +1167,7 @@ function ModulesEditor({ modules, onChange }: { modules: { title: string; items:
       {modules.map((mod, i) => (
         <div key={i} style={{ background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.15)", borderRadius: 10, padding: "14px 14px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
-            <span style={{ fontFamily: "var(--serif)", fontSize: 12, fontStyle: "italic", color: "var(--gold)", flexShrink: 0, width: 20 }}>{String(i + 1).padStart(2, "0")}</span>
+            <span style={{ fontFamily: "var(--serif)", fontSize: 12, fontStyle: "italic", color: "var(--gold-ink)", flexShrink: 0, width: 20 }}>{String(i + 1).padStart(2, "0")}</span>
             <input value={mod.title} onChange={(e) => updateTitle(i, e.target.value)} placeholder="Título del módulo" style={{ ...inputStyle, flex: 1, background: "var(--surface)" }} />
             <button onClick={() => move(i, -1)} disabled={i === 0} title="Subir" style={{ width: 28, height: 28, borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface)", cursor: i === 0 ? "default" : "pointer", color: "var(--text-muted)", opacity: i === 0 ? 0.3 : 1, flexShrink: 0 }}><ChevronUp size={13} /></button>
             <button onClick={() => move(i, 1)} disabled={i === modules.length - 1} title="Bajar" style={{ width: 28, height: 28, borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface)", cursor: i === modules.length - 1 ? "default" : "pointer", color: "var(--text-muted)", opacity: i === modules.length - 1 ? 0.3 : 1, flexShrink: 0 }}><ChevronDown size={13} /></button>
@@ -1178,7 +1178,7 @@ function ModulesEditor({ modules, onChange }: { modules: { title: string; items:
           </div>
         </div>
       ))}
-      <button onClick={addModule} style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold)", borderRadius: 9, padding: "10px 16px", fontSize: 13, fontWeight: 600, cursor: "pointer", alignSelf: "flex-start" }}>
+      <button onClick={addModule} style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold-ink)", borderRadius: 9, padding: "10px 16px", fontSize: 13, fontWeight: 600, cursor: "pointer", alignSelf: "flex-start" }}>
         <Plus size={14} /> Agregar módulo
       </button>
     </div>

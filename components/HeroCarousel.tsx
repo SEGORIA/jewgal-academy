@@ -94,24 +94,33 @@ export default function HeroCarousel({ onSlideChange }: Props) {
           <div
             aria-label="Navegación de fotos"
             style={{
-              position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)",
-              zIndex: 10, display: "flex", gap: 8, alignItems: "center",
+              position: "absolute", bottom: 24, left: "50%", transform: "translateX(-50%)",
+              zIndex: 10, display: "flex", gap: 0, alignItems: "center",
             }}
           >
             {photos.map((_, i) => (
+              // El botón mide 24px de alto (zona táctil cómoda); el punto visible sigue siendo de 6px
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
                 aria-label={`Ir a foto ${i + 1}${i === current ? " (actual)" : ""}`}
                 aria-pressed={i === current}
                 style={{
-                  width: i === current ? 22 : 6, height: 6,
-                  borderRadius: 4, border: "none", padding: 0, cursor: "pointer",
-                  background: i === current ? "#A76D61" : "rgba(246,241,231,.35)",
-                  transition: "all .35s ease",
-                  boxShadow: i === current ? "0 0 8px rgba(167,109,97,.5)" : "none",
+                  width: i === current ? 38 : 24, height: 24,
+                  border: "none", padding: 0, cursor: "pointer", background: "none",
+                  display: "flex", alignItems: "center", justifyContent: "center",
                 }}
-              />
+              >
+                <span
+                  aria-hidden="true"
+                  style={{
+                    display: "block", width: i === current ? 22 : 6, height: 6, borderRadius: 4,
+                    background: i === current ? "#C47F6F" : "rgba(246,241,231,.6)",
+                    transition: "all .35s ease",
+                    boxShadow: i === current ? "0 0 8px rgba(167,109,97,.5)" : "none",
+                  }}
+                />
+              </button>
             ))}
           </div>
 

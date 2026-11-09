@@ -65,7 +65,7 @@ function JewgalkidsToolsContent() {
     <div style={{ maxWidth: 900, margin: "0 auto" }}>
       {/* Header */}
       <div style={{ marginBottom: 32 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 10 }}>
           Instructor Certificado Joogalkids
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 8 }}>
@@ -107,7 +107,7 @@ function JewgalkidsToolsContent() {
                     display: "flex", alignItems: "center", gap: 8,
                     padding: "12px 18px", fontSize: 13.5, fontWeight: active ? 600 : 400,
                     border: "none", borderBottom: active ? "2px solid var(--gold)" : "2px solid transparent",
-                    background: "transparent", color: active ? "var(--gold)" : "var(--text-muted)",
+                    background: "transparent", color: active ? "var(--gold-ink)" : "var(--text-muted)",
                     cursor: "pointer", whiteSpace: "nowrap", transition: "color .2s",
                     marginBottom: -1,
                   }}

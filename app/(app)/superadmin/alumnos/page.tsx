@@ -164,7 +164,7 @@ export default function AlumnosPage() {
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
         <div>
-          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>Admin</span>
+          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 8 }}>Admin</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Alumnos</h1>
           <p style={{ color: "var(--text-faint)", fontSize: 14 }}>
             {loading ? "Cargando…" : `${students.length} alumno${students.length !== 1 ? "s" : ""} registrado${students.length !== 1 ? "s" : ""}`}
@@ -173,8 +173,8 @@ export default function AlumnosPage() {
         <button onClick={() => { setModal({ type: "add" }); setError("") }}
           style={{
             display: "flex", alignItems: "center", gap: 8,
-            background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
-            color: "#1A0E06", border: "none", borderRadius: 10, padding: "12px 22px",
+            background: "var(--grad-cta)",
+            color: "#fff", border: "none", borderRadius: 10, padding: "12px 22px",
             fontSize: 13, fontWeight: 700, letterSpacing: ".06em", cursor: "pointer",
             boxShadow: "0 6px 20px rgba(167,109,97,.38)",
             transition: "box-shadow .2s, transform .15s",
@@ -190,7 +190,7 @@ export default function AlumnosPage() {
       {!loading && (
         <div style={{ display: "flex", gap: 12, marginBottom: 24, flexWrap: "wrap" }}>
           {[
-            { label: "Total alumnos",     value: students.length,     color: "var(--gold)" },
+            { label: "Total alumnos",     value: students.length,     color: "var(--gold-ink)" },
             { label: "Con inscripción",   value: withEnrollment,      color: "#A76D61" },
             { label: "Ingresos totales",  value: totalPaidAll > 0 ? `$${totalPaidAll.toLocaleString("es")}` : "—", color: "var(--success)" },
           ].map(({ label, value, color }) => (
@@ -263,7 +263,7 @@ export default function AlumnosPage() {
                   >
                     <td style={{ padding: "14px 18px" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        <div style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(165,141,102,.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "var(--gold)", flexShrink: 0 }}>
+                        <div style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(165,141,102,.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "var(--gold-ink)", flexShrink: 0 }}>
                           {s.name.charAt(0).toUpperCase()}
                         </div>
                         <span style={{ color: "var(--text)", fontWeight: 500 }}>{s.name}</span>
@@ -389,7 +389,7 @@ export default function AlumnosPage() {
             {modal.type === "detail" && (
               <>
                 <div style={{ display: "flex", gap: 16, alignItems: "center", marginBottom: 24 }}>
-                  <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(165,141,102,.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 700, color: "var(--gold)", flexShrink: 0 }}>
+                  <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(165,141,102,.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 700, color: "var(--gold-ink)", flexShrink: 0 }}>
                     {modal.student.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
@@ -432,7 +432,7 @@ export default function AlumnosPage() {
                                     {en.completedAt && new Date(en.completedAt).toLocaleDateString("es-AR", { day: "numeric", month: "short", year: "numeric" })}
                                     {en.certificateUrl && (
                                       <a href={en.certificateUrl} target="_blank" rel="noopener noreferrer"
-                                        style={{ display: "inline-flex", alignItems: "center", gap: 3, color: "var(--gold)", textDecoration: "none", fontWeight: 600 }}>
+                                        style={{ display: "inline-flex", alignItems: "center", gap: 3, color: "var(--gold-ink)", textDecoration: "none", fontWeight: 600 }}>
                                         <FileDown size={10} /> Ver PDF
                                       </a>
                                     )}
@@ -482,7 +482,7 @@ export default function AlumnosPage() {
                                       })
                                       if (res.ok) { load(); setModal(null) }
                                     }}
-                                    style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(165,141,102,.12)", border: "1px solid rgba(165,141,102,.25)", color: "var(--gold)", borderRadius: 7, padding: "7px 12px", fontSize: 11, cursor: "pointer", fontWeight: 600, whiteSpace: "nowrap" }}
+                                    style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(165,141,102,.12)", border: "1px solid rgba(165,141,102,.25)", color: "var(--gold-ink)", borderRadius: 7, padding: "7px 12px", fontSize: 11, cursor: "pointer", fontWeight: 600, whiteSpace: "nowrap" }}
                                   >
                                     <Award size={12} /> Certificar
                                   </button>
@@ -519,7 +519,7 @@ export default function AlumnosPage() {
                 </div>
 
                 <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
-                  <a href={`mailto:${modal.student.email}`} style={{ flex: 1, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.25)", borderRadius: 10, padding: "11px 0", fontSize: 13, color: "var(--gold)", cursor: "pointer", textDecoration: "none", textAlign: "center" as const }}>
+                  <a href={`mailto:${modal.student.email}`} style={{ flex: 1, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.25)", borderRadius: 10, padding: "11px 0", fontSize: 13, color: "var(--gold-ink)", cursor: "pointer", textDecoration: "none", textAlign: "center" as const }}>
                     Enviar email
                   </a>
                   <button onClick={() => setModal(null)} style={{ flex: 1, background: "var(--gold)", border: "none", borderRadius: 10, padding: "11px 0", fontSize: 13, fontWeight: 700, color: "#2C1F14", cursor: "pointer" }}>Cerrar</button>

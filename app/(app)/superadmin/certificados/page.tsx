@@ -442,7 +442,7 @@ export default function CertificadosAdminPage() {
             style={{
               display: "flex", alignItems: "center", gap: 8,
               padding: "11px 24px", borderRadius: 10, border: "none", cursor: saving ? "wait" : "pointer",
-              background: saved ? "rgba(107,191,142,.18)" : "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+              background: saved ? "rgba(107,191,142,.18)" : "var(--grad-cta)",
               color: saved ? "var(--success)" : "white",
               fontWeight: 600, fontSize: 14,
               boxShadow: saved ? "none" : "0 6px 20px rgba(167,109,97,.35)",

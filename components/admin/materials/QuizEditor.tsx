@@ -58,7 +58,7 @@ export default function QuizEditor({ questions, onChange }: { questions: QuizQue
       {questions.map((q, qi) => (
         <div key={qi} style={{ border: "1px solid rgba(165,141,102,.16)", borderRadius: 10, padding: "14px 16px", background: "var(--surface)" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-            <span style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--gold)", fontWeight: 600 }}>
+            <span style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--gold-ink)", fontWeight: 600 }}>
               Pregunta {qi + 1}
             </span>
             <div style={{ display: "flex", gap: 6 }}>
@@ -103,7 +103,7 @@ export default function QuizEditor({ questions, onChange }: { questions: QuizQue
           </div>
           <button
             onClick={() => addOption(qi)}
-            style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold)", borderRadius: 8, padding: "6px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}
+            style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold-ink)", borderRadius: 8, padding: "6px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}
           >
             <Plus size={12} /> Agregar opción
           </button>
@@ -112,7 +112,7 @@ export default function QuizEditor({ questions, onChange }: { questions: QuizQue
 
       <button
         onClick={addQuestion}
-        style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold)", borderRadius: 8, padding: "8px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}
+        style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold-ink)", borderRadius: 8, padding: "8px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}
       >
         <Plus size={13} /> Agregar pregunta
       </button>

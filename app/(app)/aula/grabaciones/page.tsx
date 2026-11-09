@@ -54,7 +54,7 @@ export default function GrabacionesPage() {
     <div style={{ maxWidth: 760, margin: "0 auto" }}>
       {/* Header */}
       <div style={{ marginBottom: 36 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 10 }}>
           Aula Virtual
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "var(--text)", marginBottom: 8 }}>
@@ -76,14 +76,14 @@ export default function GrabacionesPage() {
               <a key={rec.id} href={rec.recordingUrl!} target="_blank" rel="noopener noreferrer" style={{ ...card, overflow: "hidden", display: "block", textDecoration: "none" }}>
                 <div style={{ aspectRatio: "16/9", background: "linear-gradient(135deg,var(--surface-solid),var(--bg))", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                   <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(165,141,102,.2)", border: "2px solid rgba(165,141,102,.4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <PlayCircle size={32} style={{ color: "var(--gold)" }} />
+                    <PlayCircle size={32} style={{ color: "var(--gold-ink)" }} />
                   </div>
                 </div>
                 <div style={{ padding: "20px 24px" }}>
-                  {multiCourse && <p style={{ fontSize: 11, color: "var(--gold)", marginBottom: 4 }}>{rec.courseTitle}</p>}
+                  {multiCourse && <p style={{ fontSize: 11, color: "var(--gold-ink)", marginBottom: 4 }}>{rec.courseTitle}</p>}
                   <h3 style={{ fontWeight: 600, color: "var(--text)", fontSize: 15, marginBottom: 8 }}>{rec.title}</h3>
                   <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--text-faint)" }}>
-                    <Clock size={12} style={{ color: "var(--gold)" }} />
+                    <Clock size={12} style={{ color: "var(--gold-ink)" }} />
                     {formatDuration(rec.durationMin)}
                   </div>
                 </div>
@@ -102,7 +102,7 @@ export default function GrabacionesPage() {
         {available.length === 0 && (
           <div style={{ ...card, padding: "44px 32px", textAlign: "center", marginBottom: 16, borderColor: "rgba(165,141,102,.1)" }}>
             <div style={{ width: 56, height: 56, borderRadius: "50%", background: "rgba(165,141,102,.1)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px" }}>
-              <Lock size={24} style={{ color: "var(--gold)" }} />
+              <Lock size={24} style={{ color: "var(--gold-ink)" }} />
             </div>
             <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--text)", marginBottom: 8 }}>
               {sessions.length === 0 ? "Todavía no hay clases programadas" : "Las grabaciones estarán disponibles pronto"}
@@ -120,7 +120,7 @@ export default function GrabacionesPage() {
                 <PlayCircle size={18} style={{ color: "var(--text-dim)" }} />
               </div>
               <div style={{ flex: 1 }}>
-                {multiCourse && <p style={{ fontSize: 10, color: "var(--gold)", marginBottom: 2 }}>{rec.courseTitle}</p>}
+                {multiCourse && <p style={{ fontSize: 10, color: "var(--gold-ink)", marginBottom: 2 }}>{rec.courseTitle}</p>}
                 <p style={{ fontWeight: 500, color: "var(--text)", fontSize: 14 }}>{rec.title}</p>
                 <p style={{ fontSize: 12, color: "var(--text-dim)", marginTop: 2 }}>{formatDuration(rec.durationMin)}</p>
               </div>

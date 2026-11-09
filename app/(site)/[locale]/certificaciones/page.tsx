@@ -99,7 +99,7 @@ export default function CertificacionesPage() {
                 <motion.span
                   initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }}
                   viewport={{ once: true }} transition={{ delay: i * 0.14 + 0.2 }}
-                  style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: 13, color: "var(--gold)", display: "block", marginBottom: 14 }}
+                  style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: 13, color: "var(--gold-ink)", display: "block", marginBottom: 14 }}
                 >
                   {s.n}
                 </motion.span>
@@ -149,10 +149,10 @@ export default function CertificacionesPage() {
                 {/* Panel derecho */}
                 <div style={{ background: "var(--navy-2)", padding: isMobile ? "24px 24px" : "36px 40px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                   <div>
-                    <div style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 6 }}>{t("labelDescription")}</div>
+                    <div style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 6 }}>{t("labelDescription")}</div>
                     <p style={{ color: "var(--on-dark)", fontSize: 14.5, lineHeight: 1.7, marginBottom: 24 }}>{c.desc}</p>
 
-                    <div style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 12 }}>{t("labelRequirements")}</div>
+                    <div style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 12 }}>{t("labelRequirements")}</div>
                     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                       {c.req.map((r) => (
                         <div key={r} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13.5, color: "var(--on-dark)" }}>

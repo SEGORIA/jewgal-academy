@@ -101,7 +101,7 @@ export default function BlogAdminPage() {
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
         <div>
-          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>Admin</span>
+          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 8 }}>Admin</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Blog</h1>
           <p style={{ color: "var(--text-faint)", fontSize: 14 }}>{posts.length} entradas · {posts.filter((p) => p.isPublished).length} publicadas</p>
         </div>
@@ -131,7 +131,7 @@ export default function BlogAdminPage() {
             <div key={p.id} style={{ ...card, padding: "18px 20px", display: "flex", gap: 14, alignItems: "flex-start" }}>
               <div style={{ flex: 1 }}>
                 <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 6 }}>
-                  <span style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--gold)", background: "rgba(165,141,102,.1)", borderRadius: 16, padding: "3px 10px" }}>{p.category}</span>
+                  <span style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--gold-ink)", background: "rgba(165,141,102,.1)", borderRadius: 16, padding: "3px 10px" }}>{p.category}</span>
                   <span style={{ fontSize: 11, color: p.isPublished ? "var(--success)" : "var(--text-dim)" }}>
                     {p.isPublished ? "● Publicado" : "○ Borrador"}
                   </span>
@@ -280,7 +280,7 @@ function CategoryManager({ categories, onClose, onSaved }: { categories: string[
       <div onClick={(e) => e.stopPropagation()} style={{ ...card, background: "var(--surface-solid)", boxShadow: "0 30px 90px rgba(0,0,0,.5)", width: "100%", maxWidth: 480, padding: "26px 24px", maxHeight: "85vh", overflowY: "auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
           <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--text)", display: "flex", alignItems: "center", gap: 8 }}>
-            <Tag size={17} style={{ color: "var(--gold)" }} /> Categorías del blog
+            <Tag size={17} style={{ color: "var(--gold-ink)" }} /> Categorías del blog
           </h2>
           <button onClick={onClose} style={{ background: "none", border: "none", color: "var(--text-dim)", cursor: "pointer" }}>
             <X size={18} />
@@ -318,7 +318,7 @@ function CategoryManager({ categories, onClose, onSaved }: { categories: string[
             placeholder="Nueva categoría…"
             style={{ ...inputStyle, flex: 1 }}
           />
-          <button onClick={add} style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold)", borderRadius: 9, padding: "0 16px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+          <button onClick={add} style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold-ink)", borderRadius: 9, padding: "0 16px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
             <Plus size={15} /> Agregar
           </button>
         </div>

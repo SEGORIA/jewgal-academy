@@ -20,7 +20,7 @@ const PROGRAMS_META: Record<string, { name: string; accent: string; price: numbe
 
 const STATUS_LABEL: Record<string, { label: string; color: string; bg: string; border: string }> = {
   completed: { label: "Completado", color: "var(--success)", bg: "rgba(196,159,114,.1)",  border: "rgba(196,159,114,.25)" },
-  demo:      { label: "Demo",       color: "var(--gold)", bg: "rgba(165,141,102,.1)",  border: "rgba(165,141,102,.25)" },
+  demo:      { label: "Demo",       color: "var(--gold-ink)", bg: "rgba(165,141,102,.1)",  border: "rgba(165,141,102,.25)" },
   pending:   { label: "Pendiente",  color: "var(--warning)", bg: "rgba(251,191,36,.1)",   border: "rgba(251,191,36,.25)" },
 }
 
@@ -74,7 +74,7 @@ export default function PagosAdminPage() {
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
         <div>
-          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>Admin</span>
+          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 8 }}>Admin</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Ingresos y pagos</h1>
           <p style={{ color: "var(--text-faint)", fontSize: 14 }}>Historial financiero de la plataforma.</p>
         </div>

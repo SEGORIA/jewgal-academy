@@ -21,7 +21,7 @@ const PROGRAM_META: Record<string, { icon: string; accent: string }> = {
 
 const STATUS = {
   completed: { label: "Completado", color: "#C49F72", bg: "rgba(196,159,114,.1)",  border: "rgba(196,159,114,.25)", icon: CheckCircle2 },
-  demo:      { label: "Demo",       color: "var(--gold)", bg: "rgba(165,141,102,.1)",  border: "rgba(165,141,102,.25)", icon: CheckCircle2 },
+  demo:      { label: "Demo",       color: "var(--gold-ink)", bg: "rgba(165,141,102,.1)",  border: "rgba(165,141,102,.25)", icon: CheckCircle2 },
   pending:   { label: "Pendiente",  color: "var(--warning)", bg: "rgba(251,191,36,.08)",  border: "rgba(251,191,36,.25)",  icon: Clock },
   failed:    { label: "Fallido",    color: "var(--danger)", bg: "rgba(239,68,68,.08)",  border: "rgba(239,68,68,.25)",  icon: XCircle },
   refunded:  { label: "Reembolsado", color: "var(--text-muted)", bg: "rgba(255,255,255,.04)",  border: "rgba(255,255,255,.12)",  icon: RotateCcw },
@@ -54,7 +54,7 @@ export default function PagosPage() {
   return (
     <div style={{ maxWidth: 780, margin: "0 auto" }}>
       <div style={{ marginBottom: 36 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 10 }}>
           Aula Virtual
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>
@@ -114,7 +114,7 @@ export default function PagosPage() {
           <div style={{ padding: "60px 0", textAlign: "center" }}>
             <div style={{ fontSize: 36, marginBottom: 14, color: "rgba(165,141,102,.2)" }}>✦</div>
             <p style={{ color: "var(--text-faint)", fontSize: 14, marginBottom: 8 }}>Aún no tenés transacciones registradas.</p>
-            <Link href="/#programas" style={{ fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--gold)", textDecoration: "none" }}>
+            <Link href="/#programas" style={{ fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--gold-ink)", textDecoration: "none" }}>
               Ver programas →
             </Link>
           </div>

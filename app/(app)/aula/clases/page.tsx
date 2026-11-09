@@ -53,7 +53,7 @@ export default function ClasesPage() {
   return (
     <div style={{ maxWidth: 760, margin: "0 auto" }}>
       <div style={{ marginBottom: 36 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 10 }}>
           Aula Virtual
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "var(--text)", marginBottom: 8 }}>
@@ -90,7 +90,7 @@ export default function ClasesPage() {
                       <Video size={19} style={{ color: "var(--teal)" }} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      {multiCourse && <p style={{ fontSize: 11, color: "var(--gold)", marginBottom: 4, letterSpacing: ".04em" }}>{s.courseTitle}</p>}
+                      {multiCourse && <p style={{ fontSize: 11, color: "var(--gold-ink)", marginBottom: 4, letterSpacing: ".04em" }}>{s.courseTitle}</p>}
                       <h3 style={{ fontWeight: 600, color: "var(--text)", fontSize: 15, marginBottom: 5 }}>{s.title}</h3>
                       {s.description && <p style={{ color: "var(--text-faint)", fontSize: 13, marginBottom: 12, lineHeight: 1.6 }}>{s.description}</p>}
                       <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
@@ -152,7 +152,7 @@ export default function ClasesPage() {
                   <div key={s.id} style={{ ...card, display: "flex", alignItems: "center", gap: 14, opacity: 0.65, padding: "16px 22px" }}>
                     <CheckCircle2 size={16} style={{ color: "#C49F72", flexShrink: 0 }} />
                     <div style={{ flex: 1 }}>
-                      {multiCourse && <p style={{ fontSize: 10, color: "var(--gold)", marginBottom: 2 }}>{s.courseTitle}</p>}
+                      {multiCourse && <p style={{ fontSize: 10, color: "var(--gold-ink)", marginBottom: 2 }}>{s.courseTitle}</p>}
                       <p style={{ fontWeight: 500, color: "var(--text)", fontSize: 14 }}>{s.title}</p>
                       <p style={{ fontSize: 12, color: "var(--text-faint)", marginTop: 2 }}>
                         {formatDate(new Date(s.scheduledAt))}

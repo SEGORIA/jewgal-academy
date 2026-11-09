@@ -69,7 +69,7 @@ export default function QuizView({
     <div>
       {previousScore && !result && (
         <p style={{ fontSize: 12.5, color: "var(--text-dim)", marginBottom: 16 }}>
-          Tu último puntaje: <strong style={{ color: "var(--gold)" }}>{previousScore.quizScore}/{previousScore.quizTotal}</strong>
+          Tu último puntaje: <strong style={{ color: "var(--gold-ink)" }}>{previousScore.quizScore}/{previousScore.quizTotal}</strong>
         </p>
       )}
 
@@ -80,14 +80,14 @@ export default function QuizView({
           display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap",
         }}>
           <span style={{ fontFamily: "var(--serif)", fontSize: 18, color: "var(--text)" }}>
-            Puntaje: <strong style={{ color: "var(--gold)" }}>{result.score}/{result.total}</strong>
+            Puntaje: <strong style={{ color: "var(--gold-ink)" }}>{result.score}/{result.total}</strong>
           </span>
           <button
             onClick={retry}
             style={{
               display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 8,
               border: "1px solid rgba(165,141,102,.25)", background: "transparent",
-              color: "var(--gold)", fontSize: 12.5, fontWeight: 600, cursor: "pointer",
+              color: "var(--gold-ink)", fontSize: 12.5, fontWeight: 600, cursor: "pointer",
             }}
           >
             <RotateCcw size={13} /> Reintentar
@@ -156,7 +156,7 @@ export default function QuizView({
           whileHover={allAnswered ? { scale: 1.02 } : {}}
           style={{
             marginTop: 22, padding: "12px 28px", borderRadius: 30,
-            background: allAnswered ? "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)" : "rgba(165,141,102,.2)",
+            background: allAnswered ? "var(--grad-cta)" : "rgba(165,141,102,.2)",
             border: "none", color: "#fff", fontSize: 13.5, fontWeight: 600,
             cursor: allAnswered ? "pointer" : "not-allowed",
             opacity: submitting ? 0.7 : 1,

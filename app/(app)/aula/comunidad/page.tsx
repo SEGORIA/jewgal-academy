@@ -33,7 +33,7 @@ export default function ComunidadPage() {
   return (
     <div style={{ maxWidth: 860, margin: "0 auto" }}>
       <div style={{ marginBottom: 36 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 10 }}>
           Aula Virtual
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "var(--text)", marginBottom: 8 }}>
@@ -78,7 +78,7 @@ export default function ComunidadPage() {
             >
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <div style={{ width: 40, height: 40, borderRadius: 10, background: "rgba(165,141,102,.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <Users2 size={17} style={{ color: "var(--gold)" }} />
+                  <Users2 size={17} style={{ color: "var(--gold-ink)" }} />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontWeight: 600, color: "var(--text)", fontSize: 15 }}>{c.name}</p>

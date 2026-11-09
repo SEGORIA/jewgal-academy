@@ -6,6 +6,9 @@
   --navy-2: #1A0806;
   --navy-3: #3A1810;
   --gold:        #A58D66;
+  --gold-em:     var(--gold-light); /* dorado de énfasis en títulos grandes (palabras en <em>) */
+  --grad-cta:    linear-gradient(135deg,#9A5F52 0%,#94692F 100%); /* botón primario terracota→dorado: texto blanco ≥4.8:1 (antes ~2.3:1 en el extremo dorado) */
+  --gold-ink:    var(--gold);   /* dorado PARA TEXTO: en tema claro se oscurece (AA sobre crema); en fondos oscuros = --gold */
   --gold-light:  #CBB78B;
   --gold-deep:   #8A7350;
   --on-gold:     #2C1A10;   /* texto oscuro sobre acento dorado (fijo en ambos temas) */
@@ -62,7 +65,9 @@
   --navy:   #F4EAE7;   /* Rosa crema — fondo principal */
   --navy-2: #FAF3F0;   /* crema rosada */
   --navy-3: #EEDDD7;   /* arena rosada */
-  --gold:        #C49F72;   /* Dorado Apagado — acento */
+  --gold:        #C49F72;   /* Dorado Apagado — acento (rellenos, bordes, decoración) */
+  --gold-ink:    #7A5629;   /* mismo dorado, oscurecido para TEXTO sobre crema (contraste 5.6:1) */
+  --gold-em:     #A07236;   /* énfasis en títulos grandes sobre crema (3.6:1, válido para texto ≥24px) */
   --gold-light:  #D8B98C;
   --gold-deep:   #846145;   /* Café Tierra */
   --terra:       #A76D61;   /* Rosa Terracota */
@@ -71,7 +76,7 @@
   --ink:      #4a3320;
   --ink-soft: #846145;
   --on-dark:       rgba(92,66,40,.85);
-  --on-dark-faint: rgba(92,66,40,.5);
+  --on-dark-faint: rgba(92,66,40,.8);   /* era .5 → 2.5:1; ahora ≥4.5:1 sobre crema */
   --line-d: rgba(132,97,69,.24);
 
   --bg:            #F4EAE7;
@@ -82,9 +87,9 @@
   --surface-solid: #FAF3F0;
   --text:          #463018;
   --text-strong:   rgba(58,40,24,.96);
-  --text-muted:    rgba(74,51,32,.74);
-  --text-faint:    rgba(74,51,32,.52);
-  --text-dim:      rgba(74,51,32,.36);
+  --text-muted:    rgba(74,51,32,.84);   /* era .74 */
+  --text-faint:    rgba(74,51,32,.77);   /* era .52 (1.9:1) → ≥4.5:1 también sobre tarjetas */
+  --text-dim:      rgba(74,51,32,.68);   /* era .36 (1.9:1) → ~4:1, etiquetas y encabezados de tabla */
   --border:        rgba(132,97,69,.22);
   --border-soft:   rgba(132,97,69,.12);
   --hero-overlay-1: rgba(244,234,231,.95);
@@ -103,6 +108,7 @@
 
 /* Secciones y tarjetas que se mantienen oscuras también en modo claro (acentos premium) */
 [data-theme="light"] .hero,
+[data-theme="light"] .fundadora,
 [data-theme="light"] .tone-dark,
 [data-theme="light"] .campus-l,
 [data-theme="light"] .join {
@@ -121,6 +127,8 @@
   --on-dark:       rgba(246,241,231,.82);
   --on-dark-faint: rgba(224,204,177,.5);
   --gold:        #C49F72;
+  --gold-ink:    #C49F72;   /* sobre fondo oscuro el dorado claro ya contrasta */
+  --gold-em:     #D8B98C;
   --gold-light:  #D8B98C;
   --aqua:  #E0CCB1;
   --teal:  #A76D61;
@@ -195,7 +203,7 @@ html.lenis, html.lenis body { height: auto; }
 
 /* ─── Accesibilidad: foco visible solo por teclado ─── */
 :focus-visible {
-  outline: 2px solid var(--gold-light);
+  outline: 2px solid var(--gold-ink); /* se adapta: oscuro sobre crema, claro sobre fondos oscuros */
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -205,8 +213,8 @@ a, button, [role="button"] { -webkit-tap-highlight-color: transparent; }
 /* Salto al contenido para lectores de pantalla / teclado */
 .skip-link {
   position: absolute; left: -9999px; top: 0; z-index: 9999;
-  background: var(--navy-2); color: var(--gold-light);
-  padding: 12px 20px; border: 1px solid var(--gold);
+  background: #2C1F14; color: #F6F1E7;  /* fijo y oscuro: legible sobre cualquier tema */
+  padding: 12px 20px; border: 1px solid #C49F72;
   font-size: 13px; letter-spacing: .08em; text-decoration: none;
 }
 .skip-link:focus { left: 16px; top: 16px; }
@@ -319,7 +327,7 @@ img, video { max-width: 100%; }
   font-size: 12.5px;
   letter-spacing: .28em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--gold-ink);
   font-weight: 500;
   font-family: var(--sans);
 }
@@ -349,7 +357,7 @@ img, video { max-width: 100%; }
   text-decoration: none;
   display: inline-block;
   border: 1px solid var(--gold);
-  color: var(--gold);
+  color: var(--gold-ink);
   background: transparent;
   transition: .4s;
   position: relative;
@@ -404,35 +412,59 @@ nav.jnav.scrolled {
   letter-spacing: .1em;
   text-transform: uppercase;
   position: relative;
+  padding: 8px 0; /* zona táctil/clic más cómoda (antes 19px de alto) */
   transition: color .3s;
 }
 .nav-search {
   background: none; border: none; cursor: pointer;
-  color: var(--on-dark); padding: 4px; transition: color .3s;
-  display: flex; align-items: center;
+  color: var(--on-dark); width: 40px; height: 40px; transition: color .3s;
+  display: flex; align-items: center; justify-content: center;
 }
-.nav-search:hover { color: var(--gold); }
-.nav-toggle { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+.nav-search:hover { color: var(--gold-ink); }
+.nav-toggle { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 10px; min-width: 44px; min-height: 44px; margin-right: -10px; }
 .jnav .nav-links a::after {
   content: "";
   position: absolute;
-  left: 0; bottom: -7px;
+  left: 0; bottom: 2px;
   height: 1px; width: 0;
   background: var(--gold);
   transition: width .35s;
 }
 .jnav .nav-links a:hover { color: var(--aqua); }
 .jnav .nav-links a:hover::after { width: 100%; }
+.jnav .nav-links a.active { color: var(--gold-ink); }
+/* Botones de cuenta (antes con estilos inline y colores fijos): legibles sobre crema y sobre la foto del hero */
+.jnav .nav-account, .jnav .nav-login {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 40px;
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase; text-decoration: none;
+  border-radius: 3px; padding: 10px 16px;
+  transition: background .3s, border-color .3s, color .3s;
+}
+.jnav .nav-account { color: var(--gold-ink); border: 1px solid rgba(132,97,69,.4); background: rgba(196,159,114,.12); }
+.jnav .nav-account:hover { background: rgba(196,159,114,.24); border-color: var(--gold-ink); }
+.jnav .nav-login { color: var(--on-dark); border: 1px solid var(--line-d); }
+.jnav .nav-login:hover { color: var(--gold-ink); border-color: var(--gold-ink); }
+[data-theme="light"] .jnav.scrolled .nav-links a.active { color: var(--gold-ink); }
+/* Sobre la foto oscura del hero (tema claro, sin scroll): dorado claro y crema */
+[data-theme="light"] .jnav.over-hero:not(.scrolled) .nav-links a.active { color: var(--gold-light); }
+[data-theme="light"] .jnav.over-hero:not(.scrolled) .nav-account { color: var(--gold-light); border-color: rgba(216,185,140,.55); background: rgba(44,31,20,.4); }
+[data-theme="light"] .jnav.over-hero:not(.scrolled) .nav-login { color: rgba(246,241,231,.92); border-color: rgba(246,241,231,.45); }
+[data-theme="light"] .jnav.over-hero:not(.scrolled) .nav-login:hover { color: var(--gold-light); border-color: var(--gold-light); }
+[data-theme="light"] .jnav.over-hero:not(.scrolled) .nav-toggle span { background: #F6F1E7 !important; }
+[data-theme="light"] .jnav.over-hero:not(.scrolled) .nav-search:hover { color: var(--gold-light); }
 .jnav .nav-actions { display: flex; align-items: center; gap: 16px; }
 
 /* ─── HERO ─── */
 .hero {
   position: relative;
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
   overflow: hidden;
   background: var(--navy-2);
+  /* El menú fijo mide ~128px: sin este margen el texto del hero quedaba por debajo/encima del menú en pantallas bajas */
+  padding: clamp(112px, 17vh, 150px) 0 clamp(56px, 8vh, 88px);
 }
 /* Full-bleed background photo */
 .hero-bg {
@@ -460,13 +492,16 @@ nav.jnav.scrolled {
 /* Overlay izquierda → transparente — rosa terracota */
 .hero-overlay {
   position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(
-    to right,
-    rgba(92,34,24,.65) 0%,
-    rgba(139,61,46,.50) 36%,
-    rgba(167,109,97,.28) 62%,
-    rgba(167,109,97,.04) 100%
-  );
+  background:
+    /* velo superior: asegura que el logo y el menú se lean sobre cualquier foto (también las claras) */
+    linear-gradient(to bottom, rgba(34,12,8,.62) 0%, rgba(34,12,8,.30) 14%, rgba(34,12,8,0) 30%),
+    linear-gradient(
+      to right,
+      rgba(92,34,24,.65) 0%,
+      rgba(139,61,46,.50) 36%,
+      rgba(167,109,97,.28) 62%,
+      rgba(167,109,97,.04) 100%
+    );
   transition: opacity 1s ease;
 }
 /* Circuit/network SVG (bottom-left) */
@@ -533,14 +568,14 @@ nav.jnav.scrolled {
 .hero h1 {
   font-family: var(--serif);
   font-weight: 500;
-  font-size: clamp(46px,6.4vw,88px);
+  font-size: clamp(42px, min(6.4vw, 8.6vh), 88px); /* también depende de la altura: en laptops bajas el título + botones caben en la primera vista */
   line-height: 1.14; letter-spacing: -.01em;
-  color: var(--text); margin-bottom: 26px;
+  color: var(--text); margin-bottom: 22px;
 }
 .hero h1 .ln { display: block; }
 .hero h1 .ln span { display: inline-block; } /* animación word-by-word via Framer Motion */
 .hero h1 em { font-style: normal; color: var(--gold-light); }
-.hero p { max-width: 430px; color: var(--on-dark); font-size: 16.5px; margin-bottom: 38px; opacity: 0; animation: fadeUp 1s .85s forwards; }
+.hero p { max-width: 430px; color: var(--on-dark); font-size: 16.5px; margin-bottom: 30px; opacity: 0; animation: fadeUp 1s .85s forwards; }
 
 
 .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; opacity: 0; animation: fadeUp 1s 1.05s forwards; }
@@ -565,8 +600,19 @@ nav.jnav.scrolled {
 .programas { background: linear-gradient(180deg,var(--sand-2),var(--sand)); color: var(--ink); }
 .prog-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 50px; flex-wrap: wrap; gap: 16px; }
 .prog-head h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(28px,3.4vw,42px); letter-spacing: .16em; text-transform: uppercase; color: var(--ink); }
-.prog-head a { color: var(--gold-deep); text-decoration: none; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 8px; }
+.prog-head a { padding: 10px 0; color: var(--gold-deep); text-decoration: none; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 8px; }
 .prog-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 20px; }
+/* Método Sholem (programa insignia, sitio externo): banda destacada a todo el ancho, sin dejar una tarjeta huérfana */
+.prog-grid > .prog-feature { grid-column: 1 / -1; }
+@media (min-width: 861px) {
+  .prog-feature .pcard { flex-direction: row; align-items: stretch; }
+  .prog-feature .pcard .thumb { aspect-ratio: auto; width: 34%; min-height: 240px; }
+  .prog-feature .pcard .thumb img { position: absolute; inset: 0; } /* la foto no dicta la altura: la fija el texto */
+  .prog-feature .pcard .body { padding: 34px 40px; justify-content: center; }
+  .prog-feature .pcard h3 { font-size: 28px; }
+  .prog-feature .pcard p { font-size: 15px; max-width: 560px; }
+  .prog-feature .pcard .price { margin: 4px 0 16px; }
+}
 .pcard { background: #fff; border: 1px solid var(--line-l); border-radius: 6px; overflow: hidden; transition: .5s cubic-bezier(.16,1,.3,1); display: flex; flex-direction: column; text-decoration: none; flex: 1; }
 .pcard:hover { transform: translateY(-8px); box-shadow: 0 26px 46px -22px rgba(13,43,58,.35); }
 [data-tilt] .pcard:hover { transform: none; }
@@ -653,7 +699,7 @@ nav.jnav.scrolled {
 }
 .step:hover .ring { border-color: var(--gold); box-shadow: 0 0 22px rgba(165,141,102,.4); }
 .step .ring svg { stroke: var(--gold-light); fill: none; }
-.step .n { font-family: var(--serif); font-size: 15px; color: var(--gold); font-style: italic; display: block; margin-bottom: 8px; }
+.step .n { font-family: var(--serif); font-size: 15px; color: var(--gold-ink); font-style: italic; display: block; margin-bottom: 8px; }
 .step h4 { font-size: 14px; letter-spacing: .14em; text-transform: uppercase; color: var(--text); margin-bottom: 10px; }
 .step p { font-size: 14px; color: var(--on-dark); max-width: 170px; margin: 0 auto; }
 
@@ -668,9 +714,9 @@ nav.jnav.scrolled {
   display: flex;
   flex-direction: column;
 }
-.tcard .qm { font-family: var(--serif); font-size: 72px; color: var(--gold); line-height: .8; margin-bottom: 12px; opacity: .7; }
+.tcard .qm { font-family: var(--serif); font-size: 72px; color: var(--gold-ink); line-height: .8; margin-bottom: 12px; opacity: .7; }
 .tcard p { font-size: 16.5px; color: var(--on-dark); line-height: 1.75; margin-bottom: 24px; font-style: italic; font-family: var(--serif); }
-.tcard .who { font-size: 12.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-top: auto; }
+.tcard .who { font-size: 12.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-ink); margin-top: auto; }
 
 /* ─── COMUNIDAD ─── */
 .comunidad { background: var(--navy); }
@@ -684,7 +730,7 @@ nav.jnav.scrolled {
 }
 .map .pt { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: var(--gold-light); box-shadow: 0 0 10px var(--gold-light); animation: twinkle 3s ease-in-out infinite; }
 .com-side { padding-left: 10px; }
-.com-side .big { font-family: var(--serif); font-size: 64px; font-weight: 500; color: var(--gold-light); line-height: 1; }
+.com-side .big { font-family: var(--serif); font-size: 64px; font-weight: 500; color: var(--gold-em); line-height: 1; }
 .com-side .big-l { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--on-dark); margin: 6px 0 30px; }
 .com-side h3 { font-family: var(--serif); font-weight: 500; font-size: 30px; color: var(--text); margin-bottom: 16px; line-height: 1.15; }
 .com-side p { color: var(--on-dark); font-size: 15px; margin-bottom: 26px; max-width: 340px; }
@@ -703,7 +749,7 @@ nav.jnav.scrolled {
 .feat .ico svg { stroke: var(--gold-light); }
 .feat h4 { font-family: var(--serif); font-size: 22px; color: var(--text); margin-bottom: 8px; font-weight: 500; }
 .feat p { font-size: 15px; color: var(--on-dark); margin-bottom: 18px; }
-.feat .go { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); display: inline-flex; gap: 7px; align-items: center; }
+.feat .go { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-ink); display: inline-flex; gap: 7px; align-items: center; }
 .campus { display: grid; grid-template-columns: .9fr 1.4fr; gap: 0; border: 1px solid var(--line-d); border-radius: 12px; overflow: hidden; margin-top: 30px; }
 .campus-l { padding: 48px 44px; background: linear-gradient(160deg,#3a2418,#2c1f14); display: flex; flex-direction: column; justify-content: center; }
 .campus-l .eyebrow { margin-bottom: 14px; }
@@ -719,7 +765,7 @@ nav.jnav.scrolled {
 .course .meta strong { display: block; font-size: 14px; color: var(--text); font-weight: 400; margin-bottom: 7px; font-family: var(--serif); }
 .bar { height: 4px; background: rgba(192,213,214,.16); border-radius: 3px; overflow: hidden; }
 .bar i { display: block; height: 100%; background: linear-gradient(90deg,var(--gold),var(--gold-light)); width: 0; transition: width 1.4s cubic-bezier(.16,1,.3,1); }
-.course .pct { font-size: 12px; color: var(--gold-light); width: 38px; text-align: right; }
+.course .pct { font-size: 12px; color: var(--gold-ink); width: 38px; text-align: right; }
 
 /* ─── JOIN / CTA ─── */
 .join {
@@ -746,10 +792,10 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
 .foot-grid { display: grid; grid-template-columns: 1.6fr repeat(4,1fr); gap: 40px; margin-bottom: 54px; }
 .foot-brand p { color: var(--on-dark); font-size: 14px; margin-top: 14px; max-width: 240px; }
 .foot-social { display: flex; gap: 14px; margin-top: 22px; }
-.foot-social a { color: var(--on-dark); transition: color .3s; text-decoration: none; }
-.foot-social a:hover { color: var(--gold); }
-.foot-col h5 { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
-.foot-col a { display: block; color: var(--on-dark); text-decoration: none; font-size: 15px; margin-bottom: 11px; transition: color .3s; }
+.foot-social a { color: var(--on-dark); transition: color .3s; text-decoration: none; padding: 8px; margin: -8px 0 -8px -8px; display: inline-flex; } /* zona táctil 35px sin mover el icono */
+.foot-social a:hover { color: var(--gold-ink); }
+.foot-col h5 { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-ink); margin-bottom: 18px; }
+.foot-col a { display: block; color: var(--on-dark); text-decoration: none; font-size: 15px; padding: 6px 0; margin-bottom: 2px; transition: color .3s; } /* zona táctil ≥ 36px */
 .foot-col a:hover { color: var(--aqua); }
 .foot-col p { color: var(--on-dark); font-size: 14px; }
 .news input { width: 100%; background: var(--surface-2); border: 1px solid var(--line-d); border-radius: 4px; padding: 12px 14px; color: var(--text); font-family: var(--sans); font-size: 13px; margin-top: 6px; }
@@ -760,6 +806,7 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
 .foot-bottom small { color: var(--on-dark-faint); font-size: 12px; }
 .foot-bottom .alma { font-size: 12px; color: var(--on-dark-faint); letter-spacing: .04em; }
 .foot-bottom .alma b { color: var(--gold-light); }
+.foot-bottom a { display: inline-block; padding: 8px 6px; margin: -8px -6px; } /* enlaces legales: zona táctil ≥ 36px */
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 1100px) {
@@ -791,7 +838,7 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
 }
 /* 404 */
 .not-found-link { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--on-dark); text-decoration: none; transition: color .25s; }
-.not-found-link:hover { color: var(--gold); }
+.not-found-link:hover { color: var(--gold-ink); }
 
 /* Blog — base layout */
 .blog-hero        { padding-top: 150px; padding-bottom: 90px; }
@@ -935,7 +982,7 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
   font-size: 10px;
   letter-spacing: .35em;
   text-transform: uppercase;
-  color: rgba(132,97,69,.8);
+  color: var(--text-muted);
   text-align: center;
   margin-bottom: 28px;
 }
@@ -995,7 +1042,7 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
 .avales-note {
   text-align: center;
   font-size: 12px;
-  color: rgba(132,97,69,.65);
+  color: var(--text-faint);
   margin-top: 22px;
   letter-spacing: .05em;
 }
@@ -1074,18 +1121,18 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: #25D366;
+  background: #0F7A5C; /* antes #25D366: blanco sobre ese verde daba 2:1 */
   color: #fff;
   padding: 12px 20px 12px 16px;
   border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(37,211,102,.32);
+  box-shadow: 0 10px 30px rgba(15,122,92,.35);
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
   font-family: var(--sans);
   transition: transform .25s ease, box-shadow .25s ease;
 }
-.wa-fab:hover { transform: translateY(-2px); box-shadow: 0 14px 38px rgba(37,211,102,.45); }
+.wa-fab:hover { transform: translateY(-2px); box-shadow: 0 14px 38px rgba(15,122,92,.5); }
 .wa-fab-label { white-space: nowrap; }
 @media (max-width: 560px) {
   .wa-fab { padding: 13px; }
@@ -1125,3 +1172,16 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
   .prog-includes-grid              { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) { .wa-fab { transition: none; } }
+
+/* Selector de idioma: sobre la foto del hero (tema claro) las etiquetas inactivas deben ser claras */
+.lang-btn { min-height: 30px; }
+[data-theme="light"] .jnav.over-hero:not(.scrolled) .lang-switch { border-color: rgba(246,241,231,.35) !important; }
+[data-theme="light"] .jnav.over-hero:not(.scrolled) .lang-btn:not([aria-pressed="true"]) { color: rgba(246,241,231,.85) !important; }
+
+/* Botones de solo ícono dentro del aula y del panel (editar, eliminar, publicar…): zona táctil de 32px
+   aunque el ícono sea de 14–18px (antes 18–20px, muy difíciles de tocar en celular y tablet). */
+.aula-main main button:has(> svg:only-child) {
+  min-width: 32px; min-height: 32px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+}

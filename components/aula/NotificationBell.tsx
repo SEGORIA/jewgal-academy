@@ -91,7 +91,7 @@ export default function NotificationBell() {
           position: "relative", width: 34, height: 34, borderRadius: "50%",
           background: "rgba(165,141,102,.1)", border: "1px solid rgba(165,141,102,.18)",
           display: "flex", alignItems: "center", justifyContent: "center",
-          cursor: "pointer", color: "var(--gold)",
+          cursor: "pointer", color: "var(--gold-ink)",
         }}
       >
         <Bell size={15} />
@@ -125,7 +125,7 @@ export default function NotificationBell() {
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px", borderBottom: "1px solid var(--surface-2)" }}>
               <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>Notificaciones</span>
               {unreadCount > 0 && (
-                <button onClick={markAllRead} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: "var(--gold)", fontSize: 11.5, cursor: "pointer", fontWeight: 600 }}>
+                <button onClick={markAllRead} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: "var(--gold-ink)", fontSize: 11.5, cursor: "pointer", fontWeight: 600 }}>
                   <CheckCheck size={13} /> Marcar todas
                 </button>
               )}
@@ -149,7 +149,7 @@ export default function NotificationBell() {
                       textDecoration: "none", width: "100%", boxSizing: "border-box",
                     }}
                   >
-                    <MessageSquare size={15} style={{ color: "var(--gold)", flexShrink: 0, marginTop: 2 }} />
+                    <MessageSquare size={15} style={{ color: "var(--gold-ink)", flexShrink: 0, marginTop: 2 }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <p style={{ fontSize: 12.5, color: "var(--text)", lineHeight: 1.5 }}>{n.message}</p>
                       <span style={{ fontSize: 11, color: "var(--text-dim)" }}>{timeAgo(n.createdAt)}</span>

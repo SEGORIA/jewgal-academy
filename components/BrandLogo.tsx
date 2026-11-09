@@ -16,7 +16,9 @@ export default function BrandLogo({
 }) {
   const square = variant === "square"
   const src = square ? "/brand/logo-cuadrado.png" : "/brand/logo-horizontal.png"
-  const width = Math.round(height * (square ? 1.05 : 1.7))
+  // Ambos archivos miden 1266×1000 px (proporción 1.266). Antes se reservaba 1.05 / 1.7, así que el logo
+  // "saltaba" de tamaño al cargar (layout shift) y Next avisaba en consola de la proporción incorrecta.
+  const width = Math.round(height * (1266 / 1000))
   return (
     <span className="brand-logo" style={{ display: "inline-flex", lineHeight: 0 }}>
       <Image

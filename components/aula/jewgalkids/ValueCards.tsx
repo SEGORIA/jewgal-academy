@@ -24,7 +24,7 @@ export default function ValueCards() {
           style={{
             display: "flex", alignItems: "center", gap: 8, flexShrink: 0,
             padding: "10px 20px", borderRadius: 10,
-            background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+            background: "var(--grad-cta)",
             border: "none", color: "#fff", fontSize: 13, fontWeight: 600, cursor: "pointer",
             boxShadow: "0 8px 24px -8px rgba(167,109,97,.5)",
           }}

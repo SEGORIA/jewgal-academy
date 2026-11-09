@@ -5,6 +5,7 @@ import { Link, usePathname } from "@/i18n/navigation"
 import NextLink from "next/link"
 import BrandLogo from "@/components/BrandLogo"
 import LanguageSwitcher from "@/components/LanguageSwitcher"
+import SiteSearch from "@/components/SiteSearch"
 import { useSession } from "next-auth/react"
 import { useTranslations } from "next-intl"
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion"
@@ -18,6 +19,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen]         = useState(false)
   const [hovered, setHovered]   = useState<string | null>(null)
+  const [searchOpen, setSearchOpen] = useState(false)
   const pathname                = usePathname()
 
   const NAV_LINKS = [
@@ -48,6 +50,16 @@ export default function Navbar() {
     document.body.style.overflow = open ? "hidden" : ""
     return () => { document.body.style.overflow = "" }
   }, [open])
+
+  // Atajos: Ctrl/⌘+K abre el buscador; Esc cierra el menú móvil
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); setSearchOpen((v) => !v) }
+      else if (e.key === "Escape") setOpen(false)
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [])
 
   const isLoggedIn = status === "authenticated" && !!session
   const isAdmin    = session?.user?.role === "admin"
@@ -84,7 +96,7 @@ export default function Navbar() {
             style={{
               zIndex: 90,
               width: 44, height: 44, borderRadius: "50%",
-              background: "linear-gradient(135deg,#A76D61,#C49F72)",
+              background: "var(--grad-cta)",
               border: "none", cursor: "pointer",
               display: "flex", alignItems: "center", justifyContent: "center",
               boxShadow: "0 8px 28px rgba(167,109,97,.42)",
@@ -111,7 +123,7 @@ export default function Navbar() {
                 onMouseEnter={() => setHovered(l.href)}
                 onMouseLeave={() => setHovered(null)}
               >
-                <Link href={l.href} style={{ color: isActive ? "var(--gold)" : undefined }}>
+                <Link href={l.href} className={isActive ? "active" : undefined} aria-current={isActive ? "page" : undefined}>
                   {l.label}
                 </Link>
                 {showLine && (
@@ -131,8 +143,8 @@ export default function Navbar() {
 
         <div className="nav-actions">
           {/* Buscar */}
-          <button className="nav-search" aria-label={t("buscar")}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <button className="nav-search" aria-label={`${t("buscar")} (Ctrl+K)`} aria-haspopup="dialog" onClick={() => setSearchOpen(true)}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
               <circle cx="11" cy="11" r="7"/>
               <path d="M21 21l-4.35-4.35"/>
             </svg>
@@ -143,43 +155,12 @@ export default function Navbar() {
           {status === "loading" ? (
             <div style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(165,141,102,.15)", animation: "pulse 1.5s ease-in-out infinite" }} />
           ) : isLoggedIn ? (
-            <NextLink
-              href={isAdmin ? "/superadmin" : "/aula"}
-              style={{
-                display: "flex", alignItems: "center", gap: 8,
-                color: "var(--gold)", fontSize: 11, letterSpacing: ".12em",
-                textTransform: "uppercase", textDecoration: "none",
-                border: "1px solid rgba(165,141,102,.4)", borderRadius: 3, padding: "9px 16px",
-                transition: "all .3s", background: "rgba(165,141,102,.08)",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "rgba(165,141,102,.18)"
-                ;(e.currentTarget as HTMLElement).style.borderColor = "var(--gold)"
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "rgba(165,141,102,.08)"
-                ;(e.currentTarget as HTMLElement).style.borderColor = "rgba(165,141,102,.4)"
-              }}
-            >
+            <NextLink href={isAdmin ? "/superadmin" : "/aula"} className="nav-account">
               {isAdmin ? t("panelAdmin") : t("miAula")} →
             </NextLink>
           ) : (
             <>
-              <Link href="/login" style={{
-                color: "var(--on-dark)", fontSize: 11, letterSpacing: ".12em",
-                textTransform: "uppercase", textDecoration: "none",
-                border: "1px solid var(--line-d)", borderRadius: 3, padding: "9px 16px",
-                transition: "border-color .3s, color .3s",
-              }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "var(--gold)"
-                  ;(e.currentTarget as HTMLElement).style.color = "var(--gold)"
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "var(--line-d)"
-                  ;(e.currentTarget as HTMLElement).style.color = "var(--on-dark)"
-                }}
-              >
+              <Link href="/login" className="nav-login">
                 {t("iniciarSesion")}
               </Link>
               <Link href="/#programas" className="btn solid" style={{ padding: "9px 18px", fontSize: 11 }}>
@@ -204,6 +185,9 @@ export default function Navbar() {
           <motion.div
             key="mobile-menu"
             id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label={t("abrirMenu")}
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -239,6 +223,25 @@ export default function Navbar() {
               ))}
             </nav>
 
+            <motion.button
+              type="button"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.26 }}
+              onClick={() => { setOpen(false); setSearchOpen(true) }}
+              style={{
+                marginTop: 22, display: "flex", alignItems: "center", gap: 10, width: "100%",
+                padding: "13px 16px", borderRadius: 10, cursor: "pointer", fontSize: 14,
+                background: "rgba(246,241,231,.08)", color: "rgba(246,241,231,.85)",
+                border: "1px solid rgba(196,159,114,.3)", fontFamily: "inherit",
+              }}
+            >
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/>
+              </svg>
+              {t("buscarPlaceholder")}
+            </motion.button>
+
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -262,8 +265,8 @@ export default function Navbar() {
               ) : (
                 <>
                   <Link href="/login" onClick={() => setOpen(false)} style={{
-                    color: "rgba(246,241,231,.75)", fontSize: 12, letterSpacing: ".2em",
-                    textTransform: "uppercase", textDecoration: "none",
+                    color: "rgba(246,241,231,.85)", fontSize: 13, letterSpacing: ".2em",
+                    textTransform: "uppercase", textDecoration: "none", padding: "12px 0", textAlign: "center",
                   }}>
                     {t("iniciarSesion")}
                   </Link>
@@ -275,15 +278,17 @@ export default function Navbar() {
             </motion.div>
 
             <button onClick={() => setOpen(false)} aria-label={t("cerrarMenu")} style={{
-              position: "absolute", top: 24, right: 24,
+              position: "absolute", top: 16, right: 16,
               background: "none", border: "none", color: "#F6F1E7", fontSize: 32, cursor: "pointer",
-              lineHeight: 1, padding: 4,
+              lineHeight: 1, width: 48, height: 48, display: "flex", alignItems: "center", justifyContent: "center",
             }}>
               ×
             </button>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <SiteSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   )
 }

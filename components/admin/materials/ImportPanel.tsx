@@ -131,7 +131,7 @@ export default function ImportPanel({ courseId, courseTitle, onDone, onClose }: 
       </p>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
-        <button onClick={downloadTemplate} style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.3)", color: "var(--gold)", borderRadius: 8, padding: "8px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+        <button onClick={downloadTemplate} style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.3)", color: "var(--gold-ink)", borderRadius: 8, padding: "8px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
           <Download size={13} /> Descargar plantilla
         </button>
         <label style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--text-muted)", borderRadius: 8, padding: "8px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>

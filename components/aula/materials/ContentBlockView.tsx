@@ -191,7 +191,7 @@ function LinkList({ items }: { items: LinkItem[] }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       {items.map((it, i) => (
-        <a key={i} href={it.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: "var(--gold)", textDecoration: "none" }}>
+        <a key={i} href={it.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: "var(--gold-ink)", textDecoration: "none" }}>
           {it.label} ↗
         </a>
       ))}
@@ -253,16 +253,16 @@ export default function ContentBlockView({ block }: { block: ContentBlock }) {
     if (!hasAny) return null
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 16, padding: "14px 16px", borderRadius: 10, background: "var(--surface)", border: "1px solid rgba(165,141,102,.14)" }}>
-        <ResourceCategory icon={<Video size={14} style={{ color: "var(--gold)" }} />} label="Videos recomendados" items={block.videos} render={() => <LinkList items={block.videos} />} />
-        <ResourceCategory icon={<BookOpen size={14} style={{ color: "var(--gold)" }} />} label="Lecturas complementarias" items={block.readings} render={() => <LinkList items={block.readings} />} />
-        <ResourceCategory icon={<Quote size={14} style={{ color: "var(--gold)" }} />} label="Citas para reflexionar" items={block.quotes} render={() => (
+        <ResourceCategory icon={<Video size={14} style={{ color: "var(--gold-ink)" }} />} label="Videos recomendados" items={block.videos} render={() => <LinkList items={block.videos} />} />
+        <ResourceCategory icon={<BookOpen size={14} style={{ color: "var(--gold-ink)" }} />} label="Lecturas complementarias" items={block.readings} render={() => <LinkList items={block.readings} />} />
+        <ResourceCategory icon={<Quote size={14} style={{ color: "var(--gold-ink)" }} />} label="Citas para reflexionar" items={block.quotes} render={() => (
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {block.quotes.map((q, i) => (
               <p key={i} style={{ fontSize: 13, fontStyle: "italic", color: "var(--text-muted)", borderLeft: "2px solid var(--gold)", paddingLeft: 10 }}>{q}</p>
             ))}
           </div>
         )} />
-        <ResourceCategory icon={<Link2 size={14} style={{ color: "var(--gold)" }} />} label="Enlaces de interés" items={block.links} render={() => <LinkList items={block.links} />} />
+        <ResourceCategory icon={<Link2 size={14} style={{ color: "var(--gold-ink)" }} />} label="Enlaces de interés" items={block.links} render={() => <LinkList items={block.links} />} />
       </div>
     )
   }

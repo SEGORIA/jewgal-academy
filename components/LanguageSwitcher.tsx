@@ -37,6 +37,7 @@ function LanguageSwitcherInner({ variant = "dark" }: Props) {
     <div
       role="group"
       aria-label={t("label")}
+      className="lang-switch"
       style={{
         display: "flex", alignItems: "center", gap: 2,
         border: `1px solid ${isLight ? "rgba(246,241,231,.28)" : "rgba(165,141,102,.3)"}`,
@@ -52,9 +53,10 @@ function LanguageSwitcherInner({ variant = "dark" }: Props) {
             onClick={() => switchTo(loc)}
             aria-pressed={active}
             aria-label={loc === "es" ? "Español" : "English"}
+            className="lang-btn"
             style={{
               appearance: "none", border: "none", cursor: active ? "default" : "pointer",
-              padding: "5px 11px", borderRadius: 18,
+              padding: "7px 12px", borderRadius: 18,
               fontSize: 10.5, letterSpacing: ".1em", fontWeight: active ? 700 : 500,
               transition: "all .25s",
               background: active ? "var(--gold)" : "transparent",

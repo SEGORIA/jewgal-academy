@@ -236,7 +236,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
                         color: "var(--text)",
                       }}>
                         <span style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                          <span style={{ fontFamily: "var(--serif)", fontSize: 13, color: "var(--gold)", fontStyle: "italic" }}>
+                          <span style={{ fontFamily: "var(--serif)", fontSize: 13, color: "var(--gold-ink)", fontStyle: "italic" }}>
                             {String(i + 1).padStart(2, "0")}
                           </span>
                           <span style={{ fontSize: 15, fontWeight: 500 }}>{mod.title}</span>

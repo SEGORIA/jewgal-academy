@@ -100,7 +100,7 @@ export default function CountdownTimer({ eventos = [] }: { eventos?: EventoItem[
         {/* Etiqueta */}
         <motion.span
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-          style={{ fontSize: 10, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 12 }}
+          style={{ fontSize: 10, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 12 }}
         >
           ◎ Próximo evento
         </motion.span>

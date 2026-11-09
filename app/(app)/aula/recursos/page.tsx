@@ -52,7 +52,7 @@ export default function RecursosPage() {
     <div style={{ maxWidth: 760, margin: "0 auto" }}>
       {/* Header */}
       <div style={{ marginBottom: 36 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 10 }}>
           Aula Virtual
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "var(--text)", marginBottom: 8 }}>
@@ -82,7 +82,7 @@ export default function RecursosPage() {
           <section key={groupTitle} style={{ marginBottom: 40 }}>
             {Object.keys(grouped).length > 1 && (
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
-                <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--gold)", flexShrink: 0 }}>
+                <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--gold-ink)", flexShrink: 0 }}>
                   {groupTitle}
                 </h2>
                 <div style={{ flex: 1, height: 1, background: "var(--surface-2)" }} />
@@ -107,7 +107,7 @@ export default function RecursosPage() {
                     }}
                   >
                     <div style={{ width: 44, height: 44, borderRadius: 10, background: "rgba(165,141,102,.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <Icon size={18} style={{ color: "var(--gold)" }} />
+                      <Icon size={18} style={{ color: "var(--gold-ink)" }} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <p style={{ fontWeight: 600, color: "var(--text)", fontSize: 14, marginBottom: 3 }}>{resource.title}</p>
@@ -146,7 +146,7 @@ export default function RecursosPage() {
                           display: "flex", alignItems: "center", gap: 6,
                           padding: "7px 14px", borderRadius: 8,
                           background: "rgba(165,141,102,.12)", border: "1px solid rgba(165,141,102,.2)",
-                          color: "var(--gold)", fontSize: 12, fontWeight: 600,
+                          color: "var(--gold-ink)", fontSize: 12, fontWeight: 600,
                           textDecoration: "none", flexShrink: 0, transition: "all .2s",
                         }}
                         onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(165,141,102,.22)" }}

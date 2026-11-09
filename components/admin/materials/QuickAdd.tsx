@@ -8,7 +8,7 @@ import { videoBlockFromUrl } from "@/lib/video-links"
 import ContentBlockView from "@/components/aula/materials/ContentBlockView"
 
 const field: React.CSSProperties = { background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "10px 14px", fontSize: 13, color: "var(--text)", outline: "none", fontFamily: "inherit", width: "100%" }
-const tool: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 7, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.3)", color: "var(--gold)", borderRadius: 8, padding: "8px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer" }
+const tool: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 7, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.3)", color: "var(--gold-ink)", borderRadius: 8, padding: "8px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer" }
 
 // Atajos para armar una lección sin tocar bloques uno por uno:
 //  · pegar un link de video → se agrega el bloque correcto solo
@@ -43,7 +43,7 @@ export default function QuickAdd({ blocks, onChange }: { blocks: ContentBlock[];
 
   return (
     <div style={{ border: "1px dashed rgba(165,141,102,.4)", borderRadius: 12, padding: "14px 16px", background: "rgba(165,141,102,.05)" }}>
-      <p style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, fontWeight: 700, color: "var(--gold)", marginBottom: 10 }}>
+      <p style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, fontWeight: 700, color: "var(--gold-ink)", marginBottom: 10 }}>
         <Wand2 size={14} /> Armado rápido
       </p>
 

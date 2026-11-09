@@ -18,7 +18,7 @@ export default function PdfViewer({ url, title }: { url: string; title: string }
   const btn: React.CSSProperties = {
     display: "inline-flex", alignItems: "center", gap: 7, textDecoration: "none", padding: "8px 16px",
     borderRadius: 30, border: "1px solid rgba(165,141,102,.3)", background: "var(--surface)",
-    color: "var(--gold)", fontSize: 12.5, fontWeight: 600,
+    color: "var(--gold-ink)", fontSize: 12.5, fontWeight: 600,
   }
   return (
     <div style={{ marginTop: 6 }}>

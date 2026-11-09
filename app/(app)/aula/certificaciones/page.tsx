@@ -66,7 +66,7 @@ export default function CertificacionesPage() {
 
       <div style={{ maxWidth: 860, margin: "0 auto" }}>
         <div style={{ marginBottom: 36 }}>
-          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
+          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 10 }}>
             Aula Virtual
           </span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>
@@ -192,12 +192,12 @@ export default function CertificacionesPage() {
                 </a>
               ) : (
                 <button onClick={printCert}
-                  style={{ display: "flex", alignItems: "center", gap: 7, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.35)", color: "var(--gold)", borderRadius: 9, padding: "10px 20px", fontSize: 13, cursor: "pointer" }}>
+                  style={{ display: "flex", alignItems: "center", gap: 7, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.35)", color: "var(--gold-ink)", borderRadius: 9, padding: "10px 20px", fontSize: 13, cursor: "pointer" }}>
                   <Download size={15} /> Imprimir / Descargar
                 </button>
               )}
               <Link href={`/verificar/${active.certificateNumber}`} target="_blank"
-                style={{ display: "flex", alignItems: "center", gap: 7, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.35)", color: "var(--gold)", borderRadius: 9, padding: "10px 20px", fontSize: 13, textDecoration: "none" }}>
+                style={{ display: "flex", alignItems: "center", gap: 7, background: "rgba(165,141,102,.15)", border: "1px solid rgba(165,141,102,.35)", color: "var(--gold-ink)", borderRadius: 9, padding: "10px 20px", fontSize: 13, textDecoration: "none" }}>
                 <ExternalLink size={15} /> Verificar en línea
               </Link>
               <button onClick={() => setActive(null)}

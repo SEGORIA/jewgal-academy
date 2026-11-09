@@ -168,7 +168,7 @@ export default function ComunidadMap() {
         <p style={{
           position: "absolute", bottom: 14, left: 0, right: 0,
           textAlign: "center", fontSize: 10, letterSpacing: ".14em",
-          textTransform: "uppercase", color: "rgba(165,141,102,.35)",
+          textTransform: "uppercase", color: "var(--text-faint)",
           pointerEvents: "none",
         }}>
           {t("selectCountry")}
@@ -266,7 +266,7 @@ export default function ComunidadMap() {
                   padding: "8px 14px", borderRadius: 24,
                   border: `1.5px solid ${isActive ? c.accent : "rgba(165,141,102,.18)"}`,
                   background: isActive ? `${c.accent}18` : "transparent",
-                  color: isActive ? c.accent : "var(--text-faint)",
+                  color: isActive ? "var(--gold-ink)" : "var(--text-muted)",
                   fontSize: 12, fontWeight: isActive ? 700 : 400,
                   cursor: "pointer", transition: "all .2s",
                   letterSpacing: ".06em",

@@ -190,7 +190,7 @@ export default function PerfilPage() {
 
       {/* Header */}
       <div style={{ marginBottom: 32 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 8 }}>
           Aula Virtual
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 34, color: "var(--text)", marginBottom: 4 }}>
@@ -224,7 +224,7 @@ export default function PerfilPage() {
             >
               {photo
                 ? <img src={photo} alt="Foto de perfil" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                : <span style={{ fontFamily: "var(--serif)", fontSize: 38, color: "var(--gold)", fontWeight: 500 }}>{initials}</span>
+                : <span style={{ fontFamily: "var(--serif)", fontSize: 38, color: "var(--gold-ink)", fontWeight: 500 }}>{initials}</span>
               }
               {/* Overlay hover */}
               <motion.div
@@ -235,8 +235,8 @@ export default function PerfilPage() {
                   display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4,
                 }}
               >
-                <Camera size={18} style={{ color: "var(--gold)" }} />
-                <span style={{ fontSize: 10, color: "var(--gold)", letterSpacing: ".1em" }}>Cambiar</span>
+                <Camera size={18} style={{ color: "var(--gold-ink)" }} />
+                <span style={{ fontSize: 10, color: "var(--gold-ink)", letterSpacing: ".1em" }}>Cambiar</span>
               </motion.div>
             </div>
             <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }}
@@ -320,7 +320,7 @@ export default function PerfilPage() {
                     padding: "7px 14px", borderRadius: 20, fontSize: 12, cursor: "pointer",
                     border: `1.5px solid ${active ? "var(--gold)" : "rgba(165,141,102,.2)"}`,
                     background: active ? "rgba(165,141,102,.15)" : "transparent",
-                    color: active ? "var(--gold)" : "var(--text-faint)",
+                    color: active ? "var(--gold-ink)" : "var(--text-faint)",
                     fontWeight: active ? 600 : 400,
                     display: "flex", alignItems: "center", gap: 6,
                     transition: "all .18s",

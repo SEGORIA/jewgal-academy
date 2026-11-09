@@ -61,7 +61,7 @@ export default function CompraExitosaPage() {
       >
         {estado === "verificando" && (
           <>
-            <Loader2 size={44} style={{ color: "var(--gold)", margin: "0 auto 20px", animation: "spin 1s linear infinite" }} />
+            <Loader2 size={44} style={{ color: "var(--gold-ink)", margin: "0 auto 20px", animation: "spin 1s linear infinite" }} />
             <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 26, color: "var(--text)", marginBottom: 10 }}>
               {t("verifyingTitle")}
             </h1>

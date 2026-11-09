@@ -89,7 +89,7 @@ export default function BreathingPacer() {
                 fontSize: 12.5, fontWeight: active ? 600 : 400,
                 border: `1px solid ${active ? "var(--gold)" : "rgba(165,141,102,.25)"}`,
                 background: active ? "rgba(165,141,102,.15)" : "transparent",
-                color: active ? "var(--gold)" : "var(--text-muted)",
+                color: active ? "var(--gold-ink)" : "var(--text-muted)",
                 cursor: "pointer", transition: "all .2s",
               }}
             >
@@ -156,7 +156,7 @@ export default function BreathingPacer() {
             style={{
               display: "flex", alignItems: "center", gap: 8,
               padding: "11px 26px", borderRadius: 30,
-              background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+              background: "var(--grad-cta)",
               border: "none", color: "#fff", fontSize: 13.5, fontWeight: 600,
               cursor: "pointer", boxShadow: "0 8px 24px -8px rgba(167,109,97,.5)",
             }}
@@ -179,7 +179,7 @@ export default function BreathingPacer() {
         </div>
 
         <p style={{ color: "var(--text-dim)", fontSize: 12.5 }}>
-          Respiraciones completas: <strong style={{ color: "var(--gold)" }}>{cycles}</strong>
+          Respiraciones completas: <strong style={{ color: "var(--gold-ink)" }}>{cycles}</strong>
         </p>
       </div>
     </div>

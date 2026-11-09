@@ -17,7 +17,7 @@ const ACCENTS = ["#A58D66", "#A76D61", "#C49F72", "#CBB78B", "#8FBF9F"]
 const accentFor = (i: number) => ACCENTS[i % ACCENTS.length]
 
 const quickActions = [
-  { label: "Agregar alumno",     href: "/superadmin/alumnos",  icon: UserPlus,   color: "var(--gold)" },
+  { label: "Agregar alumno",     href: "/superadmin/alumnos",  icon: UserPlus,   color: "var(--gold-ink)" },
   { label: "Agendar clase live", href: "/superadmin/cursos",   icon: PlayCircle, color: "var(--teal)" },
   { label: "Nueva entrada blog", href: "/superadmin/blog",     icon: FileText,   color: "var(--success)" },
   { label: "Editar sitio web",   href: "/superadmin/web",      icon: Globe,      color: "#A76D61" },
@@ -96,7 +96,7 @@ export default function AdminDashboard() {
       {/* Header */}
       <div style={{ marginBottom: 36, display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16 }}>
         <div>
-          <span style={{ fontSize: 10, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
+          <span style={{ fontSize: 10, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 10 }}>
             Jewgal Academy
           </span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "var(--text)", marginBottom: 6, letterSpacing: "-.01em" }}>
@@ -201,7 +201,7 @@ export default function AdminDashboard() {
           <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)" }}>
             Programas · Vista general
           </h2>
-          <Link href="/superadmin/cursos" style={{ fontSize: 12, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--gold)", textDecoration: "none" }}>
+          <Link href="/superadmin/cursos" style={{ fontSize: 12, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--gold-ink)", textDecoration: "none" }}>
             Gestionar →
           </Link>
         </div>

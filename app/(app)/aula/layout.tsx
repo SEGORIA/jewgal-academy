@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import BrandLogo from "@/components/BrandLogo"
 import NotificationBell from "@/components/aula/NotificationBell"
+import LabelAssociator from "@/components/LabelAssociator"
 import { usePathname } from "next/navigation"
 import { LayoutDashboard, Video, BookOpen, PlayCircle, Menu, X, LogOut, UserCircle, Award, CreditCard, Sparkles, ExternalLink, MessageCircle, Headphones, GraduationCap, Users2 } from "lucide-react"
 import { signOut, useSession } from "next-auth/react"
@@ -63,8 +64,8 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
             <BrandLogo height={58} variant="square" priority />
           </Link>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 12, padding: "5px 10px", borderRadius: 20, background: "rgba(165,141,102,.1)", border: "1px solid rgba(165,141,102,.18)", width: "fit-content" }}>
-            <Sparkles size={10} style={{ color: "var(--gold)" }} />
-            <span style={{ fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--gold)", fontWeight: 700 }}>
+            <Sparkles size={10} style={{ color: "var(--gold-ink)" }} />
+            <span style={{ fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--gold-ink)", fontWeight: 700 }}>
               Aula Virtual
             </span>
           </div>
@@ -81,13 +82,14 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
                 {showDivider && (
                   <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 10px 8px" }}>
                     <div style={{ flex: 1, height: 1, background: "var(--surface-2)" }} />
-                    <span style={{ fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--text-faint)" }}>cuenta</span>
+                    <span style={{ fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--text-faint)" }}>cuenta</span>
                     <div style={{ flex: 1, height: 1, background: "var(--surface-2)" }} />
                   </div>
                 )}
                 <motion.div whileHover={{ x: active ? 0 : 3 }} transition={{ type: "spring", stiffness: 400, damping: 28 }}>
                   <Link
                     href={href}
+                    aria-current={active ? "page" : undefined}
                     onClick={() => setOpen(false)}
                     style={{
                       display: "flex", alignItems: "center", gap: 12,
@@ -97,7 +99,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
                       background: active
                         ? "linear-gradient(90deg,rgba(165,141,102,.18) 0%,rgba(165,141,102,.06) 100%)"
                         : "transparent",
-                      color: active ? "var(--gold)" : "var(--text-muted)",
+                      color: active ? "var(--gold-ink)" : "var(--text-muted)",
                       borderLeft: active ? "2px solid var(--gold)" : "2px solid transparent",
                       boxShadow: active ? "inset 0 0 0 1px rgba(165,141,102,.1)" : "none",
                       transition: "all .2s",
@@ -174,7 +176,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
               onClick={() => setOpen(!open)}
               aria-label={open ? "Cerrar menú" : "Abrir menú"}
               aria-expanded={open}
-              style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", display: "none" }}
+              style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", display: "none", padding: 10, margin: -6 }}
               className="mob-menu-btn"
             >
               {open ? <X size={20} /> : <Menu size={20} />}
@@ -185,7 +187,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
               <span style={{ color: "var(--text-dim)", letterSpacing: ".06em" }}>Jewgal Aula</span>
               <span style={{ color: "rgba(165,141,102,.3)", fontSize: 10 }}>›</span>
               <span style={{
-                color: "var(--gold)", fontWeight: 600, letterSpacing: ".04em",
+                color: "var(--gold-ink)", fontWeight: 600, letterSpacing: ".04em",
                 padding: "3px 10px", borderRadius: 6,
                 background: "rgba(165,141,102,.1)",
                 border: "1px solid rgba(165,141,102,.15)",
@@ -205,7 +207,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
                 title="Mi perfil"
                 style={{
                   width: 34, height: 34, borderRadius: "50%",
-                  background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+                  background: "var(--grad-cta)",
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 13, fontWeight: 700, color: "white", cursor: "pointer",
                   boxShadow: "0 0 0 2px rgba(196,159,114,.3), 0 4px 12px rgba(167,109,97,.3)",
@@ -223,6 +225,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
 
         {/* Content */}
         <main style={{ flex: 1, overflowY: "auto", padding: "36px 32px" }}>
+          <LabelAssociator />
           {children}
         </main>
       </div>

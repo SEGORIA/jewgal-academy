@@ -131,7 +131,7 @@ export default function ContactoPage() {
             fontSize: "clamp(40px,6vw,80px)", color: "var(--text)",
             lineHeight: 1.02, letterSpacing: "-.01em",
           }}>
-            {content.pages.contacto.title1}<br /><em style={{ color: "var(--gold-light)", fontStyle: "normal" }}>{content.pages.contacto.title2}</em>
+            {content.pages.contacto.title1}<br /><em style={{ color: "var(--gold-em)", fontStyle: "normal" }}>{content.pages.contacto.title2}</em>
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: 16, maxWidth: 440, marginTop: 22, lineHeight: 1.7 }}>
             {content.pages.contacto.subtext}
@@ -148,7 +148,7 @@ export default function ContactoPage() {
                 <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16, color: "var(--gold-light)" }}>
                   {c.icon}
                 </div>
-                <div style={{ fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 8 }}>
+                <div style={{ fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 8 }}>
                   {c.label}
                 </div>
                 {c.href ? (
@@ -185,7 +185,7 @@ export default function ContactoPage() {
 
               {/* Redes sociales */}
               <div style={{ borderTop: "1px solid var(--line-d)", paddingTop: 28 }}>
-                <div style={{ fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 16 }}>
+                <div style={{ fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 16 }}>
                   {t("followMe")}
                 </div>
                 <div style={{ display: "flex", gap: 14 }}>
@@ -204,7 +204,7 @@ export default function ContactoPage() {
                         display: "flex", alignItems: "center", justifyContent: "center",
                         color: "var(--on-dark)", transition: ".3s",
                       }}
-                      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--gold)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--gold)" }}
+                      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--gold-ink)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--gold)" }}
                       onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--on-dark)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--line-d)" }}
                     >
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">{s.icon}</svg>
@@ -324,7 +324,7 @@ const labelStyle: React.CSSProperties = {
   fontSize: 11,
   letterSpacing: ".18em",
   textTransform: "uppercase",
-  color: "var(--gold)",
+  color: "var(--gold-ink)",
   marginBottom: 8,
 }
 

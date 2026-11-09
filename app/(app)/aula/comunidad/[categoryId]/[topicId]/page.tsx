@@ -147,7 +147,7 @@ export default function TopicDetailPage() {
       <div style={{ display: "flex", gap: 12, marginLeft: nested ? 40 : 0 }}>
         <div style={{
           width: 34, height: 34, borderRadius: "50%", flexShrink: 0, overflow: "hidden",
-          background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+          background: "var(--grad-cta)",
           display: "flex", alignItems: "center", justifyContent: "center",
           fontSize: 13, fontWeight: 700, color: "#fff",
         }}>
@@ -166,7 +166,7 @@ export default function TopicDetailPage() {
             <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 8 }}>
               <textarea value={editBody} onChange={(e) => setEditBody(e.target.value)} rows={3} maxLength={8000} style={inputStyle} />
               <div style={{ display: "flex", gap: 8 }}>
-                <button onClick={() => saveEdit(post.id)} style={{ fontSize: 12, fontWeight: 600, color: "var(--gold)", background: "none", border: "none", cursor: "pointer" }}>Guardar</button>
+                <button onClick={() => saveEdit(post.id)} style={{ fontSize: 12, fontWeight: 600, color: "var(--gold-ink)", background: "none", border: "none", cursor: "pointer" }}>Guardar</button>
                 <button onClick={() => setEditingId(null)} style={{ fontSize: 12, color: "var(--text-dim)", background: "none", border: "none", cursor: "pointer" }}>Cancelar</button>
               </div>
             </div>
@@ -225,7 +225,7 @@ export default function TopicDetailPage() {
                 <button
                   onClick={() => handleSendReply(post.id)}
                   disabled={!replyBody.trim() || sending}
-                  style={{ fontSize: 12, fontWeight: 600, color: "var(--gold)", background: "none", border: "none", cursor: !replyBody.trim() || sending ? "not-allowed" : "pointer" }}
+                  style={{ fontSize: 12, fontWeight: 600, color: "var(--gold-ink)", background: "none", border: "none", cursor: !replyBody.trim() || sending ? "not-allowed" : "pointer" }}
                 >
                   Responder
                 </button>
@@ -273,7 +273,7 @@ export default function TopicDetailPage() {
 
       <div style={{ marginBottom: 24 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-          {topic.isPinned && <Pin size={14} style={{ color: "var(--gold)" }} />}
+          {topic.isPinned && <Pin size={14} style={{ color: "var(--gold-ink)" }} />}
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 26, color: "var(--text)" }}>{topic.title}</h1>
         </div>
         <span style={{ fontSize: 12.5, color: "var(--text-dim)" }}>
@@ -311,7 +311,7 @@ export default function TopicDetailPage() {
             width: 40, height: 40, borderRadius: 10, flexShrink: 0, border: "none",
             display: "flex", alignItems: "center", justifyContent: "center",
             cursor: !composer.trim() || sending ? "not-allowed" : "pointer",
-            background: !composer.trim() || sending ? "rgba(165,141,102,.1)" : "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+            background: !composer.trim() || sending ? "rgba(165,141,102,.1)" : "var(--grad-cta)",
             color: !composer.trim() || sending ? "var(--text-dim)" : "#fff",
           }}
           aria-label="Enviar"

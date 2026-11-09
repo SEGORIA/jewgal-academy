@@ -144,7 +144,7 @@ export default function AsistentePage() {
           display: "flex", alignItems: "center", gap: 8, padding: "10px 14px",
           borderRadius: 10, border: "1px solid rgba(165,141,102,.25)",
           background: "rgba(165,141,102,.08)", cursor: "pointer",
-          fontSize: 13, color: "var(--gold)", fontWeight: 600, width: "100%",
+          fontSize: 13, color: "var(--gold-ink)", fontWeight: 600, width: "100%",
           transition: "all .2s", flexShrink: 0,
         }}
         onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(165,141,102,.16)" }}
@@ -175,7 +175,7 @@ export default function AsistentePage() {
                 transition: "all .15s",
               }}
             >
-              <p style={{ fontSize: 12, fontWeight: 600, color: c.id === activeId ? "var(--gold)" : "var(--text-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom: 2 }}>
+              <p style={{ fontSize: 12, fontWeight: 600, color: c.id === activeId ? "var(--gold-ink)" : "var(--text-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom: 2 }}>
                 {c.title ?? "Conversación"}
               </p>
               <p style={{ fontSize: 11, color: "var(--text-dim)" }}>{c._count.messages} mensajes</p>
@@ -260,7 +260,7 @@ export default function AsistentePage() {
                 background: "rgba(165,141,102,.08)", border: "1px solid rgba(165,141,102,.2)",
                 borderRadius: 8, padding: "6px 10px", cursor: "pointer",
                 display: "flex", alignItems: "center", gap: 6,
-                fontSize: 12, color: "var(--gold)", fontWeight: 600, flexShrink: 0,
+                fontSize: 12, color: "var(--gold-ink)", fontWeight: 600, flexShrink: 0,
               }}
             >
               <History size={14} />
@@ -268,7 +268,7 @@ export default function AsistentePage() {
             </button>
 
             <div style={{ width: 34, height: 34, borderRadius: 10, background: "linear-gradient(135deg,rgba(196,159,114,.25) 0%,rgba(167,109,97,.15) 100%)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <MessageCircle size={16} style={{ color: "var(--gold)" }} />
+              <MessageCircle size={16} style={{ color: "var(--gold-ink)" }} />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <p style={{ fontWeight: 600, fontSize: 14, color: "var(--text)" }}>Asistente Jewgal</p>
@@ -281,7 +281,7 @@ export default function AsistentePage() {
               onClick={newConversation}
               style={{
                 background: "none", border: "none", cursor: "pointer",
-                color: "var(--gold)", padding: "6px", flexShrink: 0, display: "flex",
+                color: "var(--gold-ink)", padding: "6px", flexShrink: 0, display: "flex",
               }}
               title="Nueva conversación"
             >
@@ -304,7 +304,7 @@ export default function AsistentePage() {
             ) : messages.length === 0 ? (
               <div style={{ padding: "32px 16px", textAlign: "center" }}>
                 <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(165,141,102,.1)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
-                  <MessageCircle size={22} style={{ color: "var(--gold)" }} />
+                  <MessageCircle size={22} style={{ color: "var(--gold-ink)" }} />
                 </div>
                 <p style={{ color: "var(--text-muted)", fontSize: 16, fontFamily: "var(--serif)", fontWeight: 500, marginBottom: 8 }}>
                   ¿En qué te puedo acompañar hoy?
@@ -322,7 +322,7 @@ export default function AsistentePage() {
                       padding: "11px 15px",
                       borderRadius: m.role === "user" ? "14px 14px 4px 14px" : "14px 14px 14px 4px",
                       background: m.role === "user"
-                        ? "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)"
+                        ? "var(--grad-cta)"
                         : "rgba(165,141,102,.07)",
                       border: m.role === "assistant" ? "1px solid rgba(165,141,102,.12)" : "none",
                       color: m.role === "user" ? "#fff" : "var(--text)",
@@ -391,7 +391,7 @@ export default function AsistentePage() {
                 width: 40, height: 40, borderRadius: 10, flexShrink: 0,
                 background: !input.trim() || streaming || noEnrollment
                   ? "rgba(165,141,102,.1)"
-                  : "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+                  : "var(--grad-cta)",
                 border: "none",
                 cursor: !input.trim() || streaming || noEnrollment ? "not-allowed" : "pointer",
                 display: "flex", alignItems: "center", justifyContent: "center",

@@ -307,8 +307,9 @@ export default function HomeClient({
               </TiltCard>
             ))}
 
-            {/* Método Sholem (juego para adolescentes) → sitio externo sholemethod.org */}
-            <TiltCard className="reveal" radius={6}>
+            {/* Método Sholem (juego para adolescentes) → sitio externo sholemethod.org.
+                Banda destacada a todo el ancho (.prog-feature) para no dejar una tarjeta huérfana en la grilla de 5. */}
+            <TiltCard className="reveal prog-feature" radius={6} intensity={2}>
               <a href="https://www.sholemethod.org/" target="_blank" rel="noopener noreferrer" className="pcard">
                 <div className="thumb">
                   <Image
@@ -340,7 +341,7 @@ export default function HomeClient({
           <div className="reveal" style={{ textAlign: "center", maxWidth: 700, margin: "0 auto clamp(32px,5vw,64px)" }}>
             <span className="eyebrow" style={{ display: "inline-block", marginBottom: 14 }}>{t("uniqueEyebrow")}</span>
             <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(22px,4vw,48px)", color: "var(--text)", lineHeight: 1.18, marginBottom: 16 }}>
-              {t.rich("uniqueTitle", { em: (chunks) => <em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>{chunks}</em> })}
+              {t.rich("uniqueTitle", { em: (chunks) => <em style={{ fontStyle: "normal", color: "var(--gold-em)" }}>{chunks}</em> })}
             </h2>
             <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.6vw,17px)", lineHeight: 1.7 }}>
               {t("uniqueSubtext")}
@@ -353,7 +354,7 @@ export default function HomeClient({
               { n: "03", title: t("pillar3Title"), desc: t("pillar3Desc"), items: t.raw("pillar3Items") as string[] },
             ].map((d) => (
               <div key={d.n} className="reveal" style={{ background: "var(--surface)", border: "1px solid var(--line-d)", borderRadius: "var(--r-lg)", padding: "clamp(28px,3vw,38px)" }}>
-                <div style={{ fontFamily: "var(--serif)", fontSize: 13, fontStyle: "italic", color: "var(--gold)", marginBottom: 14 }}>{d.n}</div>
+                <div style={{ fontFamily: "var(--serif)", fontSize: 13, fontStyle: "italic", color: "var(--gold-ink)", marginBottom: 14 }}>{d.n}</div>
                 <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(20px,2.2vw,26px)", color: "var(--text)", marginBottom: 10 }}>{d.title}</h3>
                 <p style={{ color: "var(--on-dark)", fontSize: 14.5, lineHeight: 1.6, marginBottom: 20 }}>{d.desc}</p>
                 <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10, padding: 0 }}>
@@ -387,7 +388,7 @@ export default function HomeClient({
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                 <Link href="/conoce-a-devora" className="btn">{t("historyLink")}</Link>
                 <Link href="/coaching-1-1" className="btn solid">{t("coachingLink")}</Link>
-                <a href="https://sholemcorazonvaliente.org/" target="_blank" rel="noopener noreferrer" className="btn" style={{ borderColor: "var(--gold)", color: "var(--gold)" }}>{t("foundationLink")}</a>
+                <a href="https://sholemcorazonvaliente.org/" target="_blank" rel="noopener noreferrer" className="btn" style={{ borderColor: "var(--gold)", color: "var(--gold-ink)" }}>{t("foundationLink")}</a>
               </div>
             </div>
           </div>

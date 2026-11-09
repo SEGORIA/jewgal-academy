@@ -29,7 +29,7 @@ export default function CoursePreviewPage() {
       marginBottom: 24, padding: "12px 18px", borderRadius: 12,
       background: "rgba(165,141,102,.1)", border: "1px solid rgba(165,141,102,.25)",
     }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--gold)", fontSize: 12.5, fontWeight: 600 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--gold-ink)", fontSize: 12.5, fontWeight: 600 }}>
         <Eye size={14} /> Vista previa — así lo ve el alumno
       </div>
       <button

@@ -142,7 +142,7 @@ export default function ConfiguracionPage() {
   return (
     <div style={{ maxWidth: 860, margin: "0 auto" }}>
       <div style={{ marginBottom: 32 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>Admin</span>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 8 }}>Admin</span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Configuración</h1>
         <p style={{ color: "var(--text-faint)", fontSize: 14 }}>Parámetros globales de la plataforma.</p>
       </div>
@@ -155,7 +155,7 @@ export default function ConfiguracionPage() {
             padding: "10px 12px", borderRadius: 9, border: "none", cursor: "pointer",
             fontSize: 13, fontWeight: tab === key ? 600 : 400,
             background: tab === key ? "rgba(165,141,102,.15)" : "transparent",
-            color: tab === key ? "var(--gold)" : "var(--text-faint)",
+            color: tab === key ? "var(--gold-ink)" : "var(--text-faint)",
             transition: "all .18s",
           }}>
             <Icon size={14} /> {label}
@@ -221,7 +221,7 @@ export default function ConfiguracionPage() {
                       background: on ? "rgba(165,141,102,.14)" : "var(--surface)",
                       border: `1px solid ${on ? "var(--gold)" : "rgba(255,255,255,.08)"}`,
                     }}>
-                    <div style={{ width: "100%", display: "flex", alignItems: "center", gap: 8, color: on ? "var(--gold)" : "var(--text-strong)" }}>
+                    <div style={{ width: "100%", display: "flex", alignItems: "center", gap: 8, color: on ? "var(--gold-ink)" : "var(--text-strong)" }}>
                       <Icon size={18} /> <span style={{ fontSize: 14, fontWeight: 600 }}>{label}</span>
                       {on && <span style={{ fontSize: 10, marginLeft: "auto", color: "var(--success)" }}>● Activo</span>}
                     </div>
@@ -370,7 +370,7 @@ export default function ConfiguracionPage() {
           {/* Buscar alumno */}
           <div style={{ ...card, padding: "26px 24px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-              <Users size={18} style={{ color: "var(--gold)" }} />
+              <Users size={18} style={{ color: "var(--gold-ink)" }} />
               <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)" }}>Resetear contraseña de alumno</h2>
             </div>
             <p style={{ fontSize: 13, color: "var(--text-faint)", marginBottom: 22 }}>Buscá un alumno por email y generá una contraseña temporal.</p>

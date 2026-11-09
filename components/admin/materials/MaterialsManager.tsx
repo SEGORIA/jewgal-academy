@@ -19,7 +19,7 @@ function cleanName(file: string) {
 }
 
 const inputStyle: React.CSSProperties = { background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.2)", borderRadius: 9, padding: "8px 12px", fontSize: 13, color: "var(--text)", outline: "none", fontFamily: "inherit", width: "100%" }
-const toolBtn: React.CSSProperties = { display: "flex", alignItems: "center", gap: 7, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.3)", color: "var(--gold)", borderRadius: 8, padding: "9px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", textDecoration: "none" }
+const toolBtn: React.CSSProperties = { display: "flex", alignItems: "center", gap: 7, background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.3)", color: "var(--gold-ink)", borderRadius: 8, padding: "9px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", textDecoration: "none" }
 const iconBtn: React.CSSProperties = { background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)", padding: 4, display: "flex", alignItems: "center" }
 
 type Props = {
@@ -263,13 +263,13 @@ export default function MaterialsManager({ courseId, courseTitle, materials, mod
 
       {materials.length > 0 && uploads.length === 0 && (
         <p style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, color: "var(--text-dim)", margin: "-4px 0 14px" }}>
-          <CloudUpload size={13} style={{ color: "var(--gold)" }} /> Tip: arrastrá archivos (PDF, video, imágenes) sobre un módulo y se cargan solos como borrador.
+          <CloudUpload size={13} style={{ color: "var(--gold-ink)" }} /> Tip: arrastrá archivos (PDF, video, imágenes) sobre un módulo y se cargan solos como borrador.
         </p>
       )}
 
       {uploads.length > 0 && (
         <div style={{ background: "var(--surface)", border: "1px solid rgba(165,141,102,.25)", borderRadius: 12, padding: "12px 14px", marginBottom: 14, display: "flex", flexDirection: "column", gap: 8 }}>
-          <p style={{ fontSize: 12, fontWeight: 700, color: "var(--gold)" }}>Cargando archivos…</p>
+          <p style={{ fontSize: 12, fontWeight: 700, color: "var(--gold-ink)" }}>Cargando archivos…</p>
           {uploads.map((u) => (
             <div key={u.id}>
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: u.status === "error" ? "var(--danger)" : "var(--text-muted)" }}>
@@ -290,7 +290,7 @@ export default function MaterialsManager({ courseId, courseTitle, materials, mod
 
       {newModuleTitle !== null && (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", background: "var(--surface)", border: "1px solid rgba(165,141,102,.25)", borderRadius: 12, padding: "12px 14px", marginBottom: 14 }}>
-          <span style={{ fontFamily: "var(--serif)", fontStyle: "italic", color: "var(--gold)", fontSize: 13 }}>Módulo {nextModuleNumber}</span>
+          <span style={{ fontFamily: "var(--serif)", fontStyle: "italic", color: "var(--gold-ink)", fontSize: 13 }}>Módulo {nextModuleNumber}</span>
           <input
             autoFocus value={newModuleTitle} onChange={(e) => setNewModuleTitle(e.target.value)} placeholder="Nombre del módulo"
             onKeyDown={async (e) => { if (e.key === "Enter" && (await saveModule(nextModuleNumber, newModuleTitle, null))) setNewModuleTitle(null) }}
@@ -341,7 +341,7 @@ export default function MaterialsManager({ courseId, courseTitle, materials, mod
               >
                 {fileDropModule === g.number && (
                   <div style={{ position: "absolute", inset: 0, zIndex: 5, borderRadius: 12, background: "rgba(246,241,231,.92)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, pointerEvents: "none" }}>
-                    <CloudUpload size={28} style={{ color: "var(--gold)" }} />
+                    <CloudUpload size={28} style={{ color: "var(--gold-ink)" }} />
                     <p style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>Soltá los archivos para cargarlos en el Módulo {g.number}</p>
                     <p style={{ fontSize: 12, color: "var(--text-dim)" }}>PDF y documentos · videos · imágenes (= diapositivas)</p>
                   </div>
@@ -351,7 +351,7 @@ export default function MaterialsManager({ courseId, courseTitle, materials, mod
                   <button onClick={() => toggleCollapsed(g.number)} style={{ ...iconBtn, padding: 2 }} title={isCollapsed ? "Expandir" : "Contraer"}>
                     {isCollapsed ? <ChevronRight size={16} /> : <ChevronDown size={16} />}
                   </button>
-                  <span style={{ fontFamily: "var(--serif)", fontStyle: "italic", color: "var(--gold)", fontSize: 13, flexShrink: 0 }}>Módulo {g.number}</span>
+                  <span style={{ fontFamily: "var(--serif)", fontStyle: "italic", color: "var(--gold-ink)", fontSize: 13, flexShrink: 0 }}>Módulo {g.number}</span>
 
                   {renaming === g.number ? (
                     <>
@@ -403,7 +403,7 @@ export default function MaterialsManager({ courseId, courseTitle, materials, mod
                                 style={{ display: "flex", alignItems: "center", gap: 12, width: "100%", textAlign: "left", background: "none", border: "none", borderRadius: 8, padding: "9px 10px", cursor: "pointer" }}
                                 onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(165,141,102,.12)" }}
                                 onMouseLeave={(e) => { e.currentTarget.style.background = "none" }}>
-                                <span style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(165,141,102,.14)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--gold)", flexShrink: 0 }}><Icon size={16} /></span>
+                                <span style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(165,141,102,.14)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--gold-ink)", flexShrink: 0 }}><Icon size={16} /></span>
                                 <span><span style={{ display: "block", fontSize: 13, fontWeight: 600, color: "var(--text)" }}>{t.label}</span><span style={{ display: "block", fontSize: 11.5, color: "var(--text-dim)" }}>{t.hint}</span></span>
                               </button>
                             )
@@ -447,7 +447,7 @@ export default function MaterialsManager({ courseId, courseTitle, materials, mod
                             <button onClick={() => moveByArrow(m, -1)} disabled={i === 0} title="Subir" style={{ ...iconBtn, padding: 0, height: 14, opacity: i === 0 ? 0.25 : 1, cursor: i === 0 ? "default" : "pointer" }}><ChevronUp size={13} /></button>
                             <button onClick={() => moveByArrow(m, 1)} disabled={i === g.items.length - 1} title="Bajar" style={{ ...iconBtn, padding: 0, height: 14, opacity: i === g.items.length - 1 ? 0.25 : 1, cursor: i === g.items.length - 1 ? "default" : "pointer" }}><ChevronDown size={13} /></button>
                           </div>
-                          {m.type === "document" ? <Download size={15} style={{ color: "var(--gold)", flexShrink: 0 }} /> : m.type === "lesson" ? <BookOpen size={15} style={{ color: "var(--gold)", flexShrink: 0 }} /> : <ExternalLink size={15} style={{ color: "var(--teal)", flexShrink: 0 }} />}
+                          {m.type === "document" ? <Download size={15} style={{ color: "var(--gold-ink)", flexShrink: 0 }} /> : m.type === "lesson" ? <BookOpen size={15} style={{ color: "var(--gold-ink)", flexShrink: 0 }} /> : <ExternalLink size={15} style={{ color: "var(--teal)", flexShrink: 0 }} />}
                           <div style={{ flex: 1, minWidth: 140 }}>
                             <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{m.title}</p>
                             <p style={{ fontSize: 11.5, color: "var(--text-dim)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>

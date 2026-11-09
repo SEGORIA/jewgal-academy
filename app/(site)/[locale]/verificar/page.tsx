@@ -30,14 +30,14 @@ export default function VerificarPage() {
       }}>
         <div className="wrap" style={{ maxWidth: 560, margin: "0 auto", textAlign: "center", padding: "0 24px" }}>
           <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(165,141,102,.12)", border: "1px solid rgba(165,141,102,.3)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
-            <ShieldCheck size={28} style={{ color: "var(--gold)" }} />
+            <ShieldCheck size={28} style={{ color: "var(--gold-ink)" }} />
           </div>
           <span className="eyebrow" style={{ display: "block", marginBottom: 16 }}>Jewgal Academy</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(30px,4vw,44px)", color: "var(--text)", marginBottom: 16 }}>
             {t("title")}
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: 15.5, lineHeight: 1.7, marginBottom: 36 }}>
-            {t.rich("intro", { em: (c) => <em style={{ fontStyle: "italic", color: "var(--gold-light)" }}>{c}</em> })}
+            {t.rich("intro", { em: (c) => <em style={{ fontStyle: "italic", color: "var(--gold-em)" }}>{c}</em> })}
           </p>
           <form onSubmit={handleSubmit} style={{ display: "flex", gap: 10, maxWidth: 420, margin: "0 auto" }}>
             <input

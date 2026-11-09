@@ -184,11 +184,11 @@ export default async function TerminosPage({ params }: { params: Promise<{ local
         borderBottom: "1px solid var(--line-d)",
       }}>
         <div className="wrap">
-          <span style={{ fontSize: 10, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 18 }}>
+          <span style={{ fontSize: 10, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 18 }}>
             {c.legal}
           </span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(32px,5vw,60px)", color: "var(--text)", lineHeight: 1.05, letterSpacing: "-.01em", marginBottom: 16 }}>
-            {c.title1}<br /><em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>{c.title2}</em>
+            {c.title1}<br /><em style={{ fontStyle: "normal", color: "var(--gold-em)" }}>{c.title2}</em>
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: 14, lineHeight: 1.7 }}>
             {c.updated}
@@ -222,7 +222,7 @@ export default async function TerminosPage({ params }: { params: Promise<{ local
             <p style={{ color: "var(--on-dark)", fontSize: 14, lineHeight: 1.7, marginBottom: 16 }}>
               {c.questions}
             </p>
-            <a href="mailto:hola@jewgalacademy.com" style={{ color: "var(--gold)", fontSize: 14, textDecoration: "none" }}>
+            <a href="mailto:hola@jewgalacademy.com" style={{ color: "var(--gold-ink)", fontSize: 14, textDecoration: "none" }}>
               hola@jewgalacademy.com
             </a>
           </div>

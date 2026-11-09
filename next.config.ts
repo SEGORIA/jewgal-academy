@@ -10,9 +10,13 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts")
  * - Stripe y PayPal cargan sus SDKs y iframes desde sus dominios.
  * - Google Fonts sirve CSS desde googleapis y fuentes desde gstatic.
  */
+// Solo en desarrollo: React usa eval() para reconstruir stacks y Vercel Analytics carga su script de depuración.
+// En producción NO se permite 'unsafe-eval' (la política real queda igual de estricta que antes).
+const devScriptSrc = process.env.NODE_ENV !== "production" ? " 'unsafe-eval' https://va.vercel-scripts.com" : ""
+
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://js.stripe.com https://www.paypal.com https://www.paypalobjects.com",
+  `script-src 'self' 'unsafe-inline'${devScriptSrc} https://js.stripe.com https://www.paypal.com https://www.paypalobjects.com`,
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com data:",
   "img-src 'self' data: blob: https:",

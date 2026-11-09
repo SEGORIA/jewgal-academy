@@ -121,7 +121,7 @@ export default function Footer() {
               </button>
             </div>
             {nlStatus === "ok" && (
-              <p role="status" style={{ color: "var(--gold-light)", fontSize: 12, marginTop: 8 }}>
+              <p role="status" style={{ color: "var(--gold-ink)", fontSize: 12, marginTop: 8 }}>
                 {t("suscritoOk")}
               </p>
             )}

@@ -67,7 +67,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 function SummaryStat({ icon: Icon, value, label }: { icon: LucideIcon; value: string; label: string }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-      <Icon size={16} style={{ color: "var(--gold)" }} />
+      <Icon size={16} style={{ color: "var(--gold-ink)" }} />
       <div>
         <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text)", lineHeight: 1.1 }}>{value}</div>
         <div style={{ fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--text-faint)" }}>{label}</div>
@@ -133,13 +133,13 @@ export default function AulaDashboard() {
 
       {/* Encabezado */}
       <div style={{ marginBottom: 40 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 12 }}>
+        <span style={{ fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 12 }}>
           Jewgal Academy · Aula Virtual
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(30px,4vw,46px)", color: "var(--text)", lineHeight: 1.08, marginBottom: 12 }}>
           {session?.user?.name
-            ? <>Hola, <em style={{ fontStyle: "normal", color: "var(--gold)" }}>{session.user.name.split(" ")[0]}</em></>
-            : <>Te damos la bienvenida a tu <em style={{ fontStyle: "normal", color: "var(--gold)" }}>espacio de aprendizaje</em></>
+            ? <>Hola, <em style={{ fontStyle: "normal", color: "var(--gold-ink)" }}>{session.user.name.split(" ")[0]}</em></>
+            : <>Te damos la bienvenida a tu <em style={{ fontStyle: "normal", color: "var(--gold-ink)" }}>espacio de aprendizaje</em></>
           }
         </h1>
         <p style={{ color: "var(--text-muted)", fontSize: 15 }}>
@@ -157,7 +157,7 @@ export default function AulaDashboard() {
           <div style={{ position: "absolute", top: -30, right: -30, width: 110, height: 110, borderRadius: "50%", background: "radial-gradient(circle,rgba(196,159,114,.1) 0%,transparent 70%)", pointerEvents: "none" }} />
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <div style={{ width: 48, height: 48, borderRadius: 12, background: "rgba(165,141,102,.14)", border: "1px solid rgba(165,141,102,.28)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 16px rgba(165,141,102,.15)" }}>
-              <SummaryLevelIcon size={24} style={{ color: "var(--gold)" }} />
+              <SummaryLevelIcon size={24} style={{ color: "var(--gold-ink)" }} />
             </div>
             <div>
               <div style={{ fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--text-faint)", marginBottom: 3 }}>Tu nivel</div>
@@ -233,7 +233,7 @@ export default function AulaDashboard() {
             </p>
             <Link
               href="/#programas"
-              style={{ fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--gold)", textDecoration: "none" }}
+              style={{ fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--gold-ink)", textDecoration: "none" }}
             >
               Ver todos los programas →
             </Link>
@@ -385,7 +385,7 @@ export default function AulaDashboard() {
         <div style={{ paddingLeft: 48 }}>
           <Link
             href="/aula/clases"
-            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--gold)", textDecoration: "none" }}
+            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--gold-ink)", textDecoration: "none" }}
           >
             <Sparkles size={13} /> Ver calendario
           </Link>

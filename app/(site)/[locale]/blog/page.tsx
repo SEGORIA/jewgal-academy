@@ -76,7 +76,7 @@ export default function BlogPage() {
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, ...spring }}
             style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(44px,6vw,78px)", color: "var(--text)", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}
           >
-            {content.pages.blog.title1}<br /><em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>{content.pages.blog.title2}</em>
+            {content.pages.blog.title1}<br /><em style={{ fontStyle: "normal", color: "var(--gold-em)" }}>{content.pages.blog.title2}</em>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.32, ...spring }}
@@ -254,7 +254,7 @@ export default function BlogPage() {
 
                   <div style={{ marginTop: 44, paddingTop: 28, borderTop: "1px solid var(--line-d)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
                     <p style={{ fontSize: 13, color: "var(--on-dark-faint)" }}>
-                      {t("by")} <span style={{ color: "var(--gold)" }}>Devora Benchimol</span> · Jewgal Academy
+                      {t("by")} <span style={{ color: "var(--gold-ink)" }}>Devora Benchimol</span> · Jewgal Academy
                     </p>
                     <Link href="/academia" className="btn solid" style={{ fontSize: 12, padding: "10px 22px" }} onClick={() => setOpenPost(null)}>
                       {t("modalPrograms")}

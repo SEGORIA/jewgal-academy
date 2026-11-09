@@ -118,7 +118,7 @@ export default function LessonBody({
           border: "1px solid rgba(165,141,102,.2)", borderRadius: 14,
           padding: "20px 22px", marginBottom: 26, background: "var(--surface)",
         }}>
-          <p style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 16 }}>
+          <p style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 16 }}>
             <Sparkles size={13} /> Practicá esto interactivamente
           </p>
           <InlineTool />
@@ -132,7 +132,7 @@ export default function LessonBody({
             display: "flex", alignItems: "center", gap: 10, textDecoration: "none",
             background: "linear-gradient(135deg,rgba(167,109,97,.12),rgba(196,159,114,.12))",
             border: "1px solid rgba(165,141,102,.25)", borderRadius: 10,
-            padding: "12px 16px", marginBottom: 22, color: "var(--gold)", fontSize: 13, fontWeight: 600,
+            padding: "12px 16px", marginBottom: 22, color: "var(--gold-ink)", fontSize: 13, fontWeight: 600,
           }}
         >
           <Sparkles size={15} /> Practicá esto interactivamente en el aula →
@@ -150,7 +150,7 @@ export default function LessonBody({
             style={{ width: 110, height: 142, objectFit: "cover", borderRadius: 8, flexShrink: 0, border: "1px solid rgba(165,141,102,.18)" }}
           />
           <div style={{ flex: 1, minWidth: 0 }}>
-            <p style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 10 }}>
+            <p style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 10 }}>
               <BookOpen size={13} /> Workbook de la unidad
             </p>
             {material.description && (
@@ -166,7 +166,7 @@ export default function LessonBody({
                 rel="noopener noreferrer"
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none",
-                  background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+                  background: "var(--grad-cta)",
                   borderRadius: 30, padding: "10px 22px", color: "#fff", fontSize: 13, fontWeight: 600,
                 }}
               >
@@ -188,7 +188,7 @@ export default function LessonBody({
               rel="noopener noreferrer"
               style={{
                 display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none",
-                background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+                background: "var(--grad-cta)",
                 borderRadius: 30, padding: "10px 22px", color: "#fff", fontSize: 13, fontWeight: 600,
                 width: "fit-content",
               }}
@@ -228,7 +228,7 @@ export default function LessonBody({
 
       {material.interactionKind === "reflection" && readOnly && (
         <div>
-          <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 10 }}>
+          <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 10 }}>
             Tu reflexión
           </p>
           <textarea
@@ -246,7 +246,7 @@ export default function LessonBody({
 
       {material.interactionKind === "reflection" && !readOnly && (
         <div>
-          <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 10 }}>
+          <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 10 }}>
             Tu reflexión
           </p>
           <textarea
@@ -265,7 +265,7 @@ export default function LessonBody({
             disabled={saving}
             style={{
               marginTop: 14, padding: "11px 24px", borderRadius: 30,
-              background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+              background: "var(--grad-cta)",
               border: "none", color: "#fff", fontSize: 13.5, fontWeight: 600,
               cursor: "pointer", opacity: saving ? 0.7 : 1,
             }}
@@ -282,7 +282,7 @@ export default function LessonBody({
 
       {!material.interactionKind && readOnly && (
         <div>
-          <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 10 }}>
+          <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 10 }}>
             Notas personales (opcional)
           </p>
           <textarea
@@ -300,7 +300,7 @@ export default function LessonBody({
 
       {!material.interactionKind && !readOnly && (
         <div>
-          <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 10 }}>
+          <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 10 }}>
             Notas personales (opcional)
           </p>
           <textarea
@@ -319,7 +319,7 @@ export default function LessonBody({
             disabled={saving}
             style={{
               padding: "11px 24px", borderRadius: 30,
-              background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+              background: "var(--grad-cta)",
               border: "none", color: "#fff", fontSize: 13.5, fontWeight: 600,
               cursor: "pointer", opacity: saving ? 0.7 : 1,
             }}

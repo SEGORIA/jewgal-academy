@@ -62,7 +62,7 @@ function isPdf(m: CurriculumMaterial | null) {
 
 const ctaStyle: React.CSSProperties = {
   display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 26px", borderRadius: 30,
-  background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)", border: "none", color: "#fff",
+  background: "var(--grad-cta)", border: "none", color: "#fff",
   fontSize: 13.5, fontWeight: 600, cursor: "pointer", textDecoration: "none",
 }
 
@@ -185,7 +185,7 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
           <p style={{ color: "var(--text)", fontSize: 16, marginBottom: 8, fontFamily: "var(--serif)", fontWeight: 500 }}>
             No pudimos cargar esta lección
           </p>
-          <a href={basePath} style={{ color: "var(--gold)", fontSize: 13.5, fontWeight: 600 }}>
+          <a href={basePath} style={{ color: "var(--gold-ink)", fontSize: 13.5, fontWeight: 600 }}>
             Volver →
           </a>
         </div>
@@ -226,7 +226,7 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
       {!readOnly && (
         <div style={{ marginBottom: 24 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
-            <span style={{ fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--gold)" }}>
+            <span style={{ fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--gold-ink)" }}>
               {curriculum.course?.title ?? "Tu avance"}
             </span>
             <span style={{ fontSize: 12.5, color: "var(--text-dim)" }}>
@@ -247,7 +247,7 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
         <aside style={{ width: 270, flexShrink: 0, position: "sticky", top: 20, maxHeight: "calc(100vh - 100px)", overflowY: "auto" }}>
           <div style={{ marginBottom: 16 }}>
             {currentModuleNumber > 0 && (
-              <p style={{ fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 4 }}>
+              <p style={{ fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 4 }}>
                 Módulo {currentModuleNumber}{moduleNumbers.length > 1 ? ` de ${moduleNumbers.filter((n) => n > 0).length}` : ""}
               </p>
             )}
@@ -330,7 +330,7 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
                     }}
                   >
                     {modLocked ? <Lock size={12} style={{ color: "var(--text-faint)", flexShrink: 0 }} /> : done === items.length && items.length > 0 ? <CheckCircle2 size={12} style={{ color: "#4a9d6f", flexShrink: 0 }} /> : <span style={{ width: 12, height: 12, borderRadius: "50%", border: "1px solid rgba(165,141,102,.4)", flexShrink: 0 }} />}
-                    <span style={{ fontSize: 12, color: active ? "var(--gold)" : "var(--text-muted)", fontWeight: active ? 600 : 400, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    <span style={{ fontSize: 12, color: active ? "var(--gold-ink)" : "var(--text-muted)", fontWeight: active ? 600 : 400, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                       {n}. {named?.title ?? `Módulo ${n}`}
                     </span>
                     {!readOnly && <span style={{ fontSize: 10.5, color: "var(--text-faint)" }}>{done}/{items.length}</span>}
@@ -379,13 +379,13 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
 
           {readOnly && progressive && (
             <p style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "var(--text-dim)", marginBottom: 16 }}>
-              <Lock size={13} style={{ color: "var(--gold)" }} /> Desbloqueo progresivo activado: el alumno accede a cada unidad al completar la anterior. Acá ves todo abierto.
+              <Lock size={13} style={{ color: "var(--gold-ink)" }} /> Desbloqueo progresivo activado: el alumno accede a cada unidad al completar la anterior. Acá ves todo abierto.
             </p>
           )}
 
           <div style={{ marginBottom: 22, display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 16 }}>
             <div style={{ minWidth: 0 }}>
-              <span style={{ fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>
+              <span style={{ fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 8 }}>
                 {curriculum.course?.title ? `${curriculum.course.title} · ` : ""}{moduleLabel(currentModuleNumber, namedModule)}
                 {currentItem?.estimatedMinutes != null && (
                   <span style={{ marginLeft: 10, color: "var(--text-faint)", textTransform: "none", letterSpacing: "normal" }}>
@@ -404,7 +404,7 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
                 style={{
                   display: "flex", alignItems: "center", gap: 7, flexShrink: 0, padding: "9px 16px", borderRadius: 30,
                   border: "1px solid rgba(165,141,102,.35)", background: "var(--surface)",
-                  color: "var(--gold)", fontSize: 12.5, fontWeight: 600, cursor: "pointer",
+                  color: "var(--gold-ink)", fontSize: 12.5, fontWeight: 600, cursor: "pointer",
                 }}
               >
                 <Pencil size={13} /> Editar este material
@@ -419,7 +419,7 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
             {currentLocked ? (
               <div style={{ textAlign: "center", padding: "36px 12px" }}>
                 <div style={{ width: 60, height: 60, borderRadius: "50%", background: "rgba(165,141,102,.14)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px" }}>
-                  <Lock size={26} style={{ color: "var(--gold)" }} />
+                  <Lock size={26} style={{ color: "var(--gold-ink)" }} />
                 </div>
                 <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 22, color: "var(--text)", marginBottom: 8 }}>Esto se desbloquea de a poco</h2>
                 <p style={{ color: "var(--text-muted)", fontSize: 14, lineHeight: 1.6, maxWidth: 420, margin: "0 auto 22px" }}>
@@ -466,7 +466,7 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
                         style={{
                           padding: "9px 20px", borderRadius: 30,
                           border: "1px solid rgba(165,141,102,.25)", background: "transparent",
-                          color: "var(--gold)", fontSize: 12.5, fontWeight: 600, cursor: "pointer",
+                          color: "var(--gold-ink)", fontSize: 12.5, fontWeight: 600, cursor: "pointer",
                           opacity: fileSaving ? 0.7 : 1,
                         }}
                       >
@@ -510,7 +510,7 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
                 onClick={() => router.push(`${basePath}/${nextItem.id}`)}
                 style={{
                   display: "flex", alignItems: "center", gap: 6, padding: "10px 20px", borderRadius: 10,
-                  border: "none", background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+                  border: "none", background: "var(--grad-cta)",
                   color: "#fff", fontSize: 13, fontWeight: 600, cursor: "pointer",
                 }}
               >
@@ -550,7 +550,7 @@ function MaterialRow({ m, active, onClick, readOnly, locked, lockHint }: { m: Cu
         <div style={{ width: 13, height: 13, borderRadius: "50%", border: "1px solid rgba(165,141,102,.3)", flexShrink: 0 }} />
       ))}
       <span style={{
-        fontSize: 12.5, color: active ? "var(--gold)" : "var(--text-muted)",
+        fontSize: 12.5, color: active ? "var(--gold-ink)" : "var(--text-muted)",
         fontWeight: active ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1,
       }}>
         {m.title}

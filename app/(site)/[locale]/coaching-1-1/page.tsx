@@ -123,7 +123,7 @@ export default function Coaching11Page() {
               <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                 {steps.map((s) => (
                   <div key={s.n} style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
-                    <span style={{ fontFamily: "var(--serif)", fontSize: 14, fontStyle: "italic", color: "var(--gold)", flexShrink: 0, width: 24 }}>{s.n}</span>
+                    <span style={{ fontFamily: "var(--serif)", fontSize: 14, fontStyle: "italic", color: "var(--gold-ink)", flexShrink: 0, width: 24 }}>{s.n}</span>
                     <div>
                       <h4 style={{ fontSize: 15, fontWeight: 600, color: "var(--text)", marginBottom: 4 }}>{s.title}</h4>
                       <p style={{ fontSize: 13.5, color: "var(--on-dark)", lineHeight: 1.6 }}>{s.desc}</p>
@@ -134,11 +134,11 @@ export default function Coaching11Page() {
 
               <div style={{ display: "flex", flexWrap: "wrap", gap: "16px 32px", marginTop: 28, paddingTop: 24, borderTop: "1px solid var(--line-d)" }}>
                 <div>
-                  <div style={{ fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 4 }}>{t("modalityLabel")}</div>
+                  <div style={{ fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 4 }}>{t("modalityLabel")}</div>
                   <div style={{ fontSize: 14, color: "var(--on-dark)" }}>{t("modalityValue")}</div>
                 </div>
                 <div>
-                  <div style={{ fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 4 }}>{t("priceLabel")}</div>
+                  <div style={{ fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 4 }}>{t("priceLabel")}</div>
                   <div style={{ fontSize: 14, color: "var(--on-dark)" }}>{t("priceValue")}</div>
                 </div>
               </div>
@@ -221,7 +221,7 @@ const labelStyle: React.CSSProperties = {
   fontSize: 11,
   letterSpacing: ".18em",
   textTransform: "uppercase",
-  color: "var(--gold)",
+  color: "var(--gold-ink)",
   marginBottom: 8,
 }
 

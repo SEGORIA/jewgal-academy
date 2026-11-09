@@ -163,7 +163,7 @@ export default function AcademiaPage() {
                 }}
                 whileHover={{ background: "rgba(165,141,102,.04)" }}
               >
-                <span style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: 13, color: "var(--gold)", display: "block", marginBottom: 16 }}>{p.n}</span>
+                <span style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: 13, color: "var(--gold-ink)", display: "block", marginBottom: 16 }}>{p.n}</span>
                 <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 22, color: "var(--text)", marginBottom: 10 }}>{t(p.titleKey)}</h3>
                 <p style={{ color: "var(--on-dark)", fontSize: 14, lineHeight: 1.65 }}>{t(p.descKey)}</p>
               </motion.div>
@@ -182,7 +182,7 @@ export default function AcademiaPage() {
                 {t("programsTitle")}
               </h2>
             </div>
-            <Link href="/certificaciones" className="reveal" style={{ color: "var(--gold)", fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", textDecoration: "none" }}>
+            <Link href="/certificaciones" className="reveal" style={{ color: "var(--gold-ink)", fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", textDecoration: "none" }}>
               {t("viewCertifications")}
             </Link>
           </div>
@@ -245,7 +245,7 @@ export default function AcademiaPage() {
               </p>
               <span style={{
                 display: "inline-flex", alignItems: "center", gap: 10, alignSelf: "flex-start",
-                background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+                background: "var(--grad-cta)",
                 color: "#fff", fontSize: 13, fontWeight: 700,
                 padding: "13px 28px", borderRadius: 30,
                 boxShadow: "0 10px 30px -8px rgba(167,109,97,.6)",

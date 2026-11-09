@@ -32,7 +32,7 @@ export default function NotFound() {
           </div>
 
           {/* Contenido principal */}
-          <span style={{ fontSize: 10, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 20 }}>
+          <span style={{ fontSize: 10, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 20 }}>
             Página no encontrada
           </span>
           <h1 style={{
@@ -41,7 +41,7 @@ export default function NotFound() {
             color: "var(--text)", lineHeight: 1.05,
             letterSpacing: "-.01em", marginBottom: 20,
           }}>
-            Te perdiste<br /><em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>en el camino</em>
+            Te perdiste<br /><em style={{ fontStyle: "normal", color: "var(--gold-em)" }}>en el camino</em>
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.6vw,17px)", lineHeight: 1.7, maxWidth: 420, margin: "0 auto 40px" }}>
             Eso también pasa, y es parte del proceso.

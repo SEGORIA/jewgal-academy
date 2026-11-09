@@ -158,7 +158,7 @@ export default function ContentBlockEditor({ blocks, onChange }: { blocks: Conte
       {blocks.map((block, i) => (
         <div key={i} style={{ border: "1px solid rgba(165,141,102,.16)", borderRadius: 10, padding: "14px 16px", background: "var(--surface)" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-            <span style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--gold)", fontWeight: 600 }}>
+            <span style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--gold-ink)", fontWeight: 600 }}>
               {BLOCK_LABELS[block.type]}
             </span>
             <div style={{ display: "flex", gap: 6 }}>
@@ -436,7 +436,7 @@ export default function ContentBlockEditor({ blocks, onChange }: { blocks: Conte
               </div>
               <button
                 onClick={() => update(i, { ...block, items: [...block.items, { title: "", provider: "cloudinary", url: "" }] })}
-                style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold)", borderRadius: 8, padding: "8px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer", marginTop: 8 }}
+                style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold-ink)", borderRadius: 8, padding: "8px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer", marginTop: 8 }}
               >
                 <Plus size={13} /> Agregar clip
               </button>
@@ -473,7 +473,7 @@ export default function ContentBlockEditor({ blocks, onChange }: { blocks: Conte
           <button
             key={type}
             onClick={() => add(type)}
-            style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold)", borderRadius: 8, padding: "8px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}
+            style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold-ink)", borderRadius: 8, padding: "8px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}
           >
             <Plus size={13} /> {BLOCK_LABELS[type]}
           </button>

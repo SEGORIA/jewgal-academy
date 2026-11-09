@@ -297,7 +297,7 @@ export default function ConoceADevorPage() {
             {credentials.map((g) => (
               <div key={g.category} className="reveal" style={{ borderTop: "1px solid var(--line-d)", paddingTop: 24 }}>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 20 }}>
-                  <span style={{ fontFamily: "var(--serif)", fontSize: 13, color: "var(--gold)", fontStyle: "italic" }}>{g.n}</span>
+                  <span style={{ fontFamily: "var(--serif)", fontSize: 13, color: "var(--gold-ink)", fontStyle: "italic" }}>{g.n}</span>
                   <h3 style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--text)" }}>{g.category}</h3>
                 </div>
                 <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
@@ -354,7 +354,7 @@ export default function ConoceADevorPage() {
               <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.2vw,46px)", color: "var(--text)", lineHeight: 1.1, marginBottom: 20 }}>
                 {t("fundTitle1")}<br /><em style={{ color: "var(--gold-light)", fontStyle: "normal" }}>{t("fundTitle2")}</em>
               </h2>
-              <div style={{ display: "inline-block", border: "1px solid var(--line-d)", borderRadius: 4, padding: "8px 16px", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--gold)", marginTop: 8 }}>
+              <div style={{ display: "inline-block", border: "1px solid var(--line-d)", borderRadius: 4, padding: "8px 16px", fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--gold-ink)", marginTop: 8 }}>
                 {t("fundBadge")}
               </div>
             </div>

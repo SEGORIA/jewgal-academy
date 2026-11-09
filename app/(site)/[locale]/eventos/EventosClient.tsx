@@ -55,7 +55,7 @@ export default function EventosClient({
         <div className="wrap" style={{ position: "relative", zIndex: 2 }}>
           <span className="eyebrow" style={{ display: "block", marginBottom: 20 }}>{content.pages.eventos.eyebrow}</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(44px,6vw,78px)", color: "var(--text)", lineHeight: 1.02, letterSpacing: "-.01em", marginBottom: 22 }}>
-            {content.pages.eventos.title1}<br /><em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>{content.pages.eventos.title2}</em>
+            {content.pages.eventos.title1}<br /><em style={{ fontStyle: "normal", color: "var(--gold-em)" }}>{content.pages.eventos.title2}</em>
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: 17, maxWidth: 500, lineHeight: 1.7 }}>
             {content.pages.eventos.subtext}
@@ -106,7 +106,7 @@ export default function EventosClient({
                   </div>
                   <div className="ev-cta">
                     <div>
-                      <div style={{ fontSize: 10, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 4 }}>
+                      <div style={{ fontSize: 10, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 4 }}>
                         {ev.spots} {t("spots")}
                       </div>
                       <div style={{ fontFamily: "var(--serif)", fontSize: 28, color: ev.price === "Gratis" ? "#C49F72" : ev.accent, marginBottom: 16 }}>
@@ -139,7 +139,7 @@ export default function EventosClient({
                   <h4 style={{ fontFamily: "var(--serif)", fontSize: 19, color: "var(--text)" }}>{p.title}</h4>
                   <span style={{ fontSize: 12, color: "var(--on-dark-faint)" }}>{p.location}</span>
                 </div>
-                <span style={{ fontSize: 12, color: "var(--gold)", letterSpacing: ".1em" }}>{p.date}</span>
+                <span style={{ fontSize: 12, color: "var(--gold-ink)", letterSpacing: ".1em" }}>{p.date}</span>
               </div>
             ))}
           </div>

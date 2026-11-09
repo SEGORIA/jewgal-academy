@@ -67,7 +67,7 @@ export default async function NotFound() {
           </div>
 
           {/* Contenido principal */}
-          <span style={{ fontSize: 10, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 20 }}>
+          <span style={{ fontSize: 10, letterSpacing: ".28em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 20 }}>
             {t.eyebrow}
           </span>
           <h1 style={{
@@ -76,7 +76,7 @@ export default async function NotFound() {
             color: "var(--text)", lineHeight: 1.05,
             letterSpacing: "-.01em", marginBottom: 20,
           }}>
-            {t.title}<br /><em style={{ fontStyle: "normal", color: "var(--gold-light)" }}>{t.titleEm}</em>
+            {t.title}<br /><em style={{ fontStyle: "normal", color: "var(--gold-em)" }}>{t.titleEm}</em>
           </h1>
           <p style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.6vw,17px)", lineHeight: 1.7, maxWidth: 420, margin: "0 auto 40px" }}>
             {t.body}

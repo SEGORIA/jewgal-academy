@@ -68,7 +68,7 @@ export default function PostureGallery() {
             display: "flex", alignItems: "center", gap: 7,
             padding: "9px 16px", borderRadius: 10,
             border: "1px solid rgba(165,141,102,.25)", background: "transparent",
-            color: "var(--gold)", fontSize: 12.5, fontWeight: 600, cursor: "pointer",
+            color: "var(--gold-ink)", fontSize: 12.5, fontWeight: 600, cursor: "pointer",
           }}
         >
           <Shuffle size={13} /> Postura al azar
@@ -93,7 +93,7 @@ export default function PostureGallery() {
           >
             <div style={{
               width: 44, height: 44, borderRadius: "50%",
-              background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+              background: "var(--grad-cta)",
               display: "flex", alignItems: "center", justifyContent: "center",
               color: "#fff", fontSize: 13, fontWeight: 700, flexShrink: 0,
             }}>
@@ -153,14 +153,14 @@ export default function PostureGallery() {
               <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 22 }}>
                 <div style={{
                   width: 52, height: 52, borderRadius: "50%",
-                  background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+                  background: "var(--grad-cta)",
                   display: "flex", alignItems: "center", justifyContent: "center",
                   color: "#fff", fontSize: 15, fontWeight: 700, flexShrink: 0,
                 }}>
                   {String(selected.order).padStart(2, "0")}
                 </div>
                 <div>
-                  <span style={{ fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 3 }}>
+                  <span style={{ fontSize: 10.5, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 3 }}>
                     Postura {naming === "hebrew" ? "· alefato hebreo" : "· versión general"}
                   </span>
                   <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 26, color: "var(--text)" }}>
@@ -170,12 +170,12 @@ export default function PostureGallery() {
               </div>
 
               <div style={{ marginBottom: 20 }}>
-                <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 8 }}>Instrucciones</p>
+                <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 8 }}>Instrucciones</p>
                 <p style={{ color: "var(--text-muted)", fontSize: 14, lineHeight: 1.7 }}>{selected.instructions}</p>
               </div>
 
               <div style={{ marginBottom: 20 }}>
-                <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 8 }}>Variaciones</p>
+                <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 8 }}>Variaciones</p>
                 <p style={{ color: "var(--text-muted)", fontSize: 14, lineHeight: 1.7 }}>{selected.variations}</p>
               </div>
 
@@ -183,7 +183,7 @@ export default function PostureGallery() {
                 background: "rgba(165,141,102,.08)", border: "1px solid rgba(165,141,102,.18)",
                 borderRadius: 10, padding: "16px 18px",
               }}>
-                <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 8 }}>Mensaje espiritual</p>
+                <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 8 }}>Mensaje espiritual</p>
                 <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", color: "var(--text)", fontSize: 15.5, lineHeight: 1.6 }}>
                   {spiritualOf(selected)}
                 </p>

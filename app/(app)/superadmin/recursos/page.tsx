@@ -203,7 +203,7 @@ export default function RecursosAdminPage() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 32 }}>
         <div>
-          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>
+          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 8 }}>
             Contenido
           </span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 34, color: "var(--text)", marginBottom: 6 }}>
@@ -218,7 +218,7 @@ export default function RecursosAdminPage() {
           style={{
             display: "flex", alignItems: "center", gap: 8,
             padding: "10px 20px", borderRadius: 10,
-            background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+            background: "var(--grad-cta)",
             border: "none", cursor: "pointer", color: "#fff",
             fontSize: 13, fontWeight: 600, whiteSpace: "nowrap",
           }}
@@ -252,7 +252,7 @@ export default function RecursosAdminPage() {
                   }}
                 >
                   <div style={{ width: 38, height: 38, borderRadius: 9, background: "rgba(165,141,102,.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                    <Headphones size={16} style={{ color: "var(--gold)" }} />
+                    <Headphones size={16} style={{ color: "var(--gold-ink)" }} />
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <p style={{ fontWeight: 600, fontSize: 13, color: "var(--text)", marginBottom: 2 }}>{r.title}</p>
@@ -351,12 +351,12 @@ export default function RecursosAdminPage() {
                   >
                     {uploading ? (
                       <>
-                        <Loader2 size={20} style={{ color: "var(--gold)", animation: "spin 1s linear infinite" }} />
+                        <Loader2 size={20} style={{ color: "var(--gold-ink)", animation: "spin 1s linear infinite" }} />
                         <span style={{ fontSize: 12, color: "var(--text-muted)" }}>Subiendo… {uploadProgress}%</span>
                       </>
                     ) : (
                       <>
-                        <Upload size={20} style={{ color: "var(--gold)" }} />
+                        <Upload size={20} style={{ color: "var(--gold-ink)" }} />
                         <span style={{ fontSize: 12, color: "var(--text-muted)", textAlign: "center" }}>
                           Arrastrá o hacé click para subir
                           <br />
@@ -459,7 +459,7 @@ export default function RecursosAdminPage() {
                   disabled={saving}
                   style={{
                     flex: 1, padding: "11px 0", borderRadius: 10,
-                    background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+                    background: "var(--grad-cta)",
                     border: "none", cursor: saving ? "not-allowed" : "pointer",
                     color: "#fff", fontSize: 13, fontWeight: 600,
                     display: "flex", alignItems: "center", justifyContent: "center", gap: 8,

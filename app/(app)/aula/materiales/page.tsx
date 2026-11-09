@@ -31,11 +31,11 @@ function moduleLabel(mod: number, title: string | null) {
 
 function iconFor(m: Material) {
   if (m.type === "link") return <ExternalLink size={17} style={{ color: "var(--teal)" }} />
-  if (m.interactionKind === "quiz") return <HelpCircle size={17} style={{ color: "var(--gold)" }} />
-  if (m.interactionKind === "reflection") return <PenLine size={17} style={{ color: "var(--gold)" }} />
-  if (m.toolHref) return <Sparkles size={17} style={{ color: "var(--gold)" }} />
-  if (m.type === "lesson") return <BookOpen size={17} style={{ color: "var(--gold)" }} />
-  return <FileText size={17} style={{ color: "var(--gold)" }} />
+  if (m.interactionKind === "quiz") return <HelpCircle size={17} style={{ color: "var(--gold-ink)" }} />
+  if (m.interactionKind === "reflection") return <PenLine size={17} style={{ color: "var(--gold-ink)" }} />
+  if (m.toolHref) return <Sparkles size={17} style={{ color: "var(--gold-ink)" }} />
+  if (m.type === "lesson") return <BookOpen size={17} style={{ color: "var(--gold-ink)" }} />
+  return <FileText size={17} style={{ color: "var(--gold-ink)" }} />
 }
 
 export default function MaterialesPage() {
@@ -88,7 +88,7 @@ export default function MaterialesPage() {
     <div style={{ maxWidth: 780, margin: "0 auto" }}>
       {/* Header */}
       <div style={{ marginBottom: 30 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 10 }}>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 10 }}>
           Aula Virtual
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 38, color: "var(--text)", marginBottom: 8 }}>
@@ -107,7 +107,7 @@ export default function MaterialesPage() {
           style={{
             display: "inline-flex", alignItems: "center", gap: 8, marginTop: 18,
             padding: "11px 22px", borderRadius: 30,
-            background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+            background: "var(--grad-cta)",
             color: "#fff", fontSize: 13.5, fontWeight: 600, textDecoration: "none",
           }}
         >
@@ -132,7 +132,7 @@ export default function MaterialesPage() {
           return (
             <div key={courseId} style={{ marginBottom: 8 }}>
               {multiCourse && (
-                <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--gold)", marginBottom: 20 }}>
+                <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 20, color: "var(--gold-ink)", marginBottom: 20 }}>
                   {courseMaterials[0].courseTitle}
                 </h2>
               )}
@@ -150,7 +150,7 @@ export default function MaterialesPage() {
                       }}
                     >
                       <div style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(165,141,102,.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                        <BookOpen size={15} style={{ color: "var(--gold)" }} />
+                        <BookOpen size={15} style={{ color: "var(--gold-ink)" }} />
                       </div>
                       <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)" }}>
                         {moduleLabel(mod, items[0]?.moduleTitle ?? null)}
@@ -201,7 +201,7 @@ export default function MaterialesPage() {
                                     <p style={{ fontWeight: 600, color: "var(--text)", fontSize: 14, marginBottom: 3 }}>{material.title}</p>
                                     {material.description && <p style={{ color: "var(--text-faint)", fontSize: 12 }}>{material.description}</p>}
                                     {material.progress?.quizScore != null && material.progress?.quizTotal != null && (
-                                      <p style={{ color: "var(--gold)", fontSize: 11.5, marginTop: 2 }}>
+                                      <p style={{ color: "var(--gold-ink)", fontSize: 11.5, marginTop: 2 }}>
                                         Puntaje: {material.progress.quizScore}/{material.progress.quizTotal}
                                       </p>
                                     )}
@@ -211,7 +211,7 @@ export default function MaterialesPage() {
                                   ) : completed ? (
                                     <CheckCircle2 size={18} style={{ color: "#4a9d6f", flexShrink: 0 }} />
                                   ) : (
-                                    <span style={{ color: "var(--gold)", flexShrink: 0 }}>
+                                    <span style={{ color: "var(--gold-ink)", flexShrink: 0 }}>
                                       {material.type === "document" ? <Download size={18} /> : material.type === "lesson" ? <ArrowRight size={16} /> : <ExternalLink size={16} />}
                                     </span>
                                   )}

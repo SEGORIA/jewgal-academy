@@ -138,7 +138,7 @@ export default function WebAdminPage() {
     <div style={{ maxWidth: 900, margin: "0 auto" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32, flexWrap: "wrap", gap: 16 }}>
         <div>
-          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>Admin</span>
+          <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 8 }}>Admin</span>
           <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Editor del sitio web</h1>
           <p style={{ color: "var(--text-faint)", fontSize: 14 }}>Modificá los textos e información visibles en el sitio público.</p>
         </div>
@@ -177,7 +177,7 @@ export default function WebAdminPage() {
           <button
             onClick={translateAll}
             disabled={translating}
-            style={{ display: "flex", alignItems: "center", gap: 7, background: "none", border: "1px solid rgba(165,141,102,.35)", borderRadius: 9, padding: "9px 16px", fontSize: 12.5, color: "var(--gold)", cursor: translating ? "default" : "pointer" }}
+            style={{ display: "flex", alignItems: "center", gap: 7, background: "none", border: "1px solid rgba(165,141,102,.35)", borderRadius: 9, padding: "9px 16px", fontSize: 12.5, color: "var(--gold-ink)", cursor: translating ? "default" : "pointer" }}
           >
             {translating ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : <Languages size={14} />}
             {translating ? "Traduciendo todo…" : "Traducir todo con IA"}
@@ -187,7 +187,7 @@ export default function WebAdminPage() {
 
       {lang === "en" && (
         <div style={{ display: "flex", gap: 10, alignItems: "flex-start", background: "rgba(196,159,114,.06)", border: "1px solid rgba(196,159,114,.2)", borderRadius: 9, padding: "12px 14px", marginBottom: 20 }}>
-          <Info size={15} style={{ color: "var(--gold)", flexShrink: 0, marginTop: 1 }} />
+          <Info size={15} style={{ color: "var(--gold-ink)", flexShrink: 0, marginTop: 1 }} />
           <p style={{ fontSize: 12.5, color: "var(--text-muted)", lineHeight: 1.6 }}>
             Estás editando la versión en inglés del sitio (se muestra en <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4 }}>jewgalacademy.com/en</code>). Cualquier campo que dejes vacío cae automáticamente al texto en español vigente — nunca se ve en blanco.
           </p>
@@ -238,7 +238,7 @@ export default function WebAdminPage() {
 
               {/* Bloque Fundación (4º stat) */}
               <div style={{ marginTop: 22, paddingTop: 18, borderTop: "1px solid var(--surface-2)" }}>
-                <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 4 }}>Bloque de la Fundación (4º recuadro)</p>
+                <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 4 }}>Bloque de la Fundación (4º recuadro)</p>
                 <p style={{ fontSize: 12.5, color: "var(--text-faint)", lineHeight: 1.6, marginBottom: 16 }}>
                   El recuadro con el botón que enlaza a la fundación. Dejá el enlace vacío si querés ocultar el botón.
                 </p>

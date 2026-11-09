@@ -64,7 +64,7 @@ export default function LinkListEditor({ items, onChange, labelPlaceholder, urlP
           placeholder={urlPlaceholder || "https://…"}
           style={{ ...inputStyle, flex: 1 }}
         />
-        <button onClick={add} style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold)", borderRadius: 8, padding: "0 14px", fontSize: 12, fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>
+        <button onClick={add} style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface-2)", border: "1px dashed rgba(165,141,102,.4)", color: "var(--gold-ink)", borderRadius: 8, padding: "0 14px", fontSize: 12, fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>
           <Plus size={13} /> Agregar
         </button>
       </div>

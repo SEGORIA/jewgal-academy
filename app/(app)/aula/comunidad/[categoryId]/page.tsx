@@ -114,7 +114,7 @@ export default function CategoryTopicsPage() {
           style={{
             display: "flex", alignItems: "center", gap: 7, padding: "9px 16px", borderRadius: 10,
             border: "none", cursor: "pointer", fontSize: 13, fontWeight: 600, color: "#fff", flexShrink: 0,
-            background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+            background: "var(--grad-cta)",
           }}
         >
           {showNew ? <X size={15} /> : <Plus size={15} />}
@@ -148,7 +148,7 @@ export default function CategoryTopicsPage() {
                 display: "flex", alignItems: "center", gap: 7, padding: "9px 18px", borderRadius: 10,
                 border: "none", fontSize: 13, fontWeight: 600,
                 cursor: !newTitle.trim() || !newBody.trim() || creating ? "not-allowed" : "pointer",
-                background: !newTitle.trim() || !newBody.trim() || creating ? "rgba(165,141,102,.15)" : "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+                background: !newTitle.trim() || !newBody.trim() || creating ? "rgba(165,141,102,.15)" : "var(--grad-cta)",
                 color: !newTitle.trim() || !newBody.trim() || creating ? "var(--text-dim)" : "#fff",
               }}
             >
@@ -192,7 +192,7 @@ export default function CategoryTopicsPage() {
             >
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                  {t.isPinned && <Pin size={12} style={{ color: "var(--gold)", flexShrink: 0 }} />}
+                  {t.isPinned && <Pin size={12} style={{ color: "var(--gold-ink)", flexShrink: 0 }} />}
                   <p style={{ fontWeight: 600, color: "var(--text)", fontSize: 14.5, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {t.title}
                   </p>

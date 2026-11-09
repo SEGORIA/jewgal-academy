@@ -55,7 +55,7 @@ export default function TestimonialCarousel() {
       {/* Comilla decorativa */}
       <div aria-hidden style={{
         fontFamily: "var(--serif)", fontSize: 160, lineHeight: 0.55,
-        color: "var(--gold)", opacity: 0.1,
+        color: "var(--gold-ink)", opacity: 0.1,
         position: "absolute", top: 8, left: 52,
         pointerEvents: "none", userSelect: "none",
       }}>
@@ -100,7 +100,7 @@ export default function TestimonialCarousel() {
               />
               <span style={{
                 fontSize: 12, letterSpacing: ".22em", textTransform: "uppercase",
-                color: "var(--gold)", fontFamily: "var(--sans)", fontWeight: 600,
+                color: "var(--gold-ink)", fontFamily: "var(--sans)", fontWeight: 600,
               }}>
                 {TESTIMONIALS[idx].who}
               </span>
@@ -113,16 +113,23 @@ export default function TestimonialCarousel() {
       </div>
 
       {/* Dots */}
-      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 36 }}>
+      <div style={{ display: "flex", gap: 0, justifyContent: "center", marginTop: 28 }}>
         {TESTIMONIALS.map((_, i) => (
-          <motion.button
+          // Botón de 24px de alto (zona táctil); el punto visible mantiene 6px
+          <button
             key={i}
             onClick={() => go(i)}
             aria-label={`${t("testimonial")} ${i + 1}`}
-            animate={{ width: i === idx ? 26 : 6, background: i === idx ? "#C49F72" : "rgba(165,141,102,.25)" }}
-            transition={{ duration: 0.3 }}
-            style={{ height: 6, borderRadius: 3, border: "none", cursor: "pointer", padding: 0 }}
-          />
+            aria-current={i === idx ? "true" : undefined}
+            style={{ height: 24, minWidth: 24, padding: "0 4px", border: "none", background: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+          >
+            <motion.span
+              aria-hidden="true"
+              animate={{ width: i === idx ? 26 : 6, background: i === idx ? "#B58A55" : "rgba(132,97,69,.35)" }}
+              transition={{ duration: 0.3 }}
+              style={{ display: "block", height: 6, borderRadius: 3 }}
+            />
+          </button>
         ))}
       </div>
 
@@ -144,7 +151,7 @@ export default function TestimonialCarousel() {
             border: "1px solid rgba(165,141,102,.22)",
             borderRadius: "50%", width: 40, height: 40,
             display: "flex", alignItems: "center", justifyContent: "center",
-            color: "var(--gold)", fontSize: 22, cursor: "pointer",
+            color: "var(--gold-ink)", fontSize: 22, cursor: "pointer",
           }}
         >
           {char}

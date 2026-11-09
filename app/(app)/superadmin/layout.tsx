@@ -12,6 +12,7 @@ import {
 import { signOut } from "next-auth/react"
 import { motion, AnimatePresence } from "framer-motion"
 import NotificationBell from "@/components/admin/NotificationBell"
+import LabelAssociator from "@/components/LabelAssociator"
 
 const NAV = [
   {
@@ -78,8 +79,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <BrandLogo height={58} variant="square" priority />
           </Link>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 12, padding: "5px 10px", borderRadius: 20, background: "rgba(165,141,102,.1)", border: "1px solid rgba(165,141,102,.18)", width: "fit-content" }}>
-            <Shield size={10} style={{ color: "var(--gold)" }} />
-            <span style={{ fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", fontWeight: 700 }}>
+            <Shield size={10} style={{ color: "var(--gold-ink)" }} />
+            <span style={{ fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", fontWeight: 700 }}>
               Super Admin
             </span>
             <span style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--success)", marginLeft: 2, boxShadow: "0 0 6px var(--success)" }} />
@@ -90,15 +91,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <nav style={{ flex: 1, padding: "14px 10px", overflowY: "auto", display: "flex", flexDirection: "column", gap: 4 }}>
           {NAV.map(({ group, items }) => (
             <div key={group} style={{ marginBottom: 6 }}>
-              <p style={{ fontSize: 9, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--text-faint)", padding: "6px 12px", marginBottom: 2 }}>
+              <p style={{ fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--text-faint)", padding: "6px 12px", marginBottom: 2 }}>
                 {group}
               </p>
               {items.map(({ href, icon: Icon, label }) => {
-                const active = isActive(href)
+                // "Programas" y "Materiales" comparten destino: solo el primero se marca activo (y la key no puede ser solo el href)
+                const active = isActive(href) && NAV.flatMap((g) => g.items).find((n) => n.href === href)?.label === label
                 return (
-                  <motion.div key={href} whileHover={{ x: active ? 0 : 3 }} transition={{ type: "spring", stiffness: 400, damping: 30 }}>
+                  <motion.div key={`${href}-${label}`} whileHover={{ x: active ? 0 : 3 }} transition={{ type: "spring", stiffness: 400, damping: 30 }}>
                     <Link
                       href={href}
+                      aria-current={active ? "page" : undefined}
                       onClick={() => setOpen(false)}
                       style={{
                         display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -108,7 +111,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         background: active
                           ? "linear-gradient(90deg,rgba(165,141,102,.18) 0%,rgba(165,141,102,.06) 100%)"
                           : "transparent",
-                        color: active ? "var(--gold)" : "var(--text-muted)",
+                        color: active ? "var(--gold-ink)" : "var(--text-muted)",
                         borderLeft: active ? "2px solid var(--gold)" : "2px solid transparent",
                         boxShadow: active ? "inset 0 0 0 1px rgba(165,141,102,.1)" : "none",
                         transition: "all .18s",
@@ -167,9 +170,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <header style={{
           height: 58, flexShrink: 0,
           padding: "0 28px", display: "flex", alignItems: "center", justifyContent: "space-between",
-          background: "rgba(20,14,8,.82)",
+          background: "var(--bar)", // antes un marrón oscuro fijo: en tema claro quedaba una franja negra y el texto invisible
           backdropFilter: "blur(16px)",
-          borderBottom: "1px solid rgba(165,141,102,.1)",
+          borderBottom: "1px solid var(--border)",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <button
@@ -177,16 +180,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               aria-label={open ? "Cerrar menú" : "Abrir menú"}
               aria-expanded={open}
               className="mob-menu-btn"
-              style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", display: "none", padding: 4 }}
+              style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", display: "none", padding: 10, margin: -6 }}
             >
               {open ? <X size={20} /> : <Menu size={20} />}
             </button>
             {/* Breadcrumb */}
             <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
-              <span style={{ color: "var(--text-dim)", letterSpacing: ".06em" }}>Jewgal Admin</span>
+              <span style={{ color: "var(--text-muted)", letterSpacing: ".06em" }}>Jewgal Admin</span>
               <span style={{ color: "rgba(165,141,102,.3)", fontSize: 10 }}>›</span>
               <span style={{
-                color: "var(--gold)", fontWeight: 600, letterSpacing: ".04em",
+                color: "var(--gold-ink)", fontWeight: 600, letterSpacing: ".04em",
                 padding: "3px 10px", borderRadius: 6,
                 background: "rgba(165,141,102,.1)",
                 border: "1px solid rgba(165,141,102,.15)",
@@ -199,11 +202,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           {/* Right side */}
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <NotificationBell />
-            <span className="admin-topbar-email" style={{ fontSize: 12, color: "var(--text-dim)", letterSpacing: ".02em" }}>admin@jewgalacademy.com</span>
+            <span className="admin-topbar-email" style={{ fontSize: 12, color: "var(--text-muted)", letterSpacing: ".02em" }}>admin@jewgalacademy.com</span>
             {/* Avatar */}
             <div style={{
               width: 34, height: 34, borderRadius: "50%",
-              background: "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
+              background: "var(--grad-cta)",
               display: "flex", alignItems: "center", justifyContent: "center",
               fontSize: 13, fontWeight: 700, color: "white",
               boxShadow: "0 0 0 2px rgba(196,159,114,.3), 0 4px 12px rgba(167,109,97,.35)",
@@ -215,6 +218,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Content */}
         <main style={{ flex: 1, overflowY: "auto", padding: "36px 36px 60px", background: "var(--bg)" }}>
+          <LabelAssociator />
           {children}
         </main>
       </div>

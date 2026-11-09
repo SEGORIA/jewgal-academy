@@ -59,7 +59,7 @@ export default function LoginForm() {
 
   const inputStyle: React.CSSProperties = {
     width: "100%",
-    border: "1.5px solid rgba(255,255,255,.1)",
+    border: "1.5px solid var(--line-d)",
     borderRadius: 12,
     padding: "14px 16px",
     fontSize: 15,
@@ -73,7 +73,7 @@ export default function LoginForm() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "linear-gradient(135deg,var(--bg) 0%,var(--surface-solid) 55%,#2A1D12 100%)",
+      background: "linear-gradient(135deg,var(--bg) 0%,var(--bg-2) 55%,var(--bg-3) 100%)", // tokens de tema (antes terminaba en un marrón fijo oscuro aun en tema claro)
       display: "flex", alignItems: "center", justifyContent: "center",
       padding: "24px 20px", position: "relative", overflow: "hidden",
     }}>
@@ -153,7 +153,7 @@ export default function LoginForm() {
                 initial={{ scale: 0, rotate: -20 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ type: "spring", stiffness: 360, damping: 18, delay: 0.1 }}
-                style={{ fontSize: 52, marginBottom: 18, color: "var(--gold)" }}
+                style={{ fontSize: 52, marginBottom: 18, color: "var(--gold-ink)" }}
               >✦</motion.div>
               <motion.h2 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}
                 style={{ fontFamily: "var(--serif)", fontSize: 28, color: "var(--text)", marginBottom: 10, fontWeight: 500 }}>
@@ -220,6 +220,7 @@ export default function LoginForm() {
                 {error && (
                   <motion.div
                     key="error"
+                    role="alert"
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto", marginBottom: 20, x: [0, -10, 10, -8, 8, -4, 4, 0] }}
                     exit={{ opacity: 0, height: 0, marginBottom: 0 }}
@@ -234,10 +235,11 @@ export default function LoginForm() {
               <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                 {/* Email */}
                 <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.36 }}>
-                  <label style={{ display: "block", fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 9 }}>
+                  <label htmlFor="login-email" style={{ display: "block", fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 9 }}>
                     {t("email")}
                   </label>
                   <input
+                    id="login-email" name="email" autoComplete="email" inputMode="email"
                     type="email" value={email} onChange={(e) => setEmail(e.target.value)}
                     required placeholder="tu@email.com"
                     style={inputStyle} onFocus={focusInput} onBlur={blurInput}
@@ -246,11 +248,12 @@ export default function LoginForm() {
 
                 {/* Contraseña */}
                 <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.44 }}>
-                  <label style={{ display: "block", fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 9 }}>
+                  <label htmlFor="login-password" style={{ display: "block", fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 9 }}>
                     {t("password")}
                   </label>
                   <div style={{ position: "relative" }}>
                     <input
+                      id="login-password" name="password" autoComplete="current-password"
                       type={showPw ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)}
                       required placeholder="••••••••"
                       style={{ ...inputStyle, paddingRight: 46 }} onFocus={focusInput} onBlur={blurInput}
@@ -259,7 +262,7 @@ export default function LoginForm() {
                       type="button" onClick={() => setShowPw(!showPw)}
                       aria-label={showPw ? t("hidePassword") : t("showPassword")}
                       whileTap={{ scale: 0.82 }}
-                      style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)", display: "flex", alignItems: "center", padding: 4 }}
+                      style={{ position: "absolute", right: 6, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", display: "flex", alignItems: "center", justifyContent: "center", width: 40, height: 40 }}
                     >
                       {showPw ? <EyeOff size={17} /> : <Eye size={17} />}
                     </motion.button>
@@ -329,11 +332,11 @@ export default function LoginForm() {
         >
           <p style={{ fontSize: 14, color: "var(--text-muted)", marginBottom: 10 }}>
             {t("noAccount")}{" "}
-            <Link href="/#programas" style={{ color: "var(--gold)", fontWeight: 600, textDecoration: "none" }}>
+            <Link href="/#programas" style={{ color: "var(--gold-ink)", fontWeight: 600, textDecoration: "none" }}>
               {t("enroll")}
             </Link>
           </p>
-          <Link href="/" style={{ fontSize: 12, color: "var(--text-dim)", textDecoration: "none", letterSpacing: ".08em" }}>
+          <Link href="/" style={{ display: "inline-block", fontSize: 13, color: "var(--text-muted)", textDecoration: "none", letterSpacing: ".08em", padding: "8px 12px" }}>
             {t("backSite")}
           </Link>
         </motion.div>

@@ -68,7 +68,7 @@ export default function SuperadminComunidadPage() {
   return (
     <div style={{ maxWidth: 1000, margin: "0 auto" }}>
       <div style={{ marginBottom: 28 }}>
-        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 8 }}>Admin</span>
+        <span style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 8 }}>Admin</span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 36, color: "var(--text)", marginBottom: 6 }}>Comunidad</h1>
         <p style={{ color: "var(--text-faint)", fontSize: 14 }}>Categorías del foro y moderación de temas y publicaciones.</p>
       </div>
@@ -82,7 +82,7 @@ export default function SuperadminComunidadPage() {
             display: "flex", alignItems: "center", gap: 7, padding: "9px 16px", borderRadius: 9,
             border: "none", cursor: "pointer", fontSize: 13, fontWeight: tab === key ? 600 : 400,
             background: tab === key ? "rgba(165,141,102,.15)" : "transparent",
-            color: tab === key ? "var(--gold)" : "var(--text-faint)", transition: "all .18s",
+            color: tab === key ? "var(--gold-ink)" : "var(--text-faint)", transition: "all .18s",
           }}>
             <Icon size={14} /> {label}
           </button>
@@ -178,8 +178,8 @@ function CategoriasTab() {
       <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
         <button onClick={showForm ? () => setShowForm(false) : openNew} style={{
           display: "flex", alignItems: "center", gap: 8,
-          background: showForm ? "var(--surface-2)" : "linear-gradient(135deg,#A76D61 0%,#C49F72 100%)",
-          color: showForm ? "var(--text-muted)" : "#1A0E06", border: showForm ? "1px solid rgba(255,255,255,.1)" : "none",
+          background: showForm ? "var(--surface-2)" : "var(--grad-cta)",
+          color: showForm ? "var(--text-muted)" : "#fff", border: showForm ? "1px solid rgba(255,255,255,.1)" : "none",
           borderRadius: 10, padding: "10px 18px", fontSize: 13, fontWeight: 700, cursor: "pointer",
         }}>
           {showForm ? <><X size={15} /> Cancelar</> : <><Plus size={15} /> Nueva categoría</>}
@@ -420,7 +420,7 @@ function ModeracionTab() {
                   </span>
                 </div>
                 <button onClick={() => togglePin(t)} title={t.isPinned ? "Desfijar" : "Fijar"}
-                  style={{ background: "none", border: "none", cursor: "pointer", color: t.isPinned ? "var(--gold)" : "var(--text-dim)", display: "flex" }}>
+                  style={{ background: "none", border: "none", cursor: "pointer", color: t.isPinned ? "var(--gold-ink)" : "var(--text-dim)", display: "flex" }}>
                   {t.isPinned ? <PinOff size={15} /> : <Pin size={15} />}
                 </button>
                 <button onClick={() => toggleTopicVisible(t)} title={t.isVisible ? "Ocultar" : "Mostrar"}

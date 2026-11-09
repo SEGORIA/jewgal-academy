@@ -98,8 +98,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       statusBarStyle: "black-translucent",
       title: "Jewgal Academy",
     },
+    // Favicon: app/favicon.ico (16/32/48) + PNG nítidos. El ?v= salta la caché de iconos del navegador.
     icons: {
-      apple: "/icons/apple-touch-icon.png",
+      icon: [
+        { url: "/icons/icon-32.png?v=3", sizes: "32x32", type: "image/png" },
+        { url: "/icons/icon-192.png?v=3", sizes: "192x192", type: "image/png" },
+      ],
+      apple: "/icons/apple-touch-icon.png?v=3",
     },
   }
 }
