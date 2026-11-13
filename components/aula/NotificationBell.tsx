@@ -1,25 +1,37 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef } from "react"
-import { Bell, MessageSquare, CheckCheck } from "lucide-react"
+import { Bell, MessageSquare, CheckCheck, Megaphone, GraduationCap } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 type Notification = {
   id: string
-  type: "forum_reply"
+  type: "forum_reply" | "announcement" | "enrollment"
   message: string
   isRead: boolean
   createdAt: string
   metadata: string | null
 }
 
-function resolveHref(n: Notification): string {
-  try {
-    const meta = n.metadata ? JSON.parse(n.metadata) : null
-    if (meta?.categoryId && meta?.topicId) return `/aula/comunidad/${meta.categoryId}/${meta.topicId}`
-  } catch {}
-  return "/aula/comunidad"
+type Meta = { categoryId?: string; topicId?: string; href?: string | null; body?: string }
+function parseMeta(n: Notification): Meta {
+  try { return n.metadata ? (JSON.parse(n.metadata) as Meta) : {} } catch { return {} }
 }
+
+/** Adónde lleva cada aviso: respuestas del foro a su tema; anuncios e inscripciones al enlace que traen (o al aula). */
+function resolveHref(n: Notification): string {
+  const meta = parseMeta(n)
+  if (n.type === "forum_reply") {
+    if (meta.categoryId && meta.topicId) return `/aula/comunidad/${meta.categoryId}/${meta.topicId}`
+    return "/aula/comunidad"
+  }
+  // Solo enlaces internos del aula o direcciones https (nunca un esquema raro como javascript:)
+  const h = meta.href
+  if (typeof h === "string" && (h.startsWith("/") && !h.startsWith("//") || /^https?:\/\//i.test(h))) return h
+  return "/aula"
+}
+
+const TYPE_ICON = { forum_reply: MessageSquare, announcement: Megaphone, enrollment: GraduationCap } as const
 
 export default function NotificationBell() {
   const [open, setOpen] = useState(false)
@@ -137,7 +149,10 @@ export default function NotificationBell() {
               </p>
             ) : (
               <div style={{ display: "flex", flexDirection: "column" }}>
-                {notifications.map((n) => (
+                {notifications.map((n) => {
+                  const Icon = TYPE_ICON[n.type] ?? MessageSquare
+                  const body = n.type === "announcement" ? parseMeta(n).body : undefined
+                  return (
                   <a
                     key={n.id}
                     href={resolveHref(n)}
@@ -149,14 +164,16 @@ export default function NotificationBell() {
                       textDecoration: "none", width: "100%", boxSizing: "border-box",
                     }}
                   >
-                    <MessageSquare size={15} style={{ color: "var(--gold-ink)", flexShrink: 0, marginTop: 2 }} />
+                    <Icon size={15} style={{ color: "var(--gold-ink)", flexShrink: 0, marginTop: 2 }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontSize: 12.5, color: "var(--text)", lineHeight: 1.5 }}>{n.message}</p>
+                      <p style={{ fontSize: 12.5, color: "var(--text)", lineHeight: 1.5, fontWeight: body ? 600 : 400 }}>{n.message}</p>
+                      {body && <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.5, margin: "2px 0 3px", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden", whiteSpace: "pre-line" }}>{body}</p>}
                       <span style={{ fontSize: 11, color: "var(--text-dim)" }}>{timeAgo(n.createdAt)}</span>
                     </div>
                     {!n.isRead && <span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--gold)", flexShrink: 0, marginTop: 5 }} />}
                   </a>
-                ))}
+                  )
+                })}
               </div>
             )}
           </motion.div>

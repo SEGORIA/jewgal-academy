@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server"
-import { auth } from "@/lib/auth"
+import { adminGuard } from "@/lib/admin-guard"
 import { db } from "@/lib/db"
 
 export async function GET() {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("any")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
 
   try {
     const [studentCount, enrollmentCount, payments, enrollmentsByProgram, courses] = await Promise.all([

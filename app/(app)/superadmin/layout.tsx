@@ -8,8 +8,10 @@ import {
   LayoutDashboard, Users, BookOpen, FileText,
   CreditCard, Settings, Globe, Menu, X, LogOut,
   ChevronRight, Newspaper, Shield, ClipboardCheck, ExternalLink, ImageIcon, Headphones, CalendarDays, Award, MessagesSquare,
+  Quote, BadgeCheck, Type, Scale, Megaphone, UserCog, History, DatabaseBackup,
 } from "lucide-react"
-import { signOut } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
+import { can, permissionForPath, type Permission } from "@/lib/permissions"
 import { motion, AnimatePresence } from "framer-motion"
 import NotificationBell from "@/components/admin/NotificationBell"
 import LabelAssociator from "@/components/LabelAssociator"
@@ -22,6 +24,7 @@ const NAV = [
       { href: "/superadmin/alumnos",      icon: Users,           label: "Alumnos" },
       { href: "/superadmin/asistencia",   icon: ClipboardCheck,  label: "Asistencia" },
       { href: "/superadmin/pagos",        icon: CreditCard,      label: "Ingresos" },
+      { href: "/superadmin/comunicaciones", icon: Megaphone,     label: "Comunicaciones" },
     ],
   },
   {
@@ -34,26 +37,42 @@ const NAV = [
       { href: "/superadmin/recursos",     icon: Headphones,      label: "Recursos" },
       { href: "/superadmin/blog",         icon: Newspaper,       label: "Blog" },
       { href: "/superadmin/eventos",      icon: CalendarDays,    label: "Eventos" },
-      { href: "/superadmin/hero",          icon: ImageIcon,       label: "Fotos hero" },
-      { href: "/superadmin/web",          icon: Globe,           label: "Sitio web" },
+    ],
+  },
+  {
+    group: "Sitio público",
+    items: [
+      { href: "/superadmin/web",          icon: Globe,           label: "Portada y contacto" },
+      { href: "/superadmin/textos",       icon: Type,            label: "Textos y SEO" },
+      { href: "/superadmin/legales",      icon: Scale,           label: "Páginas legales" },
+      { href: "/superadmin/testimonios",  icon: Quote,           label: "Testimonios" },
+      { href: "/superadmin/avales",       icon: BadgeCheck,      label: "Avales" },
+      { href: "/superadmin/hero",         icon: ImageIcon,       label: "Fotos del hero" },
     ],
   },
   {
     group: "Sistema",
     items: [
-      { href: "/superadmin/configuracion", icon: Settings,       label: "Configuración" },
+      { href: "/superadmin/equipo",        icon: UserCog,         label: "Equipo y permisos" },
+      { href: "/superadmin/historial",     icon: History,         label: "Historial de cambios" },
+      { href: "/superadmin/respaldo",      icon: DatabaseBackup,  label: "Respaldo" },
+      { href: "/superadmin/configuracion", icon: Settings,        label: "Configuración" },
     ],
   },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const { data: session } = useSession()
+  const me = session?.user
+  // El menú solo muestra lo que la persona puede usar (el super administrador ve todo).
+  const visibleNav = NAV.map((g) => ({ ...g, items: g.items.filter((i) => can(me, permissionForPath(i.href) as Permission)) })).filter((g) => g.items.length > 0)
   const [open, setOpen] = useState(false)
 
   const isActive = (href: string) =>
     href === "/superadmin" ? pathname === href : pathname.startsWith(href)
 
-  const currentLabel = NAV.flatMap((g) => g.items).find((n) => isActive(n.href))?.label ?? "Panel"
+  const currentLabel = visibleNav.flatMap((g) => g.items).find((n) => isActive(n.href))?.label ?? "Panel"
 
   return (
     <div style={{ display: "flex", height: "100vh", background: "var(--bg-3)", overflow: "hidden" }}>
@@ -81,7 +100,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 12, padding: "5px 10px", borderRadius: 20, background: "rgba(165,141,102,.1)", border: "1px solid rgba(165,141,102,.18)", width: "fit-content" }}>
             <Shield size={10} style={{ color: "var(--gold-ink)" }} />
             <span style={{ fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--gold-ink)", fontWeight: 700 }}>
-              Super Admin
+              {me?.role === "admin" ? "Super Admin" : "Equipo"}
             </span>
             <span style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--success)", marginLeft: 2, boxShadow: "0 0 6px var(--success)" }} />
           </div>
@@ -89,14 +108,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Nav */}
         <nav style={{ flex: 1, padding: "14px 10px", overflowY: "auto", display: "flex", flexDirection: "column", gap: 4 }}>
-          {NAV.map(({ group, items }) => (
+          {visibleNav.map(({ group, items }) => (
             <div key={group} style={{ marginBottom: 6 }}>
               <p style={{ fontSize: 10.5, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--text-faint)", padding: "6px 12px", marginBottom: 2 }}>
                 {group}
               </p>
               {items.map(({ href, icon: Icon, label }) => {
                 // "Programas" y "Materiales" comparten destino: solo el primero se marca activo (y la key no puede ser solo el href)
-                const active = isActive(href) && NAV.flatMap((g) => g.items).find((n) => n.href === href)?.label === label
+                const active = isActive(href) && visibleNav.flatMap((g) => g.items).find((n) => n.href === href)?.label === label
                 return (
                   <motion.div key={`${href}-${label}`} whileHover={{ x: active ? 0 : 3 }} transition={{ type: "spring", stiffness: 400, damping: 30 }}>
                     <Link
@@ -202,7 +221,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           {/* Right side */}
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <NotificationBell />
-            <span className="admin-topbar-email" style={{ fontSize: 12, color: "var(--text-muted)", letterSpacing: ".02em" }}>admin@jewgalacademy.com</span>
+            <span className="admin-topbar-email" style={{ fontSize: 12, color: "var(--text-muted)", letterSpacing: ".02em" }}>{me?.email ?? me?.name ?? ""}</span>
             {/* Avatar */}
             <div style={{
               width: 34, height: 34, borderRadius: "50%",

@@ -13,11 +13,27 @@ export default function Footer() {
   const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
   const [nlEmail, setNlEmail] = useState("")
   const [nlStatus, setNlStatus] = useState<"idle" | "sending" | "ok" | "error">("idle")
+  // Programas publicados en el panel; mientras carga, los de siempre.
+  const [programs, setPrograms] = useState<{ slug: string; title: string }[]>(() => [
+    { slug: "life-coaching-integrativo", title: t("programLifeCoaching") },
+    { slug: "joogal-adultos", title: t("programJewgalAdultos") },
+    { slug: "cabala-coach", title: t("programCabalaCoach") },
+    { slug: "metodo-sholem", title: t("programMetodoSholem") },
+  ])
 
   useEffect(() => {
     fetch(`/api/site-content?locale=${locale}`)
       .then((r) => r.json())
       .then((d) => setContent(d))
+      .catch(() => {})
+  }, [locale])
+
+  useEffect(() => {
+    fetch(`/api/courses?locale=${locale}`)
+      .then((r) => r.json())
+      .then((d: { courses?: { slug: string; title: string }[] }) => {
+        if (d.courses?.length) setPrograms(d.courses.map((c) => ({ slug: c.slug, title: c.title })))
+      })
       .catch(() => {})
   }, [locale])
 
@@ -87,10 +103,7 @@ export default function Footer() {
           {/* Programas */}
           <div className="foot-col">
             <h5>{t("programasTitulo")}</h5>
-            <Link href="/programas/life-coaching-integrativo">{t("programLifeCoaching")}</Link>
-            <Link href="/programas/joogal-adultos">{t("programJewgalAdultos")}</Link>
-            <Link href="/programas/cabala-coach">{t("programCabalaCoach")}</Link>
-            <Link href="/programas/metodo-sholem">{t("programMetodoSholem")}</Link>
+            {programs.map((p) => <Link key={p.slug} href={`/programas/${p.slug}`}>{p.title}</Link>)}
           </div>
 
           {/* Recursos */}

@@ -24,12 +24,14 @@ export async function GET(req: NextRequest) {
         isFree: true,
         durationWeeks: true,
         totalHours: true,
+        thumbnail: true,
+        content: true,
         accreditations: {
           select: { code: true, name: true, logoUrl: true },
           orderBy: { order: "asc" },
         },
       },
-      orderBy: { createdAt: "asc" },
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
     })
     const resolved = courses.map(({ titleEn, shortDescEn, ...c }) => ({
       ...c,

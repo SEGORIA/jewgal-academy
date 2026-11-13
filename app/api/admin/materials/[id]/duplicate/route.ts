@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from "next/server"
+import { adminGuard } from "@/lib/admin-guard"
 import { revalidatePath } from "next/cache"
-import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 
 // Copia un material con todo su contenido y lo deja justo debajo del original.
 // La copia nace OCULTA: es un borrador para editar, el alumno no debe ver
 // "Unidad 3 (copia)" a medio terminar. Se muestra con el ojo cuando esté lista.
 export async function POST(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("cursos")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
   const { id } = await params
 
   const src = await db.material.findUnique({ where: { id } })

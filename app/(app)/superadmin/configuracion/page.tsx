@@ -28,7 +28,8 @@ export default function ConfiguracionPage() {
   const [themeSaving, setThemeSaving] = useState(false)
 
   // General
-  const [general, setGeneral] = useState({ name: "", url: "", email: "", phone: "", metaDescription: "" })
+  const [general, setGeneral] = useState({ name: "", whatsapp: "", whatsappMessage: "", siteUrl: "" })
+  const [generalError, setGeneralError] = useState("")
   const [generalLoading, setGeneralLoading] = useState(true)
   const [generalSaving, setGeneralSaving] = useState(false)
   const [generalSaved, setGeneralSaved] = useState(false)
@@ -88,9 +89,10 @@ export default function ConfiguracionPage() {
       const res = await fetch("/api/admin/settings/general", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(general),
+        body: JSON.stringify({ name: general.name, whatsapp: general.whatsapp, whatsappMessage: general.whatsappMessage }),
       })
-      if (res.ok) { setGeneralSaved(true); setTimeout(() => setGeneralSaved(false), 2500) }
+      if (res.ok) { setGeneralError(""); setGeneralSaved(true); setTimeout(() => setGeneralSaved(false), 2500) }
+      else { const d = await res.json().catch(() => ({})); setGeneralError(d.error || "No se pudo guardar") }
     } finally {
       setGeneralSaving(false)
     }
@@ -175,24 +177,28 @@ export default function ConfiguracionPage() {
                 <div>
                   <label style={labelStyle}>Nombre de la academia</label>
                   <input value={general.name} onChange={(e) => setGeneral((g) => ({ ...g, name: e.target.value }))} style={inputStyle} />
+                  <p style={{ fontSize: 12, color: "var(--text-faint)", marginTop: 6 }}>Aparece en el título de cada página del sitio (“Página · Nombre”).</p>
                 </div>
                 <div>
-                  <label style={labelStyle}>URL del sitio</label>
-                  <input value={general.url} onChange={(e) => setGeneral((g) => ({ ...g, url: e.target.value }))} style={inputStyle} />
+                  <label style={labelStyle}>Dirección del sitio</label>
+                  <input value={general.siteUrl} readOnly style={{ ...inputStyle, opacity: 0.7, cursor: "not-allowed" }} />
+                  <p style={{ fontSize: 12, color: "var(--text-faint)", marginTop: 6 }}>Solo lectura: se define al configurar el dominio.</p>
                 </div>
                 <div>
-                  <label style={labelStyle}>Email de contacto</label>
-                  <input value={general.email} onChange={(e) => setGeneral((g) => ({ ...g, email: e.target.value }))} style={inputStyle} />
+                  <label style={labelStyle}>WhatsApp (con código de país)</label>
+                  <input value={general.whatsapp} inputMode="numeric" placeholder="17864835893" onChange={(e) => setGeneral((g) => ({ ...g, whatsapp: e.target.value.replace(/\D/g, "") }))} style={inputStyle} />
+                  <p style={{ fontSize: 12, color: "var(--text-faint)", marginTop: 6 }}>Solo dígitos, sin “+” ni espacios. Si lo dejás vacío, el botón flotante se oculta.</p>
                 </div>
                 <div>
-                  <label style={labelStyle}>Teléfono / WhatsApp</label>
-                  <input value={general.phone} onChange={(e) => setGeneral((g) => ({ ...g, phone: e.target.value }))} style={inputStyle} />
-                </div>
-                <div style={{ gridColumn: "span 2" }}>
-                  <label style={labelStyle}>Descripción breve (meta description)</label>
-                  <textarea value={general.metaDescription} onChange={(e) => setGeneral((g) => ({ ...g, metaDescription: e.target.value }))} rows={3} style={{ ...inputStyle, resize: "vertical", lineHeight: 1.7 }} />
+                  <label style={labelStyle}>Mensaje inicial del chat</label>
+                  <input value={general.whatsappMessage} maxLength={300} placeholder="Vacío = texto por defecto de cada idioma" onChange={(e) => setGeneral((g) => ({ ...g, whatsappMessage: e.target.value }))} style={inputStyle} />
                 </div>
               </div>
+              <p style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 18, lineHeight: 1.6 }}>
+                El correo, el teléfono y las redes sociales se editan en <a href="/superadmin/web" style={{ color: "var(--gold-ink)" }}>Portada y contacto</a>;
+                los títulos y descripciones para buscadores, en <a href="/superadmin/textos" style={{ color: "var(--gold-ink)" }}>Textos y SEO</a>.
+              </p>
+              {generalError && <p role="alert" style={{ marginTop: 14, fontSize: 13, color: "var(--danger)" }}>{generalError}</p>}
 
               <button onClick={saveGeneral} disabled={generalSaving} style={{ marginTop: 22, background: generalSaved ? "var(--success)" : "var(--gold)", color: "#2C1F14", border: "none", borderRadius: 10, padding: "12px 28px", fontSize: 13, fontWeight: 700, cursor: generalSaving ? "not-allowed" : "pointer", opacity: generalSaving ? 0.7 : 1, display: "flex", alignItems: "center", gap: 8, transition: "background .3s" }}>
                 {generalSaving ? <Loader2 size={15} style={{ animation: "spin 1s linear infinite" }} /> : <Save size={15} />}

@@ -5,6 +5,7 @@ import Link from "next/link"
 import BrandLogo from "@/components/BrandLogo"
 import NotificationBell from "@/components/aula/NotificationBell"
 import LabelAssociator from "@/components/LabelAssociator"
+import ViewAsBanner from "@/components/aula/ViewAsBanner"
 import { usePathname } from "next/navigation"
 import { LayoutDashboard, Video, BookOpen, PlayCircle, Menu, X, LogOut, UserCircle, Award, CreditCard, Sparkles, ExternalLink, MessageCircle, Headphones, GraduationCap, Users2 } from "lucide-react"
 import { signOut, useSession } from "next-auth/react"
@@ -229,6 +230,7 @@ export default function AulaLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
       </div>
+      <ViewAsBanner />
     </div>
   )
 }

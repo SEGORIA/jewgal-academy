@@ -1,7 +1,8 @@
-import { auth } from "@/lib/auth"
+import { auth, VIEW_AS_COOKIE } from "@/lib/auth"
 import { NextRequest, NextResponse } from "next/server"
 import createIntlMiddleware from "next-intl/middleware"
 import { routing } from "@/i18n/routing"
+import { can, isPanelRole, permissionForPath } from "@/lib/permissions"
 
 // El Aula y el Superadmin viven fuera de app/(site)/[locale] — no llevan
 // prefijo de idioma, así que el middleware de next-intl no debe tocarlos.
@@ -41,22 +42,36 @@ export default auth((req) => {
     ? `${forwardedProto}://${forwardedHost}`
     : nextUrl.origin
 
+  // “Ver el aula como un alumno” es de solo lectura: ninguna escritura de las APIs del alumno pasa mientras esté activa.
+  if (nextUrl.pathname.startsWith("/api/me")) {
+    const writes = !["GET", "HEAD", "OPTIONS"].includes(req.method)
+    if (writes && isPanelRole(session?.user?.role) && req.cookies.get(VIEW_AS_COOKIE)?.value) {
+      return NextResponse.json({ error: "Estás viendo el aula como un alumno: es una vista de solo lectura." }, { status: 403 })
+    }
+    return NextResponse.next()
+  }
+
   const isAulaRoute       = nextUrl.pathname.startsWith("/aula")
   const isSuperadminRoute = nextUrl.pathname.startsWith("/superadmin")
 
   if (isAulaRoute || isSuperadminRoute) {
     const isLoggedIn = !!session
-    const isAdmin = session?.user?.role === "admin"
+    const isPanel = isPanelRole(session?.user?.role)
 
     if (isAulaRoute && !isLoggedIn) {
       return NextResponse.redirect(new URL("/login?redirect=/aula", baseUrl))
     }
 
-    if (isSuperadminRoute && !isAdmin) {
+    if (isSuperadminRoute && !isPanel) {
       if (!isLoggedIn) {
         return NextResponse.redirect(new URL("/login?redirect=/superadmin", baseUrl))
       }
       return NextResponse.redirect(new URL("/aula", baseUrl))
+    }
+
+    // Colaboradores: solo las pantallas de las áreas que tienen asignadas.
+    if (isSuperadminRoute && !can(session?.user, permissionForPath(nextUrl.pathname))) {
+      return NextResponse.redirect(new URL("/superadmin", baseUrl))
     }
 
     return NextResponse.next()
@@ -72,6 +87,7 @@ export default auth((req) => {
 })
 
 export const config = {
-  // Todo excepto rutas de API, internals de Next y archivos estáticos con extensión
-  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
+  // Todo excepto rutas de API, internals de Next y archivos estáticos con extensión;
+  // más /api/me, para bloquear las escrituras mientras un administrador ve el aula como un alumno (solo lectura).
+  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)", "/api/me/:path*"],
 }

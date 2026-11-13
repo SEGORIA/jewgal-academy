@@ -4,23 +4,7 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useTranslations } from "next-intl"
 
-const TESTIMONIALS = [
-  {
-    text: "Qué bendición cruzarse con maestros tan empáticos que no solo educan, sino que muchas veces rescatan. Sus clases crean una profunda conexión entre quienes participamos.",
-    who: "Constanza Wohlgemut",
-    role: "Life Coaching Integrativo",
-  },
-  {
-    text: "Tus clases de coaching y Cábala han sido un faro en mi camino, ayudándome a comprender no solo la materia, sino aspectos de mi propia vida. Estas enseñanzas me han transformado.",
-    who: "Diana Atri",
-    role: "Cábala Coach",
-  },
-  {
-    text: "De todo corazón quiero agradecerte. Eres una guía invaluable; tu dedicación y sabiduría han marcado profundamente mi camino.",
-    who: "Andrea Gálvez",
-    role: "Instructor Jewgal Adultos",
-  },
-]
+export type CarouselItem = { text: string; who: string; role: string }
 
 const variants = {
   enter: (d: number) => ({ x: d > 0 ? 72 : -72, opacity: 0, filter: "blur(4px)" }),
@@ -28,23 +12,26 @@ const variants = {
   exit:  (d: number) => ({ x: d > 0 ? -72 : 72, opacity: 0, filter: "blur(4px)" }),
 }
 
-export default function TestimonialCarousel() {
+export default function TestimonialCarousel({ items }: { items: CarouselItem[] }) {
+  const TESTIMONIALS = items
   const t = useTranslations("Testimonials")
   const [idx, setIdx]       = useState(0)
   const [dir, setDir]       = useState(1)
   const [paused, setPaused] = useState(false)
 
   const go = (next: number) => {
-    const n = (next + TESTIMONIALS.length) % TESTIMONIALS.length
+    const n = TESTIMONIALS.length ? (next + TESTIMONIALS.length) % TESTIMONIALS.length : 0
     setDir(n > idx ? 1 : -1)
     setIdx(n)
   }
 
   useEffect(() => {
     if (paused) return
-    const t = setInterval(() => { setDir(1); setIdx(c => (c + 1) % TESTIMONIALS.length) }, 5200)
+    const t = setInterval(() => { setDir(1); setIdx(c => (TESTIMONIALS.length ? (c + 1) % TESTIMONIALS.length : 0)) }, 5200)
     return () => clearInterval(t)
   }, [paused, idx])
+
+  if (TESTIMONIALS.length === 0) return null
 
   return (
     <div

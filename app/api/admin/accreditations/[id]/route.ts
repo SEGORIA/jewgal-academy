@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
+import { adminGuard } from "@/lib/admin-guard"
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
-import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 
 // Acepta tanto URLs de Cloudinary como rutas locales de public/ (ej. los
@@ -19,10 +19,10 @@ const patchSchema = z.object({
 })
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("certificados")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
   const { id } = await params
 
   const parsed = patchSchema.safeParse(await req.json().catch(() => null))
@@ -50,10 +50,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("certificados")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
   const { id } = await params
 
   await db.accreditation.delete({ where: { id } }).catch(() => null)

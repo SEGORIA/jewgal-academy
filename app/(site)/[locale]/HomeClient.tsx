@@ -15,10 +15,11 @@ import { FloatingParticles } from "@/components/motion/FloatingParticles"
 import { CursorLight } from "@/components/motion/CursorLight"
 import MagneticButton from "@/components/motion/MagneticButton"
 import TestimonialCarousel from "@/components/TestimonialCarousel"
+import type { Aval, PublicTestimonial } from "@/lib/public-data"
 import { type SiteContent } from "@/lib/site-content"
 import { formatPrice } from "@/lib/utils"
 
-type CourseInfo = { slug: string; title?: string; shortDesc?: string; price: number; currency: string; isFree: boolean }
+type CourseInfo = { slug: string; title?: string; shortDesc?: string; price: number; currency: string; isFree: boolean; thumbnail?: string | null }
 
 // Mapa interactivo: below-the-fold y con código propio → se carga diferido
 const ComunidadMap = dynamic(() => import("@/components/ComunidadMap"), {
@@ -26,16 +27,6 @@ const ComunidadMap = dynamic(() => import("@/components/ComunidadMap"), {
   loading: () => <div style={{ minHeight: 360 }} aria-hidden="true" />,
 })
 
-const CERT_INSTITUTES = [
-  { slug: "idc",           name: "IDC",  fullName: "International Development Community" },
-  { slug: "hbdt",          name: "HBDT", fullName: "Acreditación Institución de Formación en Desarrollo Humano" },
-  { slug: "hdp",           name: "HDP",  fullName: "Programas de Desarrollo Humano" },
-  { slug: "thd",           name: "THD",  fullName: "Acreditación de Entrenador Humano" },
-  { slug: "cel",           name: "CEL",  fullName: "Center for Executive Leadership" },
-  { slug: "fgu",           name: "FGU",  fullName: "Florida Global University" },
-  { slug: "global-coaching", name: "GC", fullName: "Global Coaching Federation" },
-  { slug: "fundacion",     name: "FSC",  fullName: "Fundación Sholem Corazón Valiente" },
-]
 
 const PROGRAMS = [
   { slug: "life-coaching-integrativo", title: "Life Coaching Integrativo",   desc: "Formación integral para el cambio.", price: "$1.500", free: false, img: "/brand/programs/life-coaching.jpg" },
@@ -48,7 +39,11 @@ const PROGRAMS = [
 export default function HomeClient({
   initialContent,
   initialCourses,
+  avales,
+  testimonials,
 }: {
+  avales: Aval[]
+  testimonials: PublicTestimonial[]
   initialContent: SiteContent
   initialCourses: CourseInfo[]
 }) {
@@ -66,16 +61,19 @@ export default function HomeClient({
     initialCourses.map((c) => [c.slug, c])
   )
 
-  // Precio real de la DB cuando existe; si no, el valor por defecto del array
-  const programs = PROGRAMS.map((p) => {
-    const c = dbCourses[p.slug]
-    if (!c) return p
+  // Los programas publicados en el panel son la fuente de verdad (orden, título, precio y miniatura incluidos).
+  // PROGRAMS solo aporta la imagen y el texto de siempre para los cinco programas originales,
+  // y es la red de seguridad si la base no responde.
+  const programs = (initialCourses.length ? initialCourses : PROGRAMS).map((c) => {
+    const base = PROGRAMS.find((p) => p.slug === c.slug)
+    const db = dbCourses[c.slug]
     return {
-      ...p,
-      title: c.title || p.title,
-      desc: c.shortDesc || p.desc,
-      price: c.isFree ? (locale === "en" ? "Free" : "Gratis") : formatPrice(c.price, c.currency),
-      free: c.isFree,
+      slug: c.slug,
+      title: db?.title || base?.title || c.slug,
+      desc: db?.shortDesc || base?.desc || "",
+      img: db?.thumbnail || base?.img || "/brand/programs/default.svg",
+      price: db ? (db.isFree ? (locale === "en" ? "Free" : "Gratis") : formatPrice(db.price, db.currency)) : (base?.price ?? ""),
+      free: db ? db.isFree : !!base?.free,
     }
   })
 
@@ -400,11 +398,11 @@ export default function HomeClient({
         <div className="wrap">
           <p className="avales-label">{t("avalesLabel")}</p>
           <div className="avales-grid">
-            {CERT_INSTITUTES.map((inst) => (
-              <div key={inst.slug} className="aval-item" title={inst.fullName}>
+            {avales.map((inst) => (
+              <div key={inst.id} className="aval-item" title={inst.name}>
                 <img
-                  src={`/brand/certs/${inst.slug}.webp`}
-                  alt={inst.fullName}
+                  src={inst.logoUrl}
+                  alt={inst.name}
                   loading="lazy"
                   decoding="async"
                   className="aval-logo"
@@ -415,7 +413,7 @@ export default function HomeClient({
                     if (badge) badge.style.opacity = "0"
                   }}
                 />
-                <span className="aval-badge">{inst.name}</span>
+                <span className="aval-badge">{inst.code || inst.name}</span>
               </div>
             ))}
           </div>
@@ -473,7 +471,7 @@ export default function HomeClient({
             <span className="eyebrow">{t("testimonialsEyebrow")}</span>
             <h2 className="serif" style={{ color: "var(--text)", fontSize: "clamp(28px,4vw,48px)", marginTop: 10 }}>{t("testimonialsTitle")}</h2>
           </div>
-          <TestimonialCarousel />
+          <TestimonialCarousel items={testimonials} />
         </div>
       </section>
 

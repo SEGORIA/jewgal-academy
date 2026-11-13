@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { adminGuard } from "@/lib/admin-guard"
+import type { Permission } from "@/lib/permissions"
 
 // Las rutas existentes del proyecto chequean sesión inline (no había un
 // helper compartido) — acá sí se justifica uno porque el foro agrega ~12
@@ -10,12 +12,11 @@ import { db } from "@/lib/db"
 type AuthFail = { ok: false; response: NextResponse }
 type AuthOk = { ok: true; userId: string }
 
-export async function requireAdmin(): Promise<AuthFail | AuthOk> {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return { ok: false, response: NextResponse.json({ error: "Forbidden" }, { status: 403 }) }
-  }
-  return { ok: true, userId: session.user.id }
+export async function requireAdmin(perm: Permission = "comunidad"): Promise<AuthFail | AuthOk> {
+  const g = await adminGuard(perm)
+  if (!g.ok) return { ok: false, response: g.response }
+  g.enter()
+  return { ok: true, userId: g.user.id }
 }
 
 export async function requireStudent(): Promise<AuthFail | AuthOk> {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { auth } from "@/lib/auth"
+import { adminGuard } from "@/lib/admin-guard"
 import { db } from "@/lib/db"
 import { parseContent, parseQuizData } from "@/lib/materials-content"
 
@@ -7,10 +7,10 @@ import { parseContent, parseQuizData } from "@/lib/materials-content"
 // chequeo de inscripción (el admin no está inscripto como alumno) y sin
 // progreso real (nadie "completa" nada acá, es solo para ver cómo queda).
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("cursos")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
   const { id } = await params
 
   const material = await db.material.findUnique({ where: { id } })

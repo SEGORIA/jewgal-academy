@@ -26,7 +26,7 @@ type Course = {
   description: string; descriptionEn: string | null
   price: number; currency: string; isFree: boolean; isPublished: boolean; sequentialUnlock?: boolean
   totalHours: number | null; durationWeeks: number | null; thumbnail: string | null
-  videoUrl: string | null; content: string | null
+  videoUrl: string | null; content: string | null; sortOrder?: number
   _count: { enrollments: number; materials: number; liveSessions: number }
 }
 type Material = AdminMaterial
@@ -294,6 +294,18 @@ export default function CursosAdminPage() {
     }
   }
 
+  // Cambia el orden de aparición de los programas en el sitio (renumera toda la lista de 10 en 10).
+  async function moveCourse(i: number, dir: -1 | 1) {
+    const j = i + dir
+    if (j < 0 || j >= courses.length) return
+    const next = [...courses]
+    ;[next[i], next[j]] = [next[j], next[i]]
+    await Promise.all(next.map((c, idx) => (c.sortOrder === (idx + 1) * 10 ? null : fetch(`/api/admin/courses/${c.id}`, {
+      method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ sortOrder: (idx + 1) * 10 }),
+    }))))
+    loadCourses()
+  }
+
   async function togglePublish(c: Course) {
     await fetch(`/api/admin/courses/${c.id}`, {
       method: "PATCH",
@@ -494,6 +506,14 @@ export default function CursosAdminPage() {
                 <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
                   <div style={{ width: 10, height: 10, borderRadius: "50%", background: accent, flexShrink: 0 }} />
                   <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.title}</span>
+                  <button onClick={(e) => { e.stopPropagation(); moveCourse(i, -1) }} title="Subir (aparece antes en el sitio)" aria-label={`Subir ${p.title}`} disabled={i === 0}
+                    style={{ background: "none", border: "none", cursor: i === 0 ? "default" : "pointer", color: "var(--text-faint)", padding: 2, opacity: i === 0 ? 0.3 : 1 }}>
+                    <ChevronUp size={15} />
+                  </button>
+                  <button onClick={(e) => { e.stopPropagation(); moveCourse(i, 1) }} title="Bajar (aparece después en el sitio)" aria-label={`Bajar ${p.title}`} disabled={i === courses.length - 1}
+                    style={{ background: "none", border: "none", cursor: i === courses.length - 1 ? "default" : "pointer", color: "var(--text-faint)", padding: 2, opacity: i === courses.length - 1 ? 0.3 : 1 }}>
+                    <ChevronDown size={15} />
+                  </button>
                   <button onClick={(e) => { e.stopPropagation(); togglePublish(p) }} title={p.isPublished ? "Despublicar" : "Publicar"}
                     style={{ background: "none", border: "none", cursor: "pointer", color: p.isPublished ? "var(--success)" : "var(--text-dim)", padding: 2 }}>
                     {p.isPublished ? <Eye size={16} /> : <EyeOff size={16} />}

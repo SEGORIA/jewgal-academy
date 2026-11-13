@@ -1190,3 +1190,9 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
   display: inline-flex; align-items: center; justify-content: center;
   border-radius: 8px;
 }
+
+/* Texto solo para lectores de pantalla */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}

@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@prisma/client"
+import type { DbClient } from "@/lib/db"
 
 export type CertificateProgramAccent = { slug: string; accent: string }
 
@@ -65,7 +65,7 @@ export function resolveProgramAccent(design: CertificateDesign, slug: string): s
 // pero el archivo es seguro de importar desde componentes cliente porque el único
 // símbolo que toca Prisma es un import de tipo — se borra en compilación, nada acá
 // se ejecuta a nivel de módulo.
-export async function getCertificateDesign(db: PrismaClient): Promise<CertificateDesign> {
+export async function getCertificateDesign(db: Pick<DbClient, "siteSetting">): Promise<CertificateDesign> {
   try {
     const setting = await db.siteSetting.findUnique({ where: { key: "certificate_design" } })
     if (setting?.value) return mergeCertificateDesign(JSON.parse(setting.value))

@@ -3,20 +3,17 @@
 import { usePathname } from "next/navigation"
 import { useTranslations } from "next-intl"
 
-// ⬇️ Poné aquí el número de WhatsApp de Devora: código de país + número, SOLO dígitos
-//    (sin "+", sin espacios ni guiones). Ej: "13055551234" para +1 305 555 1234.
-//    Mientras esté vacío, el botón no se muestra.
-const WHATSAPP_NUMBER = "17864835893"
-
-export default function WhatsAppFab() {
+// El número (código de país + dígitos) y el mensaje inicial se editan en el panel: Configuración → General.
+// Con el número vacío, el botón no se muestra.
+export default function WhatsAppFab({ number, message }: { number: string; message?: string }) {
   const pathname = usePathname()
   const t = useTranslations("WhatsApp")
 
   // Solo en el sitio público (no en aula, panel ni login)
-  if (!WHATSAPP_NUMBER) return null
+  if (!number) return null
   if (/^\/(aula|superadmin|login)/.test(pathname)) return null
 
-  const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(t("message"))}`
+  const href = `https://wa.me/${number}?text=${encodeURIComponent(message?.trim() || t("message"))}`
 
   return (
     <a

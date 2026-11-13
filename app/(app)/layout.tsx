@@ -8,7 +8,7 @@ import WhatsAppFab from "@/components/WhatsAppFab"
 import PwaRegister from "@/components/PwaRegister"
 import { getTheme } from "@/lib/theme"
 import { Analytics } from "@vercel/analytics/next"
-import esMessages from "../../messages/es.json"
+import { loadMessages } from "@/lib/messages"
 import { SITE_URL } from "@/lib/site-url"
 
 const orgJsonLd = {
@@ -107,6 +107,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   const theme = await getTheme()
+  const messages = await loadMessages("es")
   return (
     <html
       lang="es"
@@ -120,14 +121,14 @@ export default async function RootLayout({
         />
         <a href="#contenido" className="skip-link">Saltar al contenido</a>
         <ScrollProgress />
-        <NextIntlClientProvider locale="es" messages={esMessages}>
+        <NextIntlClientProvider locale="es" messages={messages}>
           <Providers>
             <div id="contenido">{children}</div>
             <PwaRegister />
           </Providers>
           {/* WhatsAppFab usa useTranslations → debe ir dentro del provider
               (aunque se oculta en /aula y /superadmin, se renderiza en SSR) */}
-          <WhatsAppFab />
+          <WhatsAppFab number="" />
         </NextIntlClientProvider>
         <Analytics />
       </body>

@@ -12,6 +12,8 @@ export type PublicCourse = {
   isFree: boolean
   durationWeeks: number | null
   totalHours: number | null
+  thumbnail: string | null
+  content: string | null
 }
 
 /**
@@ -52,9 +54,9 @@ export const getCoursesForLocale = cache(
           slug: true, title: true, titleEn: true,
           shortDesc: true, shortDescEn: true,
           price: true, currency: true, isFree: true,
-          durationWeeks: true, totalHours: true,
+          durationWeeks: true, totalHours: true, thumbnail: true, content: true,
         },
-        orderBy: { createdAt: "asc" },
+        orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
       })
       return courses.map(({ titleEn, shortDescEn, ...c }) => ({
         ...c,

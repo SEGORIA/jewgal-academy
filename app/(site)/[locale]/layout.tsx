@@ -7,11 +7,14 @@ import "../../globals.css"
 import Providers from "@/components/Providers"
 import ScrollProgress from "@/components/motion/ScrollProgress"
 import WhatsAppFab from "@/components/WhatsAppFab"
+import AdminEditBar from "@/components/AdminEditBar"
 import PwaRegister from "@/components/PwaRegister"
 import { getTheme } from "@/lib/theme"
 import { Analytics } from "@vercel/analytics/next"
 import { routing } from "@/i18n/routing"
 import { SITE_URL } from "@/lib/site-url"
+import { getGeneralSettings } from "@/lib/general-settings"
+import { getSeo } from "@/lib/seo"
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-serif",
@@ -55,30 +58,35 @@ const METADATA_BY_LOCALE = {
 } as const
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const general = await getGeneralSettings()
   const { locale } = await params
   const m = METADATA_BY_LOCALE[locale as keyof typeof METADATA_BY_LOCALE] ?? METADATA_BY_LOCALE.es
   const url = locale === routing.defaultLocale ? SITE_URL : `${SITE_URL}/${locale}`
+  // Título, descripción e imagen para compartir: editables en “Textos y SEO” (Inicio)
+  const seo = await getSeo("home", locale)
 
   return {
     metadataBase: new URL(SITE_URL),
-    title: m.title,
-    description: m.description,
+    title: { default: seo.title, template: `%s · ${general.name}` },
+    description: seo.description,
     keywords: ["coaching", "Cabalá", "mindfulness", "desarrollo personal", "Jewgal Academy", "Devora Benchimol", "certificación coach"],
     authors: [{ name: "Devora Benchimol" }],
     creator: "Jewgal Academy",
     applicationName: "Jewgal Academy",
     openGraph: {
-      title: m.title.default,
-      description: m.description,
+      title: seo.title,
+      description: seo.description,
       url,
-      siteName: "Jewgal Academy",
+      siteName: general.name,
       type: "website",
       locale: m.ogLocale,
+      ...(seo.image ? { images: [{ url: seo.image }] } : {}),
     },
     twitter: {
       card: "summary_large_image",
-      title: m.title.default,
-      description: m.description,
+      title: seo.title,
+      description: seo.description,
+      ...(seo.image ? { images: [seo.image] } : {}),
     },
     robots: {
       index: true,
@@ -128,6 +136,7 @@ export default async function LocaleLayout({
 
   setRequestLocale(locale)
   const theme = await getTheme()
+  const general = await getGeneralSettings()
 
   const orgJsonLd = {
     "@context": "https://schema.org",
@@ -160,9 +169,11 @@ export default async function LocaleLayout({
           <Providers>
             <div id="contenido">{children}</div>
             <PwaRegister />
+            {/* Atajos de edición: solo los ve el equipo del panel */}
+            <AdminEditBar />
           </Providers>
           {/* WhatsAppFab usa useTranslations → debe ir dentro del provider */}
-          <WhatsAppFab />
+          <WhatsAppFab number={general.whatsapp} message={general.whatsappMessage} />
         </NextIntlClientProvider>
         <Analytics />
       </body>

@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
-import { auth } from "@/lib/auth"
+import { adminGuard } from "@/lib/admin-guard"
 import { db } from "@/lib/db"
 import bcrypt from "bcryptjs"
 
 export async function GET() {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("alumnos")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
 
   const students = await db.user.findMany({
     where: { role: "student" },
@@ -18,7 +18,10 @@ export async function GET() {
           attendances: { select: { status: true } },
         },
       },
-      payments: { select: { amount: true, status: true, paidAt: true } },
+      payments: {
+        select: { id: true, amount: true, currency: true, status: true, method: true, note: true, paidAt: true, createdAt: true, course: { select: { title: true } } },
+        orderBy: { createdAt: "desc" },
+      },
     },
     orderBy: { createdAt: "desc" },
   })
@@ -34,7 +37,7 @@ export async function GET() {
     : []
   const heldMap = Object.fromEntries(held.map((h) => [h.courseId, h._count.id]))
 
-  const enriched = students.map((s) => ({
+  const enriched = students.map(({ password: _password, ...s }) => ({
     ...s,
     enrollments: s.enrollments.map((e) => {
       const attended = e.attendances.filter((a) => a.status === "present" || a.status === "late").length
@@ -50,10 +53,10 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("alumnos")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
 
   const { name, email, password, courseId } = await req.json()
   if (!name || !email || !password) {
@@ -77,17 +80,8 @@ export async function POST(req: NextRequest) {
   if (courseId) {
     const course = await db.course.findUnique({ where: { id: courseId } })
     if (course) {
+      // Inscripción de cortesía: no se inventa un pago. Si hubo cobro, se registra desde la ficha del alumno → Pagos.
       await db.enrollment.create({ data: { userId: user.id, courseId, status: "active" } })
-      await db.payment.create({
-        data: {
-          userId: user.id,
-          courseId,
-          amount: course.price,
-          currency: course.currency,
-          status: "demo",
-          paidAt: new Date(),
-        },
-      })
     }
   }
 

@@ -1,6 +1,7 @@
 import { db } from "./db"
 import bcrypt from "bcryptjs"
 import { generateTempPassword } from "./security"
+import { sendEnrollmentEmail } from "./email"
 
 export type EnrollInput = {
   email: string
@@ -61,6 +62,12 @@ export async function enrollUserInCourse(input: EnrollInput): Promise<EnrollResu
       stripePaymentId: input.provider === "paypal" ? input.paymentRef : null,
     },
   })
+
+  // Alumno que ya tenía cuenta: confirmación de inscripción (la cuenta nueva recibe la bienvenida con su clave)
+  if (!isNewUser) {
+    const course = await db.course.findUnique({ where: { id: input.courseId }, select: { title: true } })
+    if (course) sendEnrollmentEmail({ email: user.email, name: user.name, courseTitle: course.title }).catch(() => {})
+  }
 
   return { userId: user.id, isNewUser, tempPassword }
 }

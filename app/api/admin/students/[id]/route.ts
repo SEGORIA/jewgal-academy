@@ -1,15 +1,30 @@
 import { NextRequest, NextResponse } from "next/server"
+import { adminGuard } from "@/lib/admin-guard"
 import { z } from "zod"
-import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 
-const patchSchema = z.object({ status: z.enum(["active", "banned"]) })
+const optionalText = (max: number) =>
+  z.string().trim().max(max).nullable().optional().transform((v) => (v === undefined ? undefined : v ? v : null))
 
+const patchSchema = z
+  .object({
+    status: z.enum(["active", "banned"]),
+    name: z.string().trim().min(2, "El nombre es muy corto").max(120),
+    email: z.string().trim().toLowerCase().email("Email inválido").max(160),
+    phone: optionalText(40),
+    country: optionalText(80),
+    city: optionalText(80),
+    job: optionalText(120),
+    bio: optionalText(1000),
+  })
+  .partial()
+  .refine((d) => Object.values(d).some((v) => v !== undefined), { message: "Nada para actualizar" })
+
+/** Editar los datos de un alumno (perfil) o suspender / reactivar su cuenta. */
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("alumnos")
+  if (!g.ok) return g.response
+  g.enter()
   const { id } = await params
 
   const student = await db.user.findUnique({ where: { id } })
@@ -19,18 +34,28 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   const parsed = patchSchema.safeParse(await req.json().catch(() => null))
   if (!parsed.success) {
-    return NextResponse.json({ error: "Datos inválidos" }, { status: 400 })
+    return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Datos inválidos" }, { status: 400 })
+  }
+  const data = Object.fromEntries(Object.entries(parsed.data).filter(([, v]) => v !== undefined))
+
+  if (typeof data.email === "string" && data.email !== student.email) {
+    const taken = await db.user.findUnique({ where: { email: data.email }, select: { id: true } })
+    if (taken && taken.id !== id) {
+      return NextResponse.json({ error: "Ya existe otra cuenta con ese email" }, { status: 409 })
+    }
   }
 
-  const updated = await db.user.update({ where: { id }, data: { status: parsed.data.status } })
-  return NextResponse.json({ ok: true, student: updated })
+  const updated = await db.user.update({ where: { id }, data })
+  const { password: _password, ...safe } = updated
+  void _password
+  return NextResponse.json({ ok: true, student: safe })
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  void req
+  const g = await adminGuard("alumnos")
+  if (!g.ok) return g.response
+  g.enter()
   const { id } = await params
 
   const student = await db.user.findUnique({ where: { id } })
@@ -44,7 +69,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
   ])
   if (enrollmentCount > 0 || paymentCount > 0) {
     return NextResponse.json(
-      { error: "Esta cuenta tiene inscripciones o pagos registrados. Por integridad de los registros académicos y de pago, contactá soporte para dar de baja una cuenta con historial." },
+      { error: "Esta cuenta tiene inscripciones o pagos registrados. Para conservar el historial académico y de pagos, suspendela en lugar de eliminarla, o quitá primero sus inscripciones y pagos." },
       { status: 409 }
     )
   }

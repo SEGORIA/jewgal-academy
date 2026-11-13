@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
+import { adminGuard } from "@/lib/admin-guard"
 import { z } from "zod"
-import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 
 /**
@@ -8,10 +8,10 @@ import { db } from "@/lib/db"
  * GET con courseId   → sesiones del programa + alumnos inscritos con su asistencia actual.
  */
 export async function GET(req: NextRequest) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("cursos")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
 
   const courseId = new URL(req.url).searchParams.get("courseId")
 
@@ -64,10 +64,10 @@ const postSchema = z.object({
 })
 
 export async function POST(req: NextRequest) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("cursos")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
 
   const parsed = postSchema.safeParse(await req.json().catch(() => null))
   if (!parsed.success) {

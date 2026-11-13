@@ -39,7 +39,7 @@ export default function LoginForm() {
       setError(t("error"))
     } else {
       const session = await getSession()
-      const destination = session?.user?.role === "admin"
+      const destination = (session?.user?.role === "admin" || session?.user?.role === "staff")
         ? "/superadmin"
         : (redirect.startsWith("/superadmin") ? "/aula" : redirect)
       setDest(destination)

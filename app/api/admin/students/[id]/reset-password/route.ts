@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
+import { adminGuard } from "@/lib/admin-guard"
 import bcrypt from "bcryptjs"
-import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 
 function randomPassword() {
@@ -11,10 +11,10 @@ function randomPassword() {
 }
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("alumnos")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
   const { id } = await params
 
   const student = await db.user.findUnique({ where: { id } })

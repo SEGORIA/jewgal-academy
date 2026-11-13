@@ -8,6 +8,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher"
 import SiteSearch from "@/components/SiteSearch"
 import { useSession } from "next-auth/react"
 import { useTranslations } from "next-intl"
+import { isPanelRole } from "@/lib/permissions"
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion"
 
 // /aula y /superadmin viven fuera de app/(site)/[locale] — nunca deben
@@ -62,7 +63,7 @@ export default function Navbar() {
   }, [])
 
   const isLoggedIn = status === "authenticated" && !!session
-  const isAdmin    = session?.user?.role === "admin"
+  const isAdmin    = isPanelRole(session?.user?.role)
 
   return (
     <>

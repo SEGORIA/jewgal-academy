@@ -1,10 +1,11 @@
-import type { Prisma, PrismaClient } from "@prisma/client"
+import type { DbClient, DbTx } from "@/lib/db"
 import { renderToBuffer } from "@react-pdf/renderer"
 import { CertificateDocument, fetchCoBrandingLogoBuffer, fetchAccreditationLogoBuffers } from "@/lib/certificate-pdf"
 import { isCloudinaryConfigured, uploadBufferToCloudinary } from "@/lib/cloudinary"
 import { getCertificateDesign, resolveProgramAccent } from "@/lib/certificate-design"
+import { sendCertificateEmail } from "@/lib/email"
 
-type Tx = Prisma.TransactionClient
+type Tx = DbTx
 
 export type AttachCertificatePdfInput = {
   enrollmentId: string
@@ -20,7 +21,7 @@ export type AttachCertificatePdfInput = {
 // timeout de una transacción de Prisma). Si algo falla acá, el certificado
 // ya emitido (número + fecha) sigue siendo válido — el PDF es una capa
 // adicional, no un requisito para /verificar/[numero].
-export async function attachCertificatePdf(db: PrismaClient, input: AttachCertificatePdfInput): Promise<void> {
+async function generateAndAttachPdf(db: DbClient | DbTx, input: AttachCertificatePdfInput): Promise<void> {
   if (!isCloudinaryConfigured()) {
     console.warn("[attachCertificatePdf] Cloudinary no configurado, se omite la generación del PDF")
     return
@@ -72,6 +73,20 @@ export async function nextCertificateNumber(tx: Tx): Promise<string> {
   return `JA-${year}-${String(completedCount + 1).padStart(4, "0")}`
 }
 
+/** Genera el PDF y, si la plantilla “Certificado emitido” está activada, avisa por correo al alumno. */
+export async function attachCertificatePdf(db: DbClient | DbTx, input: AttachCertificatePdfInput): Promise<void> {
+  try {
+    await generateAndAttachPdf(db, input)
+  } finally {
+    try {
+      const e = await db.enrollment.findUnique({ where: { id: input.enrollmentId }, select: { user: { select: { email: true } } } })
+      if (e?.user.email) await sendCertificateEmail({ email: e.user.email, name: input.studentName, courseTitle: input.courseTitle, certificateNumber: input.certificateNumber })
+    } catch (err) {
+      console.error("[attachCertificatePdf] no se pudo avisar por correo:", err)
+    }
+  }
+}
+
 export type SyncResult = {
   progress: number
   certificateIssued: boolean
@@ -85,7 +100,7 @@ export type SyncResult = {
 // casi al mismo tiempo por el mismo alumno no deben generar dos números de
 // certificado distintos (el flujo manual no corría este riesgo por ser un
 // solo admin operando; acá lo dispara el propio alumno).
-export async function syncEnrollmentProgress(db: PrismaClient, userId: string, courseId: string): Promise<SyncResult> {
+export async function syncEnrollmentProgress(db: DbClient, userId: string, courseId: string): Promise<SyncResult> {
   const result = await db.$transaction(async (tx) => {
     const enrollment = await tx.enrollment.findUnique({
       where: { userId_courseId: { userId, courseId } },

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
+import { adminGuard } from "@/lib/admin-guard"
 import { z } from "zod"
-import { auth } from "@/lib/auth"
 import { isCloudinaryConfigured, buildUploadSignature } from "@/lib/cloudinary"
 
 const bodySchema = z.object({
@@ -8,10 +8,10 @@ const bodySchema = z.object({
 })
 
 export async function POST(req: NextRequest) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("any")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
 
   if (!isCloudinaryConfigured()) {
     return NextResponse.json({ error: "Cloudinary no está configurado" }, { status: 503 })

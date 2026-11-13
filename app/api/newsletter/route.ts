@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
-import { db } from "@/lib/db"
+import { readSubscribers, writeSubscribers } from "@/lib/newsletter"
 import { rateLimit, getClientIp } from "@/lib/security"
 
 export const dynamic = "force-dynamic"
 
 const bodySchema = z.object({ email: z.string().email("Email inválido").max(160) })
-
-type Subscriber = { email: string; date: string }
 
 export async function POST(req: NextRequest) {
   const rl = rateLimit(`newsletter:${getClientIp(req)}`, 5, 60_000)
@@ -25,18 +23,11 @@ export async function POST(req: NextRequest) {
   const email = parsed.data.email.trim().toLowerCase()
 
   try {
-    const setting = await db.siteSetting.findUnique({ where: { key: "newsletter_subscribers" } })
-    const list: Subscriber[] = setting?.value ? JSON.parse(setting.value) : []
-
+    const list = await readSubscribers()
     if (!list.some((s) => s.email === email)) {
       list.push({ email, date: new Date().toISOString() })
-      await db.siteSetting.upsert({
-        where: { key: "newsletter_subscribers" },
-        update: { value: JSON.stringify(list) },
-        create: { key: "newsletter_subscribers", value: JSON.stringify(list) },
-      })
+      await writeSubscribers(list)
     }
-
     // Idempotente: si ya estaba suscrito, responde ok igual (no revela si el email existe)
     return NextResponse.json({ ok: true })
   } catch {

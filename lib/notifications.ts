@@ -1,13 +1,14 @@
 import { db } from "./db"
 import { sendAdminAlert } from "./email"
 
-export type NotificationType = "duplicate_purchase_blocked" | "refund_synced" | "payment_received" | "forum_reply"
+export type NotificationType = "duplicate_purchase_blocked" | "refund_synced" | "payment_received" | "forum_reply" | "contact_message"
 
 const SUBJECTS: Record<NotificationType, string> = {
   payment_received: "Nuevo pago recibido",
   duplicate_purchase_blocked: "Recompra bloqueada",
   refund_synced: "Reembolso procesado",
   forum_reply: "Nueva respuesta en el foro",
+  contact_message: "Nuevo mensaje de contacto",
 }
 
 /**

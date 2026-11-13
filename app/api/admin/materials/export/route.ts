@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { auth } from "@/lib/auth"
+import { adminGuard } from "@/lib/admin-guard"
 import { db } from "@/lib/db"
 import { parseContent, parseQuizData } from "@/lib/materials-content"
 
@@ -7,10 +7,10 @@ import { parseContent, parseQuizData } from "@/lib/materials-content"
 // mismo formato que acepta "Importar": sirve de respaldo y para copiar la
 // estructura de un programa a otro sin recargar nada a mano.
 export async function GET(req: NextRequest) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("cursos")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
 
   const courseId = req.nextUrl.searchParams.get("courseId")
   if (!courseId) {

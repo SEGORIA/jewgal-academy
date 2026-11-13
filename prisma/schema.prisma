@@ -22,6 +22,8 @@ model User {
   job              String?
   bio              String?
   interests        String[]           @default([])
+  permissions      String[]           @default([]) // permisos del rol "staff" (el rol "admin" tiene todos)
+  lastLoginAt      DateTime?
   enrollments      Enrollment[]
   payments         Payment[]
   conversations    Conversation[]
@@ -56,6 +58,7 @@ model Course {
   content            String? // JSON: eyebrow/duración/modalidad/nivel/módulos/incluye/para quién/resultado
   // Desbloqueo progresivo: el alumno accede a cada material al completar el anterior.
   sequentialUnlock   Boolean             @default(false)
+  sortOrder          Int                 @default(100) // orden de las tarjetas en el sitio público
   enrollments        Enrollment[]
   materials          Material[]
   liveSessions       LiveSession[]
@@ -183,6 +186,9 @@ model Payment {
   currency        String    @default("USD")
   status          String    @default("pending")
   paidAt          DateTime?
+  method          String? // stripe | paypal | transferencia | efectivo | otro (pagos registrados a mano)
+  note            String?
+  recordedById    String? // admin que registró el pago a mano
   user            User      @relation(fields: [userId], references: [id])
   course          Course    @relation(fields: [courseId], references: [id])
   createdAt       DateTime  @default(now())
@@ -326,4 +332,71 @@ model Accreditation {
   courses   Course[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// Testimonios del sitio público (antes fijos en el código)
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String   @default("")
+  roleEn    String?
+  text      String
+  textEn    String?
+  photoUrl  String?
+  order     Int      @default(0)
+  isVisible Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Avisos enviados desde el panel (en la plataforma y/o por correo)
+model Announcement {
+  id            String   @id @default(cuid())
+  title         String
+  body          String
+  linkUrl       String?
+  audience      String // JSON: { type: "all" | "course" | "users" | "newsletter", courseId?, userIds? }
+  channels      String // "app" | "email" | "app+email"
+  recipients    Int      @default(0)
+  emailsSent    Int      @default(0)
+  emailsFailed  Int      @default(0)
+  createdById   String?
+  createdByName String?
+  createdAt     DateTime @default(now())
+}
+
+// Historial de cambios hechos desde el panel (quién, qué, antes y después)
+model AuditLog {
+  id         String    @id @default(cuid())
+  actorId    String?
+  actorName  String?
+  actorRole  String?
+  action     String // create | update | delete | restore | bulk
+  model      String
+  recordId   String?
+  label      String?
+  before     Json?
+  after      Json?
+  restoredAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([createdAt])
+  @@index([model, recordId])
+}
+
+// Mensajes enviados desde el formulario de contacto del sitio (antes solo se escribían en el log y se perdían)
+model ContactMessage {
+  id          String    @id @default(cuid())
+  name        String
+  email       String
+  subject     String? // programa o motivo elegido en el formulario
+  message     String
+  locale      String    @default("es")
+  status      String    @default("new") // new | read | replied | archived
+  replyBody   String?
+  repliedAt   DateTime?
+  repliedById String?
+  createdAt   DateTime  @default(now())
+
+  @@index([status, createdAt])
 }

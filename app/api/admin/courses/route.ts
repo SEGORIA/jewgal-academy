@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
+import { adminGuard } from "@/lib/admin-guard"
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
-import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 
 function slugify(input: string) {
@@ -14,13 +14,13 @@ function slugify(input: string) {
 }
 
 export async function GET() {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("cursos")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
 
   const courses = await db.course.findMany({
-    orderBy: { createdAt: "desc" },
+    orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }], // mismo orden que ve el público
     include: {
       _count: { select: { enrollments: true, materials: true, liveSessions: true } },
     },
@@ -47,10 +47,10 @@ const createSchema = z.object({
 })
 
 export async function POST(req: NextRequest) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("cursos")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
 
   const parsed = createSchema.safeParse(await req.json().catch(() => null))
   if (!parsed.success) {

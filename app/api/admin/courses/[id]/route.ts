@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
+import { adminGuard } from "@/lib/admin-guard"
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
-import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 
 const moduleSchema = z.object({ title: z.string(), items: z.array(z.string()) })
@@ -28,6 +28,7 @@ const patchSchema = z.object({
   isFree: z.boolean().optional(),
   isPublished: z.boolean().optional(),
   sequentialUnlock: z.boolean().optional(),
+  sortOrder: z.number().int().min(0).max(100000).optional(),
   totalHours: z.number().min(0).nullable().optional(),
   durationWeeks: z.number().int().min(0).nullable().optional(),
   thumbnail: z.string().url().nullable().optional().or(z.literal("")),
@@ -36,10 +37,10 @@ const patchSchema = z.object({
 })
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("cursos")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
   const { id } = await params
 
   const parsed = patchSchema.safeParse(await req.json().catch(() => null))
@@ -67,10 +68,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("cursos")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
   const { id } = await params
 
   const [enrollmentCount, paymentCount] = await Promise.all([

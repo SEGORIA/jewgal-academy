@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server"
-import { auth } from "@/lib/auth"
+import { adminGuard } from "@/lib/admin-guard"
 import { db } from "@/lib/db"
 import { nextCertificateNumber, attachCertificatePdf } from "@/lib/certificates"
 
 export const maxDuration = 30
 
 export async function POST(req: Request) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("certificados")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
 
   const { enrollmentId } = await req.json()
   if (!enrollmentId) {
@@ -52,10 +52,10 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE(req: Request) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-  }
+  const g = await adminGuard("certificados")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
 
   const { enrollmentId } = await req.json()
   if (!enrollmentId) return NextResponse.json({ error: "enrollmentId requerido" }, { status: 400 })

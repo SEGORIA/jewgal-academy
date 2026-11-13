@@ -10,9 +10,10 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import { useLocale, useTranslations } from "next-intl"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 import { formatPrice } from "@/lib/utils"
+import { getProgramContent } from "@/lib/program-content"
 
 type Accreditation = { code: string; name: string; logoUrl: string | null }
-type CourseInfo = { slug: string; title?: string; shortDesc?: string; price: number; currency: string; isFree: boolean; accreditations?: Accreditation[] }
+type CourseInfo = { slug: string; title?: string; shortDesc?: string; price: number; currency: string; isFree: boolean; accreditations?: Accreditation[]; content?: string | null }
 
 // Copy visual/comercial de cada programa. Los textos traducibles (tag,
 // duración, nivel, bullets) se resuelven en el componente vía next-intl
@@ -75,6 +76,7 @@ export default function AcademiaPage() {
   }, [])
 
   const [dbCourses, setDbCourses] = useState<Record<string, CourseInfo>>({})
+  const [dbList, setDbList] = useState<CourseInfo[]>([])
 
   useEffect(() => {
     fetch(`/api/site-content?locale=${locale}`)
@@ -86,6 +88,7 @@ export default function AcademiaPage() {
       .then((d: { courses: CourseInfo[] }) => {
         if (Array.isArray(d?.courses)) {
           setDbCourses(Object.fromEntries(d.courses.map((c) => [c.slug, c])))
+          setDbList(d.courses)
         }
       })
       .catch(() => {})
@@ -93,19 +96,41 @@ export default function AcademiaPage() {
 
   // Precio real de la DB cuando existe; si no, el valor por defecto del array.
   // tag/duración/nivel/bullets se traducen vía next-intl con sus claves.
-  const programs = PROGRAMS.map((p) => {
-    const c = dbCourses[p.slug]
+  // Orden y alta de programas: los publicados en el panel (los nuevos usan los datos de su ficha).
+  const programs = (dbList.length ? dbList.map((c) => c.slug) : PROGRAMS.map((p) => p.slug)).map((slug) => {
+    const p = PROGRAMS.find((x) => x.slug === slug)
+    const c = dbCourses[slug]
+    const price = c ? (c.isFree ? (locale === "en" ? "Free" : "Gratis") : formatPrice(c.price, c.currency)) : p?.price ?? ""
+    if (p) {
+      return {
+        ...p,
+        tag: t(p.tagKey),
+        duration: t(p.durKey),
+        level: t(p.lvlKey),
+        bullets: t.raw(p.bulletsKey) as string[],
+        title: c?.title || p.title,
+        desc: c?.shortDesc || p.desc,
+        price,
+        free: c ? c.isFree : p.free,
+        accreditations: c?.accreditations ?? [],
+      }
+    }
+    // Programa nuevo creado en el panel: textos de su ficha pública.
+    const pc = getProgramContent(slug, c?.content)
     return {
-      ...p,
-      tag: t(p.tagKey),
-      duration: t(p.durKey),
-      level: t(p.lvlKey),
-      bullets: t.raw(p.bulletsKey) as string[],
-      title: c?.title || p.title,
-      desc: c?.shortDesc || p.desc,
-      price: c ? (c.isFree ? (locale === "en" ? "Free" : "Gratis") : formatPrice(c.price, c.currency)) : p.price,
-      free: c ? c.isFree : p.free,
+      slug,
+      title: c?.title || slug,
+      desc: c?.shortDesc || "",
+      tag: pc.eyebrow,
+      duration: pc.duration,
+      level: pc.level,
+      bullets: pc.includes.slice(0, 4),
+      price,
+      free: !!c?.isFree,
       accreditations: c?.accreditations ?? [],
+      grad: "linear-gradient(135deg,#3A2410 0%,#5C3A1E 100%)",
+      accent: "#C49F72",
+      icon: "✦",
     }
   })
 

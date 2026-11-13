@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server"
-import { auth } from "@/lib/auth"
+import { adminGuard } from "@/lib/admin-guard"
 import { db } from "@/lib/db"
 
 export const dynamic = "force-dynamic"
 
 export async function GET() {
-  const session = await auth()
-  if (session?.user?.role !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+  const g = await adminGuard("any")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
 
   const [notifications, unreadCount] = await Promise.all([
     db.notification.findMany({ where: { userId: null }, orderBy: { createdAt: "desc" }, take: 50 }),
@@ -17,8 +19,10 @@ export async function GET() {
 }
 
 export async function PATCH(req: NextRequest) {
-  const session = await auth()
-  if (session?.user?.role !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+  const g = await adminGuard("any")
+  if (!g.ok) return g.response
+  g.enter()
+  const session = g.session
 
   const body = await req.json().catch(() => null)
 

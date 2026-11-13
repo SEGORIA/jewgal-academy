@@ -55,11 +55,27 @@ export default function ContactoPage() {
   const t = useTranslations("Contacto")
   const [form, setForm] = useState({ nombre: "", email: "", asunto: "", mensaje: "" })
   const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
+  const [programs, setPrograms] = useState<{ slug: string; title: string }[]>([
+    { slug: "life-coaching-integrativo", title: "Life Coaching Integrativo" },
+    { slug: "joogal-adultos", title: "Instructor Jewgal Adultos" },
+    { slug: "joogalkids", title: "Instructor Joogalkids" },
+    { slug: "cabala-coach", title: "Cábala Coach" },
+    { slug: "metodo-sholem", title: "Método Sholem" },
+  ])
 
   useEffect(() => {
     fetch(`/api/site-content?locale=${locale}`)
       .then((r) => r.json())
       .then((d) => setContent(d))
+      .catch(() => {})
+  }, [locale])
+
+  useEffect(() => {
+    fetch(`/api/courses?locale=${locale}`)
+      .then((r) => r.json())
+      .then((d: { courses?: { slug: string; title: string }[] }) => {
+        if (d.courses?.length) setPrograms(d.courses.map((c) => ({ slug: c.slug, title: c.title })))
+      })
       .catch(() => {})
   }, [locale])
 
@@ -88,10 +104,13 @@ export default function ContactoPage() {
     setStatus("sending")
     setErrorMsg("")
     try {
+      // El asunto viaja como texto legible (el nombre del programa o el motivo), no como código interno
+      const fixed: Record<string, string> = { "coaching-1-1": t("optCoaching"), "sesion-exploratoria": t("optGuidance"), otro: t("optOther") }
+      const asunto = form.asunto ? (programs.find((p) => p.slug === form.asunto)?.title ?? fixed[form.asunto] ?? form.asunto) : ""
       const res = await fetch("/api/contacto", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        headers: { "Content-Type": "application/json", "x-locale": locale },
+        body: JSON.stringify({ ...form, asunto }),
       })
       if (!res.ok) {
         const d = await res.json().catch(() => ({}))
@@ -259,11 +278,7 @@ export default function ContactoPage() {
                   <label style={labelStyle} htmlFor="c-asunto">{t("labelSubject")}</label>
                   <select id="c-asunto" name="asunto" value={form.asunto} onChange={handleChange} className="field" style={inputStyle}>
                     <option value="">{t("optDefault")}</option>
-                    <option value="life-coaching">Life Coaching Integrativo</option>
-                    <option value="joogal-adultos">Instructor Jewgal Adultos</option>
-                    <option value="joogalkids">Instructor Joogalkids</option>
-                    <option value="cabala">Cábala Coach</option>
-                    <option value="metodo-sholem">Método Sholem</option>
+                    {programs.map((p) => <option key={p.slug} value={p.slug}>{p.title}</option>)}
                     <option value="coaching-1-1">{t("optCoaching")}</option>
                     <option value="sesion-exploratoria">{t("optGuidance")}</option>
                     <option value="otro">{t("optOther")}</option>
