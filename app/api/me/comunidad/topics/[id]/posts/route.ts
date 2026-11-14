@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { runAfterResponse } from "@/lib/background"
 import { z } from "zod"
 import { db } from "@/lib/db"
 import { requireActiveStudent, canAccessCategory } from "@/lib/auth-helpers"
@@ -67,12 +68,12 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   ])
 
   if (notifyUserId && notifyUserId !== session.userId) {
-    createNotification({
+    runAfterResponse(() => createNotification({
       type: "forum_reply",
       message: "Alguien respondió en un tema que seguís en la comunidad.",
       userId: notifyUserId,
       metadata: { categoryId: topic.category.id, topicId },
-    }).catch(() => {})
+    }), "notificación")
   }
 
   return NextResponse.json({ post }, { status: 201 })

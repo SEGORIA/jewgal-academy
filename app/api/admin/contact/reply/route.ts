@@ -3,7 +3,7 @@ import { z } from "zod"
 import { adminGuard } from "@/lib/admin-guard"
 import { db } from "@/lib/db"
 import { buildEmailHtml } from "@/lib/email-html"
-import { sendEmail } from "@/lib/email"
+import { defaultReplyTo, sendEmail } from "@/lib/email"
 
 export const dynamic = "force-dynamic"
 
@@ -29,7 +29,8 @@ export async function POST(req: NextRequest) {
   const r = await sendEmail({
     to: msg.email, subject, text: quoted,
     html: buildEmailHtml(quoted),
-    replyTo: g.user.email,
+    // las respuestas van al correo de contacto del sitio (una casilla real); si no hay, al de quien responde
+    replyTo: (await defaultReplyTo()) ?? g.user.email,
   })
   if (!r.ok) return NextResponse.json({ error: r.error ?? "No se pudo enviar la respuesta" }, { status: 502 })
 

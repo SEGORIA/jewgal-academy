@@ -6,6 +6,7 @@ import { STAFF_PERMISSION_KEYS } from "@/lib/permissions"
 
 const patchSchema = z.object({
   name: z.string().trim().min(2).max(120).optional(),
+  email: z.string().trim().toLowerCase().email("Email inválido").max(160).optional(),
   role: z.enum(["staff", "admin"]).optional(),
   status: z.enum(["active", "banned"]).optional(),
   permissions: z.array(z.string()).transform((l) => [...new Set(l)]).refine((l) => l.every((p) => STAFF_PERMISSION_KEYS.includes(p)), "Permiso desconocido").optional(),
@@ -44,6 +45,11 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   const data: Record<string, unknown> = {}
   if (d.name !== undefined) data.name = d.name
+  if (d.email !== undefined) {
+    const taken = await db.user.findUnique({ where: { email: d.email }, select: { id: true } })
+    if (taken && taken.id !== id) return NextResponse.json({ error: "Ya existe otra cuenta con ese correo." }, { status: 409 })
+    data.email = d.email
+  }
   if (d.status !== undefined) data.status = d.status
   if (d.role !== undefined) { data.role = d.role; if (d.role === "admin") data.permissions = [] }
   if (d.permissions !== undefined && nextRole === "staff") data.permissions = d.permissions

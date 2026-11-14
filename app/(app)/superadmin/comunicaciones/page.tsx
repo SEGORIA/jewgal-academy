@@ -6,12 +6,14 @@ import InboxTab from "@/components/admin/comms/InboxTab"
 import AnnouncementsTab from "@/components/admin/comms/AnnouncementsTab"
 import NewsletterTab from "@/components/admin/comms/NewsletterTab"
 import TemplatesTab from "@/components/admin/comms/TemplatesTab"
+import EmailStatusTab from "@/components/admin/comms/EmailStatusTab"
 
 const TABS = [
   { id: "mensajes", label: "Mensajes recibidos" },
   { id: "anuncios", label: "Anuncios a alumnos" },
   { id: "newsletter", label: "Newsletter" },
   { id: "plantillas", label: "Plantillas de correo" },
+  { id: "estado", label: "Estado del correo" },
 ] as const
 type TabId = (typeof TABS)[number]["id"]
 
@@ -40,6 +42,7 @@ function Inner() {
       {tab === "anuncios" && <AnnouncementsTab />}
       {tab === "newsletter" && <NewsletterTab />}
       {tab === "plantillas" && <TemplatesTab />}
+      {tab === "estado" && <EmailStatusTab />}
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { runAfterResponse } from "@/lib/background"
 import { stripe, isStripeConfigured } from "@/lib/stripe"
 import { db } from "@/lib/db"
 import { rateLimit, getClientIp } from "@/lib/security"
@@ -27,11 +28,11 @@ export async function POST(req: NextRequest) {
 
   const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : ""
   if (normalizedEmail && await hasActiveEnrollment(normalizedEmail, course.id)) {
-    createNotification({
+    runAfterResponse(() => createNotification({
       type: "duplicate_purchase_blocked",
       message: `Se bloqueó un intento de recompra: ${normalizedEmail} ya está inscrito/a en "${course.title}".`,
       metadata: { email: normalizedEmail, courseId: course.id, courseTitle: course.title },
-    }).catch(() => {})
+    }), "notificación")
     return NextResponse.json(
       { error: "Ya estás inscrito/a en este programa. Revisá tu aula virtual — no hace falta pagar de nuevo." },
       { status: 409 }

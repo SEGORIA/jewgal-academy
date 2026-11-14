@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { runAfterResponse } from "@/lib/background"
 import { z } from "zod"
 import { db } from "@/lib/db"
 import { enrollUserInCourse } from "@/lib/enroll"
@@ -68,13 +69,14 @@ export async function POST(req: NextRequest) {
     provider: "demo",
   })
 
-  if (result.tempPassword) {
-    sendWelcomeEmail({
+  const tempPassword = result.tempPassword
+  if (tempPassword) {
+    runAfterResponse(() => sendWelcomeEmail({
       email: email.trim().toLowerCase(),
       name: name || "Estudiante",
       courseTitle: course.title,
-      tempPassword: result.tempPassword,
-    }).catch(() => {})
+      tempPassword,
+    }), "correo de bienvenida")
   }
 
   // Usuario existente: NUNCA tocar su contraseña (sería un vector de robo de cuenta).

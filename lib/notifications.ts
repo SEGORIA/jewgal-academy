@@ -1,4 +1,5 @@
 import { db } from "./db"
+import { runAfterResponse } from "./background"
 import { sendAdminAlert } from "./email"
 
 export type NotificationType = "duplicate_purchase_blocked" | "refund_synced" | "payment_received" | "forum_reply" | "contact_message"
@@ -38,6 +39,6 @@ export async function createNotification(input: {
   }
 
   if (!input.userId) {
-    sendAdminAlert(SUBJECTS[input.type], input.message).catch(() => {})
+    runAfterResponse(() => sendAdminAlert(SUBJECTS[input.type], input.message), "alerta al administrador")
   }
 }

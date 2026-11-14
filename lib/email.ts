@@ -44,15 +44,55 @@ export type SendInput = {
 }
 export type SendResult = { ok: boolean; id?: string; error?: string }
 
-const payload = (i: SendInput) => ({
+/** Dirección de la que sale el correo, sin el nombre: «Jewgal Academy <hola@x.com>» → hola@x.com */
+export function addressOf(from: string): string {
+  const m = from.match(/<([^>]+)>/)
+  return (m ? m[1] : from).trim()
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+/**
+ * Casilla a la que llegan las respuestas de quien recibe un correo: el correo de contacto del sitio
+ * (editable en “Portada y contacto”) o, si no hay, ADMIN_EMAIL. Así las respuestas llegan a una casilla real aunque la
+ * dirección de envío (hola@dominio) no tenga buzón.
+ */
+export async function defaultReplyTo(): Promise<string | undefined> {
+  try {
+    const s = await baseDb.siteSetting.findUnique({ where: { key: "site_content" } })
+    const c = s?.value ? mergeSiteContent(JSON.parse(s.value)).contacto.email : DEFAULT_SITE_CONTENT.contacto.email
+    if (c && EMAIL_RE.test(c.trim())) return c.trim()
+  } catch { /* se prueba con ADMIN_EMAIL */ }
+  const a = process.env.ADMIN_EMAIL?.trim()
+  return a && EMAIL_RE.test(a) ? a : undefined
+}
+
+const payload = (i: SendInput, replyTo?: string) => ({
   from: emailFrom(),
   to: i.to,
   subject: i.subject,
   text: i.text,
   ...(i.html ? { html: i.html } : {}),
-  ...(i.replyTo ? { replyTo: i.replyTo } : {}),
+  ...((i.replyTo ?? replyTo) ? { replyTo: (i.replyTo ?? replyTo) as string } : {}),
   ...(i.headers ? { headers: i.headers } : {}),
 })
+
+/* Estado del envío: lo último que pasó (se muestra en Comunicaciones → Estado del correo) */
+export const EMAIL_STATUS_KEY = "email_status"
+export type EmailStatus = { lastOkAt?: string; lastError?: { at: string; message: string } }
+
+async function recordStatus(error?: string) {
+  try {
+    const cur = await baseDb.siteSetting.findUnique({ where: { key: EMAIL_STATUS_KEY } })
+    let st: EmailStatus = {}
+    try { st = cur?.value ? JSON.parse(cur.value) : {} } catch {}
+    const now = new Date().toISOString()
+    if (error) st.lastError = { at: now, message: error.slice(0, 300) }
+    else st.lastOkAt = now
+    const value = JSON.stringify(st)
+    await baseDb.siteSetting.upsert({ where: { key: EMAIL_STATUS_KEY }, update: { value }, create: { key: EMAIL_STATUS_KEY, value } })
+  } catch { /* el registro nunca debe afectar al envío */ }
+}
 
 /**
  * Un correo. El SDK de Resend NO lanza excepción ante errores de la API (dominio sin verificar, remitente
@@ -63,15 +103,19 @@ export async function sendEmail(input: SendInput): Promise<SendResult> {
   try {
     const { Resend } = await import("resend")
     const resend = new Resend(process.env.RESEND_API_KEY)
-    const { data, error } = await resend.emails.send(payload(input))
+    const { data, error } = await resend.emails.send(payload(input, await defaultReplyTo()))
     if (error) {
       console.error("[sendEmail] Resend devolvió un error:", error)
+      await recordStatus(error.message || "Resend rechazó el envío")
       return { ok: false, error: error.message || "No se pudo enviar el correo." }
     }
+    await recordStatus()
     return { ok: true, id: data?.id }
   } catch (e) {
     console.error("[sendEmail] falló:", e)
-    return { ok: false, error: e instanceof Error ? e.message : "No se pudo enviar el correo." }
+    const msg = e instanceof Error ? e.message : "No se pudo enviar el correo."
+    await recordStatus(msg)
+    return { ok: false, error: msg }
   }
 }
 
@@ -84,11 +128,12 @@ export async function sendEmailBatch(inputs: SendInput[]): Promise<{ sent: numbe
   const { Resend } = await import("resend")
   const resend = new Resend(process.env.RESEND_API_KEY)
   let sent = 0, failed = 0, firstError: string | undefined
+  const replyTo = await defaultReplyTo()
 
   for (let i = 0; i < inputs.length; i += 100) {
     const chunk = inputs.slice(i, i + 100)
     try {
-      const { error } = await resend.batch.send(chunk.map(payload))
+      const { error } = await resend.batch.send(chunk.map((c) => payload(c, replyTo)))
       if (error) { failed += chunk.length; firstError ??= error.message }
       else sent += chunk.length
     } catch (e) {
@@ -97,6 +142,7 @@ export async function sendEmailBatch(inputs: SendInput[]): Promise<{ sent: numbe
     }
     if (i + 100 < inputs.length) await sleep(700) // respeta el límite de velocidad de Resend
   }
+  await recordStatus(firstError)
   return { sent, failed, firstError }
 }
 

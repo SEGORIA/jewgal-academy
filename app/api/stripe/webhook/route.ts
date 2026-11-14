@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { runAfterResponse } from "@/lib/background"
 import { stripe } from "@/lib/stripe"
 import { db } from "@/lib/db"
 import { enrollUserInCourse } from "@/lib/enroll"
@@ -40,11 +41,12 @@ export async function POST(req: NextRequest) {
       paymentRef: session.id,
     })
 
-    if (result.tempPassword) {
-      sendWelcomeEmail({ email, name, courseTitle: course.title, tempPassword: result.tempPassword }).catch(() => {})
+    const tempPassword = result.tempPassword
+    if (tempPassword) {
+      runAfterResponse(() => sendWelcomeEmail({ email, name, courseTitle: course.title, tempPassword }), "correo de bienvenida")
     }
 
-    createNotification({
+    runAfterResponse(() => createNotification({
       type: "payment_received",
       message: `Nuevo pago: ${name} (${email}) — "${course.title}" (${((session.amount_total ?? 0) / 100).toFixed(2)} ${(session.currency ?? "usd").toUpperCase()}).`,
       metadata: {
@@ -53,7 +55,7 @@ export async function POST(req: NextRequest) {
         amount: (session.amount_total ?? 0) / 100,
         currency: session.currency ?? "usd",
       },
-    }).catch(() => {})
+    }), "notificación")
   }
 
   if (event.type === "charge.refunded") {
@@ -77,7 +79,7 @@ export async function POST(req: NextRequest) {
             where: { userId: payment.userId, courseId: payment.courseId },
             data: { status: "refunded" },
           })
-          createNotification({
+          runAfterResponse(() => createNotification({
             type: "refund_synced",
             message: `Reembolso sincronizado: ${payment.user.name} (${payment.user.email}) — "${payment.course.title}" (${(charge.amount_refunded / 100).toFixed(2)} ${charge.currency.toUpperCase()}). Se revocó el acceso al aula.`,
             metadata: {
@@ -87,7 +89,7 @@ export async function POST(req: NextRequest) {
               currency: charge.currency,
               paymentId: payment.id,
             },
-          }).catch(() => {})
+          }), "notificación")
         }
       }
     }

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { runAfterResponse } from "@/lib/background"
 import { z } from "zod"
 import { adminGuard } from "@/lib/admin-guard"
 import { db } from "@/lib/db"
@@ -82,7 +83,7 @@ export async function POST(req: NextRequest) {
       await db.notification.create({
         data: { userId: d.userId, type: "enrollment", message: `Recibimos tu pago. Ya tenés acceso al programa “${course.title}”.`, metadata: JSON.stringify({ courseId: d.courseId, href: "/aula" }) },
       }).catch(() => {})
-      sendEnrollmentEmail({ email: student.email, name: student.name, courseTitle: course.title }).catch(() => {})
+      runAfterResponse(() => sendEnrollmentEmail({ email: student.email, name: student.name, courseTitle: course.title }), "correo de inscripción")
     }
   }
 

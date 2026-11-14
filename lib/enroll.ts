@@ -1,4 +1,5 @@
 import { db } from "./db"
+import { runAfterResponse } from "./background"
 import bcrypt from "bcryptjs"
 import { generateTempPassword } from "./security"
 import { sendEnrollmentEmail } from "./email"
@@ -66,7 +67,7 @@ export async function enrollUserInCourse(input: EnrollInput): Promise<EnrollResu
   // Alumno que ya tenía cuenta: confirmación de inscripción (la cuenta nueva recibe la bienvenida con su clave)
   if (!isNewUser) {
     const course = await db.course.findUnique({ where: { id: input.courseId }, select: { title: true } })
-    if (course) sendEnrollmentEmail({ email: user.email, name: user.name, courseTitle: course.title }).catch(() => {})
+    if (course) runAfterResponse(() => sendEnrollmentEmail({ email: user.email, name: user.name, courseTitle: course.title }), "correo de inscripción")
   }
 
   return { userId: user.id, isNewUser, tempPassword }

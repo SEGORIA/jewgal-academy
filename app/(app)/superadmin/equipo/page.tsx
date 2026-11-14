@@ -54,7 +54,7 @@ function Inner() {
     setSaving(true)
     try {
       if (form.id) {
-        await api(`/api/admin/team/${form.id}`, { method: "PATCH", json: { name: form.name, role: form.role, ...(form.role === "staff" ? { permissions: form.permissions } : {}) } })
+        await api(`/api/admin/team/${form.id}`, { method: "PATCH", json: { name: form.name, email: form.email, role: form.role, ...(form.role === "staff" ? { permissions: form.permissions } : {}) } })
         toast("ok", "Cambios guardados")
       } else {
         const r = await api<{ tempPassword: string }>("/api/admin/team", { method: "POST", json: { name: form.name, email: form.email, role: form.role, permissions: form.permissions } })
@@ -131,7 +131,7 @@ function Inner() {
           <div style={{ display: "grid", gap: 16 }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: 14 }}>
               <Field label="Nombre" id="tm-name"><input id="tm-name" style={inputStyle} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></Field>
-              <Field label="Correo" id="tm-email" hint={form.id ? "El correo no se puede cambiar." : "Es el usuario con el que va a ingresar."}><input id="tm-email" type="email" style={inputStyle} value={form.email} disabled={!!form.id} onChange={(e) => setForm({ ...form, email: e.target.value })} /></Field>
+              <Field label="Correo" id="tm-email" hint={form.id ? "Es el usuario con el que ingresa y adonde llegan sus correos de prueba. Si lo cambiás, tiene que ser una casilla real." : "Es el usuario con el que va a ingresar."}><input id="tm-email" type="email" style={inputStyle} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></Field>
             </div>
             <Field label="Rol" id="tm-role">
               <select id="tm-role" style={{ ...inputStyle, cursor: "pointer" }} value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value as "admin" | "staff" })}>

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { runAfterResponse } from "@/lib/background"
 import { capturePayPalOrder, isPayPalConfigured } from "@/lib/paypal"
 import { db } from "@/lib/db"
 import { enrollUserInCourse } from "@/lib/enroll"
@@ -32,13 +33,14 @@ export async function POST(req: NextRequest) {
     paymentRef: capture.id,
   })
 
-  if (result.tempPassword) {
-    sendWelcomeEmail({
+  const tempPassword = result.tempPassword
+  if (tempPassword) {
+    runAfterResponse(() => sendWelcomeEmail({
       email: String(email).trim().toLowerCase(),
       name: name || "Estudiante",
       courseTitle: course.title,
-      tempPassword: result.tempPassword,
-    }).catch(() => {})
+      tempPassword,
+    }), "correo de bienvenida")
   }
 
   return NextResponse.json({ ok: true, ...result })

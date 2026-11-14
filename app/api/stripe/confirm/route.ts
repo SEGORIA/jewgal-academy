@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { runAfterResponse } from "@/lib/background"
 import { z } from "zod"
 import { stripe, isStripeConfigured } from "@/lib/stripe"
 import { db } from "@/lib/db"
@@ -74,7 +75,7 @@ export async function POST(req: NextRequest) {
     // app/api/stripe/webhook/route.ts) — este endpoint no necesita adivinarlo.
 
     if (tempPassword) {
-      sendWelcomeEmail({ email, name, courseTitle: course.title, tempPassword }).catch(() => {})
+      runAfterResponse(() => sendWelcomeEmail({ email, name, courseTitle: course.title, tempPassword }), "correo de bienvenida")
     }
 
     return NextResponse.json({
