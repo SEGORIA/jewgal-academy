@@ -116,7 +116,7 @@ export default function SeoEditor() {
         <div style={{ flex: "1 1 280px", display: "grid", gap: 10 }}>
           <div>
             <p style={{ fontFamily: "var(--serif)", fontSize: 18, color: "var(--text)", marginBottom: 4 }}>Imagen al compartir en redes</p>
-            <p style={{ fontSize: 13.5, color: "var(--text-muted)", lineHeight: 1.6 }}>Aparece cuando alguien comparte el sitio por WhatsApp, Instagram o Facebook. Tamaño recomendado: 1200 × 630 px.</p>
+            <p style={{ fontSize: 13.5, color: "var(--text-muted)", lineHeight: 1.6 }}>Aparece cuando alguien comparte el sitio por WhatsApp, Instagram o Facebook. Tamaño recomendado: 1200 × 630 px. Si no subís ninguna, se usa la imagen de marca del sitio.</p>
           </div>
           <input ref={fileRef} type="file" accept="image/*" hidden aria-label="Subir imagen para compartir" onChange={(e) => onFile(e.target.files?.[0])} />
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>

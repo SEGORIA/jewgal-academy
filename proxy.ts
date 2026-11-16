@@ -89,5 +89,5 @@ export default auth((req) => {
 export const config = {
   // Todo excepto rutas de API, internals de Next y archivos estáticos con extensión;
   // más /api/me, para bloquear las escrituras mientras un administrador ve el aula como un alumno (solo lectura).
-  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)", "/api/me/:path*"],
+  matcher: ["/((?!api|_next|_vercel|opengraph-image|.*\\..*).*)", "/api/me/:path*"],
 }

@@ -89,12 +89,14 @@ export const SEO_PAGES: SeoPage[] = [
 ]
 
 export type SeoSettings = {
-  /** Imagen que se muestra al compartir el sitio en redes (URL). Vacío = sin imagen. */
+  /** Imagen que se muestra al compartir el sitio en redes (URL). Vacío = la imagen de marca del sitio. */
   ogImage: string
   pages: Partial<Record<SeoPageKey, Partial<Record<SeoLocale, Partial<SeoText>>>>>
 }
 
 export const SEO_KEY = "seo_pages"
+/** Imagen de marca que genera el sitio (app/opengraph-image.tsx): se usa al compartir cuando no se eligió otra en el panel. */
+export const DEFAULT_OG_IMAGE = `${SITE_URL}/opengraph-image`
 export const EMPTY_SEO: SeoSettings = { ogImage: "", pages: {} }
 
 export function normalizeSeo(raw: unknown): SeoSettings {
@@ -138,7 +140,7 @@ export async function getSeo(key: SeoPageKey, locale: string): Promise<SeoValues
     description: o?.description?.trim() || page.defaults[loc].description,
     url: loc === "es" ? es : en,
     alternates: { es, en },
-    image: s.ogImage,
+    image: s.ogImage || DEFAULT_OG_IMAGE,
   }
 }
 

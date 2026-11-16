@@ -6,7 +6,7 @@ import Footer from "@/components/Footer"
 import { MarkdownLite } from "@/lib/markdown-lite"
 import { markdownToPlainText, truncateText } from "@/lib/markdown-text"
 import { getPublishedPage } from "@/lib/pages-data"
-import { getSeoSettings } from "@/lib/seo"
+import { DEFAULT_OG_IMAGE, getSeoSettings } from "@/lib/seo"
 import { getGeneralSettings } from "@/lib/general-settings"
 import { SITE_URL } from "@/lib/site-url"
 
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const title = page.seoTitle ?? page.title
   const description = page.seoDescription ?? truncateText(markdownToPlainText(page.content), 160)
   const [seo, general] = await Promise.all([getSeoSettings(), getGeneralSettings()])
-  const image = page.coverUrl ?? seo.ogImage
+  const image = page.coverUrl ?? (seo.ogImage || DEFAULT_OG_IMAGE)
   return {
     title: { absolute: `${title} · ${general.name}` },
     description,

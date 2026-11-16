@@ -9,7 +9,7 @@ import { MarkdownLite } from "@/lib/markdown-lite"
 import { truncateText } from "@/lib/markdown-text"
 import { accentForCategory } from "@/lib/blog"
 import { getPublishedPost, getRelatedPosts } from "@/lib/blog-data"
-import { getSeoSettings } from "@/lib/seo"
+import { DEFAULT_OG_IMAGE, getSeoSettings } from "@/lib/seo"
 import { getGeneralSettings } from "@/lib/general-settings"
 import { SITE_URL } from "@/lib/site-url"
 
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const description = post.seoDescription ?? truncateText(post.excerpt, 160)
   const url = urlFor(locale, slug)
   const [seo, general] = await Promise.all([getSeoSettings(), getGeneralSettings()])
-  const image = post.coverUrl ?? seo.ogImage
+  const image = post.coverUrl ?? (seo.ogImage || DEFAULT_OG_IMAGE)
   return {
     // La plantilla "· Jewgal Academy" no baja hasta acá (el layout del blog ya fijó su propio título), así que se agrega a mano.
     title: { absolute: `${title} · ${general.name}` },
@@ -67,7 +67,7 @@ export default async function BlogPostPage({ params }: Params) {
   const dateFmt = (iso: string) => new Date(iso).toLocaleDateString(locale === "en" ? "en-US" : "es-ES", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
   const published = post.publishedAt ?? post.createdAt
   const url = urlFor(locale, slug)
-  const image = post.coverUrl ?? seo.ogImage
+  const image = post.coverUrl ?? (seo.ogImage || DEFAULT_OG_IMAGE)
 
   const jsonLd = [
     {

@@ -12,7 +12,7 @@ import { getProgramBrand, getProgramContent, getYouTubeEmbedUrl, localizeProgram
 import { SITE_URL } from "@/lib/site-url"
 import { baseDb } from "@/lib/db"
 import { getGeneralSettings } from "@/lib/general-settings"
-import { getSeoSettings } from "@/lib/seo"
+import { DEFAULT_OG_IMAGE, getSeoSettings } from "@/lib/seo"
 
 /** SEO de cada programa: lo escrito en la ficha (pestaña Contenido) o, si falta, el nombre y la descripción corta. */
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const description = text.seoDescription?.trim() || short
   const url = (l: string) => `${SITE_URL}${l === "en" ? "/en" : ""}/programas/${slug}`
   const [seo, general] = await Promise.all([getSeoSettings(), getGeneralSettings()])
-  const image = course.thumbnail || seo.ogImage
+  const image = course.thumbnail || seo.ogImage || DEFAULT_OG_IMAGE
   const abs = (u: string) => (u.startsWith("/") ? `${SITE_URL}${u}` : u)
   return {
     // La plantilla "· Jewgal Academy" no baja hasta las páginas anidadas: se agrega a mano.
