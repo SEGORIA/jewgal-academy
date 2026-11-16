@@ -1,8 +1,8 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
-import { Bot, MessageSquare, Save, Search } from "lucide-react"
-import { EmptyState, Field, Modal, PageHeader, PrimaryButton, Spinner, ToastProvider, api, card, hintStyle, inputStyle, useToast } from "@/components/admin/ui"
+import { useEffect, useState } from "react"
+import { Activity, MessageSquare, Save, Search } from "lucide-react"
+import { EmptyState, Field, GhostButton, Modal, PageHeader, PrimaryButton, Spinner, ToastProvider, api, card, hintStyle, inputStyle, useToast } from "@/components/admin/ui"
 import { DEFAULT_AI_SETTINGS, type AiSettings } from "@/lib/ai-settings-core"
 
 type Stats = { conversations: number; messages7d: number; students7d: number }
@@ -22,15 +22,22 @@ function Inner() {
   const [convs, setConvs] = useState<Conv[]>([])
   const [q, setQ] = useState("")
   const [thread, setThread] = useState<Thread | "loading" | null>(null)
+  const [test, setTest] = useState<{ ok: boolean; message: string; ms?: number } | null>(null)
+  const [testing, setTesting] = useState(false)
 
-  const loadAll = useCallback(async () => {
-    try {
-      const d = await api<{ settings: AiSettings; configured: boolean; stats: Stats }>("/api/admin/ai/settings", { cache: "no-store" })
-      setSettings(d.settings); setSaved(JSON.stringify(d.settings)); setConfigured(d.configured); setStats(d.stats)
-    } catch (e) { toast("error", (e as Error).message) }
-    finally { setLoading(false) }
+  async function probar() {
+    setTesting(true); setTest(null)
+    try { setTest(await api<{ ok: boolean; message: string; ms?: number }>("/api/admin/ai/test", { method: "POST" })) }
+    catch (e) { setTest({ ok: false, message: (e as Error).message }) }
+    finally { setTesting(false) }
+  }
+
+  useEffect(() => {
+    api<{ settings: AiSettings; configured: boolean; stats: Stats }>("/api/admin/ai/settings", { cache: "no-store" })
+      .then((d) => { setSettings(d.settings); setSaved(JSON.stringify(d.settings)); setConfigured(d.configured); setStats(d.stats) })
+      .catch((e) => toast("error", (e as Error).message))
+      .finally(() => setLoading(false))
   }, [toast])
-  useEffect(() => { loadAll() }, [loadAll])
 
   useEffect(() => {
     const id = setTimeout(async () => {
@@ -63,6 +70,15 @@ function Inner() {
     <div style={{ maxWidth: 980, margin: "0 auto" }}>
       <PageHeader eyebrow="Aula" title="Asistente de IA" subtitle="Pausalo, limitá cuántos mensajes puede mandar cada alumno por día, agregale instrucciones propias y revisá cómo lo usan." />
       {!configured && <p role="alert" style={{ background: "color-mix(in srgb, var(--danger) 10%, transparent)", border: "1px solid color-mix(in srgb, var(--danger) 35%, transparent)", borderRadius: 10, padding: "10px 14px", fontSize: 13.5, color: "var(--text-strong)", marginBottom: 18 }}>La clave de la IA (GROQ_API_KEY) no está configurada en este entorno: el asistente no puede responder aunque esté activado.</p>}
+
+      <div style={{ ...card, padding: "14px 18px", marginBottom: 20, display: "flex", gap: 14, alignItems: "center", flexWrap: "wrap" }}>
+        <GhostButton icon={<Activity size={14} />} loading={testing} onClick={probar} disabled={!configured}>Probar conexión con la IA</GhostButton>
+        <p role="status" aria-live="polite" style={{ flex: "1 1 260px", fontSize: 13.5, lineHeight: 1.55, margin: 0, color: test ? (test.ok ? "var(--success)" : "var(--danger)") : "var(--text-muted)" }}>
+          {test
+            ? `${test.ok ? "✓ " : "✗ "}${test.message}${test.ok && test.ms ? ` · ${(test.ms / 1000).toFixed(1)} s` : ""}`
+            : "Hace una consulta mínima a la IA para comprobar que la clave y el modelo funcionan en este momento."}
+        </p>
+      </div>
 
       {stats && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 12, marginBottom: 20 }}>

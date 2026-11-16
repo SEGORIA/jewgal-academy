@@ -2,14 +2,20 @@ import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
-import { groq, isAIConfigured, buildSystemPrompt, AI_MODEL } from "@/lib/ai"
+import { groq, isAIConfigured, buildSystemPrompt, classifyAiError, AI_MODEL } from "@/lib/ai"
 import { rateLimit } from "@/lib/security"
 import { getAiSettings, withExtraInstructions } from "@/lib/ai-settings"
+
+// La respuesta se va emitiendo por partes: la función tiene que poder vivir más que el límite por defecto.
+export const maxDuration = 60
 
 const bodySchema = z.object({
   message: z.string().min(1).max(2000),
   conversationId: z.string().nullish(),
 })
+
+/** Cuántos mensajes anteriores de la conversación se le dan a la IA como contexto. */
+const HISTORY_LIMIT = 20
 
 export async function POST(req: NextRequest) {
   const session = await auth()
@@ -61,72 +67,84 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // Obtener o crear conversación
-  let conversation
-  if (conversationId) {
-    conversation = await db.conversation.findFirst({
-      where: { id: conversationId, userId: session.user.id },
-      include: { messages: { orderBy: { createdAt: "asc" }, take: 20 } },
-    })
-  }
-  if (!conversation) {
-    conversation = await db.conversation.create({
-      data: { userId: session.user.id, title: message.slice(0, 60) },
-      include: { messages: true },
-    })
-  }
+  // Conversación existente (si no se encuentra, se abre una nueva más abajo).
+  // Se toman los ÚLTIMOS mensajes: con "asc" + take, pasados los primeros 20 la IA dejaba de ver lo reciente.
+  const existing = conversationId
+    ? await db.conversation.findFirst({
+        where: { id: conversationId, userId: session.user.id },
+        include: { messages: { orderBy: { createdAt: "desc" }, take: HISTORY_LIMIT } },
+      })
+    : null
 
-  // Persistir mensaje del usuario
+  const systemPrompt = withExtraInstructions(await buildSystemPrompt(session.user.id), ai.extraInstructions)
+  const history = (existing?.messages ?? [])
+    .slice()
+    .reverse()
+    .map((m) => ({ role: m.role as "user" | "assistant", content: m.content }))
+
+  // La llamada a la IA se hace ANTES de responder y de guardar nada: si falla (clave, modelo, cuota, red),
+  // el alumno recibe un aviso claro y no queda una burbuja vacía ni una pregunta sin respuesta en la conversación.
+  const started = await groq.chat.completions
+    .create({
+      model: AI_MODEL,
+      max_tokens: ai.maxTokens,
+      messages: [
+        { role: "system", content: systemPrompt },
+        ...history,
+        { role: "user", content: message },
+      ],
+      stream: true,
+    })
+    .then((s) => ({ s }), (e: unknown) => ({ e }))
+  if ("e" in started) {
+    const f = classifyAiError(started.e)
+    console.error(`[ai-chat] ${f.code}: ${f.adminMessage}`)
+    return NextResponse.json({ error: f.userMessage }, { status: f.status })
+  }
+  const groqStream = started.s
+
+  const conversation =
+    existing ?? (await db.conversation.create({ data: { userId: session.user.id, title: message.slice(0, 60) } }))
+
   await db.chatMessage.create({
     data: { conversationId: conversation.id, role: "user", content: message },
   })
 
-  const systemPrompt = withExtraInstructions(await buildSystemPrompt(session.user.id), ai.extraInstructions)
-
-  const history = (conversation.messages ?? []).map((m) => ({
-    role: m.role as "user" | "assistant",
-    content: m.content,
-  }))
-
   let fullResponse = ""
   let interrupted = false
+  const encoder = new TextEncoder()
 
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       try {
-        const groqStream = await groq.chat.completions.create({
-          model: AI_MODEL,
-          max_tokens: ai.maxTokens,
-          messages: [
-            { role: "system", content: systemPrompt },
-            ...history,
-            { role: "user", content: message },
-          ],
-          stream: true,
-        })
-
         for await (const chunk of groqStream) {
           const text = chunk.choices[0]?.delta?.content ?? ""
           if (text) {
             fullResponse += text
-            controller.enqueue(new TextEncoder().encode(text))
+            controller.enqueue(encoder.encode(text))
           }
         }
-
-        controller.close()
-      } catch {
+      } catch (e) {
         interrupted = true
-        controller.close()
+        console.error(`[ai-chat] respuesta interrumpida: ${classifyAiError(e).adminMessage}`)
+        // Si no llegó nada, el alumno recibe un aviso en lugar de una burbuja vacía (no se guarda como respuesta).
+        if (!fullResponse) {
+          try { controller.enqueue(encoder.encode("No pude terminar la respuesta en este momento. Intentá de nuevo en unos minutos.")) } catch {}
+        }
       } finally {
-        const content = fullResponse || ""
-        if (content) {
-          await db.chatMessage.create({
-            data: {
-              conversationId: conversation.id,
-              role: "assistant",
-              content: interrupted ? `${content} [respuesta interrumpida]` : content,
-            },
-          })
+        try { controller.close() } catch {}
+        if (fullResponse) {
+          try {
+            await db.chatMessage.create({
+              data: {
+                conversationId: conversation.id,
+                role: "assistant",
+                content: interrupted ? `${fullResponse} [respuesta interrumpida]` : fullResponse,
+              },
+            })
+          } catch (e) {
+            console.error("[ai-chat] no se pudo guardar la respuesta:", e instanceof Error ? e.message : e)
+          }
         }
       }
     },

@@ -11,7 +11,39 @@ export const groq = new Groq({
   apiKey: key ?? "gsk_placeholder",
 })
 
-export const AI_MODEL = "llama-3.3-70b-versatile"
+/** Groq retira modelos de vez en cuando: GROQ_MODEL (en Vercel) permite cambiarlo sin tocar el código. */
+export const AI_MODEL = process.env.GROQ_MODEL?.trim() || "llama-3.3-70b-versatile"
+
+export type AiFailure = {
+  code: "auth" | "rate" | "model" | "network" | "unknown"
+  /** Código HTTP que ve el alumno. */
+  status: number
+  /** Mensaje para el alumno (sin detalles técnicos). */
+  userMessage: string
+  /** Diagnóstico para el administrador: qué pasó y cómo se arregla. */
+  adminMessage: string
+}
+
+/** Traduce un error de Groq a algo que entienda el alumno y a un diagnóstico accionable para el panel. */
+export function classifyAiError(e: unknown): AiFailure {
+  const raw = (e instanceof Error ? e.message : String(e)).slice(0, 240)
+  const status = typeof (e as { status?: unknown } | null)?.status === "number" ? (e as { status: number }).status : undefined
+  const unavailable = "El asistente no está disponible en este momento. Intentá de nuevo en unos minutos."
+
+  if (status === 401 || status === 403) {
+    return { code: "auth", status: 503, userMessage: unavailable, adminMessage: "Groq rechazó la clave (GROQ_API_KEY): está mal copiada, revocada o es de otra cuenta. Creá una nueva en console.groq.com/keys, reemplazala en Vercel (Production) y volvé a desplegar." }
+  }
+  if (status === 429) {
+    return { code: "rate", status: 429, userMessage: "El asistente está recibiendo muchas consultas. Esperá un momento e intentá de nuevo.", adminMessage: "Groq limitó las consultas (cuota o velocidad del plan gratuito agotada). Se recupera sola en unos minutos; si pasa seguido, conviene subir de plan en console.groq.com." }
+  }
+  if (status === 404 || (status === 400 && /model/i.test(raw))) {
+    return { code: "model", status: 503, userMessage: unavailable, adminMessage: `Groq no encuentra el modelo “${AI_MODEL}” (puede haber sido retirado). Definí la variable GROQ_MODEL en Vercel con uno vigente (lista en console.groq.com/docs/models) y volvé a desplegar.` }
+  }
+  if (status === undefined) {
+    return { code: "network", status: 503, userMessage: unavailable, adminMessage: `No se pudo contactar a Groq (${raw || "sin respuesta"}). Suele ser un corte momentáneo: probá de nuevo en unos minutos.` }
+  }
+  return { code: "unknown", status: 503, userMessage: unavailable, adminMessage: `Groq respondió con error ${status}: ${raw}` }
+}
 
 export async function buildSystemPrompt(userId: string): Promise<string> {
   const enrollments = await db.enrollment.findMany({
