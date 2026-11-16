@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
-import { groq, isAIConfigured, buildSystemPrompt, classifyAiError, AI_MODEL } from "@/lib/ai"
+import { groq, isAIConfigured, buildSystemPrompt, classifyAiError, AI_MODEL, AI_MODEL_OPTIONS } from "@/lib/ai"
 import { rateLimit } from "@/lib/security"
 import { getAiSettings, withExtraInstructions } from "@/lib/ai-settings"
 
@@ -87,6 +87,7 @@ export async function POST(req: NextRequest) {
   const started = await groq.chat.completions
     .create({
       model: AI_MODEL,
+      ...AI_MODEL_OPTIONS,
       max_tokens: ai.maxTokens,
       messages: [
         { role: "system", content: systemPrompt },

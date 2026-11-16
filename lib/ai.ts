@@ -11,8 +11,18 @@ export const groq = new Groq({
   apiKey: key ?? "gsk_placeholder",
 })
 
-/** Groq retira modelos de vez en cuando: GROQ_MODEL (en Vercel) permite cambiarlo sin tocar el código. */
-export const AI_MODEL = process.env.GROQ_MODEL?.trim() || "llama-3.3-70b-versatile"
+/**
+ * Groq retira modelos de vez en cuando (llama-3.3-70b-versatile se apagó el 16-ago-2026 y por eso el asistente
+ * dejó de responder): GROQ_MODEL (en Vercel) permite cambiarlo sin tocar el código.
+ */
+export const AI_MODEL = process.env.GROQ_MODEL?.trim() || "openai/gpt-oss-120b"
+
+/**
+ * Los modelos gpt-oss razonan antes de responder: se les pide poco razonamiento (responden más rápido y gastan
+ * menos cuota) y no se devuelve ese razonamiento al alumno. Otros modelos no necesitan nada extra.
+ */
+export const AI_MODEL_OPTIONS: { reasoning_effort?: "low"; include_reasoning?: boolean } =
+  AI_MODEL.startsWith("openai/gpt-oss") ? { reasoning_effort: "low", include_reasoning: false } : {}
 
 export type AiFailure = {
   code: "auth" | "rate" | "model" | "network" | "unknown"

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { adminGuard } from "@/lib/admin-guard"
-import { AI_MODEL, classifyAiError, groq, isAIConfigured } from "@/lib/ai"
+import { AI_MODEL, AI_MODEL_OPTIONS, classifyAiError, groq, isAIConfigured } from "@/lib/ai"
 
 export const dynamic = "force-dynamic"
 export const maxDuration = 30
@@ -25,7 +25,7 @@ export async function POST() {
   const t0 = Date.now()
   try {
     const r = await groq.chat.completions.create(
-      { model: AI_MODEL, max_tokens: 8, messages: [{ role: "user", content: "Respondé solo con la palabra: listo" }] },
+      { model: AI_MODEL, ...AI_MODEL_OPTIONS, max_tokens: 64, messages: [{ role: "user", content: "Respondé solo con la palabra: listo" }] },
       { timeout: 15_000, maxRetries: 0 },
     )
     return NextResponse.json({
