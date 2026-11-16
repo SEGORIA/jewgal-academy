@@ -2,6 +2,7 @@
  * Plantillas de los correos automáticos y de los avisos / newsletter.
  *
  *  · welcome       → cuenta nueva (se guarda junto al contenido del sitio: site_content.emails). Siempre activa.
+ *  · passwordReset → enlace para elegir una contraseña nueva ("Olvidé mi contraseña"). Siempre activa.
  *  · enrollment    → confirmación de inscripción a un alumno que ya tenía cuenta.
  *  · certificate   → aviso de que su certificado está listo.
  *  · announcement  → marco de los avisos que se envían por correo a los alumnos.
@@ -11,7 +12,7 @@
  * Este módulo no toca la base: sirve igual para el servidor y para el editor del panel.
  */
 
-export type TemplateKey = "welcome" | "enrollment" | "certificate" | "announcement" | "newsletter"
+export type TemplateKey = "welcome" | "passwordReset" | "enrollment" | "certificate" | "announcement" | "newsletter"
 export type EmailTemplate = { enabled: boolean; subject: string; body: string }
 export type TemplateMeta = {
   key: TemplateKey
@@ -41,6 +42,18 @@ export const TEMPLATE_META: TemplateMeta[] = [
       enabled: true,
       subject: "¡Bienvenido/a a Jewgal Academy! Tu acceso al aula",
       body: "Hola {nombre},\n\n¡Bienvenido/a a Jewgal Academy! Tu inscripción en {curso} está confirmada.\n\nEstos son tus datos de acceso al aula virtual:\n\nUsuario: {email}\nContraseña temporal: {password}\n\nEntra en https://jewgalacademy.com/login y cambia tu contraseña desde \"Mi perfil\" cuando quieras.\n\nNos vemos dentro,\nDevora Benchimol · Jewgal Academy",
+    },
+  },
+  {
+    key: "passwordReset",
+    label: "Recuperar contraseña",
+    when: "Se envía cuando alguien pide restablecer su contraseña desde “¿Olvidaste tu contraseña?”. El enlace vale 1 hora y se usa una sola vez. {enlace} es obligatorio.",
+    placeholders: [{ name: "nombre", desc: "Nombre de la persona" }, { name: "enlace", desc: "Enlace para elegir la contraseña nueva (obligatorio)" }],
+    toggleable: false,
+    defaults: {
+      enabled: true,
+      subject: "Restablecé tu contraseña de Jewgal Academy",
+      body: "Hola {nombre},\n\nRecibimos un pedido para restablecer la contraseña de tu cuenta de Jewgal Academy. Para elegir una nueva, entrá al siguiente enlace (vale por 1 hora y se puede usar una sola vez):\n\n{enlace}\n\nSi no fuiste vos, ignorá este mensaje: tu contraseña actual no cambia.\n\nDevora Benchimol · Jewgal Academy",
     },
   },
   {
@@ -130,6 +143,7 @@ export function unknownPlaceholders(key: TemplateKey, text: string): string[] {
 export function missingRequired(key: TemplateKey, body: string): string[] {
   if (key === "announcement" || key === "newsletter") return body.includes("{mensaje}") ? [] : ["mensaje"]
   if (key === "welcome") return body.includes("{password}") ? [] : ["password"]
+  if (key === "passwordReset") return body.includes("{enlace}") ? [] : ["enlace"]
   return []
 }
 

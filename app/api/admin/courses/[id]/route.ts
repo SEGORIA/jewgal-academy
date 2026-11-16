@@ -5,7 +5,7 @@ import { z } from "zod"
 import { db } from "@/lib/db"
 
 const moduleSchema = z.object({ title: z.string(), items: z.array(z.string()) })
-const contentSchema = z.object({
+const textFields = {
   eyebrow: z.string(),
   duration: z.string(),
   modality: z.string(),
@@ -14,6 +14,17 @@ const contentSchema = z.object({
   modules: z.array(moduleSchema),
   forWhom: z.array(z.string()),
   outcome: z.string(),
+  seoTitle: z.string().max(120).optional(),
+  seoDescription: z.string().max(300).optional(),
+  certRequirements: z.array(z.string().max(200)).max(30).optional(),
+}
+const contentSchema = z.object({
+  ...textFields,
+  /** Marca del programa */
+  accent: z.string().regex(/^#[0-9a-fA-F]{6}$/, "El color debe ser #RRGGBB").optional().or(z.literal("")),
+  icon: z.string().max(4).optional(),
+  /** Versión en inglés (todo opcional: lo que falte se ve en español) */
+  en: z.object(textFields).partial().optional(),
 })
 
 const patchSchema = z.object({

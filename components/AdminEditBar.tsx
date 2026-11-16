@@ -20,6 +20,8 @@ function infoFor(path: string): PageInfo {
   if (path === "/certificaciones") return { title: "Certificaciones", targets: [t("Certificaciones"), seo("certificaciones"), { label: "Diseño y avales de certificados", href: "/superadmin/certificados" }] }
   if (path === "/conoce-a-devora") return { title: "Conoce a Devora", targets: [t("Devora"), seo("conoce-a-devora"), { label: "Datos de la fundadora", href: "/superadmin/web" }] }
   if (path === "/eventos") return { title: "Eventos", targets: [{ label: "Editar eventos y retiros", href: "/superadmin/eventos" }, t("Eventos"), seo("eventos")] }
+  if (path.startsWith("/p/")) return { title: "Página propia", targets: [{ label: "Editar esta página", href: "/superadmin/paginas" }, { label: "Menú y pie de página", href: "/superadmin/web" }] }
+  if (path === "/coaching-1-1") return { title: "Coaching 1:1", targets: [{ label: "Ofertas, disponibilidad y reservas", href: "/superadmin/coaching" }, t("Coaching"), seo("coaching-1-1")] }
   if (path === "/blog" || path.startsWith("/blog/")) return { title: "Blog", targets: [{ label: "Editar artículos", href: "/superadmin/blog" }, seo("blog")] }
   if (path === "/contacto") return { title: "Contacto", targets: [t("Contacto"), seo("contacto"), { label: "Ver mensajes recibidos", href: "/superadmin/comunicaciones" }] }
   if (path === "/terminos") return { title: "Términos de uso", targets: [{ label: "Editar el texto legal", href: "/superadmin/legales" }, seo("terminos")] }

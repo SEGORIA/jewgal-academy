@@ -2,9 +2,10 @@
 
 import { motion } from "framer-motion"
 import { Printer, Moon, Sun } from "lucide-react"
-import { VALUE_CARDS } from "@/lib/jewgalkids-content"
+import { useJewgalkidsContent } from "@/lib/use-jewgalkids-content"
 
 export default function ValueCards() {
+  const { values: VALUE_CARDS } = useJewgalkidsContent()
   return (
     <div>
       <style>{`

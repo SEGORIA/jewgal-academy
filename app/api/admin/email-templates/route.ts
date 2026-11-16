@@ -33,7 +33,7 @@ export async function GET() {
 }
 
 const schema = z.object({
-  key: z.enum(["welcome", "enrollment", "certificate", "announcement", "newsletter"]),
+  key: z.enum(["welcome", "passwordReset", "enrollment", "certificate", "announcement", "newsletter"]),
   enabled: z.boolean().optional(),
   subject: z.string().trim().min(1, "Falta el asunto").max(200),
   body: z.string().trim().min(5, "Falta el texto del correo").max(8000),

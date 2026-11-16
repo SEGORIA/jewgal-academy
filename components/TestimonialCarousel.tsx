@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useTranslations } from "next-intl"
 
-export type CarouselItem = { text: string; who: string; role: string }
+export type CarouselItem = { text: string; who: string; role: string; photo?: string | null }
 
 const variants = {
   enter: (d: number) => ({ x: d > 0 ? 72 : -72, opacity: 0, filter: "blur(4px)" }),
@@ -80,6 +80,11 @@ export default function TestimonialCarousel({ items }: { items: CarouselItem[] }
 
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
               {/* Línea decorativa */}
+              {TESTIMONIALS[idx].photo && (
+                // eslint-disable-next-line @next/next/no-img-element -- foto subida desde el panel (URL externa)
+                <img src={TESTIMONIALS[idx].photo!} alt={TESTIMONIALS[idx].who} width={56} height={56} loading="lazy"
+                  style={{ width: 56, height: 56, borderRadius: "50%", objectFit: "cover", border: "2px solid var(--gold)", marginBottom: 6 }} />
+              )}
               <motion.div
                 initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}

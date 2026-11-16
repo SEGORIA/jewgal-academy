@@ -8,7 +8,7 @@ import {
   LayoutDashboard, Users, BookOpen, FileText,
   CreditCard, Settings, Globe, Menu, X, LogOut,
   ChevronRight, Newspaper, Shield, ClipboardCheck, ExternalLink, ImageIcon, Headphones, CalendarDays, Award, MessagesSquare,
-  Quote, BadgeCheck, Type, Scale, Megaphone, UserCog, History, DatabaseBackup,
+  Quote, BadgeCheck, Type, Scale, Megaphone, UserCog, History, DatabaseBackup, Ticket, Files, CalendarCheck, Bot, GraduationCap,
 } from "lucide-react"
 import { signOut, useSession } from "next-auth/react"
 import { can, permissionForPath, type Permission } from "@/lib/permissions"
@@ -23,7 +23,9 @@ const NAV = [
       { href: "/superadmin",              icon: LayoutDashboard, label: "Dashboard" },
       { href: "/superadmin/alumnos",      icon: Users,           label: "Alumnos" },
       { href: "/superadmin/asistencia",   icon: ClipboardCheck,  label: "Asistencia" },
+      { href: "/superadmin/coaching",     icon: CalendarCheck,   label: "Coaching 1:1" },
       { href: "/superadmin/pagos",        icon: CreditCard,      label: "Ingresos" },
+      { href: "/superadmin/cupones",      icon: Ticket,          label: "Cupones" },
       { href: "/superadmin/comunicaciones", icon: Megaphone,     label: "Comunicaciones" },
     ],
   },
@@ -35,6 +37,7 @@ const NAV = [
       { href: "/superadmin/certificados", icon: Award,           label: "Certificados" },
       { href: "/superadmin/comunidad",    icon: MessagesSquare,  label: "Comunidad" },
       { href: "/superadmin/recursos",     icon: Headphones,      label: "Recursos" },
+      { href: "/superadmin/aula",         icon: GraduationCap,   label: "Contenido del aula" },
       { href: "/superadmin/blog",         icon: Newspaper,       label: "Blog" },
       { href: "/superadmin/eventos",      icon: CalendarDays,    label: "Eventos" },
     ],
@@ -44,6 +47,7 @@ const NAV = [
     items: [
       { href: "/superadmin/web",          icon: Globe,           label: "Portada y contacto" },
       { href: "/superadmin/textos",       icon: Type,            label: "Textos y SEO" },
+      { href: "/superadmin/paginas",      icon: Files,           label: "Páginas propias" },
       { href: "/superadmin/legales",      icon: Scale,           label: "Páginas legales" },
       { href: "/superadmin/testimonios",  icon: Quote,           label: "Testimonios" },
       { href: "/superadmin/avales",       icon: BadgeCheck,      label: "Avales" },
@@ -54,6 +58,7 @@ const NAV = [
     group: "Sistema",
     items: [
       { href: "/superadmin/equipo",        icon: UserCog,         label: "Equipo y permisos" },
+      { href: "/superadmin/asistente",     icon: Bot,             label: "Asistente de IA" },
       { href: "/superadmin/historial",     icon: History,         label: "Historial de cambios" },
       { href: "/superadmin/respaldo",      icon: DatabaseBackup,  label: "Respaldo" },
       { href: "/superadmin/configuracion", icon: Settings,        label: "Configuración" },

@@ -1,7 +1,8 @@
 ﻿"use client"
 
 import { useState, useEffect } from "react"
-import { GripVertical, Eye, EyeOff, ChevronUp, ChevronDown, Save, Info } from "lucide-react"
+import { GripVertical, Eye, EyeOff, ChevronUp, ChevronDown, Save, Info, Trash2 } from "lucide-react"
+import { ImageInsertButton } from "@/components/admin/ImageUpload"
 
 type Photo = { src: string; alt: string; active: boolean; order: number }
 
@@ -16,6 +17,8 @@ export default function HeroAdminPage() {
   const [photos, setPhotos] = useState<Photo[]>(DEFAULT)
   const [saving, setSaving] = useState(false)
   const [saved,  setSaved]  = useState(false)
+  const [error,  setError]  = useState("")
+  const [pendingRemove, setPendingRemove] = useState<number | null>(null)
 
   useEffect(() => {
     fetch("/api/admin/hero-photos")
@@ -42,16 +45,32 @@ export default function HeroAdminPage() {
     setPhotos(prev => prev.map((p, idx) => idx === i ? { ...p, alt: value } : p))
   }
 
+  function addPhoto(src: string) {
+    setError("")
+    setPhotos(prev => [...prev, { src, alt: "Foto del carrusel", active: true, order: prev.length }])
+  }
+
+  function removePhoto(i: number) {
+    if (pendingRemove !== i) { setPendingRemove(i); setTimeout(() => setPendingRemove(null), 3500); return }
+    setPendingRemove(null)
+    setPhotos(prev => prev.filter((_, idx) => idx !== i).map((p, idx) => ({ ...p, order: idx })))
+  }
+
   async function save() {
+    if (!photos.some(p => p.active)) { setError("Dejá al menos una foto activa: el carrusel no puede quedar vacío."); return }
+    setError("")
     setSaving(true)
     try {
-      await fetch("/api/admin/hero-photos", {
+      const res = await fetch("/api/admin/hero-photos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(photos),
       })
+      if (!res.ok) { const d = await res.json().catch(() => ({})); setError(d.error ?? "No se pudo guardar. Probá de nuevo."); return }
       setSaved(true)
       setTimeout(() => setSaved(false), 2500)
+    } catch {
+      setError("No se pudo guardar. Revisá tu conexión.")
     } finally {
       setSaving(false)
     }
@@ -181,27 +200,42 @@ export default function HeroAdminPage() {
               >
                 {photo.active ? <Eye size={14} /> : <EyeOff size={14} />}
               </button>
+              <button
+                onClick={() => removePhoto(i)}
+                title={pendingRemove === i ? "Hacé clic de nuevo para quitarla" : "Quitar foto"}
+                aria-label={pendingRemove === i ? "Confirmar: quitar foto" : "Quitar foto"}
+                style={{
+                  height: 32, minWidth: 32, padding: pendingRemove === i ? "0 10px" : 0, borderRadius: 8, border: "1px solid var(--border)",
+                  background: pendingRemove === i ? "var(--danger)" : "var(--surface-2)", cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "center", gap: 6, fontSize: 12,
+                  color: pendingRemove === i ? "#fff" : "var(--danger)",
+                }}
+              >
+                <Trash2 size={14} />{pendingRemove === i ? "¿Quitar?" : null}
+              </button>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Nota: cómo agregar fotos nuevas */}
+      {error && <p role="alert" style={{ marginTop: 16, color: "var(--danger)", fontSize: 13.5 }}>{error}</p>}
+
+      {/* Agregar fotos nuevas: se suben directo desde acá */}
       <div style={{
-        marginTop: 32, padding: "18px 20px", borderRadius: 12,
+        marginTop: 28, padding: "18px 20px", borderRadius: 12,
         background: "rgba(165,141,102,.06)", border: "1px solid rgba(165,141,102,.14)",
-        display: "flex", gap: 14, alignItems: "flex-start",
+        display: "flex", gap: 14, alignItems: "flex-start", flexWrap: "wrap",
       }}>
         <Info size={18} style={{ color: accent, flexShrink: 0, marginTop: 2 }} />
-        <div>
+        <div style={{ flex: 1, minWidth: 240 }}>
           <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", marginBottom: 6 }}>
-            ¿Querés agregar fotos nuevas?
+            ¿Querés agregar una foto nueva?
           </p>
-          <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6 }}>
-            Guardá la foto en la carpeta <code style={{ background: "var(--surface-2)", padding: "1px 6px", borderRadius: 4, fontSize: 12 }}>public/brand/hero/</code> del proyecto
-            y hacé un push a main. Después, agregá la ruta aquí y guardá.
-            Las fotos deben ser JPG o WebP, mínimo 1400&nbsp;px de ancho y relación 16:9 aproximada.
+          <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6, marginBottom: 12 }}>
+            Subila desde tu computadora o celular: no hace falta tocar el código. Mejor en JPG o WebP, de al menos 1400&nbsp;px de ancho
+            y con proporción 16:9 aproximada. Después de subirla, escribí su descripción y tocá <strong>Guardar cambios</strong>.
           </p>
+          <ImageInsertButton folder="jewgal-hero" onUploaded={addPhoto} onError={setError} maxMB={10}>Subir foto nueva</ImageInsertButton>
         </div>
       </div>
     </div>

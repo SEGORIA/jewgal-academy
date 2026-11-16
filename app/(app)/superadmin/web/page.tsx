@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { Eye, Save, ChevronDown, ChevronUp, Loader2, Info, Languages } from "lucide-react"
-import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
+import { DEFAULT_SITE_CONTENT, DEFAULT_SITE_IMAGES, IMAGE_FIELDS, type SiteContent } from "@/lib/site-content"
+import ImageUpload from "@/components/admin/ImageUpload"
+import { HomeSectionsEditor, MenuEditor } from "@/components/admin/MenuEditor"
 
 type Lang = "es" | "en"
 
@@ -45,9 +47,12 @@ function applyTranslations(base: SiteContent, t: string[]): SiteContent {
   }
 }
 
-type SectionId = "hero" | "stats" | "fundadora" | "contacto" | "footer" | "pg_academia" | "pg_certificaciones" | "pg_eventos" | "pg_blog" | "pg_contacto" | "email_bienvenida"
+type SectionId = "menu" | "home" | "images" | "hero" | "stats" | "fundadora" | "contacto" | "footer" | "pg_academia" | "pg_certificaciones" | "pg_eventos" | "pg_blog" | "pg_contacto" | "email_bienvenida"
 
 const SECTION_LABELS: Record<SectionId, string> = {
+  menu: "Menú y pie de página",
+  home: "Orden de las secciones del inicio",
+  images: "Imágenes de las páginas",
   hero: "Hero / Portada",
   stats: "Estadísticas (debajo del hero)",
   fundadora: "Sección «Conoce a Devora»",
@@ -255,6 +260,55 @@ export default function WebAdminPage() {
           )}
         </div>
 
+        {/* ── MENÚ Y PIE DE PÁGINA / ORDEN DEL INICIO (compartidos: se editan en la versión en español) ── */}
+        {lang === "es" && (
+          <>
+            <div style={card}>
+              <SectionHeader id="menu" expanded={expanded} setExpanded={setExpanded} />
+              {expanded === "menu" && (
+                <div style={{ padding: "0 22px 22px", borderTop: "1px solid var(--surface-2)", paddingTop: 20 }}>
+                  <MenuEditor menu={content.menu} onChange={(menu) => setContent((c) => ({ ...c, menu }))} />
+                </div>
+              )}
+            </div>
+            <div style={card}>
+              <SectionHeader id="home" expanded={expanded} setExpanded={setExpanded} />
+              {expanded === "home" && (
+                <div style={{ padding: "0 22px 22px", borderTop: "1px solid var(--surface-2)", paddingTop: 20 }}>
+                  <HomeSectionsEditor sections={content.homeSections} onChange={(homeSections) => setContent((c) => ({ ...c, homeSections }))} />
+                </div>
+              )}
+            </div>
+          </>
+        )}
+
+        {/* ── IMÁGENES DE LAS PÁGINAS ── */}
+        <div style={card}>
+          <SectionHeader id="images" expanded={expanded} setExpanded={setExpanded} />
+          {expanded === "images" && (
+            <div style={{ padding: "0 22px 22px", display: "grid", gap: 22, borderTop: "1px solid var(--surface-2)", paddingTop: 20 }}>
+              <p style={{ fontSize: 12.5, color: "var(--text-muted)", lineHeight: 1.7 }}>
+                Cambiá las fotos grandes de cada página subiendo una nueva desde tu computadora o celular. Se aplican al guardar, en español e inglés.
+                Las fotos del carrusel de Inicio se cambian en <a href="/superadmin/hero" style={{ color: "var(--gold-ink)" }}>Fotos del hero</a> y las de cada programa, en <a href="/superadmin/cursos" style={{ color: "var(--gold-ink)" }}>Programas</a>.
+              </p>
+              {IMAGE_FIELDS.map((f) => (
+                <ImageUpload
+                  key={f.key}
+                  label={f.label}
+                  hint={f.hint}
+                  aspect={f.aspect}
+                  folder="jewgal-sitio"
+                  maxMB={10}
+                  value={content.images[f.key]}
+                  canRemove={content.images[f.key] !== DEFAULT_SITE_IMAGES[f.key]}
+                  removeLabel="Volver a la original"
+                  onChange={(url) => setContent((c) => ({ ...c, images: { ...c.images, [f.key]: url || DEFAULT_SITE_IMAGES[f.key] } }))}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* ── FUNDADORA ── */}
         <div style={card}>
           <SectionHeader id="fundadora" expanded={expanded} setExpanded={setExpanded} />
@@ -402,7 +456,7 @@ export default function WebAdminPage() {
 
       <div style={{ ...card, padding: "20px 22px", marginTop: 20, borderColor: "rgba(251,191,36,.15)", background: "rgba(251,191,36,.03)" }}>
         <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.7 }}>
-          <strong style={{ color: "var(--text-strong)" }}>Nota:</strong> Todos los textos se aplican al instante en el sitio público al guardar. Para cambios de diseño (colores, imágenes, fuentes), editá los archivos de código con Claude Code.
+          <strong style={{ color: "var(--text-strong)" }}>Nota:</strong> Todos los textos se aplican al instante en el sitio público al guardar. Las imágenes, los textos, el menú y las páginas se cambian desde el panel. Solo los cambios de diseño (colores, tipografías, estructura) requieren tocar el código.
         </p>
       </div>
     </div>

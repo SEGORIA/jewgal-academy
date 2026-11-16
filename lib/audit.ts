@@ -35,6 +35,11 @@ export const AUDITED_MODELS: Record<string, { key: "id" | "key"; restorable: boo
   Respaldo: { key: "id", restorable: false, label: "Respaldo" },
   Alumno: { key: "id", restorable: false, label: "Vista de alumno" },
   ContactMessage: { key: "id", restorable: true, label: "Mensaje de contacto" },
+  Coupon: { key: "id", restorable: true, label: "Cupón" },
+  Page: { key: "id", restorable: true, label: "Página del sitio" },
+  CoachingOffer: { key: "id", restorable: true, label: "Sesión de coaching 1:1" },
+  CoachingBooking: { key: "id", restorable: false, label: "Reserva de coaching 1:1" },
+  EventRegistration: { key: "id", restorable: false, label: "Inscripción a evento" },
 }
 
 /** Campos que nunca se guardan en el historial. */

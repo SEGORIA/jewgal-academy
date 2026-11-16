@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
   try {
     const enSetting = await db.siteSetting.findUnique({ where: { key: "site_content_en" } })
     if (enSetting?.value) {
-      return NextResponse.json(mergeSiteContent(JSON.parse(enSetting.value), esContent), {
+      return NextResponse.json(mergeSiteContent(JSON.parse(enSetting.value), esContent, { overlay: true }), {
         headers: { "Cache-Control": CACHE },
       })
     }

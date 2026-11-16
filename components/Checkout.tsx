@@ -5,11 +5,13 @@ import { motion, AnimatePresence } from "framer-motion"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js"
-import { CreditCard, ShieldCheck, Sparkles, CheckCircle2 } from "lucide-react"
+import { CreditCard, ShieldCheck, Sparkles, CheckCircle2, Ticket, X } from "lucide-react"
 import { formatPrice } from "@/lib/utils"
 
 type Course = { id: string; title: string; slug: string; price: number; currency: string; isFree: boolean }
 type Config = { stripe: boolean; paypal: boolean; paypalClientId: string | null; demo: boolean }
+/** Cupón ya verificado por el servidor: el descuento y el nuevo total vienen de ahí, nunca se calculan en el navegador. */
+type AppliedCoupon = { code: string; description: string | null; listPrice: number; discount: number; finalAmount: number }
 
 const spring = { type: "spring" as const, stiffness: 300, damping: 24 }
 
@@ -70,6 +72,10 @@ export default function Checkout({ course }: { course: Course }) {
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
   const [demoStage, setDemoStage] = useState<"idle" | "processing" | "receipt">("idle")
+  const [couponInput, setCouponInput] = useState("")
+  const [coupon, setCoupon] = useState<AppliedCoupon | null>(null)
+  const [couponError, setCouponError] = useState("")
+  const [couponLoading, setCouponLoading] = useState(false)
 
   useEffect(() => {
     fetch("/api/payment-config").then((r) => r.json()).then(setConfig)
@@ -77,6 +83,30 @@ export default function Checkout({ course }: { course: Course }) {
   }, [])
 
   const valid = email.includes("@") && name.trim().length > 1
+  const payable = coupon ? coupon.finalAmount : course.price
+  const freeWithCoupon = !!coupon && coupon.finalAmount === 0
+
+  async function applyCoupon() {
+    const code = couponInput.trim()
+    if (!code) { setCouponError("Ingresá un código de cupón."); return }
+    setCouponLoading(true); setCouponError("")
+    try {
+      const res = await fetch("/api/coupons/validate", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, courseId: course.id, email: email.trim() || undefined }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok || !data.ok) { setCoupon(null); setCouponError(data.error || "No se pudo verificar el cupón."); return }
+      setCoupon({ code: data.code, description: data.description ?? null, listPrice: data.listPrice, discount: data.discount, finalAmount: data.finalAmount })
+      setCouponInput("")
+    } catch {
+      setCouponError("No se pudo verificar el cupón. Probá de nuevo.")
+    } finally {
+      setCouponLoading(false)
+    }
+  }
+
+  function removeCoupon() { setCoupon(null); setCouponError(""); setError("") }
 
   function requireValid() {
     if (!valid) { setError("Completá tu nombre y un email válido."); return false }
@@ -106,12 +136,15 @@ export default function Checkout({ course }: { course: Course }) {
         fetch("/api/demo-enroll", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ courseId: course.id, email, name }),
+          body: JSON.stringify({ courseId: course.id, email, name, couponCode: coupon?.code }),
         }),
         isPaidDemo ? wait(1500) : Promise.resolve(), // deja ver el paso "procesando" aunque la API responda al instante
       ])
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error || "Error al inscribir")
+      if (!res.ok) {
+        if (data.couponError) { setCoupon(null); setCouponError(data.error) }
+        throw new Error(data.error || "Error al inscribir")
+      }
 
       if (isPaidDemo) {
         setDemoStage("receipt")
@@ -133,6 +166,7 @@ export default function Checkout({ course }: { course: Course }) {
     }
   }
 
+  /** Tarjeta (Stripe) o, si el cupón cubre el 100%, inscripción directa sin cobro: ambos pasan por /api/checkout. */
   async function handleStripe() {
     if (!requireValid()) return
     setLoading(true)
@@ -140,10 +174,17 @@ export default function Checkout({ course }: { course: Course }) {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ courseId: course.id, email }),
+        body: JSON.stringify({ courseId: course.id, email, name, couponCode: coupon?.code }),
       })
       const data = await res.json()
       if (data.url) { window.location.href = data.url; return }
+      if (data.enrolled) {
+        setSuccess(true)
+        if (data.tempPassword) setTimeout(() => autoLogin(data.email, data.tempPassword), 1200)
+        else setTimeout(() => router.push("/login?enrolled=true"), 1200)
+        return
+      }
+      if (data.couponError) { setCoupon(null); setCouponError(data.error) }
       throw new Error(data.error || "Error con Stripe")
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Error de pago")
@@ -212,7 +253,7 @@ export default function Checkout({ course }: { course: Course }) {
         <div style={{ background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.18)", borderRadius: 12, padding: "16px 18px", marginBottom: 14, textAlign: "left" }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13.5, color: "var(--text-muted)", marginBottom: 6 }}>
             <span>{course.title}</span>
-            <span style={{ fontWeight: 700, color: "var(--text)" }}>{formatPrice(course.price, course.currency)}</span>
+            <span style={{ fontWeight: 700, color: "var(--text)" }}>{formatPrice(payable, course.currency)}</span>
           </div>
           <div style={{ borderTop: "1px dashed rgba(165,141,102,.25)", paddingTop: 8, fontSize: 11, color: "var(--text-dim)" }}>
             Comprobante de demostración · sin cargo real
@@ -277,6 +318,49 @@ export default function Checkout({ course }: { course: Course }) {
         </div>
       </div>
 
+      {/* Cupón de descuento */}
+      {isPaid && (
+        <div style={{ marginBottom: 18 }}>
+          {coupon ? (
+            <div role="status" style={{ background: "var(--surface-2)", border: "1px solid rgba(165,141,102,.3)", borderRadius: 12, padding: "12px 14px" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 13.5, color: "var(--text)" }}>
+                  <Ticket size={15} style={{ color: "var(--success)" }} aria-hidden />
+                  Cupón <strong style={{ letterSpacing: ".05em" }}>{coupon.code}</strong> aplicado
+                </span>
+                <button type="button" onClick={removeCoupon} aria-label="Quitar el cupón" style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", display: "flex", padding: 4 }}><X size={15} /></button>
+              </div>
+              <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px dashed rgba(165,141,102,.25)", fontSize: 13.5, display: "grid", gap: 4 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", color: "var(--text-muted)" }}><span>Precio</span><span style={{ textDecoration: "line-through" }}>{formatPrice(coupon.listPrice, course.currency)}</span></div>
+                <div style={{ display: "flex", justifyContent: "space-between", color: "var(--success)" }}><span>Descuento</span><span>−{formatPrice(coupon.discount, course.currency)}</span></div>
+                <div style={{ display: "flex", justifyContent: "space-between", color: "var(--text)", fontWeight: 700, fontSize: 15 }}><span>Total</span><span>{coupon.finalAmount === 0 ? "Sin cargo" : formatPrice(coupon.finalAmount, course.currency)}</span></div>
+              </div>
+            </div>
+          ) : (
+            <>
+              <label htmlFor="coupon-code" style={{ display: "block", fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 8 }}>
+                ¿Tenés un cupón?
+              </label>
+              <div style={{ display: "flex", gap: 8 }}>
+                <input
+                  id="coupon-code" value={couponInput} autoComplete="off" autoCapitalize="characters" spellCheck={false}
+                  onChange={(e) => { setCouponInput(e.target.value.toUpperCase()); if (couponError) setCouponError("") }}
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); applyCoupon() } }}
+                  placeholder="Código" style={{ ...inputStyle, letterSpacing: ".06em" }} onFocus={focus} onBlur={blur}
+                />
+                <button
+                  type="button" onClick={applyCoupon} disabled={couponLoading || !couponInput.trim()}
+                  style={{ flexShrink: 0, padding: "0 20px", borderRadius: 12, border: "1.5px solid #d49341", background: "transparent", color: "#d49341", fontSize: 13, fontWeight: 600, letterSpacing: ".08em", textTransform: "uppercase", cursor: couponLoading || !couponInput.trim() ? "not-allowed" : "pointer", opacity: couponLoading || !couponInput.trim() ? 0.6 : 1, fontFamily: "inherit" }}
+                >
+                  {couponLoading ? "…" : "Aplicar"}
+                </button>
+              </div>
+              {couponError && <p role="alert" style={{ color: "#dc2626", fontSize: 13, marginTop: 8, lineHeight: 1.5 }}>{couponError}</p>}
+            </>
+          )}
+        </div>
+      )}
+
       {/* Error */}
       <AnimatePresence>
         {error && (
@@ -303,8 +387,18 @@ export default function Checkout({ course }: { course: Course }) {
         </GoldButton>
       )}
 
+      {/* Cupón del 100%: se inscribe sin pasar por la pasarela */}
+      {realPayments && freeWithCoupon && (
+        <GoldButton onClick={handleStripe} disabled={loading}>
+          {loading
+            ? <><motion.div animate={{ rotate: 360 }} transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}><Sparkles size={16} /></motion.div>Inscribiendo…</>
+            : <><Sparkles size={16} />Inscribirme con el cupón</>
+          }
+        </GoldButton>
+      )}
+
       {/* Stripe */}
-      {realPayments && config.stripe && (
+      {realPayments && !freeWithCoupon && config.stripe && (
         <GoldButton onClick={handleStripe} disabled={loading}>
           {loading
             ? <><motion.div animate={{ rotate: 360 }} transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}><CreditCard size={16} /></motion.div>Procesando…</>
@@ -314,17 +408,24 @@ export default function Checkout({ course }: { course: Course }) {
       )}
 
       {/* PayPal */}
-      {realPayments && config.paypal && config.paypalClientId && (
+      {realPayments && !freeWithCoupon && config.paypal && config.paypalClientId && (
         <div style={{ marginTop: 12, opacity: !valid ? 0.5 : 1, pointerEvents: !valid ? "none" : undefined }}>
           <PayPalScriptProvider options={{ clientId: config.paypalClientId, currency: course.currency }}>
             <PayPalButtons
               style={{ shape: "pill", color: "gold", layout: "horizontal", tagline: false }}
+              forceReRender={[coupon?.code ?? "", email, course.id]}
               createOrder={async () => {
                 const res = await fetch("/api/paypal/create-order", {
                   method: "POST", headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ courseId: course.id }),
+                  body: JSON.stringify({ courseId: course.id, email, couponCode: coupon?.code }),
                 })
-                return (await res.json()).id
+                const data = await res.json().catch(() => ({}))
+                if (!res.ok || !data.id) {
+                  if (data.couponError) { setCoupon(null); setCouponError(data.error) }
+                  setError(data.error || "No se pudo iniciar el pago con PayPal.")
+                  throw new Error(data.error || "PayPal")
+                }
+                return data.id
               }}
               onApprove={async (data) => {
                 const res = await fetch("/api/paypal/capture-order", {

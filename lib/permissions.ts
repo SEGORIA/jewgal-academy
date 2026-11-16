@@ -37,9 +37,12 @@ export function can(subject: PermissionSubject, perm: Permission): boolean {
 /** Permiso que exige cada pantalla del panel (para el menú y para el acceso por URL). */
 export const ROUTE_PERMISSIONS: { prefix: string; perm: Permission }[] = [
   { prefix: "/superadmin/alumnos", perm: "alumnos" },
+  { prefix: "/superadmin/coaching", perm: "alumnos" },
   { prefix: "/superadmin/pagos", perm: "pagos" },
+  { prefix: "/superadmin/cupones", perm: "pagos" },
   { prefix: "/superadmin/cursos", perm: "cursos" },
   { prefix: "/superadmin/recursos", perm: "cursos" },
+  { prefix: "/superadmin/aula", perm: "cursos" },
   { prefix: "/superadmin/asistencia", perm: "cursos" },
   { prefix: "/superadmin/comunidad", perm: "comunidad" },
   { prefix: "/superadmin/comunicaciones", perm: "comunicaciones" },
@@ -52,7 +55,9 @@ export const ROUTE_PERMISSIONS: { prefix: string; perm: Permission }[] = [
   { prefix: "/superadmin/hero", perm: "sitio" },
   { prefix: "/superadmin/eventos", perm: "sitio" },
   { prefix: "/superadmin/blog", perm: "sitio" },
+  { prefix: "/superadmin/paginas", perm: "sitio" },
   { prefix: "/superadmin/equipo", perm: "superadmin" },
+  { prefix: "/superadmin/asistente", perm: "superadmin" },
   { prefix: "/superadmin/historial", perm: "superadmin" },
   { prefix: "/superadmin/respaldo", perm: "superadmin" },
   { prefix: "/superadmin/configuracion", perm: "superadmin" },

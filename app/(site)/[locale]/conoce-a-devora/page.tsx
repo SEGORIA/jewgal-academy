@@ -6,9 +6,11 @@ import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
 import { motion } from "framer-motion"
 import { useTranslations } from "next-intl"
+import { useSiteImages, bgUrl } from "@/lib/use-site-images"
 
 export default function ConoceADevorPage() {
   const t = useTranslations("Devora")
+  const images = useSiteImages()
 
   const credentials = [
     { n: "01", category: t("cred1Cat"), items: t.raw("cred1Items") as string[] },
@@ -109,7 +111,7 @@ export default function ConoceADevorPage() {
         <div className="wrap devora-hero-grid">
           {/* Foto */}
           <div className="devora-hero-photo">
-            <div style={{ position: "absolute", inset: 0, backgroundImage: "url('/brand/devora-hero.webp')", backgroundSize: "cover", backgroundPosition: "50% 22%" }} />
+            <div style={{ position: "absolute", inset: 0, backgroundImage: bgUrl(images.devoraHero), backgroundSize: "cover", backgroundPosition: "50% 22%" }} />
             <div style={{ position: "absolute", left: 20, bottom: 20, fontSize: 10, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(238,244,244,.9)", background: "rgba(44,31,20,.70)", backdropFilter: "blur(4px)", padding: "8px 13px", border: "1px solid var(--line-d)", borderRadius: 4 }}>
               {t("photoBadge")}
             </div>

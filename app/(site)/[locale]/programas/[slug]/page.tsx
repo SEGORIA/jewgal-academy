@@ -7,19 +7,37 @@ import Footer from "@/components/Footer"
 import Checkout from "@/components/Checkout"
 import RevealInit from "@/components/RevealInit"
 import { formatPrice } from "@/lib/utils"
-import { getProgramContent, getYouTubeEmbedUrl } from "@/lib/program-content"
+import type { Metadata } from "next"
+import { getProgramBrand, getProgramContent, getYouTubeEmbedUrl, localizeProgramContent } from "@/lib/program-content"
 import { SITE_URL } from "@/lib/site-url"
+import { baseDb } from "@/lib/db"
+import { getGeneralSettings } from "@/lib/general-settings"
+import { getSeoSettings } from "@/lib/seo"
 
-/* ── Identidad visual por slug (no editable desde el admin) ── */
-const META: Record<string, { grad: string; accent: string; icon: string }> = {
-  "life-coaching-integrativo": { grad: "linear-gradient(135deg,#3A2410 0%,#5C3A1E 100%)", accent: "#A58D66", icon: "⟡" },
-  "joogal-adultos":            { grad: "linear-gradient(135deg,#3A2818 0%,#5C4026 100%)", accent: "#C49F72", icon: "✦" },
-  "joogalkids":                { grad: "linear-gradient(135deg,#4A2418 0%,#6B3826 100%)", accent: "#A76D61", icon: "★" },
-  "metodo-sholem":              { grad: "linear-gradient(135deg,#42200F 0%,#653322 100%)", accent: "#A76D61", icon: "◈" },
-  "cabala-coach":               { grad: "linear-gradient(135deg,#332508 0%,#4F3A12 100%)", accent: "#CBB78B", icon: "❂" },
+/** SEO de cada programa: lo escrito en la ficha (pestaña Contenido) o, si falta, el nombre y la descripción corta. */
+export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
+  const { locale, slug } = await params
+  const course = await baseDb.course.findUnique({ where: { slug } }).catch(() => null)
+  if (!course || !course.isPublished) return { title: locale === "en" ? "Program not found" : "Programa no encontrado", robots: { index: false, follow: false } }
+  const isEn = locale === "en"
+  const text = localizeProgramContent(getProgramContent(slug, course.content), locale)
+  const name = (isEn && course.titleEn) || course.title
+  const short = (isEn && course.shortDescEn) || course.shortDesc
+  const title = text.seoTitle?.trim() || name
+  const description = text.seoDescription?.trim() || short
+  const url = (l: string) => `${SITE_URL}${l === "en" ? "/en" : ""}/programas/${slug}`
+  const [seo, general] = await Promise.all([getSeoSettings(), getGeneralSettings()])
+  const image = course.thumbnail || seo.ogImage
+  const abs = (u: string) => (u.startsWith("/") ? `${SITE_URL}${u}` : u)
+  return {
+    // La plantilla "· Jewgal Academy" no baja hasta las páginas anidadas: se agrega a mano.
+    title: { absolute: `${title} · ${general.name}` },
+    description,
+    alternates: { canonical: url(locale), languages: { es: url("es"), en: url("en") } },
+    openGraph: { type: "website", title, description, url: url(locale), ...(image ? { images: [{ url: abs(image) }] } : {}) },
+    twitter: { card: "summary_large_image", title, description, ...(image ? { images: [abs(image)] } : {}) },
+  }
 }
-
-const DEFAULT_META = META["life-coaching-integrativo"]
 
 export default async function ProgramaPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params
@@ -35,8 +53,9 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
   const shortDesc = (isEn && course.shortDescEn) || course.shortDesc
   const description = (isEn && course.descriptionEn) || course.description
 
-  const meta = META[slug] ?? DEFAULT_META
-  const content = getProgramContent(slug, course.content)
+  const stored = getProgramContent(slug, course.content)
+  const meta = getProgramBrand(slug, stored)
+  const content = localizeProgramContent(stored, locale)
   const embedUrl = getYouTubeEmbedUrl(course.videoUrl)
   const priceLabel = course.isFree ? (isEn ? "Free" : "Gratis") : formatPrice(course.price, course.currency)
 
@@ -66,7 +85,7 @@ export default async function ProgramaPage({ params }: { params: Promise<{ local
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd).replace(/</g, "\\u003c") }}
       />
       <RevealInit />
       <Navbar />

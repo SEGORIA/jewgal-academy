@@ -165,6 +165,16 @@ export async function sendWelcomeEmail(input: { email: string; name: string; cou
   if (r.ok) console.log("[sendWelcomeEmail] enviado, id:", r.id)
 }
 
+/**
+ * Enlace para elegir una contraseña nueva. Devuelve el resultado del envío para que quien llama pueda registrar un fallo
+ * (la pantalla pública responde igual exista o no la cuenta, así que el error solo queda en el log del servidor).
+ */
+export async function sendPasswordResetEmail(input: { email: string; name: string; url: string }): Promise<SendResult> {
+  const tpl = await getTemplate("passwordReset")
+  const { subject, text, html } = composeFromTemplate(tpl, { nombre: input.name, enlace: input.url }, { cta: { label: "Elegir mi contraseña nueva", url: input.url }, preheader: "Tu enlace para restablecer la contraseña (vale 1 hora)." })
+  return sendEmail({ to: input.email, subject, text, html })
+}
+
 /** Confirmación de inscripción a un alumno que ya tenía cuenta (solo si la plantilla está activada). */
 export async function sendEnrollmentEmail(input: { email: string; name: string; courseTitle: string }) {
   if (!isEmailConfigured()) return

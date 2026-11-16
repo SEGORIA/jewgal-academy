@@ -1,13 +1,16 @@
 "use client"
 
+import { useState } from "react"
 import { Link } from "@/i18n/navigation"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
 import CountdownTimer from "@/components/CountdownTimer"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
+import EventRegistrationModal from "@/components/EventRegistrationModal"
 import { type SiteContent } from "@/lib/site-content"
-import { fechaDisplay, type EventosData } from "@/lib/eventos"
+import { bgUrl } from "@/lib/use-site-images"
+import { fechaDisplay, localizeEvento, localizePasado, type EventosData } from "@/lib/eventos"
 
 // Estilos visuales asignados en ciclo según posición (no editables desde el admin)
 const EV_STYLES = [
@@ -20,11 +23,16 @@ const EV_STYLES = [
 export default function EventosClient({
   initialContent,
   initialEventos,
+  taken = {},
 }: {
   initialContent: SiteContent
   initialEventos: EventosData
+  /** Reservas confirmadas por evento (para mostrar los lugares que quedan). */
+  taken?: Record<string, number>
 }) {
   const t = useTranslations("Eventos")
+  const locale = useLocale()
+  const [registering, setRegistering] = useState<{ id: string; title: string } | null>(null)
 
   // Contenido y eventos llegan ya resueltos desde el servidor — el HTML sale
   // con los datos reales, sin depender de un fetch del navegador (que podía
@@ -34,8 +42,8 @@ export default function EventosClient({
 
   const EVENTS = eventos.upcoming
     .filter((ev) => ev.active)
-    .map((ev, i) => ({ ...ev, date: fechaDisplay(ev.datetime), ...EV_STYLES[i % EV_STYLES.length] }))
-  const PAST = eventos.past
+    .map((ev, i) => ({ ...localizeEvento(ev, locale), date: fechaDisplay(ev.datetime), ...EV_STYLES[i % EV_STYLES.length] }))
+  const PAST = eventos.past.map((p) => localizePasado(p, locale))
 
   return (
     <>
@@ -49,7 +57,7 @@ export default function EventosClient({
         position: "relative", overflow: "hidden",
         borderBottom: "1px solid var(--line-d)",
       }}>
-        <div style={{ position: "absolute", inset: 0, backgroundImage: "url(/brand/pages/hero-eventos.webp)", backgroundSize: "cover", backgroundPosition: "right center", zIndex: 0 }} />
+        <div style={{ position: "absolute", inset: 0, backgroundImage: bgUrl(content.images.eventosHero), backgroundSize: "cover", backgroundPosition: "right center", zIndex: 0 }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(100deg,var(--navy-2) 0%,var(--navy) 42%,rgba(0,0,0,0) 82%)", zIndex: 1 }} />
         <div style={{ position: "absolute", top: "-30%", right: "0", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(165,141,102,.07),transparent 70%)", pointerEvents: "none", zIndex: 1 }} />
         <div className="wrap" style={{ position: "relative", zIndex: 2 }}>
@@ -78,9 +86,9 @@ export default function EventosClient({
           )}
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             {EVENTS.map((ev) => (
-              <div key={ev.title} className="reveal ev-card">
+              <div key={ev.id} className="reveal ev-card">
                 {/* Fecha — panel lateral en desktop, barra horizontal en móvil */}
-                <div className="tone-dark ev-date" style={{ background: ev.grad }}>
+                <div className="tone-dark ev-date" style={{ background: ev.imageUrl ? `linear-gradient(180deg,rgba(26,15,8,.55),rgba(26,15,8,.82)), url("${ev.imageUrl}") center/cover` : ev.grad }}>
                   <div>
                     <span style={{ fontFamily: "var(--serif)", fontSize: 52, color: ev.accent, lineHeight: 1, fontWeight: 500, display: "block" }}>{ev.date.day}</span>
                     <span style={{ fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--on-dark)", marginTop: 4, display: "block" }}>{ev.date.month} {ev.date.year}</span>
@@ -107,15 +115,26 @@ export default function EventosClient({
                   <div className="ev-cta">
                     <div>
                       <div style={{ fontSize: 10, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--gold-ink)", marginBottom: 4 }}>
-                        {ev.spots} {t("spots")}
+                        {ev.registration && ev.capacity
+                          ? (() => {
+                              const left = ev.capacity - (taken[ev.id] ?? 0)
+                              return left <= 0 ? t("soldOut") : left === 1 ? t("spotsLast") : t("spotsLeft", { n: left })
+                            })()
+                          : <>{ev.spots} {t("spots")}</>}
                       </div>
                       <div style={{ fontFamily: "var(--serif)", fontSize: 28, color: ev.price === "Gratis" ? "#C49F72" : ev.accent, marginBottom: 16 }}>
                         {ev.price}
                       </div>
                     </div>
-                    <Link href="/contacto" className="btn solid" style={{ fontSize: 11, padding: "10px 20px", flexShrink: 0 }}>
-                      {t("reserve")}
-                    </Link>
+                    {ev.registration ? (
+                      <button type="button" className="btn solid" style={{ fontSize: 11, padding: "10px 20px", flexShrink: 0 }} onClick={() => setRegistering({ id: ev.id, title: ev.title })}>
+                        {t("registerCta")}
+                      </button>
+                    ) : (
+                      <Link href="/contacto" className="btn solid" style={{ fontSize: 11, padding: "10px 20px", flexShrink: 0 }}>
+                        {t("reserve")}
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>
@@ -135,9 +154,15 @@ export default function EventosClient({
                 padding: "20px 0", borderTop: "1px solid var(--line-d)",
                 ...(i === PAST.length - 1 ? { borderBottom: "1px solid var(--line-d)" } : {}),
               }}>
-                <div>
-                  <h4 style={{ fontFamily: "var(--serif)", fontSize: 19, color: "var(--text)" }}>{p.title}</h4>
-                  <span style={{ fontSize: 12, color: "var(--on-dark-faint)" }}>{p.location}</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 16, minWidth: 0 }}>
+                  {p.imageUrl && (
+                    // eslint-disable-next-line @next/next/no-img-element -- foto subida desde el panel (Cloudinary u otro origen)
+                    <img src={p.imageUrl} alt="" loading="lazy" style={{ width: 64, height: 48, objectFit: "cover", borderRadius: 8, flexShrink: 0, border: "1px solid var(--line-d)" }} />
+                  )}
+                  <div style={{ minWidth: 0 }}>
+                    <h4 style={{ fontFamily: "var(--serif)", fontSize: 19, color: "var(--text)" }}>{p.title}</h4>
+                    <span style={{ fontSize: 12, color: "var(--on-dark-faint)" }}>{p.location}</span>
+                  </div>
                 </div>
                 <span style={{ fontSize: 12, color: "var(--gold-ink)", letterSpacing: ".1em" }}>{p.date}</span>
               </div>
@@ -161,6 +186,8 @@ export default function EventosClient({
       </section>
 
       <Footer />
+
+      {registering && <EventRegistrationModal event={registering} onClose={() => setRegistering(null)} />}
     </>
   )
 }

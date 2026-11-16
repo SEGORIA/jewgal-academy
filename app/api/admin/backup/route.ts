@@ -8,7 +8,8 @@ export const maxDuration = 60
 
 const lower = (m: string) => m.charAt(0).toLowerCase() + m.slice(1)
 const MODELS = Prisma.dmmf.datamodel.models.map((m) => m.name)
-const NEVER_EXPORT = new Set(["password"]) // las contraseñas (aunque estén cifradas) nunca salen de la base
+const NEVER_EXPORT = new Set(["password", "tokenHash"]) // ni las contraseñas (aunque estén cifradas) ni los enlaces de recuperación salen de la base
+const NEVER_TABLES = new Set(["PasswordResetToken"])
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const delegate = (name: string) => (baseDb as any)[lower(name)] as { findMany: (a?: unknown) => Promise<Record<string, unknown>[]>; count: () => Promise<number> }
@@ -51,7 +52,7 @@ export async function GET(req: NextRequest) {
     const data: Record<string, unknown[]> = {}
     const counts: Record<string, number> = {}
     for (const m of MODELS) {
-      if (m === "AuditLog" && !withAudit) continue
+      if (NEVER_TABLES.has(m) || (m === "AuditLog" && !withAudit)) continue
       const rows = await delegate(m).findMany()
       data[m] = rows.map((r) => Object.fromEntries(Object.entries(r).filter(([k]) => !NEVER_EXPORT.has(k))))
       counts[m] = rows.length
@@ -74,8 +75,8 @@ export async function GET(req: NextRequest) {
         ...list.map((e) => [e.user.name, e.user.email, e.course.title, e.status, e.progress, e.hoursCompleted, e.enrolledAt, e.completedAt, e.certificateNumber])]
     } else if (table === "payments") {
       const list = await baseDb.payment.findMany({ include: { user: { select: { name: true, email: true } }, course: { select: { title: true } } }, orderBy: { createdAt: "desc" } })
-      rows = [["Fecha", "Alumno", "Correo", "Programa", "Monto", "Moneda", "Medio", "Estado", "Nota"],
-        ...list.map((p) => [p.paidAt ?? p.createdAt, p.user.name, p.user.email, p.course.title, p.amount, p.currency, p.method ?? (p.stripeSessionId ? "stripe" : p.stripePaymentId ? "paypal" : ""), p.status, p.note])]
+      rows = [["Fecha", "Alumno", "Correo", "Programa", "Monto", "Moneda", "Medio", "Estado", "Nota", "Cupón", "Descuento"],
+        ...list.map((p) => [p.paidAt ?? p.createdAt, p.user.name, p.user.email, p.course.title, p.amount, p.currency, p.method ?? (p.stripeSessionId ? "stripe" : p.stripePaymentId ? "paypal" : ""), p.status, p.note, p.couponCode, p.discountAmount])]
     } else if (table === "contacts") {
       const list = await baseDb.contactMessage.findMany({ orderBy: { createdAt: "desc" } })
       rows = [["Fecha", "Nombre", "Correo", "Asunto", "Mensaje", "Estado"], ...list.map((m) => [m.createdAt, m.name, m.email, m.subject, m.message, m.status])]

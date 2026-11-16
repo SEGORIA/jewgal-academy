@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { groq, isAIConfigured, buildSystemPrompt, AI_MODEL } from "@/lib/ai"
 import { rateLimit } from "@/lib/security"
+import { getAiSettings, withExtraInstructions } from "@/lib/ai-settings"
 
 const bodySchema = z.object({
   message: z.string().min(1).max(2000),
@@ -18,6 +19,12 @@ export async function POST(req: NextRequest) {
 
   if (!isAIConfigured()) {
     return NextResponse.json({ error: "El asistente no está disponible en este momento" }, { status: 503 })
+  }
+
+  // El asistente se puede pausar y limitar desde el panel (Asistente de IA).
+  const ai = await getAiSettings()
+  if (!ai.enabled) {
+    return NextResponse.json({ error: "El asistente está en pausa por el momento. Volvé a intentar más tarde." }, { status: 503 })
   }
 
   const rl = rateLimit(`chat:${session.user.id}`, 20, 60_000)
@@ -45,6 +52,15 @@ export async function POST(req: NextRequest) {
     )
   }
 
+  if (ai.dailyLimit > 0) {
+    const used = await db.chatMessage.count({
+      where: { role: "user", createdAt: { gte: new Date(Date.now() - 24 * 3_600_000) }, conversation: { userId: session.user.id } },
+    })
+    if (used >= ai.dailyLimit) {
+      return NextResponse.json({ error: `Llegaste al límite de ${ai.dailyLimit} mensajes por día con el asistente. Podés seguir mañana.` }, { status: 429 })
+    }
+  }
+
   // Obtener o crear conversación
   let conversation
   if (conversationId) {
@@ -65,7 +81,7 @@ export async function POST(req: NextRequest) {
     data: { conversationId: conversation.id, role: "user", content: message },
   })
 
-  const systemPrompt = await buildSystemPrompt(session.user.id)
+  const systemPrompt = withExtraInstructions(await buildSystemPrompt(session.user.id), ai.extraInstructions)
 
   const history = (conversation.messages ?? []).map((m) => ({
     role: m.role as "user" | "assistant",
@@ -80,7 +96,7 @@ export async function POST(req: NextRequest) {
       try {
         const groqStream = await groq.chat.completions.create({
           model: AI_MODEL,
-          max_tokens: 2048,
+          max_tokens: ai.maxTokens,
           messages: [
             { role: "system", content: systemPrompt },
             ...history,

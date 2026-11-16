@@ -1,5 +1,6 @@
 import { cache } from "react"
 import { db } from "./db"
+import { DEFAULT_ANALYTICS, mergeAnalytics, type AnalyticsSettings } from "./analytics-settings"
 
 /**
  * Ajustes generales de la marca que el sitio público SÍ usa:
@@ -9,12 +10,13 @@ import { db } from "./db"
  *
  * El correo, el teléfono y las redes se editan en “Portada y contacto”; las descripciones SEO, en “Textos y SEO”.
  */
-export type GeneralSettings = { name: string; whatsapp: string; whatsappMessage: string }
+export type GeneralSettings = { name: string; whatsapp: string; whatsappMessage: string; analytics: AnalyticsSettings }
 
 export const DEFAULT_GENERAL: GeneralSettings = {
   name: "Jewgal Academy",
   whatsapp: "17864835893",
   whatsappMessage: "",
+  analytics: DEFAULT_ANALYTICS,
 }
 
 export function mergeGeneral(raw: unknown): GeneralSettings {
@@ -23,6 +25,7 @@ export function mergeGeneral(raw: unknown): GeneralSettings {
     name: typeof r.name === "string" && r.name.trim() ? r.name.trim() : DEFAULT_GENERAL.name,
     whatsapp: typeof r.whatsapp === "string" ? r.whatsapp.replace(/\D/g, "") : DEFAULT_GENERAL.whatsapp,
     whatsappMessage: typeof r.whatsappMessage === "string" ? r.whatsappMessage : "",
+    analytics: mergeAnalytics(r.analytics),
   }
 }
 

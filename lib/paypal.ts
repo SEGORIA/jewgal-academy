@@ -28,7 +28,7 @@ export async function getPayPalAccessToken(): Promise<string> {
   return data.access_token
 }
 
-export async function createPayPalOrder(amount: number, currency = "USD", description = "") {
+export async function createPayPalOrder(amount: number, currency = "USD", description = "", customId = "") {
   const token = await getPayPalAccessToken()
   const res = await fetch(`${PAYPAL_BASE}/v2/checkout/orders`, {
     method: "POST",
@@ -39,6 +39,8 @@ export async function createPayPalOrder(amount: number, currency = "USD", descri
         {
           amount: { currency_code: currency, value: amount.toFixed(2) },
           description: description.slice(0, 127),
+          // Dato propio que PayPal devuelve al capturar (programa y cupón): así el cobro se asocia a lo que el servidor creó.
+          ...(customId ? { custom_id: customId.slice(0, 127) } : {}),
         },
       ],
     }),

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { DEFAULT_ANALYTICS, type AnalyticsSettings } from "@/lib/analytics-settings"
 import { Save, KeyRound, Users, CreditCard, Mail, Search, Moon, Sun, Loader2, ExternalLink, CheckCircle2, AlertCircle } from "lucide-react"
 
 const card: React.CSSProperties = { background: "var(--surface)", border: "1px solid rgba(165,141,102,.13)", borderRadius: 14 }
@@ -28,7 +29,7 @@ export default function ConfiguracionPage() {
   const [themeSaving, setThemeSaving] = useState(false)
 
   // General
-  const [general, setGeneral] = useState({ name: "", whatsapp: "", whatsappMessage: "", siteUrl: "" })
+  const [general, setGeneral] = useState<{ name: string; whatsapp: string; whatsappMessage: string; siteUrl: string; analytics: AnalyticsSettings }>({ name: "", whatsapp: "", whatsappMessage: "", siteUrl: "", analytics: DEFAULT_ANALYTICS })
   const [generalError, setGeneralError] = useState("")
   const [generalLoading, setGeneralLoading] = useState(true)
   const [generalSaving, setGeneralSaving] = useState(false)
@@ -89,7 +90,7 @@ export default function ConfiguracionPage() {
       const res = await fetch("/api/admin/settings/general", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: general.name, whatsapp: general.whatsapp, whatsappMessage: general.whatsappMessage }),
+        body: JSON.stringify({ name: general.name, whatsapp: general.whatsapp, whatsappMessage: general.whatsappMessage, analytics: general.analytics }),
       })
       if (res.ok) { setGeneralError(""); setGeneralSaved(true); setTimeout(() => setGeneralSaved(false), 2500) }
       else { const d = await res.json().catch(() => ({})); setGeneralError(d.error || "No se pudo guardar") }
@@ -194,6 +195,35 @@ export default function ConfiguracionPage() {
                   <input value={general.whatsappMessage} maxLength={300} placeholder="Vacío = texto por defecto de cada idioma" onChange={(e) => setGeneral((g) => ({ ...g, whatsappMessage: e.target.value }))} style={inputStyle} />
                 </div>
               </div>
+              <div style={{ marginTop: 26, paddingTop: 22, borderTop: "1px solid var(--border)" }}>
+                <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 18, color: "var(--text)", marginBottom: 6 }}>Analítica y verificación</h3>
+                <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6, marginBottom: 16 }}>
+                  Pegá los identificadores de tus herramientas: se activan solas en todo el sitio, sin tocar código. Vacío = no se carga nada.
+                  Si usás Tag Manager, gestioná ahí Analytics y el resto de etiquetas (no cargues Analytics dos veces).
+                </p>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }} className="admin-form-grid-2">
+                  {([
+                    ["ga4", "Google Analytics 4", "G-XXXXXXXXXX"],
+                    ["gtm", "Google Tag Manager", "GTM-XXXXXXX"],
+                    ["metaPixel", "Píxel de Meta (Facebook / Instagram)", "123456789012345"],
+                    ["googleVerification", "Verificación de Google Search Console", "Solo el código de la etiqueta"],
+                    ["bingVerification", "Verificación de Bing Webmaster", "32 caracteres"],
+                  ] as const).map(([k, label, ph]) => (
+                    <div key={k}>
+                      <label style={labelStyle}>{label}</label>
+                      <input value={general.analytics[k]} placeholder={ph} spellCheck={false} onChange={(e) => setGeneral((g) => ({ ...g, analytics: { ...g.analytics, [k]: e.target.value.trim() } }))} style={inputStyle} />
+                    </div>
+                  ))}
+                </div>
+                <label style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 14, fontSize: 13.5, color: "var(--text-strong)", cursor: "pointer" }}>
+                  <input type="checkbox" checked={general.analytics.respectDnt} onChange={(e) => setGeneral((g) => ({ ...g, analytics: { ...g.analytics, respectDnt: e.target.checked } }))} />
+                  No cargar el seguimiento a quien tiene activado «No rastrear» en su navegador
+                </label>
+                <p style={{ fontSize: 12, color: "var(--text-faint)", marginTop: 8, lineHeight: 1.6 }}>
+                  Importante: según el país de tus visitantes (por ejemplo, la Unión Europea) puede hacer falta pedir consentimiento de cookies antes de activar el seguimiento. El sitio todavía no tiene un aviso de cookies.
+                </p>
+              </div>
+
               <p style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 18, lineHeight: 1.6 }}>
                 El correo, el teléfono y las redes sociales se editan en <a href="/superadmin/web" style={{ color: "var(--gold-ink)" }}>Portada y contacto</a>;
                 los títulos y descripciones para buscadores, en <a href="/superadmin/textos" style={{ color: "var(--gold-ink)" }}>Textos y SEO</a>.

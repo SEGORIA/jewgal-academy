@@ -5,6 +5,7 @@ import { db } from "@/lib/db"
 import { enrollUserInCourse } from "@/lib/enroll"
 import { sendWelcomeEmail } from "@/lib/email"
 import { createNotification } from "@/lib/notifications"
+import { couponFromMetadata } from "@/lib/coupons"
 import Stripe from "stripe"
 
 export async function POST(req: NextRequest) {
@@ -39,6 +40,7 @@ export async function POST(req: NextRequest) {
       currency: session.currency ?? "usd",
       provider: "stripe",
       paymentRef: session.id,
+      coupon: couponFromMetadata(session.metadata),
     })
 
     const tempPassword = result.tempPassword

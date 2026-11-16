@@ -8,6 +8,7 @@ export const PAYMENT_METHOD_LABELS: Record<string, string> = {
   paypal: "PayPal",
   stripe: "Tarjeta (Stripe)",
   otro: "Otro medio",
+  "cupón": "Cupón (sin cargo)",
 }
 
 /** Estados que puede tener un pago. "demo" es el de las inscripciones de prueba. */

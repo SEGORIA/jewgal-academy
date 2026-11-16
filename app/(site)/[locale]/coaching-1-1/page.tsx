@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
 import { motion } from "framer-motion"
+import CoachingBooking from "@/components/CoachingBooking"
 import { useTranslations } from "next-intl"
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -151,13 +152,16 @@ export default function Coaching11Page() {
       <section id="agendar" className="tone-dark" style={{
         background: "linear-gradient(to bottom, #1A0806 0%, #3A1510 25%, #6B2E22 50%, #3A1510 75%, #1A0806 100%)",
       }}>
-        <div className="wrap" style={{ padding: "clamp(56px,8vw,96px) 36px", maxWidth: 640 }}>
+        <div className="wrap" style={{ padding: "clamp(56px,8vw,96px) 36px", maxWidth: 680 }}>
           <div style={{ textAlign: "center", marginBottom: 40 }}>
             <span className="eyebrow reveal" style={{ display: "block", marginBottom: 16 }}>{t("bookEyebrow")}</span>
             <h2 className="reveal" style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(26px,3.2vw,42px)", color: "var(--text)", lineHeight: 1.2 }}>
               {t("bookTitle")}
             </h2>
           </div>
+
+          {/* Reserva en línea (aparece solo si está activada en el panel) */}
+          <CoachingBooking />
 
           {status === "sent" ? (
             <motion.div

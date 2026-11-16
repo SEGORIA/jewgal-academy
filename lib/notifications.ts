@@ -2,7 +2,7 @@ import { db } from "./db"
 import { runAfterResponse } from "./background"
 import { sendAdminAlert } from "./email"
 
-export type NotificationType = "duplicate_purchase_blocked" | "refund_synced" | "payment_received" | "forum_reply" | "contact_message"
+export type NotificationType = "duplicate_purchase_blocked" | "refund_synced" | "payment_received" | "forum_reply" | "contact_message" | "event_registration" | "coaching_booking"
 
 const SUBJECTS: Record<NotificationType, string> = {
   payment_received: "Nuevo pago recibido",
@@ -10,6 +10,8 @@ const SUBJECTS: Record<NotificationType, string> = {
   refund_synced: "Reembolso procesado",
   forum_reply: "Nueva respuesta en el foro",
   contact_message: "Nuevo mensaje de contacto",
+  event_registration: "Nueva reserva de evento",
+  coaching_booking: "Nueva reserva de Coaching 1:1",
 }
 
 /**
@@ -39,6 +41,9 @@ export async function createNotification(input: {
   }
 
   if (!input.userId) {
-    runAfterResponse(() => sendAdminAlert(SUBJECTS[input.type], input.message), "alerta al administrador")
+    // En un mensaje de contacto, "Responder" en el correo de aviso le contesta directo a quien escribió.
+    const email = input.metadata?.email
+    const replyTo = (input.type === "contact_message" || input.type === "coaching_booking") && typeof email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : undefined
+    runAfterResponse(() => sendAdminAlert(SUBJECTS[input.type], input.message, replyTo), "alerta al administrador")
   }
 }

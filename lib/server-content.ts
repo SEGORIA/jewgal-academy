@@ -1,7 +1,7 @@
 import { cache } from "react"
 import { db } from "./db"
 import { mergeSiteContent, type SiteContent } from "./site-content"
-import { DEFAULT_EVENTOS, type EventosData } from "./eventos"
+import { DEFAULT_EVENTOS, normalizeEventos, type EventosData } from "./eventos"
 
 export type PublicCourse = {
   slug: string
@@ -36,7 +36,7 @@ export const getSiteContentForLocale = cache(
 
     try {
       const enSetting = await db.siteSetting.findUnique({ where: { key: "site_content_en" } })
-      if (enSetting?.value) return mergeSiteContent(JSON.parse(enSetting.value), esContent)
+      if (enSetting?.value) return mergeSiteContent(JSON.parse(enSetting.value), esContent, { overlay: true })
     } catch {}
 
     return esContent
@@ -75,7 +75,7 @@ export const getEventos = cache(async (): Promise<EventosData> => {
     const setting = await db.siteSetting.findUnique({ where: { key: "eventos" } })
     if (setting?.value) {
       const parsed = JSON.parse(setting.value)
-      if (Array.isArray(parsed?.upcoming) && Array.isArray(parsed?.past)) return parsed
+      if (Array.isArray(parsed?.upcoming) && Array.isArray(parsed?.past)) return normalizeEventos(parsed)
     }
   } catch {}
   return DEFAULT_EVENTOS

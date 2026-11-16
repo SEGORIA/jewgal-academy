@@ -47,7 +47,7 @@ export const getAvales = cache(async (): Promise<Aval[]> => {
 })
 
 /* ───────────── Testimonios ───────────── */
-export type PublicTestimonial = { id: string; who: string; role: string; text: string }
+export type PublicTestimonial = { id: string; who: string; role: string; text: string; photo?: string | null }
 
 export const DEFAULT_TESTIMONIALS = [
   {
@@ -72,7 +72,7 @@ export const getTestimonials = cache(async (locale: string): Promise<PublicTesti
     if (!seeded) return fallback
     const rows = await db.testimonial.findMany({ where: { isVisible: true }, orderBy: [{ order: "asc" }, { createdAt: "asc" }] })
     const en = locale === "en"
-    return rows.map((r) => ({ id: r.id, who: r.name, role: (en && r.roleEn) || r.role, text: (en && r.textEn) || r.text }))
+    return rows.map((r) => ({ id: r.id, who: r.name, role: (en && r.roleEn) || r.role, text: (en && r.textEn) || r.text, photo: r.photoUrl || null }))
   } catch {
     return fallback
   }

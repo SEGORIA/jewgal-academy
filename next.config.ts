@@ -16,12 +16,13 @@ const devScriptSrc = process.env.NODE_ENV !== "production" ? " 'unsafe-eval' htt
 
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${devScriptSrc} https://js.stripe.com https://www.paypal.com https://www.paypalobjects.com`,
+  // googletagmanager / connect.facebook.net: solo se usan si se configura analítica en el panel (Configuración → General).
+  `script-src 'self' 'unsafe-inline'${devScriptSrc} https://js.stripe.com https://www.paypal.com https://www.paypalobjects.com https://www.googletagmanager.com https://connect.facebook.net`,
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com data:",
   "img-src 'self' data: blob: https:",
   "media-src 'self' https://res.cloudinary.com",
-  "connect-src 'self' https://api.stripe.com https://www.paypal.com https://api.cloudinary.com",
+  "connect-src 'self' https://api.stripe.com https://www.paypal.com https://api.cloudinary.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.facebook.com https://connect.facebook.net",
   "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.paypal.com https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com https://res.cloudinary.com",
   "object-src 'none'",
   "base-uri 'self'",

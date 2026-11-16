@@ -848,10 +848,42 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
 .blog-featured-l  { background: linear-gradient(135deg,var(--bg),var(--bg-2)); padding: 52px 44px; display: flex; flex-direction: column; justify-content: space-between; min-height: 360px; }
 .blog-featured-r  { background: var(--navy-2); padding: 52px 44px; display: flex; align-items: center; }
 .blog-grid        { display: grid; grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap: 20px; }
-.blog-modal-wrap  { position: fixed; inset: 0; z-index: 81; display: flex; align-items: center; justify-content: center; padding: 24px 20px; pointer-events: none; }
-.blog-modal-pane  { background: var(--navy); border-radius: 16px; border: 1px solid var(--line-d); width: 100%; max-width: 720px; max-height: 90vh; overflow-y: auto; position: relative; pointer-events: all; box-shadow: 0 40px 120px rgba(0,0,0,.5); }
-.blog-modal-head  { padding: 36px 44px 28px; border-bottom: 1px solid var(--line-d); position: sticky; top: 0; background: var(--navy); z-index: 2; }
-.blog-modal-body  { padding: 36px 44px 52px; }
+.blog-card        { border: 1px solid var(--line-d); border-radius: 10px; background: var(--surface); display: flex; flex-direction: column; overflow: hidden; border-top: 3px solid #C49F72; text-decoration: none; color: inherit; transition: transform .25s, box-shadow .25s; }
+.blog-card:hover  { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,.28); }
+.blog-card-cover  { aspect-ratio: 16/9; width: 100%; object-fit: cover; display: block; background: var(--navy-2); }
+.blog-search      { background: var(--navy); border: 1px solid var(--line-d); border-radius: 20px; padding: 8px 18px; font-size: 13px; color: var(--text); font-family: var(--sans); min-width: 220px; outline: none; margin-left: auto; }
+.blog-search:focus { border-color: var(--gold); }
+
+/* Artículo del blog (página individual) */
+.post-hero        { padding-top: 140px; padding-bottom: 56px; }
+.post-body-wrap   { max-width: 760px; margin: 0 auto; padding: 56px 36px 24px; }
+.post-cover       { width: 100%; max-width: 960px; margin: 0 auto; display: block; border-radius: 14px; aspect-ratio: 16/9; object-fit: cover; border: 1px solid var(--line-d); }
+.post-related     { display: grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap: 20px; }
+
+/* Texto del artículo (Markdown ligero). En el panel se reasignan las variables para el tema del panel. */
+.prose-jg { --prose-text: var(--on-dark); --prose-head: var(--text); --prose-accent: var(--gold-ink); --prose-line: var(--line-d); --prose-code-bg: var(--navy-2); color: var(--prose-text); font-size: clamp(15px,1.5vw,17px); line-height: 1.85; overflow-wrap: anywhere; }
+.prose-jg > :first-child { margin-top: 0; }
+.prose-jg p { margin: 0 0 22px; }
+.prose-jg h2, .prose-jg h3, .prose-jg h4 { font-family: var(--serif); font-weight: 500; color: var(--prose-head); line-height: 1.22; margin: 44px 0 16px; }
+.prose-jg h2 { font-size: clamp(24px,2.6vw,32px); }
+.prose-jg h3 { font-size: clamp(20px,2.1vw,25px); }
+.prose-jg h4 { font-size: 18px; }
+.prose-jg a { color: var(--prose-accent); text-decoration: underline; text-underline-offset: 3px; }
+.prose-jg strong { color: var(--prose-head); font-weight: 600; }
+.prose-jg ul, .prose-jg ol { margin: 0 0 24px; padding-left: 26px; }
+.prose-jg li { margin-bottom: 8px; }
+.prose-jg li::marker { color: var(--prose-accent); }
+.prose-jg blockquote { margin: 32px 0; padding: 4px 0 4px 22px; border-left: 3px solid var(--prose-accent); font-family: var(--serif); font-style: italic; font-size: 1.12em; color: var(--prose-head); }
+.prose-jg blockquote p { margin: 0; }
+.prose-jg hr { border: 0; border-top: 1px solid var(--prose-line); margin: 40px 0; }
+.prose-jg code { background: var(--prose-code-bg); border: 1px solid var(--prose-line); border-radius: 5px; padding: 1px 6px; font-size: .9em; }
+.prose-jg pre { background: var(--prose-code-bg); border: 1px solid var(--prose-line); border-radius: 10px; padding: 16px 18px; overflow-x: auto; margin: 0 0 24px; }
+.prose-jg pre code { background: none; border: 0; padding: 0; }
+.prose-jg figure { margin: 34px 0; }
+.prose-jg img { max-width: 100%; height: auto; border-radius: 10px; display: block; }
+.prose-jg figcaption { margin-top: 10px; font-size: 13px; color: var(--on-dark-faint); text-align: center; }
+.prose-jg.prose-admin { --prose-text: var(--text-muted); --prose-head: var(--text); --prose-accent: var(--gold-ink); --prose-line: var(--border); --prose-code-bg: var(--surface-2); font-size: 14.5px; line-height: 1.75; }
+.prose-jg.prose-admin figcaption { color: var(--text-faint); }
 
 @media (max-width: 640px) {
   .wrap { padding: 0 20px; }
@@ -885,10 +917,10 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
   .blog-featured-l { padding: 32px 24px; min-height: auto; }
   .blog-featured-r { padding: 24px 24px 32px; }
   .blog-grid       { grid-template-columns: 1fr; }
-  .blog-modal-wrap { align-items: flex-end; padding: 0; }
-  .blog-modal-pane { border-radius: 16px 16px 0 0; max-height: 92vh; max-width: 100%; }
-  .blog-modal-head { padding: 20px 20px 16px; }
-  .blog-modal-body { padding: 20px 20px 36px; }
+  .blog-search     { width: 100%; min-width: 0; margin-left: 0; }
+  .post-hero       { padding-top: 104px; padding-bottom: 36px; }
+  .post-body-wrap  { padding: 36px 20px 16px; }
+  .post-related    { grid-template-columns: 1fr; }
 }
 @media (max-width: 480px) {
   /* Homepage */
@@ -1102,6 +1134,12 @@ footer.jfoot { background: var(--navy-2); border-top: 1px solid var(--line-d); p
      campos lado a lado quedan ilegibles en 375px — se apilan. */
   .admin-form-grid-2, .admin-form-grid-3 { grid-template-columns: 1fr !important; min-width: 0; }
   .admin-form-grid-2 > *, .admin-form-grid-3 > * { min-width: 0; }
+  /* Campo de imagen: la vista previa pasa arriba y los botones abajo. */
+  .admin-image-upload { grid-template-columns: 1fr !important; min-width: 0; }
+  .admin-image-upload > * { min-width: 0; }
+  /* Editor del menú: la fila (orden, texto ES, texto EN, acciones) pasa a una columna. */
+  .admin-menu-row { grid-template-columns: 1fr !important; min-width: 0; }
+  .admin-menu-row > * { min-width: 0; grid-column: auto !important; }
 }
 
 /* Ajustes de padding en contenido de aula en móvil */

@@ -15,13 +15,13 @@ const at = (x: number, y: number) => ({ left: `${((x / VB_W) * 100).toFixed(2)}%
 
 const COUNTRY_META = [
   // Argentina: cono sur de América del Sur (centro de la mitad inferior de la silueta)
-  { id: "argentina", key: "ar", flag: "🇦🇷", ...at(112, 268), accent: "#A58D66", stat: "20+" },
+  { id: "argentina", key: "ar", flag: "🇦🇷", ...at(112, 268), accent: "#A58D66" },
   // Israel: sobre la silueta de Oriente Medio
-  { id: "israel",    key: "il", flag: "🇮🇱", ...at(291, 112), accent: "#A76D61", stat: "∞" },
+  { id: "israel",    key: "il", flag: "🇮🇱", ...at(291, 112), accent: "#A76D61" },
   // Colombia: esquina noroeste de América del Sur
-  { id: "colombia",  key: "co", flag: "🇨🇴", ...at(108, 212), accent: "#846145", stat: "200+" },
+  { id: "colombia",  key: "co", flag: "🇨🇴", ...at(108, 212), accent: "#846145" },
   // EE.UU.: parte sur-central de América del Norte
-  { id: "eeuu",      key: "us", flag: "🇺🇸", ...at(96, 108), accent: "#C49F72", stat: "4" },
+  { id: "eeuu",      key: "us", flag: "🇺🇸", ...at(96, 108), accent: "#C49F72" },
 ]
 
 export default function ComunidadMap() {
@@ -33,6 +33,7 @@ export default function ComunidadMap() {
     tagline: t(`${m.key}_tagline`),
     desc: t(`${m.key}_desc`),
     statLabel: t(`${m.key}_statLabel`),
+    stat: t(`${m.key}_stat`),
   }))
   const [activeId, setActiveId] = useState("eeuu")
   const active = COUNTRIES.find((c) => c.id === activeId) ?? COUNTRIES[3]

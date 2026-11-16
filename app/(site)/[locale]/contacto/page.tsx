@@ -7,6 +7,7 @@ import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
 import { useLocale, useTranslations } from "next-intl"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
+import { bgUrl } from "@/lib/use-site-images"
 
 function buildContactInfo(content: SiteContent, labels: { email: string; phone: string; location: string }) {
   return [
@@ -135,7 +136,7 @@ export default function ContactoPage() {
         borderBottom: "1px solid var(--line-d)",
         position: "relative", overflow: "hidden",
       }}>
-        <div style={{ position: "absolute", inset: 0, backgroundImage: "url(/brand/pages/hero-contacto.webp)", backgroundSize: "cover", backgroundPosition: "right center", zIndex: 0 }} />
+        <div style={{ position: "absolute", inset: 0, backgroundImage: bgUrl(content.images.contactoHero), backgroundSize: "cover", backgroundPosition: "right center", zIndex: 0 }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(100deg,var(--navy-2) 0%,var(--navy) 42%,rgba(0,0,0,0) 82%)", zIndex: 1 }} />
         <div style={{
           position: "absolute", top: "-40%", right: "-5%",

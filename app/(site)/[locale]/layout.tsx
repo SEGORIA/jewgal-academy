@@ -14,6 +14,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { routing } from "@/i18n/routing"
 import { SITE_URL } from "@/lib/site-url"
 import { getGeneralSettings } from "@/lib/general-settings"
+import TrackingScripts from "@/components/TrackingScripts"
 import { getSeo } from "@/lib/seo"
 
 const cormorant = Cormorant_Garamond({
@@ -87,6 +88,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       title: seo.title,
       description: seo.description,
       ...(seo.image ? { images: [seo.image] } : {}),
+    },
+    // Verificación de propiedad en Google y Bing (se configura en Configuración → General → Analítica).
+    verification: {
+      ...(general.analytics.googleVerification ? { google: general.analytics.googleVerification } : {}),
+      ...(general.analytics.bingVerification ? { other: { "msvalidate.01": general.analytics.bingVerification } } : {}),
     },
     robots: {
       index: true,
@@ -176,6 +182,7 @@ export default async function LocaleLayout({
           <WhatsAppFab number={general.whatsapp} message={general.whatsappMessage} />
         </NextIntlClientProvider>
         <Analytics />
+        <TrackingScripts ga4={general.analytics.ga4} gtm={general.analytics.gtm} metaPixel={general.analytics.metaPixel} respectDnt={general.analytics.respectDnt} />
       </body>
     </html>
   )

@@ -7,6 +7,7 @@ import { rateLimit, getClientIp } from "@/lib/security"
 import { isStripeConfigured } from "@/lib/stripe"
 import { isPayPalConfigured } from "@/lib/paypal"
 import { sendWelcomeEmail } from "@/lib/email"
+import { CouponError, normalizeCouponCode, quoteCoupon, type CouponQuote } from "@/lib/coupons"
 
 /**
  * DEMO checkout — simula un pago exitoso SIN cobrar nada.
@@ -18,6 +19,7 @@ const bodySchema = z.object({
   courseId: z.string().min(1),
   email: z.string().email("Email inválido").max(160),
   name: z.string().trim().max(120).optional(),
+  couponCode: z.string().max(60).optional(),
 })
 
 export async function POST(req: NextRequest) {
@@ -45,7 +47,7 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     )
   }
-  const { courseId, email, name } = parsed.data
+  const { courseId, email, name, couponCode } = parsed.data
 
   const course = await db.course.findUnique({ where: { id: courseId } })
   if (!course) return NextResponse.json({ error: "Curso no encontrado" }, { status: 404 })
@@ -60,13 +62,26 @@ export async function POST(req: NextRequest) {
     )
   }
 
+  // Cupón (también en la simulación, para poder probar el flujo completo): precio calculado por el servidor.
+  let quote: CouponQuote | null = null
+  const code = normalizeCouponCode(couponCode)
+  if (code && isPaidCourse) {
+    try {
+      quote = await quoteCoupon({ code, course, email })
+    } catch (e) {
+      if (e instanceof CouponError) return NextResponse.json({ error: e.message, couponError: true }, { status: 400 })
+      throw e
+    }
+  }
+
   const result = await enrollUserInCourse({
     email,
     name: name || "Estudiante Demo",
     courseId,
-    amount: course.price,
+    amount: quote ? quote.finalAmount : course.price,
     currency: course.currency,
     provider: "demo",
+    coupon: quote ? { code: quote.coupon.code, discount: quote.discount } : undefined,
   })
 
   const tempPassword = result.tempPassword

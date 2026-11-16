@@ -2,14 +2,17 @@
 
 import { useEffect, useState } from "react"
 import { Link } from "@/i18n/navigation"
-import NextLink from "next/link"
 import BrandLogo from "@/components/BrandLogo"
 import { useTranslations, useLocale } from "next-intl"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
+import SiteLink from "@/components/SiteLink"
+import { linkLabel } from "@/lib/site-menu"
 
 export default function Footer() {
   const t = useTranslations("Footer")
   const locale = useLocale()
+  // Texto de siempre de los enlaces de fábrica ("Blog" no tiene clave propia en el pie).
+  const footerText = (k: string) => (k === "blog" ? "Blog" : t(k as "contacto"))
   const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
   const [nlEmail, setNlEmail] = useState("")
   const [nlStatus, setNlStatus] = useState<"idle" | "sending" | "ok" | "error">("idle")
@@ -94,10 +97,9 @@ export default function Footer() {
           {/* Academia */}
           <div className="foot-col">
             <h5>{t("academiaTitulo")}</h5>
-            <Link href="/academia">{t("todosProgramas")}</Link>
-            <Link href="/certificaciones">{t("certificaciones")}</Link>
-            <Link href="/conoce-a-devora">{t("sobreDevora")}</Link>
-            <Link href="/eventos">{t("eventosRetiros")}</Link>
+            {content.menu.footerAcademia.filter((l) => l.visible).map((l) => (
+              <SiteLink key={l.id} href={l.href}>{linkLabel(l, locale, footerText)}</SiteLink>
+            ))}
           </div>
 
           {/* Programas */}
@@ -109,10 +111,9 @@ export default function Footer() {
           {/* Recursos */}
           <div className="foot-col">
             <h5>{t("recursosTitulo")}</h5>
-            <Link href="/blog">Blog</Link>
-            <NextLink href="/aula">{t("bibliotecaVirtual")}</NextLink>
-            <Link href="/#testimonios">{t("testimonios")}</Link>
-            <Link href="/contacto">{t("contacto")}</Link>
+            {content.menu.footerRecursos.filter((l) => l.visible).map((l) => (
+              <SiteLink key={l.id} href={l.href}>{linkLabel(l, locale, footerText)}</SiteLink>
+            ))}
           </div>
 
           {/* Newsletter */}

@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { Play, Pause, RotateCcw } from "lucide-react"
-import { BREATHING_PATTERNS, type BreathingPattern } from "@/lib/jewgalkids-content"
+import type { BreathingPattern } from "@/lib/jewgalkids-content"
+import { useJewgalkidsContent } from "@/lib/use-jewgalkids-content"
 
 type Phase = "inhale" | "hold" | "exhale"
 
@@ -16,7 +17,9 @@ function nextPhase(p: Phase, pattern: BreathingPattern): Phase {
 }
 
 export default function BreathingPacer() {
-  const [pattern, setPattern] = useState<BreathingPattern>(BREATHING_PATTERNS[0])
+  const { breathing: BREATHING_PATTERNS } = useJewgalkidsContent()
+  const [chosen, setPattern] = useState<BreathingPattern | null>(null)
+  const pattern = BREATHING_PATTERNS.find((p) => p.id === chosen?.id) ?? BREATHING_PATTERNS[0]
   const [running, setRunning] = useState(false)
   const [phase, setPhase] = useState<Phase>("inhale")
   const [elapsed, setElapsed] = useState(0) // ms transcurridos en la fase actual

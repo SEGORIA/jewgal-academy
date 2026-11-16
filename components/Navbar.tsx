@@ -7,7 +7,10 @@ import BrandLogo from "@/components/BrandLogo"
 import LanguageSwitcher from "@/components/LanguageSwitcher"
 import SiteSearch from "@/components/SiteSearch"
 import { useSession } from "next-auth/react"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
+import SiteLink from "@/components/SiteLink"
+import { useSiteMenu } from "@/lib/use-site-menu"
+import { isExternalHref, linkLabel } from "@/lib/site-menu"
 import { isPanelRole } from "@/lib/permissions"
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion"
 
@@ -16,6 +19,8 @@ import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion"
 
 export default function Navbar() {
   const t = useTranslations("Navbar")
+  const locale = useLocale()
+  const menu = useSiteMenu(locale)
   const { data: session, status } = useSession()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen]         = useState(false)
@@ -23,14 +28,10 @@ export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false)
   const pathname                = usePathname()
 
-  const NAV_LINKS = [
-    { href: "/" as const,             label: t("inicio") },
-    { href: "/academia" as const,     label: t("academia") },
-    { href: "/coaching-1-1" as const, label: t("coaching") },
-    { href: "/eventos" as const,      label: t("eventos") },
-    { href: "/blog" as const,         label: t("blog") },
-    { href: "/contacto" as const,     label: t("contacto") },
-  ]
+  // Los enlaces vienen del panel (Portada y contacto → Menú y pie de página); sin configuración son los de siempre.
+  const NAV_LINKS = menu.header
+    .filter((l) => l.visible)
+    .map((l) => ({ id: l.id, href: l.href, label: linkLabel(l, locale, (k) => t(k as "inicio")), external: isExternalHref(l.href) }))
 
   const { scrollYProgress, scrollY } = useScroll()
   const barScaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 })
@@ -117,16 +118,16 @@ export default function Navbar() {
 
         <div className="nav-links">
           {NAV_LINKS.map((l) => {
-            const isActive = pathname === l.href || (l.href !== "/" && pathname.startsWith(l.href))
+            const isActive = !l.external && (pathname === l.href || (l.href !== "/" && pathname.startsWith(l.href)))
             const showLine = hovered === l.href || (!hovered && isActive)
             return (
-              <div key={l.label} style={{ position: "relative", display: "inline-flex" }}
+              <div key={l.id} style={{ position: "relative", display: "inline-flex" }}
                 onMouseEnter={() => setHovered(l.href)}
                 onMouseLeave={() => setHovered(null)}
               >
-                <Link href={l.href} className={isActive ? "active" : undefined} aria-current={isActive ? "page" : undefined}>
+                <SiteLink href={l.href} className={isActive ? "active" : undefined} aria-current={isActive ? "page" : undefined}>
                   {l.label}
-                </Link>
+                </SiteLink>
                 {showLine && (
                   <motion.div
                     layoutId="nav-underline"
@@ -204,12 +205,12 @@ export default function Navbar() {
             <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
               {NAV_LINKS.map((l, i) => (
                 <motion.div
-                  key={l.label}
+                  key={l.id}
                   initial={{ opacity: 0, x: -24 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.06 + i * 0.06 }}
                 >
-                  <Link href={l.href} onClick={() => setOpen(false)} style={{
+                  <SiteLink href={l.href} onClick={() => setOpen(false)} style={{
                     fontFamily: "var(--serif)", fontSize: 32, color: "#F6F1E7",
                     textDecoration: "none", padding: "10px 0", display: "block",
                     borderBottom: "1px solid rgba(196,159,114,.18)",
@@ -219,7 +220,7 @@ export default function Navbar() {
                     onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "#F6F1E7")}
                   >
                     {l.label}
-                  </Link>
+                  </SiteLink>
                 </motion.div>
               ))}
             </nav>

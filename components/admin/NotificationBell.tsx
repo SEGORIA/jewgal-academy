@@ -1,12 +1,12 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef } from "react"
-import { Bell, RefreshCcw, ShieldAlert, CheckCheck, CreditCard, Mail } from "lucide-react"
+import { Bell, RefreshCcw, ShieldAlert, CheckCheck, CreditCard, Mail, CalendarCheck } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 type Notification = {
   id: string
-  type: "duplicate_purchase_blocked" | "refund_synced" | "payment_received" | "contact_message"
+  type: "duplicate_purchase_blocked" | "refund_synced" | "payment_received" | "contact_message" | "event_registration" | "coaching_booking"
   message: string
   isRead: boolean
   createdAt: string
@@ -17,6 +17,8 @@ const ICONS = {
   refund_synced: RefreshCcw,
   payment_received: CreditCard,
   contact_message: Mail,
+  event_registration: CalendarCheck,
+  coaching_booking: CalendarCheck,
 } as const
 
 export default function NotificationBell() {

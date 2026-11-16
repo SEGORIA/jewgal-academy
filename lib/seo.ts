@@ -10,7 +10,7 @@ import { SITE_URL } from "./site-url"
  */
 
 export type SeoText = { title: string; description: string }
-export type SeoPageKey = "home" | "academia" | "certificaciones" | "conoce-a-devora" | "eventos" | "blog" | "contacto" | "terminos" | "privacidad"
+export type SeoPageKey = "home" | "academia" | "coaching-1-1" | "certificaciones" | "conoce-a-devora" | "eventos" | "blog" | "contacto" | "terminos" | "privacidad"
 export type SeoLocale = "es" | "en"
 
 export type SeoPage = { key: SeoPageKey; label: string; path: string; defaults: Record<SeoLocale, SeoText> }
@@ -28,6 +28,13 @@ export const SEO_PAGES: SeoPage[] = [
     defaults: {
       es: { title: "Academia: programas de formación", description: "Life Coaching Integrativo, Cábala Coach, Método Sholem y más: programas de formación y certificación con Devora Benchimol, en línea y presenciales." },
       en: { title: "Academy: training programs", description: "Integrative Life Coaching, Kabbalah Coach, Sholem Method and more: certification and training programs with Devora Benchimol, online and in person." },
+    },
+  },
+  {
+    key: "coaching-1-1", label: "Coaching 1:1", path: "/coaching-1-1",
+    defaults: {
+      es: { title: "Coaching 1:1 con Devora Benchimol", description: "Sesiones individuales de coaching con Devora Benchimol, Master Coach: un espacio privado para ganar claridad, tomar decisiones y avanzar en tu proceso." },
+      en: { title: "1:1 Coaching with Devora Benchimol", description: "Individual coaching sessions with Master Coach Devora Benchimol: a private space to gain clarity, make decisions and move forward in your process." },
     },
   },
   {

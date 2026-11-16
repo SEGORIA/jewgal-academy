@@ -4,7 +4,8 @@
 
 export type ProgramModule = { title: string; items: string[] }
 
-export type ProgramContent = {
+/** Los textos de la ficha del programa: existen en español y, opcionalmente, en inglés. */
+export type ProgramText = {
   eyebrow: string
   duration: string
   modality: string
@@ -13,6 +14,19 @@ export type ProgramContent = {
   modules: ProgramModule[]
   forWhom: string[]
   outcome: string
+  /** Título y descripción para Google y redes (vacío = se arman con el nombre y la descripción corta del programa). */
+  seoTitle?: string
+  seoDescription?: string
+  /** Requisitos para obtener la certificación (se muestran en la página Certificaciones). */
+  certRequirements?: string[]
+}
+
+export type ProgramContent = ProgramText & {
+  /** Marca del programa: color de acento (#RRGGBB) e ícono corto. Vacío = los de su slug o los de la marca. */
+  accent?: string
+  icon?: string
+  /** Versión en inglés: lo que falte se muestra en español. */
+  en?: Partial<ProgramText>
 }
 
 export const EMPTY_PROGRAM_CONTENT: ProgramContent = {
@@ -24,6 +38,40 @@ export const EMPTY_PROGRAM_CONTENT: ProgramContent = {
   modules: [],
   forWhom: [],
   outcome: "",
+}
+
+/* ── Identidad visual por programa ── */
+export type ProgramBrand = { grad: string; accent: string; icon: string }
+
+const BRAND_BY_SLUG: Record<string, ProgramBrand> = {
+  "life-coaching-integrativo": { grad: "linear-gradient(135deg,#3A2410 0%,#5C3A1E 100%)", accent: "#A58D66", icon: "⟡" },
+  "joogal-adultos":            { grad: "linear-gradient(135deg,#3A2818 0%,#5C4026 100%)", accent: "#C49F72", icon: "✦" },
+  "joogalkids":                { grad: "linear-gradient(135deg,#4A2418 0%,#6B3826 100%)", accent: "#A76D61", icon: "★" },
+  "metodo-sholem":             { grad: "linear-gradient(135deg,#42200F 0%,#653322 100%)", accent: "#A76D61", icon: "◈" },
+  "cabala-coach":              { grad: "linear-gradient(135deg,#332508 0%,#4F3A12 100%)", accent: "#CBB78B", icon: "❂" },
+}
+export const DEFAULT_BRAND: ProgramBrand = BRAND_BY_SLUG["life-coaching-integrativo"]
+export const BRAND_ICONS = ["⟡", "✦", "★", "◈", "❂", "❖", "✧", "✺", "☼", "❀"]
+
+const HEX = /^#[0-9a-fA-F]{6}$/
+
+/** Mezcla un color con el marrón de la marca para armar el fondo oscuro del programa. */
+function gradFromAccent(accent: string): string {
+  const n = parseInt(accent.slice(1), 16)
+  const mix = (c: number, base: number) => Math.round(base + (c - base) * 0.18).toString(16).padStart(2, "0")
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255
+  const dark1 = `#${mix(r, 0x2e)}${mix(g, 0x1c)}${mix(b, 0x0e)}`
+  const dark2 = `#${mix(r, 0x4a)}${mix(g, 0x30)}${mix(b, 0x1a)}`
+  return `linear-gradient(135deg,${dark1} 0%,${dark2} 100%)`
+}
+
+/** Color, fondo e ícono de un programa: lo definido en el panel manda; si no, los del slug; si no, los de la marca. */
+export function getProgramBrand(slug: string, content?: Pick<ProgramContent, "accent" | "icon"> | null): ProgramBrand {
+  const base = BRAND_BY_SLUG[slug] ?? DEFAULT_BRAND
+  const accent = content?.accent && HEX.test(content.accent) ? content.accent : base.accent
+  const icon = content?.icon?.trim() ? content.icon.trim().slice(0, 4) : base.icon
+  const grad = content?.accent && HEX.test(content.accent) ? gradFromAccent(content.accent) : base.grad
+  return { grad, accent, icon }
 }
 
 // Valores originales (uno por programa existente) — sirven de fallback mientras
@@ -182,6 +230,9 @@ export function getProgramContent(slug: string, stored: string | null | undefine
   if (!stored) return base
   try {
     const parsed = JSON.parse(stored)
+    const str = (v: unknown) => (typeof v === "string" ? v : undefined)
+    const list = (v: unknown) => (Array.isArray(v) ? (v.filter((x) => typeof x === "string") as string[]) : undefined)
+    const en = parsed.en && typeof parsed.en === "object" ? (parsed.en as Partial<ProgramText>) : undefined
     return {
       eyebrow: typeof parsed.eyebrow === "string" ? parsed.eyebrow : base.eyebrow,
       duration: typeof parsed.duration === "string" ? parsed.duration : base.duration,
@@ -191,10 +242,34 @@ export function getProgramContent(slug: string, stored: string | null | undefine
       modules: Array.isArray(parsed.modules) ? parsed.modules : base.modules,
       forWhom: Array.isArray(parsed.forWhom) ? parsed.forWhom : base.forWhom,
       outcome: typeof parsed.outcome === "string" ? parsed.outcome : base.outcome,
+      seoTitle: str(parsed.seoTitle),
+      seoDescription: str(parsed.seoDescription),
+      certRequirements: list(parsed.certRequirements),
+      accent: str(parsed.accent),
+      icon: str(parsed.icon),
+      ...(en ? { en } : {}),
     }
   } catch {
     return base
   }
+}
+
+/** La ficha en un idioma: en inglés, cada campo que tenga versión en inglés reemplaza al español (lo que falta queda en español). */
+export function localizeProgramContent(c: ProgramContent, locale: string): ProgramText {
+  const { en, accent: _a, icon: _i, ...es } = c
+  void _a; void _i
+  if (locale !== "en" || !en) return es
+  const out: ProgramText = { ...es }
+  for (const k of ["eyebrow", "duration", "modality", "level", "outcome", "seoTitle", "seoDescription"] as const) {
+    const v = en[k]
+    if (typeof v === "string" && v.trim()) out[k] = v
+  }
+  for (const k of ["includes", "forWhom", "certRequirements"] as const) {
+    const v = en[k]
+    if (Array.isArray(v) && v.some((x) => x.trim())) out[k] = v
+  }
+  if (Array.isArray(en.modules) && en.modules.length) out.modules = en.modules
+  return out
 }
 
 /**

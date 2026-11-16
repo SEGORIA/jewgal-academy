@@ -37,6 +37,7 @@ const createSchema = z.object({
   roleEn: z.string().trim().max(120).nullable().optional(),
   text: z.string().trim().min(10, "El testimonio es muy corto").max(1200),
   textEn: z.string().trim().max(1200).nullable().optional(),
+  photoUrl: z.string().trim().url("El enlace de la foto no es válido").max(500).nullable().optional().or(z.literal("")),
   isVisible: z.boolean().default(true),
 })
 
@@ -51,7 +52,7 @@ export async function POST(req: NextRequest) {
   const last = await db.testimonial.findFirst({ orderBy: { order: "desc" }, select: { order: true } })
   const d = parsed.data
   const t = await db.testimonial.create({
-    data: { name: d.name, role: d.role, roleEn: d.roleEn || null, text: d.text, textEn: d.textEn || null, isVisible: d.isVisible, order: (last?.order ?? -1) + 1 },
+    data: { name: d.name, role: d.role, roleEn: d.roleEn || null, text: d.text, textEn: d.textEn || null, photoUrl: d.photoUrl || null, isVisible: d.isVisible, order: (last?.order ?? -1) + 1 },
   })
   refresh()
   return NextResponse.json({ testimonial: t }, { status: 201 })

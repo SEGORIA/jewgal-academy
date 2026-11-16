@@ -10,6 +10,7 @@ const patchSchema = z.object({
   roleEn: z.string().trim().max(120).nullable().optional(),
   text: z.string().trim().min(10).max(1200).optional(),
   textEn: z.string().trim().max(1200).nullable().optional(),
+  photoUrl: z.string().trim().url("El enlace de la foto no es válido").max(500).nullable().optional().or(z.literal("")),
   isVisible: z.boolean().optional(),
 })
 
@@ -24,7 +25,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   try {
     const t = await db.testimonial.update({
       where: { id },
-      data: { ...d, ...("roleEn" in d ? { roleEn: d.roleEn || null } : {}), ...("textEn" in d ? { textEn: d.textEn || null } : {}) },
+      data: { ...d, ...("roleEn" in d ? { roleEn: d.roleEn || null } : {}), ...("textEn" in d ? { textEn: d.textEn || null } : {}), ...("photoUrl" in d ? { photoUrl: d.photoUrl || null } : {}) },
     })
     revalidatePath("/", "layout")
     return NextResponse.json({ testimonial: t })

@@ -6,6 +6,7 @@ import { db } from "@/lib/db"
 import { enrollUserInCourse } from "@/lib/enroll"
 import { rateLimit, getClientIp } from "@/lib/security"
 import { sendWelcomeEmail } from "@/lib/email"
+import { couponFromMetadata } from "@/lib/coupons"
 
 /**
  * Confirmación del checkout de Stripe desde el navegador del comprador.
@@ -61,6 +62,7 @@ export async function POST(req: NextRequest) {
         currency: session.currency ?? "usd",
         provider: "stripe",
         paymentRef: session.id,
+        coupon: couponFromMetadata(session.metadata),
       })
       tempPassword = result.tempPassword ?? null
     }

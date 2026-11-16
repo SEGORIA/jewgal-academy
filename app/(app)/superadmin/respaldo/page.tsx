@@ -17,6 +17,8 @@ const MODEL_LABELS: Record<string, string> = {
   User: "Usuarios", Course: "Programas", CourseModule: "Módulos", Material: "Materiales", Enrollment: "Inscripciones", Payment: "Pagos", MaterialProgress: "Avance por material",
   LiveSession: "Clases en vivo", Attendance: "Asistencias", Post: "Artículos", Testimonial: "Testimonios", ContactMessage: "Mensajes de contacto", Announcement: "Anuncios",
   SiteSetting: "Ajustes del sitio", Notification: "Notificaciones", AuditLog: "Historial", ForumTopic: "Temas del foro", ForumPost: "Respuestas del foro", ExclusiveResource: "Recursos exclusivos",
+  Coupon: "Cupones", CouponRedemption: "Usos de cupones", Page: "Páginas del sitio", EventRegistration: "Inscripciones a eventos", CoachingOffer: "Sesiones de coaching 1:1", CoachingBooking: "Reservas de coaching 1:1",
+  Accreditation: "Avales", ForumCategory: "Categorías de comunidad", Conversation: "Conversaciones con el asistente", ChatMessage: "Mensajes del asistente",
 }
 
 const dl = (href: string) => { const a = document.createElement("a"); a.href = href; a.rel = "noopener"; document.body.appendChild(a); a.click(); a.remove() }

@@ -3,11 +3,13 @@
 import { useMemo, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Search, Shuffle, X } from "lucide-react"
-import { POSTURES, type Posture } from "@/lib/jewgalkids-content"
+import type { Posture } from "@/lib/jewgalkids-content"
+import { useJewgalkidsContent } from "@/lib/use-jewgalkids-content"
 
 type Naming = "general" | "hebrew"
 
 export default function PostureGallery() {
+  const { postures: POSTURES } = useJewgalkidsContent()
   const [naming, setNaming] = useState<Naming>("general")
   const [query, setQuery] = useState("")
   const [selected, setSelected] = useState<Posture | null>(null)
@@ -18,7 +20,7 @@ export default function PostureGallery() {
     return POSTURES.filter((p) =>
       p.nameGeneral.toLowerCase().includes(q) || p.nameHebrew.toLowerCase().includes(q)
     )
-  }, [query])
+  }, [query, POSTURES])
 
   function randomPosture() {
     const pick = POSTURES[Math.floor(Math.random() * POSTURES.length)]

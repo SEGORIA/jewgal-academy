@@ -9,6 +9,7 @@ import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { TiltCard } from "@/components/motion/TiltCard"
 import { getLevel, getAchievements, getSummary, MILESTONES, type LevelIcon, type AchievementIcon } from "@/lib/gamification"
+import { DEFAULT_AULA_CONFIG, type AulaConfig } from "@/lib/aula-config"
 
 const LEVEL_ICONS: Record<LevelIcon, LucideIcon> = {
   sprout: Sprout, compass: Compass, trending: TrendingUp, star: Star, crown: Crown,
@@ -81,6 +82,8 @@ export default function AulaDashboard() {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([])
   const [loading, setLoading]         = useState(true)
   const [showWelcome, setShowWelcome] = useState(false)
+  // Textos, niveles y logros editables desde el panel (Contenido del aula); mientras carga, los de siempre.
+  const [cfg, setCfg] = useState<AulaConfig>(DEFAULT_AULA_CONFIG)
 
   useEffect(() => {
     if (window.location.search.includes("enrolled=true")) {
@@ -93,9 +96,13 @@ export default function AulaDashboard() {
       .then((data) => setEnrollments(data.enrollments ?? []))
       .catch(() => setEnrollments([]))
       .finally(() => setLoading(false))
+    fetch("/api/me/aula-config", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((c: AulaConfig | null) => { if (c?.texts && c?.levels && c?.achievements) setCfg(c) })
+      .catch(() => {})
   }, [])
 
-  const summary = !loading && enrollments.length > 0 ? getSummary(enrollments) : null
+  const summary = !loading && enrollments.length > 0 ? getSummary(enrollments, cfg) : null
   const SummaryLevelIcon = summary ? LEVEL_ICONS[summary.level.icon] : null
 
   return (
@@ -134,16 +141,16 @@ export default function AulaDashboard() {
       {/* Encabezado */}
       <div style={{ marginBottom: 40 }}>
         <span style={{ fontSize: 11, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--gold-ink)", display: "block", marginBottom: 12 }}>
-          Jewgal Academy · Aula Virtual
+          {cfg.texts.eyebrow}
         </span>
         <h1 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(30px,4vw,46px)", color: "var(--text)", lineHeight: 1.08, marginBottom: 12 }}>
           {session?.user?.name
-            ? <>Hola, <em style={{ fontStyle: "normal", color: "var(--gold-ink)" }}>{session.user.name.split(" ")[0]}</em></>
-            : <>Te damos la bienvenida a tu <em style={{ fontStyle: "normal", color: "var(--gold-ink)" }}>espacio de aprendizaje</em></>
+            ? <>{cfg.texts.greeting} <em style={{ fontStyle: "normal", color: "var(--gold-ink)" }}>{session.user.name.split(" ")[0]}</em></>
+            : <>{cfg.texts.welcome1} <em style={{ fontStyle: "normal", color: "var(--gold-ink)" }}>{cfg.texts.welcome2}</em></>
           }
         </h1>
         <p style={{ color: "var(--text-muted)", fontSize: 15 }}>
-          Aquí encontrás todo el contenido de tus programas activos.
+          {cfg.texts.subtitle}
         </p>
       </div>
 
@@ -244,9 +251,9 @@ export default function AulaDashboard() {
               const meta = PROGRAM_META[en.course.slug] ?? { icon: "✦", accent: "#A58D66" }
               const isCertified = en.status === "completed" && en.certificateNumber
               const totalH = en.course.totalHours
-              const level = getLevel(en.progress, !!isCertified)
+              const level = getLevel(en.progress, !!isCertified, cfg)
               const LevelIcon = LEVEL_ICONS[level.icon]
-              const achievements = getAchievements(en)
+              const achievements = getAchievements(en, cfg)
               return (
                 <motion.div
                   key={en.id}

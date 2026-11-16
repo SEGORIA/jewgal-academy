@@ -1,35 +1,36 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Link } from "@/i18n/navigation"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import RevealInit from "@/components/RevealInit"
-import { accentForCategory, estimateReadTime } from "@/lib/blog"
+import { accentForCategory, type PublicPostCard } from "@/lib/blog"
 import { Loader2 } from "lucide-react"
+import { bgUrl } from "@/lib/use-site-images"
 import { useLocale, useTranslations } from "next-intl"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 
-type Post = {
-  id: string; slug: string; category: string; title: string
-  excerpt: string; content: string; publishedAt: string | null; createdAt: string
-}
-
 const spring = { type: "spring" as const, stiffness: 280, damping: 26 }
+const PAGE_SIZE = 9
+
+/** Minúsculas y sin tildes, para que "cabala" encuentre "Cabalá". */
+const fold = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
 
 export default function BlogPage() {
   const locale = useLocale()
   const t = useTranslations("Blog")
-  const [posts, setPosts]           = useState<Post[]>([])
+  const [posts, setPosts]           = useState<PublicPostCard[]>([])
   const [loading, setLoading]       = useState(true)
-  const [openPost, setOpenPost]     = useState<Post | null>(null)
   const [activeCategory, setActiveCategory] = useState("Todo")
+  const [query, setQuery]           = useState("")
+  const [visible, setVisible]       = useState(PAGE_SIZE)
   const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
   const [categories, setCategories] = useState<string[]>([])
 
   useEffect(() => {
-    fetch("/api/blog", { cache: "no-store" })
+    fetch(`/api/blog?locale=${locale}`, { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => setPosts(d.posts ?? []))
       .catch(() => setPosts([]))
@@ -46,9 +47,18 @@ export default function BlogPage() {
 
   const CATEGORIES = ["Todo", ...categories]
 
-  const filtered = activeCategory === "Todo" ? posts : posts.filter((p) => p.category === activeCategory)
+  const filtered = useMemo(() => {
+    const q = fold(query.trim())
+    return posts.filter((p) => {
+      if (activeCategory !== "Todo" && p.category !== activeCategory) return false
+      if (!q) return true
+      return fold(`${p.title} ${p.excerpt} ${p.category} ${p.tags.join(" ")}`).includes(q)
+    })
+  }, [posts, activeCategory, query])
 
-  const dateOf = (p: Post) => new Date(p.publishedAt ?? p.createdAt).toLocaleDateString(locale === "en" ? "en-US" : "es-ES", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" })
+  const shown = filtered.slice(0, visible)
+
+  const dateOf = (p: PublicPostCard) => new Date(p.publishedAt ?? p.createdAt).toLocaleDateString(locale === "en" ? "en-US" : "es-ES", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" })
 
   return (
     <>
@@ -61,7 +71,7 @@ export default function BlogPage() {
         position: "relative", overflow: "hidden",
         borderBottom: "1px solid var(--line-d)",
       }}>
-        <div style={{ position: "absolute", inset: 0, backgroundImage: "url(/brand/pages/hero-blog.webp)", backgroundSize: "cover", backgroundPosition: "right center", zIndex: 0 }} />
+        <div style={{ position: "absolute", inset: 0, backgroundImage: bgUrl(content.images.blogHero), backgroundSize: "cover", backgroundPosition: "right center", zIndex: 0 }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(100deg,var(--navy-2) 0%,var(--navy) 42%,rgba(0,0,0,0) 82%)", zIndex: 1 }} />
         <div style={{ position: "absolute", top: "-30%", right: 0, width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle,rgba(165,141,102,.07),transparent 70%)", pointerEvents: "none", zIndex: 1 }} />
         <div className="wrap" style={{ position: "relative", zIndex: 2 }}>
@@ -89,13 +99,14 @@ export default function BlogPage() {
 
       {/* ── FILTROS ── */}
       <section style={{ background: "var(--navy-2)", borderBottom: "1px solid var(--line-d)" }}>
-        <div className="wrap blog-filters">
+        <div className="wrap blog-filters" style={{ alignItems: "center" }}>
           {CATEGORIES.map((cat) => (
             <motion.button
               key={cat}
-              onClick={() => setActiveCategory(cat)}
+              onClick={() => { setActiveCategory(cat); setVisible(PAGE_SIZE) }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              aria-pressed={activeCategory === cat}
               style={{
                 background: activeCategory === cat ? "var(--gold)" : "transparent",
                 color: activeCategory === cat ? "var(--navy)" : "var(--on-dark)",
@@ -110,6 +121,14 @@ export default function BlogPage() {
               {cat === "Todo" ? t("all") : cat}
             </motion.button>
           ))}
+          <input
+            type="search"
+            className="blog-search"
+            value={query}
+            onChange={(e) => { setQuery(e.target.value); setVisible(PAGE_SIZE) }}
+            placeholder={t("searchPlaceholder")}
+            aria-label={t("searchLabel")}
+          />
         </div>
       </section>
 
@@ -124,51 +143,57 @@ export default function BlogPage() {
           ) : filtered.length === 0 ? (
             <div style={{ padding: "60px 0", textAlign: "center" }}>
               <p style={{ color: "var(--on-dark-faint)", fontSize: 15 }}>
-                {posts.length === 0 ? t("emptyNone") : t("emptyCategory")}
+                {posts.length === 0 ? t("emptyNone") : query.trim() ? t("emptySearch") : t("emptyCategory")}
               </p>
             </div>
           ) : (
-            /* Grid de posts — todas las cards con el mismo estilo */
-            <div className="blog-grid">
-              <AnimatePresence>
-                {filtered.map((post, i) => (
-                  <motion.div
-                    key={post.slug}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ ...spring, delay: i * 0.06 }}
-                    onClick={() => setOpenPost(post)}
-                    whileHover={{ y: -6, boxShadow: "0 16px 48px rgba(0,0,0,.28)" }}
-                    style={{
-                      border: "1px solid var(--line-d)", borderRadius: 10,
-                      background: "var(--surface)",
-                      display: "flex", flexDirection: "column", justifyContent: "space-between",
-                      cursor: "pointer", overflow: "hidden",
-                      borderTop: `3px solid ${accentForCategory(post.category)}`,
-                    }}
-                  >
-                    <div style={{ padding: "28px 28px 0" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-                        <span style={{ fontSize: 11, background: `${accentForCategory(post.category)}15`, border: `1px solid ${accentForCategory(post.category)}35`, borderRadius: 16, padding: "4px 12px", color: accentForCategory(post.category), letterSpacing: ".12em", textTransform: "uppercase" }}>
-                          {post.category}
-                        </span>
-                        <span style={{ fontSize: 11, color: "var(--on-dark-faint)" }}>⏱ {estimateReadTime(post.content)}</span>
-                      </div>
-                      <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 19, color: "var(--text)", lineHeight: 1.25, marginBottom: 10 }}>{post.title}</h3>
-                      <p style={{ color: "var(--on-dark)", fontSize: 14, lineHeight: 1.65 }}>{post.excerpt}</p>
-                    </div>
-                    <div style={{ padding: "18px 28px 24px", marginTop: 8, borderTop: "1px solid var(--line-d)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <span style={{ fontSize: 12, color: "var(--on-dark-faint)" }}>{dateOf(post)}</span>
-                      <motion.span whileHover={{ x: 4 }} style={{ fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: accentForCategory(post.category), display: "inline-block" }}>
-                        {t("read")}
-                      </motion.span>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
+            <>
+              <div className="blog-grid">
+                <AnimatePresence>
+                  {shown.map((post, i) => (
+                    <motion.div
+                      key={post.slug}
+                      layout
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ ...spring, delay: Math.min(i, 8) * 0.05 }}
+                      style={{ display: "flex" }}
+                    >
+                      <Link href={`/blog/${post.slug}`} className="blog-card" style={{ width: "100%", justifyContent: "space-between" }}>
+                        <div>
+                          {post.coverUrl && (
+                            // eslint-disable-next-line @next/next/no-img-element -- portadas subidas desde el panel (Cloudinary u otro origen)
+                            <img src={post.coverUrl} alt="" className="blog-card-cover" loading="lazy" />
+                          )}
+                          <div style={{ padding: `${post.coverUrl ? 22 : 28}px 28px 0` }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, gap: 10 }}>
+                              <span style={{ fontSize: 11, background: `${accentForCategory(post.category)}15`, border: `1px solid ${accentForCategory(post.category)}35`, borderRadius: 16, padding: "4px 12px", color: accentForCategory(post.category), letterSpacing: ".12em", textTransform: "uppercase" }}>
+                                {post.category}
+                              </span>
+                              <span style={{ fontSize: 11, color: "var(--on-dark-faint)", whiteSpace: "nowrap" }}>⏱ {post.readMinutes} min</span>
+                            </div>
+                            <h3 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 19, color: "var(--text)", lineHeight: 1.25, marginBottom: 10 }}>{post.title}</h3>
+                            <p style={{ color: "var(--on-dark)", fontSize: 14, lineHeight: 1.65 }}>{post.excerpt}</p>
+                          </div>
+                        </div>
+                        <div style={{ padding: "18px 28px 24px", marginTop: 8, borderTop: "1px solid var(--line-d)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <span style={{ fontSize: 12, color: "var(--on-dark-faint)" }}>{dateOf(post)}</span>
+                          <span style={{ fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: accentForCategory(post.category) }}>
+                            {t("read")}
+                          </span>
+                        </div>
+                      </Link>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+              {filtered.length > shown.length && (
+                <div style={{ textAlign: "center", marginTop: 40 }}>
+                  <button type="button" className="btn" onClick={() => setVisible((v) => v + PAGE_SIZE)}>{t("loadMore")}</button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
@@ -188,84 +213,6 @@ export default function BlogPage() {
       </section>
 
       <Footer />
-
-      {/* ── MODAL ARTÍCULO ── */}
-      <AnimatePresence>
-        {openPost && (
-          <>
-            <motion.div
-              key="overlay"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              onClick={() => setOpenPost(null)}
-              style={{ position: "fixed", inset: 0, zIndex: 80, background: "var(--scrim)", backdropFilter: "blur(8px)", cursor: "pointer" }}
-            />
-
-            <motion.div
-              key="modal"
-              className="blog-modal-wrap"
-              initial={{ opacity: 0, y: 72 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 40 }}
-              transition={spring}
-            >
-              <div
-                onClick={(e) => e.stopPropagation()}
-                className="blog-modal-pane"
-              >
-                {/* Header */}
-                <div className="blog-modal-head">
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ display: "flex", gap: 10, marginBottom: 14, alignItems: "center", flexWrap: "wrap" }}>
-                        <span style={{ fontSize: 11, background: `${accentForCategory(openPost.category)}15`, border: `1px solid ${accentForCategory(openPost.category)}35`, borderRadius: 16, padding: "4px 14px", color: accentForCategory(openPost.category), letterSpacing: ".12em", textTransform: "uppercase" }}>
-                          {openPost.category}
-                        </span>
-                        <span style={{ fontSize: 12, color: "var(--on-dark-faint)" }}>{dateOf(openPost)} · ⏱ {estimateReadTime(openPost.content)}</span>
-                      </div>
-                      <h2 style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: "clamp(18px,2.4vw,28px)", color: "var(--text)", lineHeight: 1.2 }}>
-                        {openPost.title}
-                      </h2>
-                    </div>
-                    <motion.button
-                      onClick={() => setOpenPost(null)}
-                      whileHover={{ scale: 1.1, rotate: 90 }}
-                      whileTap={{ scale: 0.9 }}
-                      style={{ background: "var(--navy-2)", border: "1px solid var(--line-d)", borderRadius: "50%", width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "var(--on-dark)", fontSize: 20, flexShrink: 0 }}
-                    >
-                      ×
-                    </motion.button>
-                  </div>
-                </div>
-
-                {/* Contenido */}
-                <div className="blog-modal-body">
-                  <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(15px,1.6vw,18px)", color: "var(--on-dark)", lineHeight: 1.75, marginBottom: 32, borderLeft: `3px solid ${accentForCategory(openPost.category)}`, paddingLeft: 20 }}>
-                    {openPost.excerpt}
-                  </p>
-
-                  {openPost.content.split("\n\n").map((paragraph, i) => (
-                    <p key={i} style={{ color: "var(--on-dark)", fontSize: "clamp(14px,1.4vw,16px)", lineHeight: 1.85, marginBottom: 22 }}>
-                      {paragraph}
-                    </p>
-                  ))}
-
-                  <div style={{ marginTop: 44, paddingTop: 28, borderTop: "1px solid var(--line-d)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
-                    <p style={{ fontSize: 13, color: "var(--on-dark-faint)" }}>
-                      {t("by")} <span style={{ color: "var(--gold-ink)" }}>Devora Benchimol</span> · Jewgal Academy
-                    </p>
-                    <Link href="/academia" className="btn solid" style={{ fontSize: 12, padding: "10px 22px" }} onClick={() => setOpenPost(null)}>
-                      {t("modalPrograms")}
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
     </>
   )
 }

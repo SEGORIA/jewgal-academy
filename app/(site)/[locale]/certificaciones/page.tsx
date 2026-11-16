@@ -9,6 +9,9 @@ import { TiltCard } from "@/components/motion/TiltCard"
 import { motion } from "framer-motion"
 import { useLocale, useTranslations } from "next-intl"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
+import { getProgramBrand, getProgramContent, localizeProgramContent } from "@/lib/program-content"
+
+type ApiCourse = { slug: string; title: string; shortDesc: string; totalHours: number | null; content: string | null; accreditations: { name: string }[] }
 
 // Datos visuales fijos de cada certificación; los textos se traducen vía
 // next-intl con las claves c1..c5.
@@ -25,13 +28,35 @@ export default function CertificacionesPage() {
   const t = useTranslations("Certificaciones")
   const [isMobile, setIsMobile] = useState(false)
 
-  const CERTS = CERT_META.map((m, i) => ({
-    n: String(i + 1).padStart(2, "0"),
-    slug: m.slug, accent: m.accent, grad: m.grad, icon: m.icon,
-    title: t(`${m.key}Title`), entity: t(`${m.key}Entity`),
-    type: t(`${m.key}Type`), duration: t(`${m.key}Dur`),
-    desc: t(`${m.key}Desc`), req: t.raw(`${m.key}Req`) as string[],
-  }))
+  // Los programas publicados en el panel: uno nuevo aparece acá solo. Mientras carga (o si falla) se ven los de siempre.
+  const [courses, setCourses] = useState<ApiCourse[] | null>(null)
+  useEffect(() => {
+    fetch(`/api/courses?locale=${locale}`)
+      .then((r) => r.json())
+      .then((d: { courses?: ApiCourse[] }) => { if (d.courses?.length) setCourses(d.courses) })
+      .catch(() => {})
+  }, [locale])
+
+  const KNOWN = Object.fromEntries(CERT_META.map((m) => [m.slug, m]))
+  const sources: { slug: string; course?: ApiCourse }[] = courses ? courses.map((c) => ({ slug: c.slug, course: c })) : CERT_META.map((m) => ({ slug: m.slug }))
+  const CERTS = sources.map(({ slug, course }, i) => {
+    const k = KNOWN[slug] as (typeof CERT_META)[number] | undefined
+    const stored = getProgramContent(slug, course?.content)
+    const text = localizeProgramContent(stored, locale)
+    const brand = getProgramBrand(slug, stored)
+    // Los cinco programas originales conservan sus textos (editables en "Textos y SEO"); los nuevos se arman con su ficha.
+    const req = text.certRequirements?.length ? text.certRequirements : k ? (t.raw(`${k.key}Req`) as string[]) : []
+    return {
+      n: String(i + 1).padStart(2, "0"),
+      slug, accent: brand.accent, grad: brand.grad, icon: brand.icon,
+      title: k ? t(`${k.key}Title`) : course?.title ?? slug,
+      entity: k ? t(`${k.key}Entity`) : (course?.accreditations ?? []).map((a) => a.name).join(" · "),
+      type: k ? t(`${k.key}Type`) : text.eyebrow,
+      duration: k ? t(`${k.key}Dur`) : text.duration || (course?.totalHours ? `${course.totalHours} h` : ""),
+      desc: k ? t(`${k.key}Desc`) : course?.shortDesc ?? "",
+      req,
+    }
+  })
 
   const STEPS = [
     { n: "01", title: t("step1Title"), desc: t("step1Desc") },

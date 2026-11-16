@@ -267,6 +267,9 @@ export default function LoginForm() {
                       {showPw ? <EyeOff size={17} /> : <Eye size={17} />}
                     </motion.button>
                   </div>
+                  <div style={{ textAlign: "right", marginTop: 10 }}>
+                    <Link href="/recuperar-contrasena" style={{ fontSize: 13, color: "var(--gold-ink)", textDecoration: "none" }}>{t("forgotLink")}</Link>
+                  </div>
                 </motion.div>
 
                 {/* Botón */}

@@ -10,6 +10,7 @@ import { PAYMENT_METHODS, PAYMENT_METHOD_LABELS, PAYMENT_STATUS_LABELS } from "@
 type Payment = {
   id: string; amount: number; currency: string; status: string; method: string | null; note: string | null
   stripeSessionId: string | null; stripePaymentId: string | null
+  couponCode: string | null; discountAmount: number | null
   paidAt: string | null; createdAt: string; userId: string; courseId: string
   user: { name: string; email: string }
   course: { title: string; slug: string }
@@ -79,10 +80,10 @@ function Inner() {
   const avg = income.length ? income.reduce((s, p) => s + p.amount, 0) / income.length : 0
 
   function downloadCSV() {
-    const rows: (string | number)[][] = [["Fecha", "Alumno", "Email", "Programa", "Monto", "Moneda", "Medio", "Estado", "Nota"]]
+    const rows: (string | number)[][] = [["Fecha", "Alumno", "Email", "Programa", "Monto", "Moneda", "Medio", "Estado", "Nota", "Cupón", "Descuento"]]
     filtered.forEach((p) => rows.push([
       fmtDate(p.paidAt ?? p.createdAt, { year: "numeric", month: "2-digit", day: "2-digit" }), p.user.name, p.user.email, p.course.title,
-      p.amount, p.currency, methodOf(p), PAYMENT_STATUS_LABELS[p.status] ?? p.status, p.note ?? "",
+      p.amount, p.currency, methodOf(p), PAYMENT_STATUS_LABELS[p.status] ?? p.status, p.note ?? "", p.couponCode ?? "", p.discountAmount ?? "",
     ]))
     const csv = "﻿" + rows.map((r) => r.map(csvCell).join(",")).join("\r\n")
     const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }))
@@ -170,8 +171,11 @@ function Inner() {
                         <div style={{ fontSize: 12, color: "var(--text-faint)" }}>{p.user.email}</div>
                       </td>
                       <td style={{ padding: "13px 16px", color: "var(--text-strong)", fontSize: 13 }}>{p.course.title}</td>
-                      <td style={{ padding: "13px 16px", color: "var(--text)", fontFamily: "var(--serif)", fontSize: 15, whiteSpace: "nowrap" }}>{p.amount > 0 ? money(p.amount, p.currency) : "—"}</td>
-                      <td style={{ padding: "13px 16px", color: "var(--text-muted)", fontSize: 13 }} title={p.note ?? undefined}>{methodOf(p)}</td>
+                      <td style={{ padding: "13px 16px", color: "var(--text)", fontFamily: "var(--serif)", fontSize: 15, whiteSpace: "nowrap" }}>{p.amount > 0 ? money(p.amount, p.currency) : p.couponCode ? "Sin cargo" : "—"}</td>
+                      <td style={{ padding: "13px 16px", color: "var(--text-muted)", fontSize: 13 }} title={p.note ?? undefined}>
+                        {methodOf(p)}
+                        {p.couponCode && <div style={{ fontSize: 12, color: "var(--gold-ink)", marginTop: 2 }}>Cupón {p.couponCode}{p.discountAmount ? ` (−${money(p.discountAmount, p.currency)})` : ""}</div>}
+                      </td>
                       <td style={{ padding: "13px 16px" }}><span style={{ fontSize: 12, padding: "4px 11px", borderRadius: 999, fontWeight: 600, background: st.bg, color: st.color }}>{PAYMENT_STATUS_LABELS[p.status] ?? p.status}</span></td>
                       <td style={{ padding: "13px 16px", color: "var(--text-muted)", fontSize: 13, whiteSpace: "nowrap" }}>{fmtDate(p.paidAt ?? p.createdAt)}</td>
                       <td style={{ padding: "13px 12px", whiteSpace: "nowrap", textAlign: "right" }}>

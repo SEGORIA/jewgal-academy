@@ -2,12 +2,13 @@
 
 import { useCallback, useEffect, useState } from "react"
 import { ArrowDown, ArrowUp, Eye, EyeOff, Languages, Pencil, Plus, Quote, Trash2 } from "lucide-react"
+import ImageUpload from "@/components/admin/ImageUpload"
 import { ConfirmDialog, EmptyState, Field, GhostButton, Modal, PageHeader, PrimaryButton, Spinner, ToastProvider, api, card, inputStyle, useToast } from "@/components/admin/ui"
 
 type Testimonial = {
-  id: string; name: string; role: string; roleEn: string | null; text: string; textEn: string | null; isVisible: boolean; order: number
+  id: string; name: string; role: string; roleEn: string | null; text: string; textEn: string | null; photoUrl: string | null; isVisible: boolean; order: number
 }
-const EMPTY = { name: "", role: "", roleEn: "", text: "", textEn: "", isVisible: true }
+const EMPTY = { name: "", role: "", roleEn: "", text: "", textEn: "", photoUrl: "", isVisible: true }
 
 function Inner() {
   const toast = useToast()
@@ -28,14 +29,14 @@ function Inner() {
   useEffect(() => { load() }, [load])
 
   const openNew = () => setEditing({ id: null, form: { ...EMPTY } })
-  const openEdit = (t: Testimonial) => setEditing({ id: t.id, form: { name: t.name, role: t.role, roleEn: t.roleEn ?? "", text: t.text, textEn: t.textEn ?? "", isVisible: t.isVisible } })
+  const openEdit = (t: Testimonial) => setEditing({ id: t.id, form: { name: t.name, role: t.role, roleEn: t.roleEn ?? "", text: t.text, textEn: t.textEn ?? "", photoUrl: t.photoUrl ?? "", isVisible: t.isVisible } })
 
   async function save() {
     if (!editing) return
     setSaving(true)
     try {
       const f = editing.form
-      const body = { name: f.name, role: f.role, roleEn: f.roleEn || null, text: f.text, textEn: f.textEn || null, isVisible: f.isVisible }
+      const body = { name: f.name, role: f.role, roleEn: f.roleEn || null, text: f.text, textEn: f.textEn || null, photoUrl: f.photoUrl || null, isVisible: f.isVisible }
       if (editing.id) await api(`/api/admin/testimonials/${editing.id}`, { method: "PATCH", json: body })
       else await api("/api/admin/testimonials", { method: "POST", json: body })
       toast("ok", editing.id ? "Testimonio actualizado" : "Testimonio agregado")
@@ -97,6 +98,10 @@ function Inner() {
                 <button aria-label="Subir" disabled={i === 0} onClick={() => move(i, -1)} style={arrow(i === 0)}><ArrowUp size={14} /></button>
                 <button aria-label="Bajar" disabled={i === items.length - 1} onClick={() => move(i, 1)} style={arrow(i === items.length - 1)}><ArrowDown size={14} /></button>
               </div>
+              {t.photoUrl && (
+                // eslint-disable-next-line @next/next/no-img-element -- miniatura de una URL externa
+                <img src={t.photoUrl} alt="" width={44} height={44} style={{ width: 44, height: 44, borderRadius: "50%", objectFit: "cover", flexShrink: 0, border: "1px solid var(--border)" }} />
+              )}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <p style={{ color: "var(--text-strong)", fontSize: 15, lineHeight: 1.6, fontFamily: "var(--serif)", fontStyle: "italic", marginBottom: 8 }}>“{t.text}”</p>
                 <p style={{ fontSize: 13, color: "var(--text-muted)" }}>
@@ -123,6 +128,8 @@ function Inner() {
               <Field label="Nombre" id="t-name"><input id="t-name" style={inputStyle} value={f.name} onChange={(e) => set({ name: e.target.value })} /></Field>
               <Field label="Programa o rol" id="t-role" hint="Ej.: Life Coaching Integrativo"><input id="t-role" style={inputStyle} value={f.role} onChange={(e) => set({ role: e.target.value })} /></Field>
             </div>
+            <ImageUpload label="Foto (opcional)" value={f.photoUrl} onChange={(url) => set({ photoUrl: url })} folder="jewgal-testimonios" aspect="1/1"
+              hint="Se muestra en círculo junto al testimonio. Una foto cuadrada, de cara, funciona mejor." />
             <Field label="Testimonio (español)" id="t-text"><textarea id="t-text" rows={4} style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }} value={f.text} onChange={(e) => set({ text: e.target.value })} /></Field>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
               <span style={{ fontSize: 13, color: "var(--text-muted)" }}>Versión en inglés (opcional; si falta, se muestra en español)</span>

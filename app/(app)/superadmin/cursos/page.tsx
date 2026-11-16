@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react"
 import { useSearchParams } from "next/navigation"
 import { Users, FileText, Eye, EyeOff, Plus, X, Video, Trash2, Pencil, Loader2, ExternalLink, Download, PlayCircle, ListChecks, ChevronUp, ChevronDown, Save, AlertCircle, GripVertical, Languages, BookOpen, Layers, Upload } from "lucide-react"
-import { getProgramContent, getYouTubeEmbedUrl, EMPTY_PROGRAM_CONTENT, type ProgramContent } from "@/lib/program-content"
+import { getProgramBrand, getProgramContent, getYouTubeEmbedUrl, BRAND_ICONS, EMPTY_PROGRAM_CONTENT, type ProgramContent, type ProgramText } from "@/lib/program-content"
 import StringListEditor from "@/components/admin/StringListEditor"
 import ContentBlockEditor from "@/components/admin/materials/ContentBlockEditor"
 import QuizEditor from "@/components/admin/materials/QuizEditor"
@@ -12,6 +12,7 @@ import MaterialsManager from "@/components/admin/materials/MaterialsManager"
 import { TEMPLATES, TEMPLATE_ICONS, templateDefaults, templateOf, type TemplateId } from "@/components/admin/materials/templates"
 import type { AdminMaterial, AdminCourseModule } from "@/components/admin/materials/types"
 import { uploadToCloudinary } from "@/lib/cloudinary-upload"
+import ImageUpload from "@/components/admin/ImageUpload"
 
 const TOOL_HREF_OPTIONS = [
   { value: "", label: "Ninguna" },
@@ -103,6 +104,10 @@ export default function CursosAdminPage() {
   const [loadingStudents, setLoadingStudents] = useState(false)
 
   const [progContent, setProgContent] = useState<ProgramContent>(EMPTY_PROGRAM_CONTENT)
+  // Idioma de la ficha que se está editando: los textos se guardan en español y, aparte, en inglés (lo que falte se ve en español).
+  const [progLang, setProgLang] = useState<"es" | "en">("es")
+  const cur: ProgramText = progLang === "es" ? progContent : { eyebrow: "", duration: "", modality: "", level: "", includes: [], modules: [], forWhom: [], outcome: "", ...(progContent.en ?? {}) }
+  const setCur = (patch: Partial<ProgramText>) => setProgContent((c) => (progLang === "es" ? { ...c, ...patch } : { ...c, en: { ...(c.en ?? {}), ...patch } }))
   const [videoUrlInput, setVideoUrlInput] = useState("")
   const [savingContent, setSavingContent] = useState(false)
   const [contentSaved, setContentSaved] = useState(false)
@@ -183,6 +188,7 @@ export default function CursosAdminPage() {
     if (tab === "sesiones") loadSessions(selected.id)
     if (tab === "contenido") {
       setProgContent(getProgramContent(selected.slug, selected.content))
+      setProgLang("es")
       setVideoUrlInput(selected.videoUrl ?? "")
       setContentError("")
       setContentSaved(false)
@@ -630,11 +636,14 @@ export default function CursosAdminPage() {
                   <input type="number" min={0} value={courseForm.durationWeeks} onChange={(e) => setCourseForm((f) => ({ ...f, durationWeeks: e.target.value }))} placeholder="Ej: 12" style={inputStyle} />
                 </div>
               </div>
-              <div>
-                <label style={labelStyle}>URL de imagen (thumbnail)</label>
-                <input value={courseForm.thumbnail} onChange={(e) => setCourseForm((f) => ({ ...f, thumbnail: e.target.value }))} placeholder="https://…" style={inputStyle} />
-                <p style={{ fontSize: 11.5, color: "var(--text-dim)", marginTop: 6 }}>Subí la imagen a <code>public/brand/programs/</code> y pegá la ruta acá (no hay carga de archivos todavía).</p>
-              </div>
+              <ImageUpload
+                label="Imagen del programa (miniatura)"
+                value={courseForm.thumbnail}
+                onChange={(url) => setCourseForm((f) => ({ ...f, thumbnail: url }))}
+                folder="jewgal-programas"
+                aspect="4/3"
+                hint="Se ve en las tarjetas de Inicio y de Academia. Recomendado: horizontal, mínimo 800 px de ancho. Si la dejás vacía se usa la imagen de siempre del programa."
+              />
             </div>
 
             <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
@@ -718,54 +727,110 @@ export default function CursosAdminPage() {
                   <p style={{ fontSize: 11.5, color: "var(--text-dim)", marginTop: 8 }}>Se muestra debajo de "Sobre el programa" en la página pública. Dejá el campo vacío para no mostrar ningún video.</p>
                 </div>
 
+                {/* Idioma de la ficha + marca del programa */}
+                <div style={{ marginBottom: 24, padding: "16px 18px", border: "1px solid var(--border)", borderRadius: 12, background: "var(--surface-2)" }}>
+                  <div role="tablist" aria-label="Idioma de la ficha" style={{ display: "flex", gap: 8, marginBottom: progLang === "es" ? 16 : 0 }}>
+                    {(["es", "en"] as const).map((l) => (
+                      <button key={l} role="tab" type="button" aria-selected={progLang === l} onClick={() => setProgLang(l)}
+                        style={{ padding: "6px 16px", borderRadius: 18, fontSize: 13, cursor: "pointer", fontFamily: "inherit", border: `1px solid ${progLang === l ? "var(--gold-ink)" : "var(--border)"}`, background: progLang === l ? "color-mix(in srgb, var(--gold-ink) 14%, transparent)" : "transparent", color: progLang === l ? "var(--gold-ink)" : "var(--text-muted)" }}>
+                        {l === "es" ? "Español" : "English"}
+                      </button>
+                    ))}
+                  </div>
+                  {progLang === "en" && <p style={{ fontSize: 12.5, color: "var(--text-muted)", marginTop: 10, lineHeight: 1.5 }}>Versión para quienes visitan el sitio en inglés. Lo que dejes vacío se muestra en español. El nombre y la descripción del programa en inglés se editan arriba, en la ficha del programa.</p>}
+                  {progLang === "es" && (
+                    <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                      <div>
+                        <label style={labelStyle}>Color del programa</label>
+                        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                          <input type="color" aria-label="Elegir color" value={getProgramBrand(selected?.slug ?? "", progContent).accent} onChange={(e) => setProgContent((c) => ({ ...c, accent: e.target.value }))} style={{ width: 44, height: 40, padding: 2, border: "1px solid var(--border)", borderRadius: 8, background: "transparent", cursor: "pointer" }} />
+                          <input value={progContent.accent ?? ""} onChange={(e) => setProgContent((c) => ({ ...c, accent: e.target.value.trim() }))} placeholder="#A76D61 (vacío = el de siempre)" style={inputStyle} />
+                        </div>
+                        <p style={{ fontSize: 11.5, color: "var(--text-dim)", marginTop: 6 }}>Tiñe la portada de la página del programa y su tarjeta en Certificaciones.</p>
+                      </div>
+                      <div>
+                        <label style={labelStyle}>Ícono</label>
+                        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                          {BRAND_ICONS.map((ic) => {
+                            const active = getProgramBrand(selected?.slug ?? "", progContent).icon === ic
+                            return (
+                              <button key={ic} type="button" onClick={() => setProgContent((c) => ({ ...c, icon: ic }))} aria-pressed={active} aria-label={`Ícono ${ic}`}
+                                style={{ width: 38, height: 38, borderRadius: 8, fontSize: 18, cursor: "pointer", fontFamily: "var(--serif)", border: `1px solid ${active ? "var(--gold-ink)" : "var(--border)"}`, background: active ? "color-mix(in srgb, var(--gold-ink) 14%, transparent)" : "transparent", color: "var(--text)" }}>{ic}</button>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 {/* Chips: eyebrow / duración / modalidad / nivel */}
                 <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28 }}>
                   <div>
                     <label style={labelStyle}>Etiqueta (eyebrow)</label>
-                    <input value={progContent.eyebrow} onChange={(e) => setProgContent((c) => ({ ...c, eyebrow: e.target.value }))} placeholder="Ej: Certificación Infantil" style={inputStyle} />
+                    <input value={cur.eyebrow} onChange={(e) => setCur({ eyebrow: e.target.value })} placeholder="Ej: Certificación Infantil" style={inputStyle} />
                   </div>
                   <div>
                     <label style={labelStyle}>Duración</label>
-                    <input value={progContent.duration} onChange={(e) => setProgContent((c) => ({ ...c, duration: e.target.value }))} placeholder="Ej: 3 meses" style={inputStyle} />
+                    <input value={cur.duration} onChange={(e) => setCur({ duration: e.target.value })} placeholder="Ej: 3 meses" style={inputStyle} />
                   </div>
                   <div>
                     <label style={labelStyle}>Modalidad</label>
-                    <input value={progContent.modality} onChange={(e) => setProgContent((c) => ({ ...c, modality: e.target.value }))} placeholder="Ej: Online · Clases en vivo" style={inputStyle} />
+                    <input value={cur.modality} onChange={(e) => setCur({ modality: e.target.value })} placeholder="Ej: Online · Clases en vivo" style={inputStyle} />
                   </div>
                   <div>
                     <label style={labelStyle}>Nivel</label>
-                    <input value={progContent.level} onChange={(e) => setProgContent((c) => ({ ...c, level: e.target.value }))} placeholder="Ej: Sin requisitos previos" style={inputStyle} />
+                    <input value={cur.level} onChange={(e) => setCur({ level: e.target.value })} placeholder="Ej: Sin requisitos previos" style={inputStyle} />
                   </div>
                 </div>
 
                 {/* Qué incluye */}
                 <div style={{ marginBottom: 28 }}>
                   <label style={labelStyle}>Qué incluye</label>
-                  <StringListEditor items={progContent.includes} onChange={(items) => setProgContent((c) => ({ ...c, includes: items }))} placeholder="Ej: Certificado al completar" />
+                  <StringListEditor items={cur.includes} onChange={(items) => setCur({ includes: items })} placeholder="Ej: Certificado al completar" />
                 </div>
 
                 {/* Contenido del programa (módulos) */}
                 <div style={{ marginBottom: 28 }}>
                   <label style={labelStyle}>Contenido del programa (módulos)</label>
-                  <ModulesEditor modules={progContent.modules} onChange={(modules) => setProgContent((c) => ({ ...c, modules }))} />
+                  <ModulesEditor modules={cur.modules} onChange={(modules) => setCur({ modules })} />
                 </div>
 
                 {/* Para quién */}
                 <div style={{ marginBottom: 28 }}>
                   <label style={labelStyle}>¿Para quién es este programa?</label>
-                  <StringListEditor items={progContent.forWhom} onChange={(items) => setProgContent((c) => ({ ...c, forWhom: items }))} placeholder="Ej: Docentes de nivel inicial" />
+                  <StringListEditor items={cur.forWhom} onChange={(items) => setCur({ forWhom: items })} placeholder="Ej: Docentes de nivel inicial" />
                 </div>
 
                 {/* Al finalizar */}
                 <div style={{ marginBottom: 28 }}>
                   <label style={labelStyle}>Al finalizar (resultado)</label>
                   <textarea
-                    value={progContent.outcome}
-                    onChange={(e) => setProgContent((c) => ({ ...c, outcome: e.target.value }))}
+                    value={cur.outcome}
+                    onChange={(e) => setCur({ outcome: e.target.value })}
                     rows={3}
                     placeholder="Qué logrará el alumno al completar el programa…"
                     style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
                   />
+                </div>
+
+                {/* Requisitos de certificación */}
+                <div style={{ marginBottom: 28 }}>
+                  <label style={labelStyle}>Requisitos para la certificación</label>
+                  <StringListEditor items={cur.certRequirements ?? []} onChange={(items) => setCur({ certRequirements: items })} placeholder="Ej: Completar el 100% de los módulos" />
+                  <p style={{ fontSize: 11.5, color: "var(--text-dim)", marginTop: 8 }}>Se muestran en la página Certificaciones. Vacío = los requisitos de siempre.</p>
+                </div>
+
+                {/* SEO */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 12, marginBottom: 28 }}>
+                  <div>
+                    <label style={labelStyle}>Título para Google ({(cur.seoTitle ?? "").length}/60)</label>
+                    <input value={cur.seoTitle ?? ""} maxLength={120} onChange={(e) => setCur({ seoTitle: e.target.value })} placeholder="Vacío = el nombre del programa" style={inputStyle} />
+                  </div>
+                  <div>
+                    <label style={labelStyle}>Descripción para Google ({(cur.seoDescription ?? "").length}/160)</label>
+                    <textarea value={cur.seoDescription ?? ""} maxLength={300} rows={2} onChange={(e) => setCur({ seoDescription: e.target.value })} placeholder="Vacío = la descripción corta del programa" style={{ ...inputStyle, resize: "vertical", lineHeight: 1.5 }} />
+                  </div>
                 </div>
 
                 <button onClick={saveProgramContent} disabled={savingContent} style={{ ...btnPrimary(contentSaved ? "var(--success)" : "var(--gold)"), justifyContent: "center", opacity: savingContent ? 0.6 : 1 }}>

@@ -11,6 +11,7 @@ import { useLocale, useTranslations } from "next-intl"
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content"
 import { formatPrice } from "@/lib/utils"
 import { getProgramContent } from "@/lib/program-content"
+import { bgUrl } from "@/lib/use-site-images"
 
 type Accreditation = { code: string; name: string; logoUrl: string | null }
 type CourseInfo = { slug: string; title?: string; shortDesc?: string; price: number; currency: string; isFree: boolean; accreditations?: Accreditation[]; content?: string | null }
@@ -151,7 +152,7 @@ export default function AcademiaPage() {
       }}>
         {/* Foto de la comunidad, fundida con el fondo del hero */}
         <motion.div className="academia-hero-photo" style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "52%", zIndex: 0, display: isMobile ? "none" : undefined, y: photoY }}>
-          <img src="/brand/devora-grupo.webp" alt="Devora con su comunidad de alumnos" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "95% 28%" }} />
+          <img src={content.images.academiaGroup} alt="Devora con su comunidad de alumnos" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "95% 28%" }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, var(--bg-2) 2%, rgba(0,0,0,0) 58%)" }} />
         </motion.div>
         <div className="wrap" style={{ position: "relative", zIndex: 2 }}>
@@ -229,7 +230,7 @@ export default function AcademiaPage() {
               border: "1px solid rgba(255,255,255,.08)",
               minHeight: isMobile ? 420 : 360,
               // Foto de fondo — cambiable: cualquier imagen de /public/brand
-              backgroundImage: "url('/brand/hero/devora-ninos.webp')",
+              backgroundImage: bgUrl(content.images.academiaBanner),
               backgroundSize: "cover", backgroundPosition: "center 22%",
             }}
           >
