@@ -724,7 +724,7 @@ export default function CursosAdminPage() {
                       </p>
                     )
                   )}
-                  <p style={{ fontSize: 11.5, color: "var(--text-dim)", marginTop: 8 }}>Se muestra debajo de "Sobre el programa" en la página pública. Dejá el campo vacío para no mostrar ningún video.</p>
+                  <p style={{ fontSize: 11.5, color: "var(--text-dim)", marginTop: 8 }}>Se muestra debajo de &quot;Sobre el programa&quot; en la página pública. Dejá el campo vacío para no mostrar ningún video.</p>
                 </div>
 
                 {/* Idioma de la ficha + marca del programa */}

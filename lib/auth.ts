@@ -19,9 +19,9 @@ const nextAuth = NextAuth({
   callbacks: {
     async jwt({ token, user, trigger, session }) {
       if (user) {
-        token.role = (user as any).role
+        token.role = (user as { role?: string }).role
         token.id = user.id
-        token.permissions = (user as any).permissions ?? []
+        token.permissions = (user as { permissions?: string[] }).permissions ?? []
         token.checkedAt = Date.now()
       }
       // Integrantes del panel: se relee el rol y los permisos desde la base cada 5 minutos, así un cambio

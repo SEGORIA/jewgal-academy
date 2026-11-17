@@ -95,8 +95,8 @@ export type SeoSettings = {
 }
 
 export const SEO_KEY = "seo_pages"
-/** Imagen de marca que genera el sitio (app/opengraph-image.tsx): se usa al compartir cuando no se eligió otra en el panel. */
-export const DEFAULT_OG_IMAGE = `${SITE_URL}/opengraph-image`
+/** Imagen de marca para compartir (JPEG de ~85 KB: WhatsApp ignora previsualizaciones pesadas). Se usa cuando no se eligió otra en el panel. La ruta /opengraph-image sigue existiendo para los enlaces ya compartidos. */
+export const DEFAULT_OG_IMAGE = `${SITE_URL}/brand/og-share.jpg`
 export const EMPTY_SEO: SeoSettings = { ogImage: "", pages: {} }
 
 export function normalizeSeo(raw: unknown): SeoSettings {

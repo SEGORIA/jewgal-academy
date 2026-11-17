@@ -6,7 +6,7 @@ import { rateLimit, getClientIp } from "@/lib/security"
 import { MIN_PASSWORD_LENGTH, findValidResetToken, hashToken } from "@/lib/password-reset"
 
 const schema = z.object({
-  token: z.string().min(20).max(200),
+  token: z.string().min(20, "El enlace no es válido. Pedí uno nuevo.").max(200, "El enlace no es válido. Pedí uno nuevo."),
   password: z.string().min(MIN_PASSWORD_LENGTH, `Usá al menos ${MIN_PASSWORD_LENGTH} caracteres.`).max(100, "La contraseña es demasiado larga."),
 })
 

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import {
@@ -358,9 +359,9 @@ export default function LessonPlayer({ materialId, apiBase, basePath, readOnly, 
                 </p>
                 <p style={{ color: "var(--text-muted)", fontSize: 12.5 }}>
                   Certificado {certBanner} emitido —{" "}
-                  <a href="/aula/certificaciones" style={{ color: "#4a9d6f", fontWeight: 600 }}>
+                  <Link href="/aula/certificaciones" style={{ color: "#4a9d6f", fontWeight: 600 }}>
                     ver mi certificado →
-                  </a>
+                  </Link>
                 </p>
               </div>
             </motion.div>

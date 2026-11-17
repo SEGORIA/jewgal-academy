@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import Link from "next/link"
 import { DEFAULT_ANALYTICS, type AnalyticsSettings } from "@/lib/analytics-settings"
 import { Save, KeyRound, Users, CreditCard, Mail, Search, Moon, Sun, Loader2, ExternalLink, CheckCircle2, AlertCircle } from "lucide-react"
 
@@ -225,8 +226,8 @@ export default function ConfiguracionPage() {
               </div>
 
               <p style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 18, lineHeight: 1.6 }}>
-                El correo, el teléfono y las redes sociales se editan en <a href="/superadmin/web" style={{ color: "var(--gold-ink)" }}>Portada y contacto</a>;
-                los títulos y descripciones para buscadores, en <a href="/superadmin/textos" style={{ color: "var(--gold-ink)" }}>Textos y SEO</a>.
+                El correo, el teléfono y las redes sociales se editan en <Link href="/superadmin/web" style={{ color: "var(--gold-ink)" }}>Portada y contacto</Link>;
+                los títulos y descripciones para buscadores, en <Link href="/superadmin/textos" style={{ color: "var(--gold-ink)" }}>Textos y SEO</Link>.
               </p>
               {generalError && <p role="alert" style={{ marginTop: 14, fontSize: 13, color: "var(--danger)" }}>{generalError}</p>}
 
@@ -382,7 +383,7 @@ export default function ConfiguracionPage() {
               Suscriptores del newsletter
             </h3>
             <p style={{ fontSize: 13, color: "var(--text-faint)", marginBottom: 16 }}>
-              Emails dejados en el formulario "Únete a la comunidad" del pie de página del sitio. Total: {subscribers.length}
+              Emails dejados en el formulario &quot;Únete a la comunidad&quot; del pie de página del sitio. Total: {subscribers.length}
             </p>
             {subscribers.length === 0 ? (
               <p style={{ fontSize: 13, color: "var(--text-dim)" }}>Todavía no hay suscriptores.</p>

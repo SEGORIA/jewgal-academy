@@ -18,7 +18,7 @@ export default function ValueCards() {
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 16, marginBottom: 24 }}>
         <p style={{ color: "var(--text-muted)", fontSize: 14.5, lineHeight: 1.65, maxWidth: 560 }}>
-          Los 10 valores universales del método, más "Sombrita" — la sombra que le impide a cada valor brillar del todo. Imprimilas para recortar y usar con los niños y niñas.
+          Los 10 valores universales del método, más &quot;Sombrita&quot; — la sombra que le impide a cada valor brillar del todo. Imprimilas para recortar y usar con los niños y niñas.
         </p>
         <button
           onClick={() => window.print()}

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import Link from "next/link"
 import { Eye, Save, ChevronDown, ChevronUp, Loader2, Info, Languages } from "lucide-react"
 import { DEFAULT_SITE_CONTENT, DEFAULT_SITE_IMAGES, IMAGE_FIELDS, type SiteContent } from "@/lib/site-content"
 import ImageUpload from "@/components/admin/ImageUpload"
@@ -229,7 +230,7 @@ export default function WebAdminPage() {
               <div style={{ display: "flex", gap: 10, alignItems: "flex-start", background: "rgba(107,191,142,.06)", border: "1px solid rgba(107,191,142,.18)", borderRadius: 9, padding: "12px 14px", marginBottom: 16 }}>
                 <Info size={15} style={{ color: "var(--success)", flexShrink: 0, marginTop: 1 }} />
                 <p style={{ fontSize: 12.5, color: "var(--text-muted)", lineHeight: 1.6 }}>
-                  El número se anima con un conteo y termina mostrando el texto exacto que escribas (ej. <strong>40+</strong>, <strong>5</strong>). Podés usar "+" u otros símbolos.
+                  El número se anima con un conteo y termina mostrando el texto exacto que escribas (ej. <strong>40+</strong>, <strong>5</strong>). Podés usar &quot;+&quot; u otros símbolos.
                 </p>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
@@ -289,7 +290,7 @@ export default function WebAdminPage() {
             <div style={{ padding: "0 22px 22px", display: "grid", gap: 22, borderTop: "1px solid var(--surface-2)", paddingTop: 20 }}>
               <p style={{ fontSize: 12.5, color: "var(--text-muted)", lineHeight: 1.7 }}>
                 Cambiá las fotos grandes de cada página subiendo una nueva desde tu computadora o celular. Se aplican al guardar, en español e inglés.
-                Las fotos del carrusel de Inicio se cambian en <a href="/superadmin/hero" style={{ color: "var(--gold-ink)" }}>Fotos del hero</a> y las de cada programa, en <a href="/superadmin/cursos" style={{ color: "var(--gold-ink)" }}>Programas</a>.
+                Las fotos del carrusel de Inicio se cambian en <Link href="/superadmin/hero" style={{ color: "var(--gold-ink)" }}>Fotos del hero</Link> y las de cada programa, en <Link href="/superadmin/cursos" style={{ color: "var(--gold-ink)" }}>Programas</Link>.
               </p>
               {IMAGE_FIELDS.map((f) => (
                 <ImageUpload

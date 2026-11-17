@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import {
@@ -102,7 +103,7 @@ export default function MaterialesPage() {
             {totalCompleted} de {materials.length} completados
           </p>
         )}
-        <a
+        <Link
           href="/aula/programa"
           style={{
             display: "inline-flex", alignItems: "center", gap: 8, marginTop: 18,
@@ -112,7 +113,7 @@ export default function MaterialesPage() {
           }}
         >
           <GraduationCap size={16} /> Ir al programa →
-        </a>
+        </Link>
       </div>
 
       {loading ? (
